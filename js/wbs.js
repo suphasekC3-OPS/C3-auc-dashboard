@@ -5158,64 +5158,36 @@
   let latestGoogleSheetPlanOptions = [];
 
   /**
-   * Dynamically build & update wbsEditModalPlan dropdown choices
-   * from live Google Sheet data (ensuring 100% real-time match with any additions/edits)
+   * Strictly 3 Google Sheet choices for wbsEditModalPlan dropdown (Q4 2569)
+   * ป้องกันการสแกนข้อมูลเก่าที่ติด ไตรมาส 4 หรือ งวดบัญชี สค มาปน
    */
   function refreshWbsPlanCloseDropdownOptions(currentSelectedVal = undefined) {
     const elPlan = document.getElementById('wbsEditModalPlan');
     if (!elPlan) return;
 
-    // Standard baseline options (Q4 2569)
-    const baseOptions = [
+    // กำหนด 3 ตัวเลือกตรงตาม Google Sheet เท่านั้น
+    const exactOptions = [
       'งวดบัญชี ต.ค. 69',
       'งวดบัญชี พ.ย. 69',
       'งวดบัญชี ธ.ค. 69'
     ];
 
-    const dynamicOptionsSet = new Set(baseOptions);
-
-    // Add options returned directly from Google Apps Script if available
-    if (Array.isArray(latestGoogleSheetPlanOptions)) {
-      latestGoogleSheetPlanOptions.forEach(opt => {
-        if (opt && String(opt).trim()) dynamicOptionsSet.add(String(opt).trim());
-      });
-    }
-
-    // Scan all live items from Google Sheet
-    const allData = window.AUC_WBS_REMAINING_DATA || [];
-    allData.forEach(item => {
-      const p = (item.planClose || '').trim();
-      if (p) {
-        p.split(/,\s*/).forEach(part => {
-          const pt = part.trim();
-          if (pt) dynamicOptionsSet.add(pt);
-        });
-      }
-    });
-
-    const activeVal = currentSelectedVal !== undefined ? currentSelectedVal : (elPlan.value || '');
-    if (activeVal && activeVal.trim()) {
-      dynamicOptionsSet.add(activeVal.trim());
-    }
-
-    // Sort: base options first, then any custom/new choices from Google Sheet
-    const sortedOptions = Array.from(dynamicOptionsSet).sort((a, b) => {
-      const idxA = baseOptions.indexOf(a);
-      const idxB = baseOptions.indexOf(b);
-      if (idxA !== -1 && idxB !== -1) return idxA - idxB;
-      if (idxA !== -1) return -1;
-      if (idxB !== -1) return 1;
-      return a.localeCompare(b, 'th');
-    });
+    const activeVal = (currentSelectedVal !== undefined ? currentSelectedVal : (elPlan.value || '')).trim();
 
     let html = `<option value="">-- ไม่ระบุแผนปิดงาน (เว้นว่าง) --</option>`;
-    sortedOptions.forEach(opt => {
+    exactOptions.forEach(opt => {
       const isSelected = (opt === activeVal) ? 'selected' : '';
       html += `<option value="${escapeHtml(opt)}" ${isSelected}>${escapeHtml(opt)}</option>`;
     });
 
     elPlan.innerHTML = html;
-    elPlan.value = activeVal;
+
+    // ถ้าค่าเดิมตรงกับ 1 ใน 3 ตัวเลือก ให้เลือกค่านั้น หากไม่ตรงให้เป็นค่าว่างเพื่อเลือกใหม่
+    if (exactOptions.includes(activeVal)) {
+      elPlan.value = activeVal;
+    } else {
+      elPlan.value = '';
+    }
   }
 
   window.openWbsEditNoteModal = function (wbsCode) {
@@ -5392,37 +5364,11 @@
   window.renderWbsTab = renderWbsTab;
   window.refreshWbsPlanCloseDropdownOptions = refreshWbsPlanCloseDropdownOptions;
 
-  // Initialize when DOM is ready
+  // Initialize when DOM is ready (ซิงค์เฉพาะเมื่อกดปุ่ม #btnSyncGoogleSheet เท่านั้น)
   function initWbsApp() {
     setupWbsListeners();
     renderWbsTab();
     refreshWbsPlanCloseDropdownOptions();
-
-    // 🌟 Trigger 1: Auto-sync on page load (ดึงข้อมูลล่าสุดจาก Google Sheet ทันทีที่เปิดเว็บ)
-    setTimeout(() => {
-      if (typeof window.syncLiveNotesFromGoogleSheet === 'function') {
-        window.syncLiveNotesFromGoogleSheet(false);
-      }
-    }, 1500);
-
-    // 🌟 Trigger 2: Auto-sync on Tab Visibility/Focus (ดึงข้อมูลทันทีเมื่อผู้ใช้สลับหน้าต่างกลับมาที่ Dashboard)
-    document.addEventListener('visibilitychange', () => {
-      if (!document.hidden && !currentEditingWbsItem && typeof window.syncLiveNotesFromGoogleSheet === 'function') {
-        window.syncLiveNotesFromGoogleSheet(false);
-      }
-    });
-    window.addEventListener('focus', () => {
-      if (!currentEditingWbsItem && typeof window.syncLiveNotesFromGoogleSheet === 'function') {
-        window.syncLiveNotesFromGoogleSheet(false);
-      }
-    });
-
-    // 🌟 Trigger 3: Periodic Background Auto-Sync (ตรวจจับการแก้ไขใน Google Sheet อัตโนมัติทุกๆ 60 วินาที)
-    setInterval(() => {
-      if (!document.hidden && !currentEditingWbsItem && typeof window.syncLiveNotesFromGoogleSheet === 'function') {
-        window.syncLiveNotesFromGoogleSheet(false);
-      }
-    }, 60000);
   }
 
   if (document.readyState === 'loading') {

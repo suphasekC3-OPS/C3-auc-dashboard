@@ -403,6 +403,38 @@
    */
   const BASE_AUDIT_LOGS = [
     {
+      id: 'log_000_wbs_sync_on_button_click_only',
+      timestamp: '2026-10-22 22:28:00',
+      timestampTh: '22 ต.ค. 2569, 22:28 น.',
+      type: 'CONFIG',
+      typeBadge: 'ซิงค์เฉพาะกดปุ่ม',
+      badgeClass: 'badge-type-config',
+      title: 'ปรับปรุงระบบซิงค์ Google Sheet ให้ทำงานเฉพาะเมื่อผู้ใช้กดปุ่มเท่านั้น',
+      targetSubject: 'ระบบซิงค์ข้อมูล Google Sheet (#btnSyncGoogleSheet) และฟังก์ชัน initWbsApp ใน js/wbs.js',
+      storageFile: 'index.html, js/wbs.js & js/data_history.js',
+      changeSummary: 'ยกเลิกการดึงข้อมูลอัตโนมัติในพื้นหลังทั้งหมด (Auto-Sync on Load, Visibility Change และ Interval Polling) โดยเปลี่ยนให้ระบบซิงค์ข้อมูลจาก Google Sheet เฉพาะเมื่อผู้ใช้กดปุ่ม "ซิงค์ Google Sheet" เท่านั้น เพื่อความเสถียรและให้ผู้ใช้ควบคุมการโหลดข้อมูลเอง 100%',
+      details: 'ดำเนินการตามคำสั่งผู้ใช้งาน (แก้ไข ซิง google sheet เฉพาะกดปุ่มเท่านั้น): 1) ใน js/wbs.js ตัดคำสั่ง auto-sync ใน background ออกทั้งหมด (setTimeout โหลดหน้าเว็บ, visibilitychange สลับแท็บ, และ setInterval ทุก 60 วินาที) 2) การดึงข้อมูลสดจาก Google Sheet จะทำงานเฉพาะเมื่อมีการคลิกปุ่ม #btnSyncGoogleSheet โดยตรงเท่านั้น 3) ปรับปรุง tooltip และป้ายสถานะใน index.html ให้สอดคล้องกัน',
+      sourceFile: 'คำสั่งผู้ใช้งาน (แก้ไข ซิง google sheet เฉพาะกดปุ่มเท่านั้น)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง'
+    },
+    {
+      id: 'log_000_wbs_modal_clean_strict_3_choices_fix',
+      timestamp: '2026-10-22 22:25:00',
+      timestampTh: '22 ต.ค. 2569, 22:25 น.',
+      type: 'EDIT',
+      typeBadge: 'ตัดตัวเลือกส่วนเกินออก',
+      badgeClass: 'badge-type-edit',
+      title: 'แก้ไขและล็อค Dropdown แผนปิดงานให้แสดงเฉพาะ 3 ตัวเลือกตรงชีต ตัดค่าขยะ ไตรมาส 4 และ งวด สค ออกถาวร',
+      targetSubject: 'หน้าต่างโมดัลแก้ไขงาน WBS (#wbsEditModalPlan) ใน js/wbs.js',
+      storageFile: 'js/wbs.js & js/data_history.js',
+      changeSummary: 'แก้ไขฟังก์ชัน refreshWbsPlanCloseDropdownOptions โดยตัดคำสั่งสแกนข้อมูลเก่า allData ออกอย่างเด็ดขาด เพื่อป้องกันไม่ให้ค่าเก่าที่เคยติด ไตรมาส 4 หรือ งวดบัญชี สค หลุดเข้ามาใน Dropdown ทำให้ปัจจุบันแสดงเฉพาะ 3 ตัวเลือกตาม Google Sheet เป๊ะ 100%',
+      details: 'ดำเนินการตามคำถาม/ปัญหาของผู้ใช้งาน (ทำไม แผนปิดงาน dropdown list ไม่ตรงตาม google sheet - มีตัวเลือกอื่นปนมาเกิน 3 ตัวเลือก): 1) สาเหตุเกิดจากระบบเดิมมีการสแกนหาตัวเลือกจากฐานข้อมูลเริ่มต้น ซึ่งมีข้อมูลเก่าติดคำว่า "ไตรมาส 4" และ "งวดบัญชี สค" 2) แก้ไขใน js/wbs.js โดยกำหนด exactOptions ให้มีเฉพาะ "งวดบัญชี ต.ค. 69", "งวดบัญชี พ.ย. 69", "งวดบัญชี ธ.ค. 69" และตัวเลือกเว้นว่าง 3) ตัดการสแกน dynamicOptionsSet จาก allData ทิ้งทั้งหมด ทำให้ตัวเลือกสะอาดและตรงกับ Google Sheet 100%',
+      sourceFile: 'คำสั่งผู้ใช้งาน (ทำไม แผนปิดงาน dropdown list ไม่ตรงตาม google sheet)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง'
+    },
+    {
       id: 'log_000_wbs_realtime_auto_sync_google_sheet_plan_dropdown',
       timestamp: '2026-10-22 21:37:00',
       timestampTh: '22 ต.ค. 2569, 21:37 น.',
