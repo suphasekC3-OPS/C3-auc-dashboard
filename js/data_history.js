@@ -320,10 +320,10 @@
       path: 'js/data_wbs.js',
       title: 'ฐานข้อมูลรวมงาน WBS คงเหลือ (Merged WBS Database)',
       role: 'จัดเก็บข้อมูลหลักงาน WBS (ไฟล์ 03 + 04 + 05 + Google Sheet)',
-      recordsCount: '2,968 รายการ (41 คอลัมน์)',
-      fileSize: '3.30 MB',
-      updatedAt: '22 ต.ค. 2569, 17:23 น.',
-      status: '100% ซิงค์ Google Sheet ล่าสุด',
+      recordsCount: '2,083 รายการ (41 คอลัมน์)',
+      fileSize: '2.32 MB',
+      updatedAt: '23 ต.ค. 2569, 09:58 น.',
+      status: '100% ฐานข้อมูลอัปเดตล่าสุด',
       variable: 'window.AUC_WBS_REMAINING_DATA'
     },
     {
@@ -402,6 +402,22 @@
    * System Pre-defined Audit & Modification Log Entries
    */
   const BASE_AUDIT_LOGS = [
+    {
+      id: 'log_000_fix_wbs_count_2083_and_cache_bust',
+      timestamp: '2026-10-23 10:20:00',
+      timestampTh: '23 ต.ค. 2569, 10:20 น.',
+      type: 'EDIT',
+      typeBadge: 'ปรับยอด WBS 2,083 & แก้ Cache',
+      badgeClass: 'badge-type-edit',
+      title: 'แก้ไขการแสดงผลยอดงาน WBS คงเหลือให้ตรงกับไฟล์ 03 (2,083 งาน) และอัปเดต Version Cache Buster',
+      targetSubject: 'ป้ายเมนูนำทาง (index.html), การ์ดสถิติ (index.html), โมเดลจัดเก็บข้อมูล (js/data_history.js) และแท็กเวอร์ชันสคริปต์ล้างแคชเบราว์เซอร์',
+      storageFile: 'index.html, js/data_history.js',
+      changeSummary: 'แก้ไขยอดรวมงาน WBS ที่ตกค้างเป็น 2,968 ให้แสดง 2,083 งานตามไฟล์ 03 WBS ล่าสุด: 1) ปรับปรุง index.html ที่แท็บ wbsTabTotalBadge จาก 2,968 เป็น 2,083 2) ปรับปรุงการ์ดสรุป wbsStatTotalJobsSub เป็น 2,083 3) อัปเดต Cache Buster Query String (?v=20261023_1020) บนไฟล์ data_wbs.js, wbs.js, data_history.js, app.js เพื่อบังคับให้เบราว์เซอร์และ GitHub Pages ดึงไฟล์ 2,083 รายการใหม่ทันที ไม่ติดแคชเดิม 4) อัปเดตข้อมูลผัง Model View ใน js/data_history.js ครบทุกจุด',
+      details: 'ดำเนินการตามคำสั่ง "งานรวมทั้งหมด 2083 งาน ทำไมภาพรวมยังขึ้น 2968 / จำนวนงานที่แสดง wbs คงเหลือ ให้อ้างอิงจากไฟล 03 WBS คงเหลือเม่านั้น / WBS ใน github ไม่ตรงกับ index": 1) วิเคราะห์พบว่าเบราว์เซอร์ของผู้ใช้และ GitHub Pages ยังคงจำไฟล์แคช js/data_wbs.js?v=20261019_0848 จากวันที่ 19 ต.ค. ซึ่งมียอดเดิม 2,968 รายการ และใน index.html มีค่าเริ่มต้นเป็น 2,968 ทำให้เมื่อเปิดเว็บยังแสดงผลตัวเลขเดิม 2) ปรับค่าเริ่มต้นใน index.html เป็น 2,083 รายการ 3) อัปเดตพารามิเตอร์เวอร์ชันสคริปต์เป็น ?v=20261023_1020 เพื่อตัดปัญหา Browser Disk Cache 4) ปรับผัง Model View และตัวแปรสถิติใน js/data_history.js เป็น 2,083 รายการ (2.32 MB) 5) ซิงค์ไฟล์ index.html และไฟล์ทั้งหมดไปยัง D:\\กรย+++\\C3-auc-dashboard',
+      sourceFile: 'คำสั่งผู้ใช้งาน (งานรวมทั้งหมด 2083 งาน ทำไมภาพรวมยังขึ้น 2968 / WBS ใน github ไม่ตรงกับ index)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง'
+    },
     {
       id: 'log_000_update_wbs_03_04_05_1',
       timestamp: '2026-10-23 09:58:00',
@@ -2141,9 +2157,9 @@
           <div class="dh-stat-card">
             <div class="dh-stat-icon" style="background:rgba(139,92,246,0.15); color:#A78BFA;">📅</div>
             <div class="dh-stat-body">
-              <div class="dh-stat-val">13 ต.ค. 2569</div>
+              <div class="dh-stat-val">23 ต.ค. 2569</div>
               <div class="dh-stat-label">นำเข้าข้อมูล WBS คงเหลือล่าสุด</div>
-              <div class="dh-stat-sub">2,968 รายการ WBS (ผสานไฟล์ 03, 04, 05, 06)</div>
+              <div class="dh-stat-sub">2,083 รายการ WBS (ผสานไฟล์ 03, 04, 05, 06)</div>
             </div>
           </div>
 
@@ -2223,18 +2239,18 @@
                 <div class="dh-stage-cards">
                   <div class="dh-flow-node" onclick="window.openModelViewModal('src_03', 'source')">
                     <div class="dh-node-badge" style="background:#EC4899;">ไฟล์ 03</div>
-                    <div class="dh-node-title">WBS คงเหลือ (2,968 รายการ)</div>
-                    <div class="dh-node-meta">นำเข้า: 13 ต.ค. 69 • 5.74 MB</div>
+                    <div class="dh-node-title">WBS คงเหลือ (2,083 รายการ)</div>
+                    <div class="dh-node-meta">นำเข้า: 23 ต.ค. 69 • 5.43 MB</div>
                   </div>
                   <div class="dh-flow-node" onclick="window.openModelViewModal('src_04', 'source')">
                     <div class="dh-node-badge" style="background:#8B5CF6;">ไฟล์ 04</div>
                     <div class="dh-node-title">ZBUDR064 (%พัสดุ/สถานะ SAP)</div>
-                    <div class="dh-node-meta">นำเข้า: 13 ต.ค. 69 • 959 KB</div>
+                    <div class="dh-node-meta">นำเข้า: 23 ต.ค. 69 • 731.7 KB</div>
                   </div>
                   <div class="dh-flow-node" onclick="window.openModelViewModal('src_05', 'source')">
                     <div class="dh-node-badge" style="background:#F59E0B;">ไฟล์ 05</div>
                     <div class="dh-node-title">CN41 (มูลค่า AUC บาท)</div>
-                    <div class="dh-node-meta">นำเข้า: 13 ต.ค. 69 • 345 KB</div>
+                    <div class="dh-node-meta">นำเข้า: 23 ต.ค. 69 • 338.1 KB</div>
                   </div>
                   <div class="dh-flow-node" onclick="window.openModelViewModal('src_06', 'source')">
                     <div class="dh-node-badge" style="background:#10B981;">ไฟล์ 06</div>
@@ -2307,7 +2323,7 @@
                   <div class="dh-flow-node storage-node" onclick="window.openModelViewModal('src_03', 'source')">
                     <div class="dh-node-badge" style="background:#10B981;">js/data_wbs.js</div>
                     <div class="dh-node-title">window.AUC_WBS_REMAINING_DATA</div>
-                    <div class="dh-node-meta">2,968 รายการ WBS • 3.47 MB</div>
+                    <div class="dh-node-meta">2,083 รายการ WBS • 2.32 MB</div>
                   </div>
                   <div class="dh-flow-node storage-node" onclick="window.openModelViewModal('src_01_aug', 'source')">
                     <div class="dh-node-badge" style="background:#6366F1;">js/data_aug.js</div>
