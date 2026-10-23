@@ -535,6 +535,16 @@
     return m >= 0 && m <= 8;
   }
 
+  function getLatestAvailableMonthIndex() {
+    for (let m = 11; m >= 0; m--) {
+      if (typeof hasReportForMonth === 'function' && hasReportForMonth(m)) {
+        return m;
+      }
+    }
+    return 8; // Default fallback to ก.ย. (index 8)
+  }
+  window.getLatestAvailableMonthIndex = getLatestAvailableMonthIndex;
+
   function getRawDataForMonth(mIdx) {
     const m = Number(mIdx);
     if (m === 0 && window.AUC_DATA_JAN && Array.isArray(window.AUC_DATA_JAN)) return window.AUC_DATA_JAN;
@@ -943,8 +953,8 @@
 
     const badge = document.getElementById('selectedMonthBadge');
     if (badge) {
-      const mIdx = (typeof state.filters.month === 'number') ? state.filters.month : 7;
-      const mName = MONTHS_TH[mIdx] || 'ส.ค.';
+      const mIdx = (typeof state.filters.month === 'number') ? state.filters.month : getLatestAvailableMonthIndex();
+      const mName = MONTHS_TH[mIdx] || 'ก.ย.';
       const hasData = activeBtn ? activeBtn.classList.contains('has-data') : (mIdx <= 7);
       badge.textContent = `${mName} (${hasData ? 'มีข้อมูล' : 'ยังไม่มีข้อมูล'})`;
       if (hasData) {
@@ -1103,7 +1113,7 @@
     if (cOff && state.filters.office) cOff.value = state.filters.office;
 
     // Sync all chart header dropdowns (เดือน, เกณฑ์วัด, จังหวัด, หน่วยงาน)
-    const curMonth = (typeof state.filters.month === 'number') ? state.filters.month : 7;
+    const curMonth = (typeof state.filters.month === 'number') ? state.filters.month : getLatestAvailableMonthIndex();
     document.querySelectorAll('.select-chart-month').forEach(s => {
       s.value = curMonth;
     });
@@ -1156,10 +1166,11 @@
 
   window.selectSidebarCriteria = function(crit) {
     if (state.hiddenTimelineSeries) state.hiddenTimelineSeries.clear();
-    state.filters.criteria = crit;
-    state.filters.selectedCriteria = [crit];
+    const newCrit = (state.filters.criteria === crit && crit !== 'ALL') ? 'ALL' : crit;
+    state.filters.criteria = newCrit;
+    state.filters.selectedCriteria = newCrit === 'ALL' ? [] : [newCrit];
     const sideCrit = document.getElementById('filterCriteria');
-    if (sideCrit) sideCrit.value = crit;
+    if (sideCrit) sideCrit.value = newCrit;
 
     syncSidebarFilterUI();
     syncChartFilterUI();
@@ -1632,15 +1643,32 @@
     const resetBtn = document.getElementById('btnResetFilters');
     if (resetBtn) {
       resetBtn.addEventListener('click', () => {
-        state.filters = { criteria: 'ข้อ 1.1 งบ C.1 ก่อน 69', selectedCriteria: ['ข้อ 1.1 งบ C.1 ก่อน 69'], province: 'ALL', office: 'ALL', kpiGrade: 'ALL', search: '', unit: 'ALL', month: 7 };
+        if (state.hiddenTimelineSeries) state.hiddenTimelineSeries.clear();
+        if (state.hiddenTimelineAmountSeries) state.hiddenTimelineAmountSeries.clear();
+
+        const latestM = getLatestAvailableMonthIndex();
+        state.filters = {
+          criteria: 'ข้อ 1.1 งบ C.1 ก่อน 69',
+          selectedCriteria: ['ข้อ 1.1 งบ C.1 ก่อน 69'],
+          province: 'ALL',
+          office: 'ALL',
+          kpiGrade: 'ALL',
+          search: '',
+          unit: 'ALL',
+          month: latestM
+        };
+
+        loadDataForMonth(latestM);
         updateMonthButtonsUI();
         
         const critEl = document.getElementById('filterCriteria');
         if (critEl) critEl.value = 'ข้อ 1.1 งบ C.1 ก่อน 69';
         const provEl = document.getElementById('filterProvince');
         if (provEl) provEl.value = 'ALL';
+        const offEl = document.getElementById('filterOffice');
+        if (offEl) offEl.value = 'ALL';
         const mEl = document.getElementById('filterMonth');
-        if (mEl) mEl.value = 7;
+        if (mEl) mEl.value = latestM;
         const s = document.getElementById('searchInput');
         if (s) s.value = '';
 
@@ -1649,7 +1677,7 @@
         syncChartFilterUI();
         filterData();
         renderAll();
-        showToast('รีเซ็ตตัวกรองทั้งหมดเรียบร้อยแล้ว', 'info');
+        showToast(`รีเซ็ตตัวกรองทั้งหมดเป็นเดือนล่าสุด (${MONTHS_TH[latestM] || 'ก.ย.'}) เรียบร้อยแล้ว`, 'info');
       });
     }
 
@@ -1845,7 +1873,12 @@
     setTimeout(() => {
       if (tabId === 'tab-dashboard') renderDashboardCharts();
       if (tabId === 'tab-analytics') renderAnalyticsCharts();
-      if (tabId === 'tab-wbs' && window.renderWbsTab) window.renderWbsTab();
+      if (tabId === 'tab-wbs') {
+        if (window.renderWbsTab) window.renderWbsTab();
+        if (window.syncLiveNotesFromGoogleSheet) {
+          window.syncLiveNotesFromGoogleSheet(false);
+        }
+      }
       if (tabId === 'tab-data-history' && window.renderDataHistoryTab) window.renderDataHistoryTab();
     }, 50);
   }
@@ -1907,8 +1940,8 @@
     if (nUnitEl) nUnitEl.textContent = `(${unitLabel})`;
 
     // 3. Month (เดือนประเมิน)
-    const mIdx = (typeof state.filters.month === 'number') ? state.filters.month : 7;
-    const mName = MONTHS_TH[mIdx] || 'ส.ค.';
+    const mIdx = (typeof state.filters.month === 'number') ? state.filters.month : getLatestAvailableMonthIndex();
+    const mName = MONTHS_TH[mIdx] || 'ก.ย.';
     const monthEl = document.getElementById('topSelMonthText');
     if (monthEl) monthEl.textContent = `${mName} 2569`;
     const nMonthEl = document.getElementById('next3mSelMonthText');
@@ -4299,7 +4332,7 @@
 
     // Calculate Level 5 KPI Target Lines (%) based on selected criteria, evaluation month, next 3 months, and December (ธ.ค.)
     const monthNames = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
-    const mIdx = (typeof state.filters.month === 'number') ? state.filters.month : 7;
+    const mIdx = (typeof state.filters.month === 'number') ? state.filters.month : getLatestAvailableMonthIndex();
 
     const rawTargetLines = [];
 
@@ -7501,7 +7534,7 @@
 
     // Target Lines for criteriaComparisonChart: เดือนล่าสุด และ 3 เดือนถัดไป เท่านั้น (ทศนิยม 2 ตำแหน่ง)
     const monthNames = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
-    const curMonthIdx = (typeof state.filters.month === 'number') ? state.filters.month : 7; // ค่าเริ่มต้น ส.ค. (index 7, monthNum 8)
+    const curMonthIdx = (typeof state.filters.month === 'number') ? state.filters.month : getLatestAvailableMonthIndex(); // ค่าเริ่มต้นเดือนล่าสุด ก.ย. (index 8)
 
     // Helper to get Level 5 KPI Target for any criteria and month
     function getCriteriaTarget(critName, mIdx) {
@@ -7809,6 +7842,14 @@
         { label: '★ ผ่านเกณฑ์สะสม (1 ดาว/เดือน)', color: '#FFD25A' },
         { label: '✓ บรรลุเป้าหมาย ธ.ค. (สิ้นปี 69)', color: '#00FF88' }
       ],
+      onClick: (item) => {
+        if (item && item.extra && item.extra.fullTitle && typeof window.selectSidebarCriteria === 'function') {
+          window.selectSidebarCriteria(item.extra.fullTitle);
+        } else if (item && item.label && typeof window.selectSidebarCriteria === 'function') {
+          const matched = presentCrits.find(c => getCriteriaBarShortLabel(c) === item.label) || item.label;
+          window.selectSidebarCriteria(matched);
+        }
+      },
       onRender: (chart) => {
         if (window.CriteriaFireworks && typeof window.CriteriaFireworks.updateTargets === 'function') {
           window.CriteriaFireworks.updateTargets(chart);
@@ -9298,6 +9339,50 @@
       });
     }
   }
+
+  /**
+   * Action: Update to GitHub Desktop
+   * Syncs latest web files from 00AI to C3-auc-dashboard
+   */
+  window.triggerUpdateToGithubDesktop = async function () {
+    const btn = document.getElementById('btnUpdateGithubDesktop');
+    const originalHtml = btn ? btn.innerHTML : '';
+    if (btn) {
+      btn.innerHTML = '<span style="font-size:0.8rem;">⏳ กำลังซิงค์ไฟล์...</span>';
+      btn.disabled = true;
+    }
+
+    try {
+      const resp = await fetch('http://localhost:8089/api/sync-github', {
+        method: 'GET',
+        mode: 'cors'
+      });
+      const result = await resp.json();
+      if (result && result.status === 'success') {
+        if (typeof showToast === 'function') {
+          showToast('✅ คัดลอกไฟล์ไปยัง C3-auc-dashboard สำเร็จ! เปิด GitHub Desktop ให้เรียบร้อย', 'success');
+        } else {
+          alert('✅ คัดลอกไฟล์ไปยัง C3-auc-dashboard สำเร็จ!\nระบบได้โฟกัส GitHub Desktop ให้แล้ว สามารถกด Commit & Push ได้ทันทีครับ');
+        }
+        return;
+      }
+    } catch (err) {
+      console.warn('Local sync server not reachable, displaying modal instructions:', err);
+    } finally {
+      if (btn) {
+        btn.innerHTML = originalHtml;
+        btn.disabled = false;
+      }
+    }
+
+    // Fallback: If local API server wasn't responding, show instruction modal
+    const modal = document.getElementById('updateGithubModal');
+    if (modal) {
+      modal.style.display = 'flex';
+    } else {
+      alert('💡 สามารถเปิดไฟล์ Update_to_GitHub_Desktop.bat ในโฟลเดอร์ 00AI เพื่อซิงค์ไฟล์ไปยัง GitHub Desktop ได้ทันทีครับ');
+    }
+  };
 
   window.__APP_LOADED = true;
 })();

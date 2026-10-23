@@ -2337,7 +2337,7 @@ body {
   grid-template-columns: minmax(295px, 20.25%) 1fr;
   gap: 0.85rem;
   margin-bottom: 1.25rem;
-  align-items: stretch;
+  align-items: start;
 }
 
 @media (max-width: 1440px) {
@@ -2363,7 +2363,31 @@ body {
 .top-executive-left-deck {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: auto;
+  width: 100%;
+  min-width: 0;
+  position: -webkit-sticky;
+  position: sticky;
+  top: calc(var(--sticky-header-height, 134px) + 0.35rem);
+  z-index: 15;
+  align-self: start;
+  max-height: calc(100vh - var(--sticky-header-height, 134px) - 0.75rem);
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+@media (max-width: 1080px) {
+  .top-executive-left-deck {
+    position: static !important;
+    max-height: none !important;
+    overflow-y: visible !important;
+  }
+}
+
+.top-executive-right-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
   width: 100%;
   min-width: 0;
 }
@@ -2394,7 +2418,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
-  height: 100%;
+  height: auto;
   box-sizing: border-box;
   background: var(--surface-card, rgba(30, 9, 50, 0.7));
   border: 1px solid var(--border-subtle, rgba(216, 180, 254, 0.15));
@@ -3233,7 +3257,7 @@ body {
 
 /* Criteria Comparison Chart Card (Full Width Section Below Executive Grid) */
 .top-criteria-chart-card {
-  margin-bottom: 1.5rem !important;
+  margin-bottom: 0 !important;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -9123,7 +9147,7 @@ body.has-fullscreen-table {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   overflow: visible;
-  height: 100%;
+  height: auto;
 }
 
 /* Top Section: Projection 3-Month Targets */
@@ -16061,3 +16085,24 @@ body.has-fullscreen-table {
   background: rgba(234, 179, 8, 0.2);
   border-color: #F59E0B;
 }
+
+/* WBS Not Found in Google Sheet Cell Styling */
+.badge-plan-not-found {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #DC2626;
+  color: #FFFFFF !important;
+  font-weight: 700;
+  font-size: 0.72rem;
+  padding: 2px 7px;
+  border-radius: 4px;
+  box-shadow: 0 0 8px rgba(220, 38, 38, 0.45);
+  white-space: nowrap;
+}
+
+[data-theme="light"] .badge-plan-not-found {
+  background: #EF4444;
+  color: #FFFFFF !important;
+}
+

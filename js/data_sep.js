@@ -3681,7 +3681,7 @@
     },
     {
         "id":  231,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "นครปฐม",
         "office":  "กฟจ.นครปฐม",
@@ -3697,7 +3697,7 @@
     },
     {
         "id":  232,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "นครปฐม",
         "office":  "กฟส.ดอนตูม",
@@ -3713,7 +3713,7 @@
     },
     {
         "id":  233,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "นครปฐม",
         "office":  "กฟส.สามพราน",
@@ -3729,7 +3729,7 @@
     },
     {
         "id":  234,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "นครปฐม",
         "office":  "กฟส.กำแพงแสน",
@@ -3745,7 +3745,7 @@
     },
     {
         "id":  235,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "นครปฐม",
         "office":  "กฟส.นครชัยศรี",
@@ -3761,7 +3761,7 @@
     },
     {
         "id":  236,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "นครปฐม",
         "office":  "กฟส.บางเลน",
@@ -3777,7 +3777,7 @@
     },
     {
         "id":  237,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "นครปฐม",
         "office":  "กฟส.พุทธมณฑล",
@@ -3793,7 +3793,7 @@
     },
     {
         "id":  238,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "นครปฐม",
         "office":  "ผลรวมจังหวัดนครปฐม",
@@ -3809,7 +3809,7 @@
     },
     {
         "id":  239,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "สุพรรณบุรี",
         "office":  "กฟจ.สุพรรณบุรี",
@@ -3825,7 +3825,7 @@
     },
     {
         "id":  240,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "สุพรรณบุรี",
         "office":  "กฟส.บางปลาม้า",
@@ -3841,7 +3841,7 @@
     },
     {
         "id":  241,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "สุพรรณบุรี",
         "office":  "กฟส.ดอนเจดีย์",
@@ -3857,7 +3857,7 @@
     },
     {
         "id":  242,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "สุพรรณบุรี",
         "office":  "กฟส.ศรีประจันต์",
@@ -3873,7 +3873,7 @@
     },
     {
         "id":  243,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "สุพรรณบุรี",
         "office":  "กฟส.สามชุก",
@@ -3889,7 +3889,7 @@
     },
     {
         "id":  244,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "สุพรรณบุรี",
         "office":  "กฟส.อู่ทอง",
@@ -3905,7 +3905,7 @@
     },
     {
         "id":  245,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "สุพรรณบุรี",
         "office":  "กฟส.สองพี่น้อง",
@@ -3921,7 +3921,7 @@
     },
     {
         "id":  246,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "สุพรรณบุรี",
         "office":  "กฟส.เดิมบางนางบวช",
@@ -3937,7 +3937,7 @@
     },
     {
         "id":  247,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "สุพรรณบุรี",
         "office":  "กฟส.ด่านช้าง",
@@ -3953,7 +3953,7 @@
     },
     {
         "id":  248,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "สุพรรณบุรี",
         "office":  "กฟส.หนองหญ้าไซ",
@@ -3969,7 +3969,7 @@
     },
     {
         "id":  249,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "สุพรรณบุรี",
         "office":  "ผลรวมจังหวัดสุพรรณบุรี",
@@ -3985,7 +3985,7 @@
     },
     {
         "id":  250,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "กาญจนบุรี",
         "office":  "กฟจ.กาญจนบุรี",
@@ -4001,7 +4001,7 @@
     },
     {
         "id":  251,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "กาญจนบุรี",
         "office":  "กฟส.ท่าม่วง",
@@ -4017,7 +4017,7 @@
     },
     {
         "id":  252,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "กาญจนบุรี",
         "office":  "กฟส.พนมทวน",
@@ -4033,7 +4033,7 @@
     },
     {
         "id":  253,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "กาญจนบุรี",
         "office":  "กฟส.ไทรโยค",
@@ -4049,7 +4049,7 @@
     },
     {
         "id":  254,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "กาญจนบุรี",
         "office":  "กฟส.ทองผาภูมิ",
@@ -4065,7 +4065,7 @@
     },
     {
         "id":  255,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "กาญจนบุรี",
         "office":  "กฟส.ด่านมะขามเตี้ย",
@@ -4081,7 +4081,7 @@
     },
     {
         "id":  256,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "กาญจนบุรี",
         "office":  "กฟส.ลาดหญ้า",
@@ -4097,7 +4097,7 @@
     },
     {
         "id":  257,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "กาญจนบุรี",
         "office":  "กฟส.บ่อพลอย",
@@ -4113,7 +4113,7 @@
     },
     {
         "id":  258,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "กาญจนบุรี",
         "office":  "กฟส.เลาขวัญ",
@@ -4129,7 +4129,7 @@
     },
     {
         "id":  259,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "กาญจนบุรี",
         "office":  "กฟส.ท่ามะกา",
@@ -4145,7 +4145,7 @@
     },
     {
         "id":  260,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "กาญจนบุรี",
         "office":  "กฟส.ท่าเรือ",
@@ -4161,7 +4161,7 @@
     },
     {
         "id":  261,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "กาญจนบุรี",
         "office":  "ผลรวมจังหวัดกาญจนบุรี",
@@ -4177,7 +4177,7 @@
     },
     {
         "id":  262,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "สมุทรสาคร",
         "office":  "กฟจ.สมุทรสาคร",
@@ -4193,7 +4193,7 @@
     },
     {
         "id":  263,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "สมุทรสาคร",
         "office":  "กฟส.บางน้ำจืด",
@@ -4209,7 +4209,7 @@
     },
     {
         "id":  264,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "สมุทรสาคร",
         "office":  "กฟส.กระทุ่มแบน",
@@ -4225,7 +4225,7 @@
     },
     {
         "id":  265,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "สมุทรสาคร",
         "office":  "กฟส.อ้อมน้อย",
@@ -4241,7 +4241,7 @@
     },
     {
         "id":  266,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "สมุทรสาคร",
         "office":  "กฟส.สมุทรสาคร2(บพว)",
@@ -4257,7 +4257,7 @@
     },
     {
         "id":  267,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "สมุทรสาคร",
         "office":  "กฟส.โคกขาม",
@@ -4273,7 +4273,7 @@
     },
     {
         "id":  268,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "สมุทรสาคร",
         "office":  "ผลรวมจังหวัดสมุทรสาคร",
@@ -4289,7 +4289,7 @@
     },
     {
         "id":  269,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "กอง/กฟก.3",
         "office":  "กรย.",
@@ -4305,7 +4305,7 @@
     },
     {
         "id":  270,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "กอง/กฟก.3",
         "office":  "กสฟ.",
@@ -4321,7 +4321,7 @@
     },
     {
         "id":  271,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "กอง/กฟก.3",
         "office":  "กดส.",
@@ -4337,7 +4337,7 @@
     },
     {
         "id":  272,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "กอง/กฟก.3",
         "office":  "กบษ.",
@@ -4353,7 +4353,7 @@
     },
     {
         "id":  273,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "กอง/กฟก.3",
         "office":  "กปบ.",
@@ -4369,7 +4369,7 @@
     },
     {
         "id":  274,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "กอง/กฟก.3",
         "office":  "กบล.",
@@ -4385,7 +4385,7 @@
     },
     {
         "id":  275,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "กอง/กฟก.3",
         "office":  "กวว.",
@@ -4401,7 +4401,7 @@
     },
     {
         "id":  276,
-        "criteria":  "ข้อ 3.2 TECO D2",
+        "criteria":  "ข้อ 3.3 TECO D2",
         "unit":  "งาน",
         "province":  "กฟก.3",
         "office":  "กฟก.3 ผลรวม",

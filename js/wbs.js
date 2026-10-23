@@ -415,7 +415,9 @@
       // 7. Local In-Table Plan Close Filter (File 06)
       if (localPlanClose !== 'ALL') {
         const p = (item.planClose || '').trim();
-        if (localPlanClose === 'EMPTY') {
+        if (localPlanClose === 'NOT_IN_SHEET') {
+          if (!item.notFoundInSheet) return false;
+        } else if (localPlanClose === 'EMPTY') {
           if (p) return false;
         } else {
           if (!p.includes(localPlanClose)) return false;
@@ -2017,8 +2019,12 @@
     const currentVal = wbsState.planClose || 'ALL';
     const planCounts = {};
     let emptyCount = 0;
+    let notInSheetCount = 0;
 
     filtered.forEach(item => {
+      if (item.notFoundInSheet) {
+        notInSheetCount++;
+      }
       const p = (item.planClose || '').trim();
       if (!p) {
         emptyCount++;
@@ -2034,6 +2040,10 @@
     const sortedPlans = Object.keys(planCounts).sort((a, b) => a.localeCompare(b, 'th'));
 
     let html = `<option value="ALL">ทุกแผนปิดงาน (ทั้งหมด ${sortedPlans.length})</option>`;
+    if (notInSheetCount > 0) {
+      const selected = (currentVal === 'NOT_IN_SHEET') ? 'selected' : '';
+      html += `<option value="NOT_IN_SHEET" ${selected} style="color:#EF4444; font-weight:700;">❌ ไม่พบใน Google Sheet (${notInSheetCount.toLocaleString('th-TH')})</option>`;
+    }
     if (emptyCount > 0) {
       const selected = (currentVal === 'EMPTY') ? 'selected' : '';
       html += `<option value="EMPTY" ${selected}>ยังไม่มีแผนปิดงาน (${emptyCount.toLocaleString('th-TH')})</option>`;
@@ -2830,27 +2840,51 @@
               break;
             // File 06 Columns (Google Sheet แผนงานแล้วเสร็จ)
             case 'planClose': {
+              const isNotFound = item.notFoundInSheet === true;
               const pVal = item.planClose ? item.planClose.trim() : '';
-              rowHtml += `<td style="text-align: center;">
-                <div class="wbs-cell-edit-wrap is-center">
-                  ${pVal ? `<span class="badge-plan-close" title="${escapeHtml(pVal)}">📅 ${escapeHtml(pVal)}</span>` : `<span style="color: var(--text-dim); font-size: 0.8rem;">-</span>`}
-                  <button type="button" class="btn-wbs-inline-edit" onclick="window.openWbsEditNoteModal('${safeWbsAttr}')" title="คลิกเพื่อแก้ไขแผนปิดงาน / หมายเหตุ (Google Sheet)">
-                    ✏️
-                  </button>
-                </div>
-              </td>`;
+              if (isNotFound) {
+                rowHtml += `<td style="text-align: center; background: rgba(220, 38, 38, 0.28) !important; border-top: 1px solid rgba(239, 68, 68, 0.4); border-bottom: 1px solid rgba(239, 68, 68, 0.4); border-left: 2px solid #EF4444;">
+                  <div class="wbs-cell-edit-wrap is-center">
+                    <span class="badge-plan-not-found" style="background: #DC2626; color: #FFFFFF; font-weight: 700; font-size: 0.72rem; padding: 2px 7px; border-radius: 4px; box-shadow: 0 0 8px rgba(220, 38, 38, 0.45); white-space: nowrap;" title="ไม่พบเลขที่ WBS นี้ใน Google Sheet (ยึดตาม Google Sheet เท่านั้น)">❌ ไม่พบใน Google Sheet</span>
+                    <button type="button" class="btn-wbs-inline-edit" onclick="window.openWbsEditNoteModal('${safeWbsAttr}')" title="คลิกเพื่อระบุแผนปิดงาน / หมายเหตุ เพื่อส่งเข้า Google Sheet">
+                      ✏️
+                    </button>
+                  </div>
+                </td>`;
+              } else {
+                rowHtml += `<td style="text-align: center;">
+                  <div class="wbs-cell-edit-wrap is-center">
+                    ${pVal ? `<span class="badge-plan-close" title="${escapeHtml(pVal)}">📅 ${escapeHtml(pVal)}</span>` : `<span style="color: var(--text-dim); font-size: 0.8rem;">-</span>`}
+                    <button type="button" class="btn-wbs-inline-edit" onclick="window.openWbsEditNoteModal('${safeWbsAttr}')" title="คลิกเพื่อแก้ไขแผนปิดงาน / หมายเหตุ (Google Sheet)">
+                      ✏️
+                    </button>
+                  </div>
+                </td>`;
+              }
               break;
             }
             case 'note': {
+              const isNotFound = item.notFoundInSheet === true;
               const nVal = item.note ? item.note.trim() : '';
-              rowHtml += `<td>
-                <div class="wbs-cell-edit-wrap is-between">
-                  <div class="wbs-note-cell" style="flex:1;" title="${escapeHtml(nVal)}">${escapeHtml(nVal || '-')}</div>
-                  <button type="button" class="btn-wbs-inline-edit" onclick="window.openWbsEditNoteModal('${safeWbsAttr}')" title="คลิกเพื่อแก้ไขหมายเหตุ / แผนปิดงาน (Google Sheet)">
-                    ✏️
-                  </button>
-                </div>
-              </td>`;
+              if (isNotFound) {
+                rowHtml += `<td style="background: rgba(220, 38, 38, 0.28) !important; border-top: 1px solid rgba(239, 68, 68, 0.4); border-bottom: 1px solid rgba(239, 68, 68, 0.4); border-right: 2px solid #EF4444;">
+                  <div class="wbs-cell-edit-wrap is-between">
+                    <div class="wbs-note-cell" style="flex:1; color: #FCA5A5; font-size: 0.78rem; font-weight: 600;" title="ไม่พบเลขที่ WBS นี้ใน Google Sheet (ยึดตาม Google Sheet เท่านั้น)">❌ ไม่พบใน Google Sheet</div>
+                    <button type="button" class="btn-wbs-inline-edit" onclick="window.openWbsEditNoteModal('${safeWbsAttr}')" title="คลิกเพื่อระบุหมายเหตุ / แผนปิดงาน เพื่อส่งเข้า Google Sheet">
+                      ✏️
+                    </button>
+                  </div>
+                </td>`;
+              } else {
+                rowHtml += `<td>
+                  <div class="wbs-cell-edit-wrap is-between">
+                    <div class="wbs-note-cell" style="flex:1;" title="${escapeHtml(nVal)}">${escapeHtml(nVal || '-')}</div>
+                    <button type="button" class="btn-wbs-inline-edit" onclick="window.openWbsEditNoteModal('${safeWbsAttr}')" title="คลิกเพื่อแก้ไขหมายเหตุ / แผนปิดงาน (Google Sheet)">
+                      ✏️
+                    </button>
+                  </div>
+                </td>`;
+              }
               break;
             }
             default:
@@ -4829,6 +4863,15 @@
    * Setup Event Listeners
    */
   function setupWbsListeners() {
+    // 0. Auto-sync Google Sheet when user clicks/opens WBS tab
+    document.querySelectorAll('[data-tab="tab-wbs"]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (window.syncLiveNotesFromGoogleSheet) {
+          window.syncLiveNotesFromGoogleSheet(false);
+        }
+      });
+    });
+
     // 1. In-table Search Input
     const sInput = document.getElementById('wbsTableSearchInput');
     if (sInput) {
@@ -5257,13 +5300,15 @@
     // 1. Optimistic Update in Local Memory
     item.planClose = newPlan;
     item.note = newNote;
+    item.notFoundInSheet = false;
 
     // 2. Call Google Apps Script API in background
     try {
-      const encWbs = encodeURIComponent(item.wbs);
+      const encWbs = encodeURIComponent(item.wbs || '');
+      const encDesc = encodeURIComponent(item.description || '');
       const encNote = encodeURIComponent(newNote);
       const encPlan = encodeURIComponent(newPlan);
-      const apiUrl = `${GAS_WEBAPP_URL}?action=update&wbs=${encWbs}&note=${encNote}&plan=${encPlan}&planClose=${encPlan}`;
+      const apiUrl = `${GAS_WEBAPP_URL}?action=update&wbs=${encWbs}&desc=${encDesc}&description=${encDesc}&note=${encNote}&plan=${encPlan}&planClose=${encPlan}`;
 
       // In browser, GAS redirects via 302. Using mode: 'no-cors' allows sending update smoothly
       fetch(apiUrl, { method: 'GET', mode: 'no-cors' }).catch(e => {
@@ -5289,11 +5334,20 @@
     }
   };
 
+  let isGoogleSheetSyncInProgress = false;
+  let lastSyncTimestamp = 0;
+
   /**
    * Sync Live Notes and Plan Close from Google Sheet (getAll)
    * รองรับการดึงข้อมูลทิศทาง Google Sheet ➡️ Web Dashboard
    */
   window.syncLiveNotesFromGoogleSheet = async function (isManual = false) {
+    const now = Date.now();
+    // ป้องกันการเรียกซ้ำซ้อนขณะกำลังซิงค์ หรือหากเพิ่งซิงค์เสร็จไปไม่เกิน 5 วินาที (กรณี Auto-sync)
+    if (isGoogleSheetSyncInProgress) return;
+    if (!isManual && (now - lastSyncTimestamp < 5000)) return;
+
+    isGoogleSheetSyncInProgress = true;
     const btn = document.getElementById('btnSyncGoogleSheet');
     const dot = document.getElementById('wbsSyncStatusDot');
     if (btn) btn.classList.add('is-syncing');
@@ -5303,23 +5357,73 @@
       const resp = await fetch(`${GAS_WEBAPP_URL}?action=getAll`);
       const json = await resp.json();
       if (json && json.status === 'success' && json.data) {
+        lastSyncTimestamp = Date.now();
         if (Array.isArray(json.planOptions)) {
           latestGoogleSheetPlanOptions = json.planOptions;
         }
 
-        const sheetMap = json.data;
+        const sheetMap = json.data || {};
+        const descMap = json.dataByDesc || {};
+        const normalizedSheetMap = {};
+        const normalizedDescMap = {};
+
+        // 1. แม็พด้วยรหัส WBS
+        if (sheetMap && typeof sheetMap === 'object') {
+          Object.keys(sheetMap).forEach(k => {
+            const cleanKey = k.trim().toUpperCase();
+            normalizedSheetMap[cleanKey] = sheetMap[k];
+          });
+        }
+
+        // 2. แม็พด้วย "ชื่องาน" (Job Description) สำหรับแถวที่ WBS ว่างหรือหา WBS ไม่ตรง
+        if (descMap && typeof descMap === 'object') {
+          Object.keys(descMap).forEach(k => {
+            const cleanDescKey = k.trim().toLowerCase().replace(/\s+/g, '');
+            normalizedDescMap[cleanDescKey] = descMap[k];
+          });
+        }
+
         const allData = window.AUC_WBS_REMAINING_DATA || [];
-        let updatedCount = 0;
+        let foundInSheetCount = 0;
+        let notFoundInSheetCount = 0;
 
         allData.forEach(item => {
-          const w = (item.wbs || '').trim();
-          if (sheetMap[w]) {
-            const row = sheetMap[w];
-            if (row.planClose !== undefined) item.planClose = row.planClose;
-            if (row.note !== undefined) item.note = row.note;
-            updatedCount++;
+          const wKey = (item.wbs || '').trim().toUpperCase();
+          const dKey = (item.description || '').trim().toLowerCase().replace(/\s+/g, '');
+
+          // 1. ตรวจสอบจับคู่ด้วยรหัส WBS ก่อน
+          let row = normalizedSheetMap[wKey];
+
+          // 2. หากไม่พบจาก WBS ให้ค้นหาจาก "ชื่องาน" (Job Description) ใน Google Sheet
+          if (!row && dKey && normalizedDescMap[dKey]) {
+            row = normalizedDescMap[dKey];
+          }
+
+          // 3. หากยังไม่พบ ให้ตรวจจับการมีอยู่ของคำ (Substring Match) หากชื่องานมีความยาวตั้งแต่ 8 ตัวอักษรขึ้นไป
+          if (!row && dKey && dKey.length >= 8) {
+            const foundDescKey = Object.keys(normalizedDescMap).find(k => k && (k.includes(dKey) || dKey.includes(k)));
+            if (foundDescKey) {
+              row = normalizedDescMap[foundDescKey];
+            }
+          }
+
+          if (row) {
+            // พบใน Google Sheet! (ดึงเฉพาะ แผนปิดงาน และหมายเหตุเท่านั้น)
+            item.planClose = (row.planClose !== undefined && row.planClose !== null) ? String(row.planClose).trim() : '';
+            item.note = (row.note !== undefined && row.note !== null) ? String(row.note).trim() : '';
+            item.notFoundInSheet = false;
+            foundInSheetCount++;
+          } else {
+            // หากหา WBS และ ชื่องาน ใน Google Sheet ไม่เจอเลย:
+            // ห้ามนำข้อมูลเก่ามาแสดง ให้ยึดจาก google sheet เท่านั้น
+            item.planClose = '';
+            item.note = '';
+            item.notFoundInSheet = true;
+            notFoundInSheetCount++;
           }
         });
+
+        window.AUC_WBS_SYNCED_SHEET = true;
 
         // 🌟 Auto-refresh modal dropdown options with any newly added/modified choices from Google Sheet
         refreshWbsPlanCloseDropdownOptions();
@@ -5327,7 +5431,9 @@
         renderWbsTab();
         if (dot) dot.style.background = '#10B981';
         if (isManual && window.showToast) {
-          window.showToast(`🎉 ซิงค์ข้อมูลจาก Google Sheet สำเร็จ (${json.totalRecords || updatedCount} รายการ)`, 'success');
+          window.showToast(`🎉 ซิงค์ Google Sheet สำเร็จ: พบใน Sheet ${foundInSheetCount.toLocaleString('th-TH')} งาน (ไม่พบ ${notFoundInSheetCount.toLocaleString('th-TH')} งาน)`, 'success');
+        } else if (!isManual && window.showToast) {
+          window.showToast(`🔄 Auto-Sync Google Sheet เรียบร้อย (พบ ${foundInSheetCount.toLocaleString('th-TH')} งาน, ไม่พบ ${notFoundInSheetCount.toLocaleString('th-TH')} งาน)`, 'info');
         }
       }
     } catch (err) {
@@ -5337,6 +5443,7 @@
         window.showToast(`ไม่สามารถซิงค์ Google Sheet ได้: ${err.message}`, 'error');
       }
     } finally {
+      isGoogleSheetSyncInProgress = false;
       if (btn) btn.classList.remove('is-syncing');
     }
   };
@@ -5364,11 +5471,24 @@
   window.renderWbsTab = renderWbsTab;
   window.refreshWbsPlanCloseDropdownOptions = refreshWbsPlanCloseDropdownOptions;
 
-  // Initialize when DOM is ready (ซิงค์เฉพาะเมื่อกดปุ่ม #btnSyncGoogleSheet เท่านั้น)
+  // Initialize when DOM is ready (Auto-sync Google Sheet เมื่อเปิดแท็บ WBS และล้างข้อมูลเก่าเพื่อยึด Google Sheet เท่านั้น)
   function initWbsApp() {
+    // กำหนดสถานะเริ่มต้นอย่างนุ่มนวล โดยให้ Auto-sync เป็นผู้ดึงข้อมูลสดและตรวจสอบความมีอยู่จริงจาก Google Sheet
+    const allData = window.AUC_WBS_REMAINING_DATA || [];
+    allData.forEach(item => {
+      item.planClose = '';
+      item.note = '';
+      item.notFoundInSheet = false;
+    });
+
     setupWbsListeners();
     renderWbsTab();
     refreshWbsPlanCloseDropdownOptions();
+
+    // Auto-sync Google Sheet ทันทีเพื่อดึงข้อมูลสด
+    if (window.syncLiveNotesFromGoogleSheet) {
+      window.syncLiveNotesFromGoogleSheet(false);
+    }
   }
 
   if (document.readyState === 'loading') {
