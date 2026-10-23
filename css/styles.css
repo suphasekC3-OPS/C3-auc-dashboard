@@ -10470,6 +10470,7 @@ body.has-fullscreen-table {
   line-height: 1.35;
   white-space: normal;
   word-break: break-word;
+  text-align: left !important;
 }
 
 .badge-sap-status {

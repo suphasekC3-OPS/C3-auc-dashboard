@@ -9348,7 +9348,7 @@
     const btn = document.getElementById('btnUpdateGithubDesktop');
     const originalHtml = btn ? btn.innerHTML : '';
     if (btn) {
-      btn.innerHTML = '<span style="font-size:0.8rem;">⏳ กำลังซิงค์ไฟล์...</span>';
+      btn.innerHTML = '<span style="font-size:0.8rem;">⏳ กำลังคัดลอกไฟล์...</span>';
       btn.disabled = true;
     }
 
@@ -9359,10 +9359,19 @@
       });
       const result = await resp.json();
       if (result && result.status === 'success') {
+        if (btn) {
+          btn.innerHTML = '<span style="font-size:0.8rem; color:#60A5FA;">🚀 เปิด GitHub Desktop แล้ว</span>';
+        }
+
+        // เสริมการเรียก x-github-client protocol เพื่อให้ Windows ดึงหน้าต่าง GitHub Desktop ขึ้นมาบนสุด
+        try {
+          window.location.href = 'x-github-client://openRepo/https://github.com/suphasekC3-OPS/C3-auc-dashboard';
+        } catch (_) {}
+
         if (typeof showToast === 'function') {
-          showToast('✅ คัดลอกไฟล์ไปยัง C3-auc-dashboard สำเร็จ! เปิด GitHub Desktop ให้เรียบร้อย', 'success');
+          showToast('✅ คัดลอกไฟล์ไปยัง C3-auc-dashboard สำเร็จ! เปิดโปรแกรม GitHub Desktop ให้อัตโนมัติแล้ว', 'success');
         } else {
-          alert('✅ คัดลอกไฟล์ไปยัง C3-auc-dashboard สำเร็จ!\nระบบได้โฟกัส GitHub Desktop ให้แล้ว สามารถกด Commit & Push ได้ทันทีครับ');
+          alert('✅ คัดลอกไฟล์สำเร็จ!\nระบบได้เปิดโปรแกรม GitHub Desktop ให้เรียบร้อย สามารถกด Commit to main & Push origin ได้เลยครับ');
         }
         return;
       }
@@ -9370,8 +9379,10 @@
       console.warn('Local sync server not reachable, displaying modal instructions:', err);
     } finally {
       if (btn) {
-        btn.innerHTML = originalHtml;
-        btn.disabled = false;
+        setTimeout(() => {
+          btn.innerHTML = originalHtml;
+          btn.disabled = false;
+        }, 1200);
       }
     }
 

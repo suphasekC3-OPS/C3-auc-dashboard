@@ -2867,18 +2867,18 @@
               const isNotFound = item.notFoundInSheet === true;
               const nVal = item.note ? item.note.trim() : '';
               if (isNotFound) {
-                rowHtml += `<td style="background: rgba(220, 38, 38, 0.28) !important; border-top: 1px solid rgba(239, 68, 68, 0.4); border-bottom: 1px solid rgba(239, 68, 68, 0.4); border-right: 2px solid #EF4444;">
-                  <div class="wbs-cell-edit-wrap is-between">
-                    <div class="wbs-note-cell" style="flex:1; color: #FCA5A5; font-size: 0.78rem; font-weight: 600;" title="ไม่พบเลขที่ WBS นี้ใน Google Sheet (ยึดตาม Google Sheet เท่านั้น)">❌ ไม่พบใน Google Sheet</div>
+                rowHtml += `<td style="background: rgba(220, 38, 38, 0.28) !important; border-top: 1px solid rgba(239, 68, 68, 0.4); border-bottom: 1px solid rgba(239, 68, 68, 0.4); border-right: 2px solid #EF4444; text-align: left !important;">
+                  <div class="wbs-cell-edit-wrap is-between" style="text-align: left; justify-content: space-between;">
+                    <div class="wbs-note-cell" style="flex:1; text-align: left !important; color: #FCA5A5; font-size: 0.78rem; font-weight: 600;" title="ไม่พบเลขที่ WBS นี้ใน Google Sheet (ยึดตาม Google Sheet เท่านั้น)">❌ ไม่พบใน Google Sheet</div>
                     <button type="button" class="btn-wbs-inline-edit" onclick="window.openWbsEditNoteModal('${safeWbsAttr}')" title="คลิกเพื่อระบุหมายเหตุ / แผนปิดงาน เพื่อส่งเข้า Google Sheet">
                       ✏️
                     </button>
                   </div>
                 </td>`;
               } else {
-                rowHtml += `<td>
-                  <div class="wbs-cell-edit-wrap is-between">
-                    <div class="wbs-note-cell" style="flex:1;" title="${escapeHtml(nVal)}">${escapeHtml(nVal || '-')}</div>
+                rowHtml += `<td style="text-align: left !important;">
+                  <div class="wbs-cell-edit-wrap is-between" style="text-align: left; justify-content: space-between;">
+                    <div class="wbs-note-cell" style="flex:1; text-align: left !important;" title="${escapeHtml(nVal)}">${escapeHtml(nVal || '-')}</div>
                     <button type="button" class="btn-wbs-inline-edit" onclick="window.openWbsEditNoteModal('${safeWbsAttr}')" title="คลิกเพื่อแก้ไขหมายเหตุ / แผนปิดงาน (Google Sheet)">
                       ✏️
                     </button>

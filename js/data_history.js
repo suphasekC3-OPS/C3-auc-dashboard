@@ -403,6 +403,38 @@
    */
   const BASE_AUDIT_LOGS = [
     {
+      id: 'log_000_open_github_desktop_delay_2s',
+      timestamp: '2026-10-23 08:35:00',
+      timestampTh: '23 ต.ค. 2569, 08:35 น.',
+      type: 'CONFIG',
+      typeBadge: 'เปิด GitHub Desktop หลัง 2 วินาที',
+      badgeClass: 'badge-type-config',
+      title: 'เพิ่มระบบหน่วงเวลา 2 วินาที ก่อนเปิดโปรแกรม GitHub Desktop หลังกดปุ่ม Update 00AI to GitHub Desktop',
+      targetSubject: 'การทำงานของปุ่ม Update 00AI to GitHub Desktop (js/app.js), เซิร์ฟเวอร์ API (scratch/serve.ps1) และสคริปต์ซิงค์ (scratch/sync_to_github.ps1)',
+      storageFile: 'js/app.js, scratch/serve.ps1, scratch/sync_to_github.ps1 & js/data_history.js',
+      changeSummary: 'ปรับปรุงกระบวนการหลังกดปุ่ม "Update 00AI to GitHub Desktop": ให้ทำการคัดลอกไฟล์ทั้งหมดให้เสร็จสิ้นก่อน จากนั้นหน่วงเวลา 2 วินาที แล้วจึงเปิดหรือดึงโปรแกรม GitHub Desktop ขึ้นมาบนหน้าจออัตโนมัติ เพื่อให้ระบบ Git ตรวจจับไฟล์ที่เปลี่ยนแปลงได้อย่างสมบูรณ์ 100%',
+      details: 'ดำเนินการตามคำขอผู้ใช้งาน: 1) ปรับปรุง scratch/serve.ps1 ใน endpoint /api/sync-github ให้ใส่ Start-Sleep -Seconds 2 หลังจากคัดลอกไฟล์เสร็จ ก่อนเรียก Start-Process เปิด GitHubDesktop.exe 2) ปรับปรุง scratch/sync_to_github.ps1 ให้มีหน่วงเวลา 2 วินาทีก่อนเปิด GitHub Desktop เช่นเดียวกัน 3) ปรับปรุง js/app.js แสดงข้อความแจ้งสถานะและดึงหน้าต่างโปรแกรมผ่าน x-github-client protocol 4) ซิงค์ไฟล์ล่าสุดไปยัง D:\\กรย+++\\C3-auc-dashboard เรียบร้อย',
+      sourceFile: 'คำสั่งผู้ใช้งาน (ถ้า กดปุ่ม update 00AI .... แล้ว ให้เปิดโปรแกรม github destop ขึ้นมาหลังจากนั้น 2 วินาที ได้ไหม)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ'
+    },
+    {
+      id: 'log_000_note_left_align_sheet_and_dashboard',
+      timestamp: '2026-10-23 08:28:00',
+      timestampTh: '23 ต.ค. 2569, 08:28 น.',
+      type: 'EDIT',
+      typeBadge: 'จัดชิดซ้ายคอลัมน์หมายเหตุ',
+      badgeClass: 'badge-type-edit',
+      title: 'แก้ไขการแสดงผลคอลัมน์ "หมายเหตุ" ให้แสดงชิดซ้าย (Left Align) ทั้งใน Google Sheet และบนหน้าเว็บ Dashboard',
+      targetSubject: 'การบันทึกค่าลง Google Sheet (scratch/Code.gs), การเรนเดอร์ตาราง WBS (js/wbs.js) และ CSS เซลล์หมายเหตุ (css/styles.css)',
+      storageFile: 'scratch/Code.gs, js/wbs.js, css/styles.css & js/data_history.js',
+      changeSummary: 'ปรับปรุงการจัดตำแหน่งข้อความในคอลัมน์ "หมายเหตุ" (Note) ให้ชิดซ้าย (Left Align) 100%: 1) ใน Google Apps Script เพิ่มคำสั่ง setHorizontalAlignment("left") และ setNumberFormat("@") เพื่อป้องกันกรณีที่ผู้ใช้กรอกข้อความที่เป็นตัวเลข (เช่น 111) แล้ว Google Sheet แปลงเป็นตัวเลขและแสดงชิดขวา 2) ใน js/wbs.js และ css/styles.css เพิ่ม text-align: left !important บนเซลล์และข้อความหมายเหตุในตารางหน้าเว็บ',
+      details: 'ดำเนินการตามภาพถ่ายและคำสั่งผู้ใช้งาน: 1) วิเคราะห์พบว่าเมื่อผู้ใช้แก้ไขหมายเหตุผ่านหน้าเว็บ Dashboard โดยพิมพ์ตัวเลข เช่น 111 เมื่อบันทึกเข้า Google Sheet ระบบเดิมไม่ได้ระบุรูปแบบ Plain Text ทำให้ชีตตีความเป็น Number ส่งผลให้เลขชิดขวาของเซลล์ 2) ปรับปรุง scratch/Code.gs ใน updateWbsRecord ให้ใช้ .setNumberFormat("@") และ .setHorizontalAlignment("left") กับทั้งคอลัมน์หมายเหตุ, แผนปิดงาน และ WBS 3) ปรับปรุง js/wbs.js ในเรนเดอร์ตาราง WBS ให้เซลล์หมายเหตุมีสไตล์ text-align: left !important 4) ปรับปรุง css/styles.css ในคลาส .wbs-note-cell ให้มี text-align: left !important 5) ซิงค์ไฟล์ล่าสุดไปยัง D:\\กรย+++\\C3-auc-dashboard ครบถ้วน',
+      sourceFile: 'คำสั่งผู้ใช้งาน (แก้ไขใน หมายเหตุ ใน dasboard แล้วให้แสดงชิดทางซ้ายในคอล้ม พร้อมรูปประกอบตัวเลข 111 ที่ชิดขวาใน Google Sheet)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง'
+    },
+    {
       id: 'log_000_rename_btn_update_00ai_to_github_desktop',
       timestamp: '2026-10-23 08:12:00',
       timestampTh: '23 ต.ค. 2569, 08:12 น.',
