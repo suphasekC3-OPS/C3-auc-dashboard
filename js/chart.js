@@ -415,8 +415,9 @@ class PeaChart {
             // 3. Multi-pass bidirectional relaxation so items NEVER overlap each other
             barItems.sort((a, b) => a.badgeY - b.badgeY);
 
-            const minGap = 3.5; // Guaranteed visual gap between badges
-            for (let pass = 0; pass < 15; pass++) {
+            const hasAchieveBadge = (ext && ext.isExceedDecKpi && !isNoWork);
+            const minGap = 4.0; // Guaranteed visual gap between badges
+            for (let pass = 0; pass < 20; pass++) {
               for (let i = 1; i < barItems.length; i++) {
                 const prev = barItems[i - 1];
                 const curr = barItems[i];
@@ -436,8 +437,9 @@ class PeaChart {
                   curr.badgeY += currShift;
                 }
               }
-              const minAllowedY = (val >= 100 || y <= pad.top + 6) ? (pad.top - 25) : (pad.top + 2);
-              const maxAllowedY = isBottomKpi ? (pad.top + plotH - 42) : (pad.top + plotH - badgeH - 2);
+              // หากมีป้าย ✓ บรรลุเป้าหมาย อยู่บนหัวแท่ง: ล็อคไม่ให้เป้าหมายในแท่งดันขึ้นไปเกิน pad.top เด็ดขาด (เริ่มที่ pad.top + 3 เสมอ)
+              const minAllowedY = hasAchieveBadge ? (pad.top + 3) : ((val >= 100 || y <= pad.top + 6) ? (pad.top - 20) : (pad.top + 2));
+              const maxAllowedY = isBottomKpi ? (pad.top + plotH - 46) : (pad.top + plotH - badgeH - 2);
               if (barItems.length > 0) {
                 if (barItems[0].badgeY < minAllowedY) barItems[0].badgeY = minAllowedY;
                 if (barItems[barItems.length - 1].badgeY + barItems[barItems.length - 1].h > maxAllowedY) {
@@ -454,7 +456,7 @@ class PeaChart {
               }
             }
             // Strict backward guarantee pass if pushed beyond bottom
-            const maxAllowedBottom = isBottomKpi ? (pad.top + plotH - 42) : (pad.top + plotH - 2);
+            const maxAllowedBottom = isBottomKpi ? (pad.top + plotH - 46) : (pad.top + plotH - 2);
             if (barItems.length > 0 && barItems[barItems.length - 1].badgeY + barItems[barItems.length - 1].h > maxAllowedBottom) {
               barItems[barItems.length - 1].badgeY = maxAllowedBottom - barItems[barItems.length - 1].h;
               for (let i = barItems.length - 2; i >= 0; i--) {
@@ -868,8 +870,8 @@ class PeaChart {
 
           // Position sitting right on top of the bar (or in top padding headroom if bar is at ceiling)
           let achieveBadgeY = (val >= 100 || y <= pad.top + 6)
-            ? (pad.top - achieveBadgeH - 5)
-            : (y - achieveBadgeH - 5);
+            ? (pad.top - achieveBadgeH - 6)
+            : (y - achieveBadgeH - 6);
           if (achieveBadgeY < 2) achieveBadgeY = 2;
 
           ctx.save();

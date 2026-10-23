@@ -871,9 +871,9 @@
                 <div class="unified-card-top-section" id="next3mProjectionSection">
                   <div class="next3m-chart-card" id="next3mHBarChartCard"
                     style="background:transparent; border:none; box-shadow:none; padding:0; margin-top:0;">
-                    <div class="next3m-chart-header" id="next3mChartHeader" style="display:none;">
+                    <div class="next3m-chart-header" id="next3mChartHeader" style="display:none !important;">
                       <div class="next3m-chart-controls" id="next3mHBarControls"
-                        style="display:none; align-items:center; gap:0.5rem; margin-left:auto;">
+                        style="display:none !important; align-items:center; gap:0.5rem; margin-left:auto;">
                         <button type="button" class="btn-toggle-metric active" id="btnNext3mModeVal"
                           onclick="window.setNext3mHBarMode('val')">
                           💰 มูลค่า (ล้านบาท)
@@ -1466,8 +1466,8 @@
           ========================================== -->
           <div id="tab-wbs" class="tab-pane">
 
-            <!-- WBS BANNER CARD -->
-            <div class="wbs-banner-card">
+            <!-- WBS BANNER CARD (นำออกตามคำสั่งผู้ใช้งาน) -->
+            <div class="wbs-banner-card" style="display: none !important;">
               <div class="wbs-banner-left">
                 <div class="wbs-banner-icon">
                   <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
@@ -1645,6 +1645,18 @@
 
                 <!-- Pagination Stats & Rows per page & Column Visibility Selector -->
                 <div style="display:flex; align-items:center; gap:0.65rem; flex-wrap:wrap;">
+                  <!-- ปุ่มส่งออก WBS (CSV) -->
+                  <button type="button" class="btn btn-gold btn-sm" id="btnExportWbsCsv" onclick="window.exportWbsToCsv()"
+                    title="ส่งออกข้อมูล WBS เป็นไฟล์ CSV/Excel สำหรับเปิดในโปรแกรม Excel"
+                    style="padding:0.35rem 0.65rem; font-size:0.8rem; display:inline-flex; align-items:center; gap:5px;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                      <polyline points="7 10 12 15 17 10"></polyline>
+                      <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    <span>ส่งออก WBS (CSV)</span>
+                  </button>
+
                   <!-- ปุ่มซิงค์ข้อมูลสดจาก Google Sheet (9 แท็บ) -->
                   <button type="button" class="btn-wbs-sync-sheet" id="btnSyncGoogleSheet"
                     onclick="window.syncLiveNotesFromGoogleSheet(true)" title="กดเพื่อซิงค์แผนงานและหมายเหตุล่าสุดจาก Google Sheet ทั้ง 9 แท็บ">
@@ -2417,11 +2429,11 @@
   <script src="js/data_aug.js?v=20260929_1655"></script>
   <script src="js/data_sep.js?v=20261022_2315"></script>
   <script src="js/kpi_matrix.js?v=20261003_0930"></script>
-  <script src="js/chart.js?v=20261017_2045"></script>
+  <script src="js/chart.js?v=20261023_2030"></script>
   <script src="js/data_wbs.js?v=20261023_1020"></script>
   <script src="js/wbs.js?v=20261023_1020"></script>
-  <script src="js/data_history.js?v=20261023_1127"></script>
-  <script src="js/app.js?v=20261023_1127"></script>
+  <script src="js/data_history.js?v=20261023_2030"></script>
+  <script src="js/app.js?v=20261023_2030"></script>
   <script src="js/criteria_dropdown.js?v=20261017_2055"></script>
 </body>
 

@@ -3145,8 +3145,13 @@
     }
 
     // Determine active mode (val vs job)
+    const isAllCriteria = (!state.filters.criteria || state.filters.criteria === 'ALL');
     let activeMode = state.next3mHBarMode || 'val';
-    if (!hasValInSelection && hasJobInSelection) {
+    if (isAllCriteria) {
+      // เฉพาะเกณฑ์วัด "เลือกทั้งหมด" กำหนดหน่วยมูลค่าเป็นหลักเสมอ และไม่แสดงปุ่มสลับหน่วย
+      activeMode = 'val';
+      state.next3mHBarMode = 'val';
+    } else if (!hasValInSelection && hasJobInSelection) {
       activeMode = 'job';
       state.next3mHBarMode = 'job';
     } else if (hasValInSelection && !hasJobInSelection) {
@@ -3154,12 +3159,13 @@
       state.next3mHBarMode = 'val';
     }
 
-    const showControls = (hasValInSelection && hasJobInSelection);
+    // ซ่อนปุ่มสลับหน่วย [มูลค่า / งาน] ทั้ง 2 จุดเมื่อเลือกเกณฑ์วัด "เลือกทั้งหมด" ตามคำสั่งผู้ใช้งาน
+    const showControls = !isAllCriteria && (hasValInSelection && hasJobInSelection);
     if (headerEl) {
-      headerEl.style.display = showControls ? 'flex' : 'none';
+      headerEl.style.display = 'none'; // ซ่อน container เดิมด้านบนเสมอ ป้องกันปุ่มลอยซ้ำซ้อน
     }
     if (controls) {
-      controls.style.display = showControls ? 'flex' : 'none';
+      controls.style.display = 'none';
       if (btnVal) btnVal.classList.toggle('active', activeMode === 'val');
       if (btnJob) btnJob.classList.toggle('active', activeMode === 'job');
     }
@@ -7865,8 +7871,8 @@
 
     const chartOptions = {
       type: 'bar',
-      barRatio: 0.82, // สัดส่วนความกว้างแท่งกราฟสำหรับพื้นที่กราฟ ~65%
-      maxBarWidth: 80, // กำหนดความกว้างแท่งสูงสุดให้สมดุลสวยงาม
+      barRatio: 0.88, // สัดส่วนความกว้างแท่งกราฟ เพิ่มให้แท่งกราฟกว้าง เต็มตา สมส่วน
+      maxBarWidth: 120, // ขยายความกว้างแท่งสูงสุดจาก 80 เป็น 120px ให้กว้างสวยงามสมส่วน
       padding: { top: 52, right: 20, bottom: 85, left: 62 },
       formatY: (v) => `${Number(v).toFixed(2)}%`,
       yLabelAlign: 'right', // จัดชิดขวาของแกน Y เว้นระยะห่างจากเส้นกราฟอย่างสมดุล ไม่ชิดหรือทับกราฟ
@@ -7876,17 +7882,17 @@
       yLabelColor: '#E2D4F0',
       yMax: 100,
       gridSteps: 2,
-      targetBadgeFontSize: 8.2, // ขนาดตัวอักษรเกณฑ์วัด KPI ชัดเจน อ่านง่าย
-      targetBadgeHeight: 13, // ความสูงป้ายเกณฑ์วัด
-      badgeInset: 7, // เว้นระยะขอบซ้าย-ขวาให้เห็นเส้นและสีเรืองแสงของขอบแท่งกราฟอย่างชัดเจน
-      targetBadgeFullWidth: true, // ปรับความกว้างของป้ายเกณฑ์วัด % ให้เกือบเต็มแท่งกราฟ (เว้นขอบแท่ง)
+      targetBadgeFontSize: 8.8, // ขนาดตัวอักษรเกณฑ์วัด KPI ชัดเจน อ่านง่ายขึ้น
+      targetBadgeHeight: 14.5, // ความสูงป้ายเกณฑ์วัดพอดี
+      badgeInset: 6, // เว้นระยะขอบซ้าย-ขวา ข้างละ 3px สวยงาม พอดีเป๊ะ ไม่เกินกราฟออกมา
+      targetBadgeFullWidth: true, // ปรับความกว้างของป้ายเกณฑ์วัด % ให้ขยายเต็มแท่งกราฟตามความกว้างใหม่
       showBarValues: true,
       barValuePosition: 'bottom', // เฉพาะกราฟนี้ ปรับ % ทุกกราฟแท่ง มาไว้ล่างสุด
       barValueTheme: 'gold', // เปลี่ยนสี % ทุกแท่งเป็นสีเหลืองทองตามคำขอ
       barValueColor: '#FFD25A', // สีเหลืองทอง PEA Gold
-      barValueFontSize: 10, // ขนาดตัวเลข % สีเหลืองทอง
-      barValueHeight: 15.5,
-      barValueFullWidth: true, // ปรับความกว้างของป้าย % ล่างสุดให้เกือบเต็มแท่งกราฟ (เว้นขอบแท่ง)
+      barValueFontSize: 11, // ขนาดตัวเลข % สีเหลืองทอง ใหญ่ขึ้น ชัดเจน
+      barValueHeight: 17, // ความสูงป้าย % ล่างสุด
+      barValueFullWidth: true, // ปรับความกว้างของป้าย % ล่างสุดให้ขยายเต็มแท่งกราฟ (เว้นขอบ 3px) ไม่เกินกราฟ
       showBarTargetLines: false, // เอาเส้นตรงแนวนอนออกทั้งหมด (ไม่วาดเส้นประแนวนอนเป้าหมายบนแท่งกราฟ)
       showGridLines: false, // เอาเส้นตรงแนวนอนออกทั้งหมด (ไม่วาดเส้นกริดแนวนอน)
       rotateXLabels: true,
