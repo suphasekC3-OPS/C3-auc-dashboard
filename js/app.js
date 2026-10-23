@@ -5063,7 +5063,9 @@
   }
 
   /**
-   * Helper: Calculate month-over-month growth % for both Total AUC (ภาพรวมมูลค่า/งาน) and Closed AUC (ปิดงานแล้ว)
+   * Helper: Calculate monthly growth (both amount/jobs delta and % delta) for:
+   * 1. Closed AUC (ปิดงานแล้ว) - มูลค่า/จำนวนงานที่เพิ่ม/ลดลงในแต่ละเดือน [เลข 1] และ % [เลข 2]
+   * 2. Total AUC (ภาพรวมมูลค่า/งาน) - มูลค่า/จำนวนงานที่เพิ่ม/ลดลงในแต่ละเดือน [เลข 3] และ % [เลข 4]
    * across all 12 months with footer row average
    */
   function calculateTimelineComprehensiveGrowth(totalValues, closedValues, actualPcts, isJobCrit) {
@@ -5075,11 +5077,15 @@
     let prevValidClosed = null;
     let prevValidPct = null;
 
-    let totalMoMCount = 0;
+    let totalValSum = 0;
+    let totalValCount = 0;
     let totalMoMSum = 0;
+    let totalMoMCount = 0;
 
-    let closedMoMCount = 0;
-    let closedMoMSum = 0;
+    let closedValSum = 0;
+    let closedValCount = 0;
+    let closedPctSum = 0;
+    let closedPctCount = 0;
 
     for (let m = 0; m < 12; m++) {
       const rawTot = (totalValues && totalValues[m] !== null && totalValues[m] !== undefined && !isNaN(totalValues[m]))
@@ -5102,127 +5108,193 @@
           month: months[m],
           monthIdx: m,
           hasData: false,
-          totalText: '-',
-          totalCls: 'val-growth-none',
+          totalValText: '-',
+          totalValCls: 'val-growth-none',
+          totalPctText: '-',
+          totalPctCls: 'val-growth-none',
           totalTooltip: 'ยังไม่มีข้อมูล',
-          closedText: '-',
-          closedCls: 'val-growth-none',
+          closedValText: '-',
+          closedValCls: 'val-growth-none',
+          closedPctText: '-',
+          closedPctCls: 'val-growth-none',
           closedTooltip: 'ยังไม่มีข้อมูล'
         });
         continue;
       }
 
-      // 1. Total AUC Growth % (ภาพรวมมูลค่า/งาน เพิ่มหรือลดลงเป็น %)
-      let totalText = '-';
-      let totalCls = 'val-growth-none';
+      // -------------------------------------------------------------
+      // 1. Total AUC (ภาพรวมมูลค่า/งาน): มูลค่าที่เพิ่ม/ลด [เลข 3] และ % [เลข 4]
+      // -------------------------------------------------------------
+      let totalValText = '-';
+      let totalValCls = 'val-growth-none';
+      let totalPctText = '-';
+      let totalPctCls = 'val-growth-none';
       let totalTooltip = '';
 
       if (rawTot !== null) {
+        const valFormatted = isJobCrit ? `${Math.round(rawTot).toLocaleString()} งาน` : `${rawTot.toFixed(2)} ลบ.`;
         if (prevValidTotal === null) {
           // First reporting month (Baseline)
-          totalText = '-';
-          totalCls = 'val-growth-none';
-          const formattedVal = isJobCrit ? `${Math.round(rawTot).toLocaleString()} งาน` : `${rawTot.toFixed(2)} ลบ.`;
-          totalTooltip = `${months[m]} 2569: ฐานภาพรวมเริ่มต้น ${formattedVal}`;
+          totalValText = '-';
+          totalValCls = 'val-growth-none';
+          totalPctText = '-';
+          totalPctCls = 'val-growth-none';
+          totalTooltip = `${months[m]} 2569: ฐานภาพรวมเริ่มต้น ${valFormatted}`;
           prevValidTotal = rawTot;
         } else {
           const deltaTot = rawTot - prevValidTotal;
           const momGrowth = prevValidTotal > 0 ? (deltaTot / prevValidTotal) * 100 : 0;
           prevValidTotal = rawTot;
-          totalMoMCount++;
+          totalValSum += deltaTot;
+          totalValCount++;
           totalMoMSum += momGrowth;
+          totalMoMCount++;
+
+          // Formatted value delta [เลข 3]
+          if (isJobCrit) {
+            totalValText = deltaTot > 0 ? `+${Math.round(deltaTot).toLocaleString()}` : `${Math.round(deltaTot).toLocaleString()}`;
+          } else {
+            totalValText = deltaTot > 0.001 ? `+${deltaTot.toFixed(2)}` : `${deltaTot.toFixed(2)}`;
+          }
+
+          if (deltaTot > 0.001) totalValCls = 'val-growth-pos';
+          else if (deltaTot < -0.001) totalValCls = 'val-growth-neg';
+          else totalValCls = 'val-growth-zero';
+
+          // Formatted % delta [เลข 4]
+          if (momGrowth > 0.001) {
+            totalPctText = `+${momGrowth.toFixed(2)}%`;
+            totalPctCls = 'val-growth-pos';
+          } else if (momGrowth < -0.001) {
+            totalPctText = `${momGrowth.toFixed(2)}%`;
+            totalPctCls = 'val-growth-neg';
+          } else {
+            totalPctText = `0.00%`;
+            totalPctCls = 'val-growth-zero';
+          }
 
           const deltaFormatted = isJobCrit 
             ? (deltaTot >= 0 ? `+${Math.round(deltaTot).toLocaleString()} งาน` : `${Math.round(deltaTot).toLocaleString()} งาน`)
             : (deltaTot >= 0 ? `+${deltaTot.toFixed(2)} ลบ.` : `${deltaTot.toFixed(2)} ลบ.`);
-          const valFormatted = isJobCrit ? `${Math.round(rawTot).toLocaleString()} งาน` : `${rawTot.toFixed(2)} ลบ.`;
-
-          if (momGrowth > 0.001) {
-            totalText = `+${momGrowth.toFixed(2)}%`;
-            totalCls = 'val-growth-pos';
-          } else if (momGrowth < -0.001) {
-            totalText = `${momGrowth.toFixed(2)}%`;
-            totalCls = 'val-growth-neg';
-          } else {
-            totalText = `0.00%`;
-            totalCls = 'val-growth-zero';
-          }
-          totalTooltip = `${months[m]} 2569: ภาพรวม ${valFormatted} (เปลี่ยนแปลง ${deltaFormatted} หรือ ${totalText})`;
+          totalTooltip = `${months[m]} 2569: ภาพรวม ${valFormatted} (เปลี่ยนแปลง ${deltaFormatted} หรือ ${totalPctText})`;
         }
       }
 
-      // 2. Closed AUC Growth % (ปิดงานแล้ว เพิ่มหรือลดลงเป็น %)
-      let closedText = '-';
-      let closedCls = 'val-growth-none';
+      // -------------------------------------------------------------
+      // 2. Closed AUC (ปิดงานแล้ว): มูลค่าปิดงานที่เพิ่ม/ลด [เลข 1] และ % [เลข 2]
+      // -------------------------------------------------------------
+      let closedValText = '-';
+      let closedValCls = 'val-growth-none';
+      let closedPctText = '-';
+      let closedPctCls = 'val-growth-none';
       let closedTooltip = '';
 
-      if (curPct !== null) {
-        let deltaPct = 0;
-        if (prevValidPct === null) {
-          // Month 0: Closed from beginning of year (0.00%)
-          deltaPct = curPct;
-        } else {
-          deltaPct = curPct - prevValidPct;
-        }
-        prevValidPct = curPct;
-        closedMoMCount++;
-        closedMoMSum += deltaPct;
+      if (rawCls !== null || curPct !== null) {
+        // Delta Amount [เลข 1]
+        let deltaClsVal = 0;
+        if (rawCls !== null) {
+          if (prevValidClosed === null) {
+            deltaClsVal = rawCls;
+          } else {
+            deltaClsVal = rawCls - prevValidClosed;
+          }
+          prevValidClosed = rawCls;
+          closedValSum += deltaClsVal;
+          closedValCount++;
 
-        if (deltaPct > 0.001) {
-          closedText = `+${deltaPct.toFixed(2)}%`;
-          closedCls = 'val-growth-pos';
-        } else if (deltaPct < -0.001) {
-          closedText = `${deltaPct.toFixed(2)}%`;
-          closedCls = 'val-growth-neg';
-        } else {
-          closedText = `0.00%`;
-          closedCls = 'val-growth-zero';
+          if (isJobCrit) {
+            closedValText = deltaClsVal > 0 ? `+${Math.round(deltaClsVal).toLocaleString()}` : `${Math.round(deltaClsVal).toLocaleString()}`;
+          } else {
+            closedValText = deltaClsVal > 0.001 ? `+${deltaClsVal.toFixed(2)}` : `${deltaClsVal.toFixed(2)}`;
+          }
+
+          if (deltaClsVal > 0.001) closedValCls = 'val-growth-pos';
+          else if (deltaClsVal < -0.001) closedValCls = 'val-growth-neg';
+          else closedValCls = 'val-growth-zero';
+        }
+
+        // Delta % [เลข 2]
+        let deltaPct = 0;
+        if (curPct !== null) {
+          if (prevValidPct === null) {
+            deltaPct = curPct;
+          } else {
+            deltaPct = curPct - prevValidPct;
+          }
+          prevValidPct = curPct;
+          closedPctSum += deltaPct;
+          closedPctCount++;
+
+          if (deltaPct > 0.001) {
+            closedPctText = `+${deltaPct.toFixed(2)}%`;
+            closedPctCls = 'val-growth-pos';
+          } else if (deltaPct < -0.001) {
+            closedPctText = `${deltaPct.toFixed(2)}%`;
+            closedPctCls = 'val-growth-neg';
+          } else {
+            closedPctText = `0.00%`;
+            closedPctCls = 'val-growth-zero';
+          }
         }
 
         const closedValStr = rawCls !== null 
           ? (isJobCrit ? `${Math.round(rawCls).toLocaleString()} งาน` : `${rawCls.toFixed(2)} ลบ.`)
           : '';
-        const closedDeltaStr = (rawCls !== null && prevValidClosed !== null)
-          ? (isJobCrit 
-              ? (rawCls - prevValidClosed >= 0 ? `+${Math.round(rawCls - prevValidClosed).toLocaleString()} งาน` : `${Math.round(rawCls - prevValidClosed).toLocaleString()} งาน`)
-              : (rawCls - prevValidClosed >= 0 ? `+${(rawCls - prevValidClosed).toFixed(2)} ลบ.` : `${(rawCls - prevValidClosed).toFixed(2)} ลบ.`))
-          : (rawCls !== null ? (isJobCrit ? `+${Math.round(rawCls).toLocaleString()} งาน` : `+${rawCls.toFixed(2)} ลบ.`) : '');
+        const closedDeltaStr = rawCls !== null
+          ? (isJobCrit ? `${closedValText} งาน` : `${closedValText} ลบ.`)
+          : '';
 
-        if (rawCls !== null) prevValidClosed = rawCls;
-
-        closedTooltip = `${months[m]} 2569: ปิดสะสม ${closedValStr} (สัดส่วน ${curPct.toFixed(2)}%${closedDeltaStr ? `, ปิดเพิ่มในเดือน ${closedDeltaStr} หรือ ${closedText}` : ''})`;
+        closedTooltip = `${months[m]} 2569: ปิดสะสม ${closedValStr} (${curPct !== null ? curPct.toFixed(2) + '%' : '-'}) | ปิดเพิ่มในเดือน ${closedDeltaStr} (${closedPctText})`;
       }
 
       rows.push({
         month: months[m],
         monthIdx: m,
         hasData: true,
-        totalText,
-        totalCls,
+        totalValText,
+        totalValCls,
+        totalPctText,
+        totalPctCls,
         totalTooltip,
-        closedText,
-        closedCls,
+        closedValText,
+        closedValCls,
+        closedPctText,
+        closedPctCls,
         closedTooltip
       });
     }
 
     // Calculate Averages
-    const avgTotal = totalMoMCount > 0 ? (totalMoMSum / totalMoMCount) : null;
-    const avgTotalText = avgTotal !== null
-      ? (avgTotal > 0.001 ? `+${avgTotal.toFixed(2)}%` : `${avgTotal.toFixed(2)}%`)
+    const avgTotalVal = totalValCount > 0 ? (totalValSum / totalValCount) : null;
+    const avgTotalValText = avgTotalVal !== null
+      ? (isJobCrit
+          ? (avgTotalVal > 0 ? `+${Math.round(avgTotalVal).toLocaleString()}` : `${Math.round(avgTotalVal).toLocaleString()}`)
+          : (avgTotalVal > 0.001 ? `+${avgTotalVal.toFixed(2)}` : `${avgTotalVal.toFixed(2)}`))
       : '-';
 
-    const avgClosed = closedMoMCount > 0 ? (closedMoMSum / closedMoMCount) : null;
-    const avgClosedText = avgClosed !== null
-      ? (avgClosed > 0.001 ? `+${avgClosed.toFixed(2)}%` : `${avgClosed.toFixed(2)}%`)
+    const avgTotalPct = totalMoMCount > 0 ? (totalMoMSum / totalMoMCount) : null;
+    const avgTotalPctText = avgTotalPct !== null
+      ? (avgTotalPct > 0.001 ? `+${avgTotalPct.toFixed(2)}%` : `${avgTotalPct.toFixed(2)}%`)
+      : '-';
+
+    const avgClosedVal = closedValCount > 0 ? (closedValSum / closedValCount) : null;
+    const avgClosedValText = avgClosedVal !== null
+      ? (isJobCrit
+          ? (avgClosedVal > 0 ? `+${Math.round(avgClosedVal).toLocaleString()}` : `${Math.round(avgClosedVal).toLocaleString()}`)
+          : (avgClosedVal > 0.001 ? `+${avgClosedVal.toFixed(2)}` : `${avgClosedVal.toFixed(2)}`))
+      : '-';
+
+    const avgClosedPct = closedPctCount > 0 ? (closedPctSum / closedPctCount) : null;
+    const avgClosedPctText = avgClosedPct !== null
+      ? (avgClosedPct > 0.001 ? `+${avgClosedPct.toFixed(2)}%` : `${avgClosedPct.toFixed(2)}%`)
       : '-';
 
     return {
       rows,
-      avgTotal,
-      avgTotalText,
-      avgClosed,
-      avgClosedText,
+      avgTotalValText,
+      avgTotalPctText,
+      avgClosedValText,
+      avgClosedPctText,
       isJobCrit,
       unit
     };
@@ -5230,8 +5302,8 @@
 
   /**
    * Helper: Render growth table on the right side of timeline charts
-   * - If options.showTotal is false: renders 2 columns (Month & %)
-   * - If options.showTotal is true: renders 3 columns (Month, Total %, and Closed %)
+   * - mode 'closed': Top table (Month, Closed Value Delta [1], Closed % Delta [2])
+   * - mode 'total': Bottom table (Month, Total AUC Value Delta [3], Total AUC % Delta [4])
    */
   function renderTimelineGrowthTable(targetElementId, growthData, options = {}) {
     const wrap = document.getElementById(targetElementId);
@@ -5242,11 +5314,14 @@
       return;
     }
 
+    const mode = options.mode || (options.showTotal ? 'total' : 'closed');
+    const unit = growthData.unit || (options.isJobCrit ? 'งาน' : 'ลบ.');
     const title = options.title || '📈 % เพิ่ม/ลด รายเดือน';
-    const showTotal = options.showTotal === true;
 
-    if (showTotal) {
-      wrap.classList.add('is-3col');
+    wrap.classList.add('is-3col');
+
+    if (mode === 'total') {
+      // Bottom table: Month | ภาพรวมมูลค่าที่เพิ่ม/ลด (${unit}) [เลข 3] | % [เลข 4]
       wrap.innerHTML = `
         <div class="timeline-side-table-card">
           <div class="timeline-side-table-title">
@@ -5256,12 +5331,12 @@
           <table class="timeline-growth-table">
             <thead>
               <tr>
-                <th style="width:24%;">เดือน</th>
-                <th class="col-growth-total" style="width:38%;" title="อัตราเพิ่ม/ลดภาพรวมมูลค่า หรือจำนวนงาน AUC รายเดือน">
-                  <span style="color:#FFD25A; font-size:0.68rem;">●</span> ภาพรวม
+                <th style="width:22%;">เดือน</th>
+                <th class="col-growth-total" style="width:48%; white-space:nowrap;" title="ภาพรวมมูลค่า หรือจำนวนงาน AUC ที่เพิ่มขึ้นหรือลดลงในแต่ละเดือน (${unit})">
+                  <span style="color:#FFD25A; font-size:0.68rem;">●</span> ภาพรวมมูลค่า <span style="font-size:0.62rem; opacity:0.85;">(${unit})</span>
                 </th>
-                <th class="col-growth-closed" style="width:38%;" title="อัตราการปิดงานมูลค่า หรือจำนวนงานที่เพิ่ม/ลดลงรายเดือน">
-                  <span style="color:#34D399; font-size:0.68rem;">●</span> ปิดงาน
+                <th class="col-growth-total" style="width:30%;" title="อัตราเพิ่ม/ลดร้อยละ (%) ของภาพรวม AUC เทียบเดือนก่อนหน้า (MoM)">
+                  <span style="color:#FFD25A; font-size:0.68rem;">●</span> %
                 </th>
               </tr>
             </thead>
@@ -5269,23 +5344,23 @@
               ${growthData.rows.map(r => `
                 <tr class="${r.hasData ? 'has-data' : 'no-data'}">
                   <td>${r.month}</td>
-                  <td class="col-growth-total ${r.totalCls}" title="${escapeHtml(r.totalTooltip)}">${r.totalText}</td>
-                  <td class="col-growth-closed ${r.closedCls}" title="${escapeHtml(r.closedTooltip)}">${r.closedText}</td>
+                  <td class="col-growth-total ${r.totalValCls}" title="${escapeHtml(r.totalTooltip)}">${r.totalValText}</td>
+                  <td class="col-growth-total ${r.totalPctCls}" title="${escapeHtml(r.totalTooltip)}">${r.totalPctText}</td>
                 </tr>
               `).join('')}
             </tbody>
             <tfoot>
               <tr class="row-average">
                 <td>ค่าเฉลี่ย</td>
-                <td class="col-growth-total val-growth-avg" title="ค่าเฉลี่ยอัตราการเพิ่มขึ้นของภาพรวมต่อเดือน (${growthData.avgTotalText})">${growthData.avgTotalText}</td>
-                <td class="col-growth-closed val-growth-avg" title="ค่าเฉลี่ยอัตราการปิดงานที่เพิ่มขึ้นต่อเดือน (${growthData.avgClosedText})">${growthData.avgClosedText}</td>
+                <td class="col-growth-total val-growth-avg" title="ค่าเฉลี่ยมูลค่าภาพรวมที่เปลี่ยนแปลงต่อเดือน (${growthData.avgTotalValText} ${unit})">${growthData.avgTotalValText}</td>
+                <td class="col-growth-total val-growth-avg" title="ค่าเฉลี่ยอัตราการเติบโตของภาพรวมต่อเดือน (${growthData.avgTotalPctText})">${growthData.avgTotalPctText}</td>
               </tr>
             </tfoot>
           </table>
         </div>
       `;
     } else {
-      wrap.classList.remove('is-3col');
+      // Top table: Month | มูลค่าปิดงานที่เพิ่ม/ลด (${unit}) [เลข 1] | % [เลข 2]
       wrap.innerHTML = `
         <div class="timeline-side-table-card">
           <div class="timeline-side-table-title">
@@ -5295,22 +5370,29 @@
           <table class="timeline-growth-table">
             <thead>
               <tr>
-                <th style="width:38%;">เดือน</th>
-                <th style="width:62%; text-align:right;">%</th>
+                <th style="width:22%;">เดือน</th>
+                <th class="col-growth-closed" style="width:48%; white-space:nowrap;" title="มูลค่าปิดงาน หรือจำนวนงานที่ปิดเพิ่มขึ้นในแต่ละเดือน (${unit})">
+                  <span style="color:#34D399; font-size:0.68rem;">●</span> มูลค่าปิดงาน <span style="font-size:0.62rem; opacity:0.85;">(${unit})</span>
+                </th>
+                <th class="col-growth-closed" style="width:30%;" title="ร้อยละ (%) การปิดงานที่เพิ่มขึ้นในแต่ละเดือน">
+                  <span style="color:#34D399; font-size:0.68rem;">●</span> %
+                </th>
               </tr>
             </thead>
             <tbody>
               ${growthData.rows.map(r => `
                 <tr class="${r.hasData ? 'has-data' : 'no-data'}">
                   <td>${r.month}</td>
-                  <td class="${r.closedCls}" title="${escapeHtml(r.closedTooltip)}">${r.closedText}</td>
+                  <td class="col-growth-closed ${r.closedValCls}" title="${escapeHtml(r.closedTooltip)}">${r.closedValText}</td>
+                  <td class="col-growth-closed ${r.closedPctCls}" title="${escapeHtml(r.closedTooltip)}">${r.closedPctText}</td>
                 </tr>
               `).join('')}
             </tbody>
             <tfoot>
               <tr class="row-average">
                 <td>ค่าเฉลี่ย</td>
-                <td class="val-growth-avg" title="ค่าเฉลี่ยอัตราการปิดงานที่เพิ่มขึ้นต่อเดือน (${growthData.avgClosedText})">${growthData.avgClosedText}</td>
+                <td class="col-growth-closed val-growth-avg" title="ค่าเฉลี่ยการปิดงานที่เพิ่มขึ้นต่อเดือน (${growthData.avgClosedValText} ${unit})">${growthData.avgClosedValText}</td>
+                <td class="col-growth-closed val-growth-avg" title="ค่าเฉลี่ยร้อยละการปิดงานที่เพิ่มขึ้นต่อเดือน (${growthData.avgClosedPctText})">${growthData.avgClosedPctText}</td>
               </tr>
             </tfoot>
           </table>
@@ -5771,11 +5853,11 @@
 
     renderTimelineInteractiveLegend(datasets);
 
-    // Render 2-column monthly growth table on the right side (% column and Month column with Average row - NO Total column)
+    // Render monthly growth table on the right side: Closed Value [1] and Closed % [2]
     const growthData = calculateTimelineComprehensiveGrowth(summaryTotalVals, summaryClosedVals, summaryActualPcts, isJobCrit);
     renderTimelineGrowthTable('timelinePctGrowthTableWrap', growthData, {
       title: '📈 % เพิ่ม/ลด รายเดือน',
-      showTotal: false,
+      mode: 'closed',
       isJobCrit: isJobCrit
     });
 
@@ -6193,11 +6275,11 @@
 
     renderTimelineAmountInteractiveLegend(datasets);
 
-    // Render 3-column monthly growth table for amounts/jobs on the right side (% Total & % Closed)
+    // Render monthly growth table for amounts/jobs on the right side: Total AUC Value [3] and Total AUC % [4]
     const amountGrowthData = calculateTimelineComprehensiveGrowth(totalAmounts, closedAmounts, null, isJobCrit);
     renderTimelineGrowthTable('timelineAmountGrowthTableWrap', amountGrowthData, {
       title: '📈 % เพิ่ม/ลด รายเดือน',
-      showTotal: true,
+      mode: 'total',
       isJobCrit: isJobCrit
     });
   }

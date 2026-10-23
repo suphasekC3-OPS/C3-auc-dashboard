@@ -9396,6 +9396,7 @@ body.has-fullscreen-table {
 }
 
 .timeline-growth-table-wrap.is-3col,
+#timelinePctGrowthTableWrap,
 #timelineAmountGrowthTableWrap {
   width: 255px;
   flex: 0 0 255px;
