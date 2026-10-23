@@ -9344,54 +9344,88 @@
    * Action: Update to GitHub Desktop
    * Syncs latest web files from 00AI to C3-auc-dashboard
    */
+  window.openGitHubDesktopDirect = function () {
+    try {
+      const link = document.createElement('a');
+      link.href = 'x-github-client://openRepo/https://github.com/suphasekC3-OPS/C3-auc-dashboard';
+      link.click();
+    } catch (_) {
+      window.location.href = 'x-github-client://openRepo/https://github.com/suphasekC3-OPS/C3-auc-dashboard';
+    }
+  };
+
   window.triggerUpdateToGithubDesktop = async function () {
     const btn = document.getElementById('btnUpdateGithubDesktop');
     const originalHtml = btn ? btn.innerHTML : '';
     if (btn) {
-      btn.innerHTML = '<span style="font-size:0.8rem;">⏳ กำลังคัดลอกไฟล์...</span>';
+      btn.innerHTML = '<span style="font-size:0.8rem;">⏳ กำลังคัดลอกไฟล์... (รอ 2 วินาที)</span>';
       btn.disabled = true;
     }
 
+    let syncedViaServer = false;
+
+    // 1. ส่งคำขอผ่าน fetch ไปยัง local sync server (localhost:8089) พร้อม timeout 3.5 วินาที
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 3500);
       const resp = await fetch('http://localhost:8089/api/sync-github', {
         method: 'GET',
-        mode: 'cors'
+        mode: 'cors',
+        signal: controller.signal
       });
+      clearTimeout(timeoutId);
       const result = await resp.json();
       if (result && result.status === 'success') {
-        if (btn) {
-          btn.innerHTML = '<span style="font-size:0.8rem; color:#60A5FA;">🚀 เปิด GitHub Desktop แล้ว</span>';
-        }
-
-        // เสริมการเรียก x-github-client protocol เพื่อให้ Windows ดึงหน้าต่าง GitHub Desktop ขึ้นมาบนสุด
-        try {
-          window.location.href = 'x-github-client://openRepo/https://github.com/suphasekC3-OPS/C3-auc-dashboard';
-        } catch (_) {}
-
-        if (typeof showToast === 'function') {
-          showToast('✅ คัดลอกไฟล์ไปยัง C3-auc-dashboard สำเร็จ! เปิดโปรแกรม GitHub Desktop ให้อัตโนมัติแล้ว', 'success');
-        } else {
-          alert('✅ คัดลอกไฟล์สำเร็จ!\nระบบได้เปิดโปรแกรม GitHub Desktop ให้เรียบร้อย สามารถกด Commit to main & Push origin ได้เลยครับ');
-        }
-        return;
+        syncedViaServer = true;
       }
     } catch (err) {
-      console.warn('Local sync server not reachable, displaying modal instructions:', err);
-    } finally {
+      console.log('Local sync server not reachable, using OS protocol launcher:', err);
+    }
+
+    if (syncedViaServer) {
       if (btn) {
-        setTimeout(() => {
-          btn.innerHTML = originalHtml;
-          btn.disabled = false;
-        }, 1200);
+        btn.innerHTML = '<span style="font-size:0.8rem; color:#60A5FA;">🚀 เปิด GitHub Desktop แล้ว</span>';
+      }
+      if (typeof showToast === 'function') {
+        showToast('✅ คัดลอกไฟล์ไปยัง C3-auc-dashboard สำเร็จ! เปิดโปรแกรม GitHub Desktop ให้อัตโนมัติแล้ว', 'success');
+      } else {
+        alert('✅ คัดลอกไฟล์สำเร็จ!\nระบบได้เปิดโปรแกรม GitHub Desktop ให้เรียบร้อย สามารถตรวจสอบแถบ Changes ได้เลยครับ');
+      }
+    } else {
+      // 2. เรียกใช้งาน update00ai:// protocol เพื่อให้ Windows รันสคริปต์ซิงค์ไฟล์
+      try {
+        const frame = document.createElement('iframe');
+        frame.style.display = 'none';
+        frame.src = 'update00ai://sync';
+        document.body.appendChild(frame);
+        setTimeout(() => { try { frame.remove(); } catch (_) {} }, 4000);
+      } catch (_) {}
+
+      // 3. เรียกเปิด GitHub Desktop ตรงๆ ผ่าน x-github-client protocol (หน่วงเวลา 1.5 วินาที)
+      setTimeout(() => {
+        window.openGitHubDesktopDirect();
+      }, 1500);
+
+      if (btn) {
+        btn.innerHTML = '<span style="font-size:0.8rem; color:#34D399;">🚀 สั่งเปิด GitHub Desktop แล้ว</span>';
+      }
+
+      if (typeof showToast === 'function') {
+        showToast('🚀 ส่งคำสั่งเปิด GitHub Desktop แล้ว! หากยังไม่ขึ้น สามารถดับเบิลคลิก Update_to_GitHub_Desktop.bat ได้ครับ', 'info');
+      }
+
+      // แสดง Modal แนะนำพร้อมปุ่มทางลัด
+      const modal = document.getElementById('updateGithubModal');
+      if (modal) {
+        modal.style.display = 'flex';
       }
     }
 
-    // Fallback: If local API server wasn't responding, show instruction modal
-    const modal = document.getElementById('updateGithubModal');
-    if (modal) {
-      modal.style.display = 'flex';
-    } else {
-      alert('💡 สามารถเปิดไฟล์ Update_to_GitHub_Desktop.bat ในโฟลเดอร์ 00AI เพื่อซิงค์ไฟล์ไปยัง GitHub Desktop ได้ทันทีครับ');
+    if (btn) {
+      setTimeout(() => {
+        btn.innerHTML = originalHtml;
+        btn.disabled = false;
+      }, 3000);
     }
   };
 
