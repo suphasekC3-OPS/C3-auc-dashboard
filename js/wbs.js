@@ -610,14 +610,14 @@
       <span class="wbs-pill pill-gold" style="font-weight:700;" title="วันที่และเวลานำเข้าข้อมูลไฟล์ WBS เข้าสู่ระบบ">
         📥 วันที่/เวลา นำเข้าข้อมูล:
       </span>
-      <span class="wbs-pill pill-file pill-file-03" onclick="if(window.openDhModelModal)window.openDhModelModal('src_03')" title="วันที่/เวลา นำเข้าข้อมูล: 17 ต.ค. 2569, 13:20 น. (ไฟล์ 03 WBSงานคงเหลือเดือนล่าสุด.xlsx)">
-        📋 <strong>03 WBSงานคงเหลือเดือนล่าสุด.xlsx:</strong> 17 ต.ค. 2569, 13:20 น.
+      <span class="wbs-pill pill-file pill-file-03" onclick="if(window.openDhModelModal)window.openDhModelModal('src_03')" title="วันที่/เวลา นำเข้าข้อมูล: 23 ต.ค. 2569, 08:04 น. (ไฟล์ 03 WBSงานคงเหลือเดือนล่าสุด.xlsx)">
+        📋 <strong>03 WBSงานคงเหลือเดือนล่าสุด.xlsx:</strong> 23 ต.ค. 2569, 08:04 น.
       </span>
-      <span class="wbs-pill pill-file pill-file-04" onclick="if(window.openDhModelModal)window.openDhModelModal('src_04')" title="วันที่/เวลา นำเข้าข้อมูล: 19 ต.ค. 2569, 08:34 น. (ไฟล์ 04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx)">
-        ⚡ <strong>04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx:</strong> 19 ต.ค. 2569, 08:34 น.
+      <span class="wbs-pill pill-file pill-file-04" onclick="if(window.openDhModelModal)window.openDhModelModal('src_04')" title="วันที่/เวลา นำเข้าข้อมูล: 23 ต.ค. 2569, 08:28 น. (ไฟล์ 04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx)">
+        ⚡ <strong>04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx:</strong> 23 ต.ค. 2569, 08:28 น.
       </span>
-      <span class="wbs-pill pill-file pill-file-05" onclick="if(window.openDhModelModal)window.openDhModelModal('src_05')" title="วันที่/เวลา นำเข้าข้อมูล: 22 ก.ย. 2569, 10:20 น. (ไฟล์ 05 WBS CN41 มูลค่า AUC new.xlsx)">
-        📑 <strong>05 WBS CN41 มูลค่า AUC new.xlsx:</strong> 22 ก.ย. 2569, 10:20 น.
+      <span class="wbs-pill pill-file pill-file-05" onclick="if(window.openDhModelModal)window.openDhModelModal('src_05')" title="วันที่/เวลา นำเข้าข้อมูล: 23 ต.ค. 2569, 08:35 น. (ไฟล์ 05-1 WBS CN41 มูลค่า AUC วันเริ่มบัญชี 14 ตค69 (1เดือนเปลี่ยนครั้ง).xlsx)">
+        📑 <strong>05-1 WBS CN41 มูลค่า AUC วันเริ่มบัญชี 14 ตค69:</strong> 23 ต.ค. 2569, 08:35 น.
       </span>
       <span class="wbs-pill pill-file pill-file-06" onclick="if(window.openDhModelModal)window.openDhModelModal('src_06')" title="วันที่/เวลา ซิงค์ข้อมูล: 22 ต.ค. 2569, 17:23 น. (Google Sheet แผนงานแล้วเสร็จ ออนไลน์)">
         📊 <strong>Google Sheet แผนงานแล้วเสร็จ:</strong> 22 ต.ค. 2569 (Live API)
