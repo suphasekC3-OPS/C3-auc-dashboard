@@ -29,8 +29,8 @@
     allData: [],
     filteredData: [],
     filters: {
-      criteria: 'ข้อ 1.1 งบ C.1 ก่อน 69', // เริ่มต้นที่ข้อ 1.1
-      selectedCriteria: ['ข้อ 1.1 งบ C.1 ก่อน 69'],
+      criteria: 'ALL', // เริ่มต้นที่เลือกทั้งหมด
+      selectedCriteria: [],
       province: 'ALL',
       office: 'ALL',
       kpiGrade: 'ALL',
@@ -749,12 +749,12 @@
           state.filters.criteria = monthTeco;
           critSelect.value = monthTeco;
         } else {
-          state.filters.criteria = 'ข้อ 1.1 งบ C.1 ก่อน 69';
-          critSelect.value = state.filters.criteria;
+          state.filters.criteria = 'ALL';
+          critSelect.value = 'ALL';
         }
       } else {
-        state.filters.criteria = critSelect.options[1]?.value || 'ข้อ 1.1 งบ C.1 ก่อน 69';
-        critSelect.value = state.filters.criteria;
+        state.filters.criteria = 'ALL';
+        critSelect.value = 'ALL';
       }
 
       // Sync to all chart header criteria dropdowns (.select-chart-crit)
@@ -813,8 +813,8 @@
     // Render Chart Single-Select Criteria Quick Pills (แสดงเกณฑ์วัดบนกราฟ - แสดงอย่างเดียว กดเลือกไม่ได้)
     const critPillsContainer = document.getElementById('chartCritQuickPills');
     if (critPillsContainer) {
-      const currentCrit = state.filters.criteria || 'ข้อ 1.1 งบ C.1 ก่อน 69';
-      const isAll = currentCrit === 'ALL' || !currentCrit;
+      const currentCrit = state.filters.criteria || 'ALL';
+      const isAll = currentCrit === 'ALL' || !currentCrit || currentCrit === 'เลือกทั้งหมด';
       let pillsHtml = '';
 
       availableCrits.forEach(c => {
@@ -1060,14 +1060,14 @@
 
 
   function syncSidebarFilterUI() {
-    const currentCrit = state.filters.criteria || 'ข้อ 1.1 งบ C.1 ก่อน 69';
+    const currentCrit = state.filters.criteria || 'ALL';
     const currentProv = state.filters.province || 'ALL';
     const currentOff = state.filters.office || 'ALL';
 
     // Sync Criteria Sidebar Buttons
     document.querySelectorAll('#sidebarCriteriaButtons .btn-sidebar-pill').forEach(btn => {
       const c = btn.getAttribute('data-crit');
-      btn.classList.toggle('active', matchCriteriaName(c, currentCrit));
+      btn.classList.toggle('active', currentCrit !== 'ALL' && matchCriteriaName(c, currentCrit));
     });
 
     // Sync Province Sidebar Buttons
@@ -1224,40 +1224,24 @@
   // Backwards compatibility alias
   window.toggleChartCriteria = window.selectChartCriteria;
 
-  // Reset Individual Filters via Eraser Buttons (ล้างตัวกรองเฉพาะส่วนด้วยปุ่มยางลบ - เกณฑ์วัดกลับเป็นข้อ 1.1)
+  // Reset Individual Filters via Eraser Buttons (ล้างตัวกรองเฉพาะส่วนด้วยปุ่มยางลบ - เกณฑ์วัดกลับเป็นเลือกทั้งหมด)
   window.resetCriteriaFilter = function() {
     if (state.hiddenTimelineSeries) state.hiddenTimelineSeries.clear();
     
-    // ค้นหาชื่อเกณฑ์วัดข้อ 1.1 จากตัวเลือกที่มี
-    let targetCrit = 'ข้อ 1.1 งบ C.1 ก่อน 69';
-    const critEl = document.getElementById('filterCriteria');
-    if (critEl && critEl.options) {
-      for (let i = 0; i < critEl.options.length; i++) {
-        const val = critEl.options[i].value;
-        if (val.includes('1.1')) {
-          targetCrit = val;
-          break;
-        }
-      }
-    }
-    
-    state.filters.criteria = targetCrit;
+    state.filters.criteria = 'ALL';
+    state.filters.selectedCriteria = [];
     state.filters.kpiGrade = 'ALL';
-    if (critEl) critEl.value = targetCrit;
+    const critEl = document.getElementById('filterCriteria');
+    if (critEl) critEl.value = 'ALL';
     
     document.querySelectorAll('.select-chart-crit').forEach(sel => {
-      for (let i = 0; i < sel.options.length; i++) {
-        if (sel.options[i].value.includes('1.1')) {
-          sel.value = sel.options[i].value;
-          break;
-        }
-      }
+      sel.value = 'ALL';
     });
     syncSidebarFilterUI();
     syncChartFilterUI();
     filterData();
     renderAll();
-    showToast(`รีเซ็ตเกณฑ์วัดกลับเป็น ${targetCrit} เรียบร้อยแล้ว`, 'info');
+    showToast('รีเซ็ตเกณฑ์วัดกลับเป็นเลือกทั้งหมดเรียบร้อยแล้ว', 'info');
   };
 
   window.resetProvinceFilter = function() {
@@ -1531,12 +1515,12 @@
     if (btnChartReset) {
       btnChartReset.addEventListener('click', () => {
         if (state.hiddenTimelineSeries) state.hiddenTimelineSeries.clear();
-        state.filters.criteria = 'ข้อ 1.1 งบ C.1 ก่อน 69';
-        state.filters.selectedCriteria = ['ข้อ 1.1 งบ C.1 ก่อน 69'];
+        state.filters.criteria = 'ALL';
+        state.filters.selectedCriteria = [];
         state.filters.province = 'ALL';
         state.filters.office = 'ALL';
         const topCrit = document.getElementById('filterCriteria');
-        if (topCrit) topCrit.value = 'ข้อ 1.1 งบ C.1 ก่อน 69';
+        if (topCrit) topCrit.value = 'ALL';
         const topProv = document.getElementById('filterProvince');
         if (topProv) topProv.value = 'ALL';
         updateOfficeDropdown();
@@ -1614,9 +1598,10 @@
       btn.addEventListener('click', () => {
         const target = btn.getAttribute('data-clear');
         if (target === 'criteria') {
-          state.filters.criteria = 'ข้อ 1.1 งบ C.1 ก่อน 69';
+          state.filters.criteria = 'ALL';
+          state.filters.selectedCriteria = [];
           const sel = document.getElementById('filterCriteria');
-          if (sel) sel.value = 'ข้อ 1.1 งบ C.1 ก่อน 69';
+          if (sel) sel.value = 'ALL';
         } else if (target === 'province') {
           state.filters.province = 'ALL';
           const sel = document.getElementById('filterProvince');
@@ -1648,8 +1633,8 @@
 
         const latestM = getLatestAvailableMonthIndex();
         state.filters = {
-          criteria: 'ข้อ 1.1 งบ C.1 ก่อน 69',
-          selectedCriteria: ['ข้อ 1.1 งบ C.1 ก่อน 69'],
+          criteria: 'ALL',
+          selectedCriteria: [],
           province: 'ALL',
           office: 'ALL',
           kpiGrade: 'ALL',
@@ -1662,7 +1647,7 @@
         updateMonthButtonsUI();
         
         const critEl = document.getElementById('filterCriteria');
-        if (critEl) critEl.value = 'ข้อ 1.1 งบ C.1 ก่อน 69';
+        if (critEl) critEl.value = 'ALL';
         const provEl = document.getElementById('filterProvince');
         if (provEl) provEl.value = 'ALL';
         const offEl = document.getElementById('filterOffice');
@@ -1918,7 +1903,7 @@
 
   function updateTopSelectionDisplay(totalJobs) {
     // 1. Criteria (ประเภทเกณฑ์วัด)
-    const crit = state.filters.criteria || 'ข้อ 1.1 งบ C.1 ก่อน 69';
+    const crit = state.filters.criteria || 'ALL';
     const isAll = crit === 'ALL' || crit === 'เลือกทั้งหมด' || crit === 'ทุกเกณฑ์วัด';
     const critEl = document.getElementById('topSelCriteriaText');
     if (critEl) {
@@ -4056,7 +4041,7 @@
 
   // State for the office bar chart controls
   const officeBarState = {
-    criteria: 'ข้อ 1.1 งบ C.1 ก่อน 69',
+    criteria: 'ALL',
     province: 'ALL',
     sort: 'pct-desc'
   };
@@ -4125,7 +4110,7 @@
     }
 
     const sortSel = document.getElementById('barChartSortSelect');
-    const selectedCrit = officeBarState.criteria || (critSel ? critSel.value : 'ข้อ 1.1 งบ C.1 ก่อน 69');
+    const selectedCrit = officeBarState.criteria || (critSel ? critSel.value : 'ALL');
     const selectedProv = officeBarState.province || (provSel ? provSel.value : 'ALL');
     const selectedSort = (sortSel && sortSel.value) ? sortSel.value : officeBarState.sort;
 
@@ -6423,7 +6408,7 @@
       const m = (state.filters.month !== undefined && state.filters.month !== null) ? Number(state.filters.month) : 7;
     const monthName = MONTHS_TH[m] || 'ส.ค.';
     const monthFullName = MONTHS_FULL_TH[m] || `${monthName} 2569`;
-    const crit = state.filters.criteria || 'ข้อ 1.1 งบ C.1 ก่อน 69';
+    const crit = state.filters.criteria || 'ALL';
     const isJobCrit = crit && (crit.includes('3.') || crit.includes('4') || crit.includes('C02.2') || crit.includes('TECO'));
     const unitLabel = isJobCrit ? 'งาน' : 'บาท';
 

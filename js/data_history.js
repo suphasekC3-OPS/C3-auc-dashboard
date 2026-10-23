@@ -403,6 +403,22 @@
    */
   const BASE_AUDIT_LOGS = [
     {
+      id: 'log_000_default_criteria_set_to_all',
+      timestamp: '2026-10-23 10:55:00',
+      timestampTh: '23 ต.ค. 2569, 10:55 น.',
+      type: 'CONFIG',
+      typeBadge: 'เปลี่ยน Default เกณฑ์วัดเป็นเลือกทั้งหมด',
+      badgeClass: 'badge-type-config',
+      title: 'ปรับค่าเริ่มต้น (Default) ของตัวกรองเกณฑ์วัดเป็น "เลือกทั้งหมด" (ALL)',
+      targetSubject: 'ตัวกรองประเภทเกณฑ์วัด (#filterCriteria, select-chart-crit), สถานะเริ่มต้นของระบบ (state.filters.criteria), ปุ่มยางลบรีเซ็ต',
+      storageFile: 'js/app.js, index.html & js/data_history.js',
+      changeSummary: 'เปลี่ยนค่าเริ่มต้นของประเภทเกณฑ์วัดจากเดิมที่ล็อกไว้ที่ข้อ 1.1 เป็น "เลือกทั้งหมด" (ALL): 1) กำหนด state.filters.criteria เริ่มต้นเป็น "ALL" 2) กำหนด <option value="ALL" selected> ใน index.html 3) ปรับปุ่มยางลบและปุ่มรีเซ็ตตัวกรองให้คืนค่าเป็น "ALL" 4) ซิงค์ dropdown บนกราฟและภาพรวมให้เริ่มต้นที่ภาพรวมทุกเกณฑ์วัดทันทีที่เปิดระบบ',
+      details: 'ดำเนินการตามคำสั่ง "เกณวัด ให้เปลี่ยน default เป็น เลือกทั้งหมด": 1) ปรับปรุง state.filters.criteria และ selectedCriteria ใน js/app.js ให้มีค่าเริ่มต้นเป็น ALL และ [] 2) แก้ไขฟังก์ชัน populateFilterDropdowns ให้ fallback เป็น ALL 3) ปรับปรุงฟังก์ชันรีเซ็ต resetCriteriaFilter, btnChartFilterReset, btnResetFilters ให้คืนค่าเป็น ALL 4) อัปเดต index.html ให้ option ALL มี attribute selected และปรับ tooltip ของปุ่มยางลบ 5) บันทึกประวัติการปรับปรุงระบบลงใน BASE_AUDIT_LOGS ตามข้อกำหนด',
+      sourceFile: 'คำสั่งผู้ใช้งาน (เกณวัด ให้เปลี่ยน default เป็น เลือกทั้งหมด)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง'
+    },
+    {
       id: 'log_000_fix_wbs_count_2083_and_cache_bust',
       timestamp: '2026-10-23 10:20:00',
       timestampTh: '23 ต.ค. 2569, 10:20 น.',
