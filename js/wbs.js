@@ -1738,156 +1738,347 @@
     const markerAlignClass = targetBarPct < 25 ? 'label-right' : 'label-left';
 
     container.innerHTML = `
-      <div class="wbs-kpi-comparison-card" id="wbsTargetComparisonCard">
-        <!-- Card Header -->
-        <div class="wbs-kpi-comp-header">
-          <div class="wbs-kpi-comp-title-group">
-            <div class="wbs-kpi-comp-icon">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
-                <circle cx="12" cy="12" r="10"></circle>
-                <circle cx="12" cy="12" r="6"></circle>
-                <circle cx="12" cy="12" r="2"></circle>
-              </svg>
-            </div>
-            <div>
-              <div class="wbs-kpi-comp-title">
-                <span>เปรียบเทียบการปิด${unitTitle}ตามเป้าหมายระดับ KPI 5</span>
-                <span class="wbs-kpi-crit-tag">${escapeHtml(critDisplay)}</span>
-                <span class="wbs-kpi-unit-tag">${isVal ? '💰 มูลค่า (บาท)' : '⚡ จำนวนงาน (งาน)'}</span>
+      <div class="wbs-comparison-unified-grid">
+        <!-- Left Column: ภาพรวมมูลค่า & งาน AUC (ตามรูปที่ 15: กว้างเท่าเดิม ปรับความสูงเท่ากับการ์ดเปรียบเทียบ) -->
+        <div class="wbs-side-summary-col">
+          <div class="content-card executive-donut-kpi-card wbs-side-kpi-card" id="wbsExecutiveDonutKpiCard">
+            <!-- แถวบน: สรุปรวมมูลค่าและงานทั้งหมด -->
+            <div class="exec-donut-top-summary">
+              <div class="exec-summary-title-row">
+                <span class="badge-pea-tag" id="wbsKpiCard1ScopeBadge">กฟก.3</span>
+                <span class="exec-summary-title">ภาพรวมมูลค่า & งาน AUC</span>
+              </div>
+              <div class="exec-summary-val-row">
+                <span class="exec-total-main-val" id="wbsKpiTotalVal">0.00 ฿</span>
+                <span class="exec-total-jobs-badge" id="wbsKpiTotalJobsSub">0 งาน</span>
               </div>
             </div>
-          </div>
-          <div class="wbs-kpi-comp-meta-info">
-            <span class="kpi-meta-chip">
-              <span>ฐานเป้าหมาย:</span>
-              <strong style="color:var(--pea-gold-400);">${selectedMonth.shortName} 69 (${selectedMonth.kpiPct})</strong>
-            </span>
-          </div>
-        </div>
 
-        <!-- Month Selection Buttons (Requirement 2: หากเดือนไหนบรรลุเป้าให้แสดงด้วย แต่เลือกไม่ได้) -->
-        <div class="wbs-kpi-month-selector-strip">
-          <div class="wbs-kpi-month-label">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-              <line x1="16" y1="2" x2="16" y2="6"></line>
-              <line x1="8" y1="2" x2="8" y2="6"></line>
-              <line x1="3" y1="10" x2="21" y2="10"></line>
-            </svg>
-            <span>เลือกเดือนเป้าหมาย:</span>
-          </div>
-          <div class="wbs-kpi-month-btn-group">
-            ${monthButtonsHtml}
-          </div>
-        </div>
-
-        <!-- 2-Column KPI Comparison: Left Bars + Right Outcome Panel (ย้ายแถวล่างมาเป็นคอลัมน์ขวาตามคำขอ) -->
-        <div class="wbs-kpi-main-grid">
-          <!-- Left: 2-Layer Horizontal Graph (Requirement 1) -->
-          <div class="wbs-kpi-bars-box">
-            <!-- Top Bar: เป้าหมายปิดเพิ่ม (รูป 22) -->
-            <div class="wbs-kpi-bar-block bar-top-target">
-              <div class="wbs-kpi-bar-header">
-                <div class="bar-header-left">
-                  <span class="bar-tag tag-target">🎯 กราฟบน (เป้าหมายปิดเพิ่ม)</span>
-                  <span class="bar-month-pill">${selectedMonth.shortName} 69</span>
-                  <span class="bar-kpi-pill">เป้า KPI: ${selectedMonth.kpiPct}</span>
+            <!-- แถวกลาง: ปิดงานแล้ว (บน) -> กราฟวงกลม KPI (กลาง) -> คงเหลือ (ล่าง) -->
+            <div class="exec-donut-main-row vertical-layout">
+              <!-- ปิดงานแล้ว -->
+              <div class="donut-stat-col stat-closed stat-box-top">
+                <div class="donut-stat-head-row">
+                  <div class="donut-stat-label">
+                    <span class="donut-stat-dot dot-closed"></span>
+                    <span>ปิดงานแล้ว</span>
+                  </div>
+                  <div class="donut-stat-jobs badge-jobs-closed">
+                    <span>ปิดแล้ว <strong id="wbsKpiClosedJobs">0</strong> งาน</span>
+                  </div>
                 </div>
-                <div class="bar-header-right">
-                  <span class="bar-amount-lbl">เป้าหมาย:</span>
-                  <span class="bar-amount-main target-text">${targetDisplay}</span>
+                <div class="donut-stat-val text-success" id="wbsKpiClosedVal">0.00 ฿</div>
+              </div>
+
+              <!-- กราฟวงกลมโดนัท AUC พร้อมคะแนน KPI -->
+              <div class="exec-donut-chart-wrapper">
+                <div class="exec-donut-canvas-box">
+                  <canvas id="wbsExecutiveDonutChart" width="104" height="104"></canvas>
+                  <div class="exec-donut-center-content" id="wbsExecDonutCenterContent">
+                    <div class="donut-kpi-star-label">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                      </svg>
+                      <span>KPI</span>
+                    </div>
+                    <div class="donut-kpi-score-row">
+                      <span class="donut-kpi-score" id="wbsKpiAvgKpi">-</span>
+                      <span class="donut-kpi-unit" id="wbsKpiAvgUnit" style="display:none;">/ 5</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div class="wbs-kpi-track track-target" title="เป้าหมายปิดเพิ่มเดือน ${selectedMonth.shortName} 69: ${targetDisplay}">
-                <div class="wbs-kpi-fill fill-target" style="width: ${targetBarPct}%;">
-                  <div class="bar-inner-content">
-                    <span class="bar-inner-label">เป้าหมาย KPI ระดับ 5 (${selectedMonth.shortName} 69)</span>
-                    <span class="bar-inner-val">${formatShort(targetAmount)}</span>
+
+              <!-- คงเหลือ -->
+              <div class="donut-stat-col stat-remain stat-box-bottom">
+                <div class="donut-stat-head-row">
+                  <div class="donut-stat-label">
+                    <span class="donut-stat-dot dot-remain"></span>
+                    <span>คงเหลือ</span>
+                  </div>
+                  <div class="donut-stat-jobs badge-jobs-remain">
+                    <span>คงเหลือ <strong id="wbsKpiRemainJobs">0</strong> งาน</span>
+                  </div>
+                </div>
+                <div class="donut-stat-val text-danger" id="wbsKpiRemainVal">0.00 ฿</div>
+              </div>
+            </div>
+
+            <!-- ด้านล่าง: แถบ % ปิดงานมูลค่า AUC และ % ปิดจำนวนงาน -->
+            <div class="exec-dual-progress-section">
+              <!-- แถบ 1: % ปิดงานมูลค่า AUC -->
+              <div class="exec-progress-block">
+                <div class="exec-progress-head-row">
+                  <div class="exec-progress-label-wrap">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span>% ปิดงานมูลค่า AUC</span>
+                  </div>
+                  <div class="exec-progress-target-badge" id="wbsKpiTargetCircleBadge" title="เป้าหมายเดือน ธ.ค.">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+                      <circle cx="12" cy="12" r="9"></circle>
+                      <polyline points="9 12 11 14 15 10"></polyline>
+                    </svg>
+                  </div>
+                </div>
+                <div class="exec-progress-val-row">
+                  <span class="exec-progress-big-val text-gold" id="wbsKpiPctVal">0.00%</span>
+                </div>
+                <div class="progress-track track-gold-pattern">
+                  <div class="progress-fill fill-gold-stripe" id="wbsBarMainPctClosed" style="width:0%">
+                    <div class="pea-ev-runner" title="รถบริการเคลื่อนที่ กฟภ. (PEA EV)">
+                      <div class="pea-ev-car-body">
+                        <img src="assets/pea_truck_right.png" alt="รถบริการเคลื่อนที่ กฟภ." class="pea-ev-truck-img" />
+                        <span class="pea-ev-beam"></span>
+                        <span class="pea-ev-sparkle">⚡</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- แถบ 2: % ปิดจำนวนงาน -->
+              <div class="exec-progress-block">
+                <div class="exec-progress-head-row">
+                  <div class="exec-progress-label-wrap">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                      <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                      <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                      <polyline points="9 14 11 16 15 12"></polyline>
+                    </svg>
+                    <span>% ปิดจำนวนงาน</span>
+                  </div>
+                </div>
+                <div class="exec-progress-val-row">
+                  <span class="exec-progress-big-val text-gold" id="wbsKpiJobPctClosed">0.00%</span>
+                </div>
+                <div class="progress-track track-gold-pattern">
+                  <div class="progress-fill fill-gold-stripe" id="wbsBarJobPctClosed" style="width:0%">
+                    <div class="pea-ev-runner" title="รถบริการเคลื่อนที่ กฟภ. (PEA EV)">
+                      <div class="pea-ev-car-body">
+                        <img src="assets/pea_truck_right.png" alt="รถบริการเคลื่อนที่ กฟภ." class="pea-ev-truck-img" />
+                        <span class="pea-ev-beam"></span>
+                        <span class="pea-ev-sparkle">⚡</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
+        </div>
 
-            <!-- Bottom Bar: ปิดงาน SAP + รายการที่เลือก (รูป 23) -->
-            <div class="wbs-kpi-bar-block bar-bottom-progress">
-              <div class="wbs-kpi-bar-header">
-                <div class="bar-header-left">
-                  <span class="bar-tag tag-progress">⚡ กราฟล่าง (ยอดดำเนินการ)</span>
-                  <span class="bar-month-pill">${selectedMonth.shortName} 69</span>
-                  <span class="bar-selected-pill ${selectedFromCheckbox > 0 ? 'has-selected' : ''}">
-                    ${selectedFromCheckbox > 0 ? `เลือกแล้ว ${selectedCheckboxCount.toLocaleString('th-TH')} งาน` : '+ ยังไม่ได้เลือก Checkbox'}
+        <!-- Right Column: การ์ดเปรียบเทียบมูลค่า/งาน -->
+        <div class="wbs-comparison-main-col">
+          <div class="wbs-kpi-comparison-card" id="wbsTargetComparisonCard">
+            <!-- Card Header -->
+            <div class="wbs-kpi-comp-header">
+              <div class="wbs-kpi-comp-title-group">
+                <div class="wbs-kpi-comp-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <circle cx="12" cy="12" r="6"></circle>
+                    <circle cx="12" cy="12" r="2"></circle>
+                  </svg>
+                </div>
+                <div>
+                  <div class="wbs-kpi-comp-title">
+                    <span>เปรียบเทียบการปิด${unitTitle}ตามเป้าหมายระดับ KPI 5</span>
+                    <span class="wbs-kpi-crit-tag">${escapeHtml(critDisplay)}</span>
+                    <span class="wbs-kpi-unit-tag">${isVal ? '💰 มูลค่า (บาท)' : '⚡ จำนวนงาน (งาน)'}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="wbs-kpi-comp-meta-info">
+                <span class="kpi-meta-chip">
+                  <span>ฐานเป้าหมาย:</span>
+                  <strong style="color:var(--pea-gold-400);">${selectedMonth.shortName} 69 (${selectedMonth.kpiPct})</strong>
+                </span>
+              </div>
+            </div>
+
+            <!-- Month Selection Buttons (Requirement 2: หากเดือนไหนบรรลุเป้าให้แสดงด้วย แต่เลือกไม่ได้) -->
+            <div class="wbs-kpi-month-selector-strip">
+              <div class="wbs-kpi-month-label">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                <span>เลือกเดือนเป้าหมาย:</span>
+              </div>
+              <div class="wbs-kpi-month-btn-group">
+                ${monthButtonsHtml}
+              </div>
+            </div>
+
+            <!-- 2-Column KPI Comparison: Left Bars + Right Outcome Panel (ย้ายแถวล่างมาเป็นคอลัมน์ขวาตามคำขอ) -->
+            <div class="wbs-kpi-main-grid">
+              <!-- Left: 2-Layer Horizontal Graph (Requirement 1) -->
+              <div class="wbs-kpi-bars-box">
+                <!-- Top Bar: เป้าหมายปิดเพิ่ม (รูป 22) -->
+                <div class="wbs-kpi-bar-block bar-top-target">
+                  <div class="wbs-kpi-bar-header">
+                    <div class="bar-header-left">
+                      <span class="bar-tag tag-target">🎯 กราฟบน (เป้าหมายปิดเพิ่ม)</span>
+                      <span class="bar-month-pill">${selectedMonth.shortName} 69</span>
+                      <span class="bar-kpi-pill">เป้า KPI: ${selectedMonth.kpiPct}</span>
+                    </div>
+                    <div class="bar-header-right">
+                      <span class="bar-amount-lbl">เป้าหมาย:</span>
+                      <span class="bar-amount-main target-text">${targetDisplay}</span>
+                    </div>
+                  </div>
+                  <div class="wbs-kpi-track track-target" title="เป้าหมายปิดเพิ่มเดือน ${selectedMonth.shortName} 69: ${targetDisplay}">
+                    <div class="wbs-kpi-fill fill-target" style="width: ${targetBarPct}%;">
+                      <div class="bar-inner-content">
+                        <span class="bar-inner-label">เป้าหมาย KPI ระดับ 5 (${selectedMonth.shortName} 69)</span>
+                        <span class="bar-inner-val">${formatShort(targetAmount)}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Bottom Bar: ปิดงาน SAP + รายการที่เลือก (รูป 23) -->
+                <div class="wbs-kpi-bar-block bar-bottom-progress">
+                  <div class="wbs-kpi-bar-header">
+                    <div class="bar-header-left">
+                      <span class="bar-tag tag-progress">⚡ กราฟล่าง (ยอดดำเนินการ)</span>
+                      <span class="bar-month-pill">${selectedMonth.shortName} 69</span>
+                    </div>
+                    <div class="bar-header-right">
+                      <!-- CLSD F4 / F2: ขนาดอักษรเท่ากับจำนวนเงิน -->
+                      <div class="bar-stat-group stat-sap">
+                        <span class="bar-amount-lbl lbl-sap">${sapBadgeLabel}:</span>
+                        <span class="bar-amount-main sap-text">${sapDisplay} ${isVal ? `<span class="sap-jobs-count">(${clsdSapCount.toLocaleString('th-TH')} งาน)</span>` : ''}</span>
+                      </div>
+                      <span class="bar-stat-divider">|</span>
+                      <!-- ส่วนที่เลือก: ย้ายตำแหน่ง ที่เลือกงาน มาไว้ที่นี่ และขนาดอักษรเท่ากับจำนวนเงิน -->
+                      <div class="bar-stat-group stat-selected">
+                        <span class="bar-amount-lbl lbl-selected">ส่วนที่เลือก:</span>
+                        <span class="bar-amount-main selected-text">${selectedFromCheckbox > 0 ? '+' : ''}${selectedDisplay} ${isVal && selectedCheckboxCount > 0 ? `<span class="selected-jobs-count">(${selectedCheckboxCount.toLocaleString('th-TH')} งาน)</span>` : ''}</span>
+                      </div>
+                      <span class="bar-stat-divider">|</span>
+                      <!-- ตัวเลขรวม: สีเขียวอร่ามเรืองแสง -->
+                      <div class="bar-stat-group stat-total">
+                        <span class="bar-amount-lbl lbl-total">รวมทำได้:</span>
+                        <span class="bar-amount-main progress-text">${progressDisplay}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="wbs-kpi-track track-progress" title="ยอดดำเนินการรวม: ${progressDisplay}">
+                    <!-- Target Line Marker (รูป 32: เส้นบอกระดับเป้าหมายสีทองเปล่งประกายเรืองแสง ปลายมนสีขาว ทุกอัน) -->
+                    <div class="target-marker-line"
+                      style="left: ${targetMarkerLeft};"
+                      title="เส้นเป้าหมาย KPI ระดับ 5: ${targetDisplay}">
+                      <span class="target-marker-label ${markerAlignClass}">▲ เส้นเป้าหมาย (${formatShort(targetAmount)})</span>
+                    </div>
+
+                    <!-- Multi-segment Fill -->
+                    <div class="wbs-kpi-fill-group" style="width: ${progressBarPct}%;">
+                      <!-- Segment 1: Closed in SAP (คำสั่งวงที่ 2 เพิ่มจำนวนงานด้วย) -->
+                      <div class="bar-segment seg-sap" style="width: ${sapSegPct}%;"
+                        title="ปิดงานใน SAP (${sapBadgeLabel}): ${sapDisplay} (${clsdSapCount.toLocaleString('th-TH')} งาน)">
+                        <span class="seg-title">SAP ${sapBadgeLabel}: ${formatShort(closedInSap)} ${isVal ? `(${clsdSapCount.toLocaleString('th-TH')} งาน)` : ''}</span>
+                      </div>
+                      <!-- Segment 2: Selected from Checkbox -->
+                      ${selectedFromCheckbox > 0 ? `
+                        <div class="bar-segment seg-selected" style="width: ${selectedSegPct}%;"
+                          title="รายการที่เลือกจาก Checkbox: ${selectedDisplay} (${selectedCheckboxCount} งาน)">
+                          <span class="seg-title">+ ที่เลือก: ${formatShort(selectedFromCheckbox)}</span>
+                        </div>
+                      ` : ''}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right Column: Comparison Result & Action Column (ย้ายแถวล่างมาเป็นคอลัมน์ชิดขวา) -->
+              <div class="wbs-kpi-outcome-col ${isGoalReached ? 'status-achieved' : 'status-pending'}">
+                <div class="outcome-col-header">
+                  <span class="outcome-status-title">
+                    <span class="outcome-icon">${isGoalReached ? '🎉' : '⚠️'}</span>
+                    ${isGoalReached ? 'บรรลุเป้าหมายแล้ว!' : 'ยังต้องปิดเพิ่มอีก'}
+                  </span>
+                  <span class="outcome-month-badge">${selectedMonth.shortName} 69</span>
+                </div>
+                <div class="outcome-col-body">
+                  <span class="outcome-col-lbl">${isGoalReached ? 'ยอดเกินเป้าหมาย (+)' : 'คงเหลือต้องปิดเพิ่ม'}</span>
+                  <span class="outcome-col-val ${isGoalReached ? 'val-success' : 'val-pending'}">
+                    ${isGoalReached ? `+${formatCardVal(overAmount)}` : formatCardVal(remainingAmount)}
+                  </span>
+                  <span class="outcome-col-sub">
+                    ${isGoalReached ? `(เกินเป้า ${formatShort(overAmount)})` : `(ต้องปิดอีก ${formatShort(remainingAmount)})`}
                   </span>
                 </div>
-                <div class="bar-header-right">
-                  <!-- วงกลมให้เพิ่ม มูลค่า/งาน CLSD F4 / F2 สีเขียว (คำสั่งวงที่ 2 เพิ่มจำนวนงานด้วย) -->
-                  <div class="bar-stat-group stat-sap">
-                    <span class="bar-amount-lbl lbl-sap">${sapBadgeLabel}:</span>
-                    <span class="bar-amount-main sap-text">${sapDisplay} ${isVal ? `<span style="font-size:0.88em; opacity:0.9; margin-left:2px;">(${clsdSapCount.toLocaleString('th-TH')} งาน)</span>` : ''}</span>
-                  </div>
-                  <span class="bar-stat-divider">|</span>
-                  <!-- ส่วนที่เลือก: ตัวเลขสีฟ้า -->
-                  <div class="bar-stat-group stat-selected">
-                    <span class="bar-amount-lbl lbl-selected">ส่วนที่เลือก:</span>
-                    <span class="bar-amount-main selected-text">${selectedFromCheckbox > 0 ? '+' : ''}${selectedDisplay}</span>
-                  </div>
-                  <span class="bar-stat-divider">|</span>
-                  <!-- ตัวเลขรวม: สีเขียวอร่ามเรืองแสง -->
-                  <div class="bar-stat-group stat-total">
-                    <span class="bar-amount-lbl lbl-total">รวมทำได้:</span>
-                    <span class="bar-amount-main progress-text">${progressDisplay}</span>
-                  </div>
-                </div>
               </div>
-              <div class="wbs-kpi-track track-progress" title="ยอดดำเนินการรวม: ${progressDisplay}">
-                <!-- Target Line Marker (รูป 32: เส้นบอกระดับเป้าหมายสีทองเปล่งประกายเรืองแสง ปลายมนสีขาว ทุกอัน) -->
-                <div class="target-marker-line"
-                  style="left: ${targetMarkerLeft};"
-                  title="เส้นเป้าหมาย KPI ระดับ 5: ${targetDisplay}">
-                  <span class="target-marker-label ${markerAlignClass}">▲ เส้นเป้าหมาย (${formatShort(targetAmount)})</span>
-                </div>
-
-                <!-- Multi-segment Fill -->
-                <div class="wbs-kpi-fill-group" style="width: ${progressBarPct}%;">
-                  <!-- Segment 1: Closed in SAP (คำสั่งวงที่ 2 เพิ่มจำนวนงานด้วย) -->
-                  <div class="bar-segment seg-sap" style="width: ${sapSegPct}%;"
-                    title="ปิดงานใน SAP (${sapBadgeLabel}): ${sapDisplay} (${clsdSapCount.toLocaleString('th-TH')} งาน)">
-                    <span class="seg-title">SAP ${sapBadgeLabel}: ${formatShort(closedInSap)} ${isVal ? `(${clsdSapCount.toLocaleString('th-TH')} งาน)` : ''}</span>
-                  </div>
-                  <!-- Segment 2: Selected from Checkbox -->
-                  ${selectedFromCheckbox > 0 ? `
-                    <div class="bar-segment seg-selected" style="width: ${selectedSegPct}%;"
-                      title="รายการที่เลือกจาก Checkbox: ${selectedDisplay} (${selectedCheckboxCount} งาน)">
-                      <span class="seg-title">+ ที่เลือก: ${formatShort(selectedFromCheckbox)}</span>
-                    </div>
-                  ` : ''}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Right Column: Comparison Result & Action Column (ย้ายแถวล่างมาเป็นคอลัมน์ชิดขวา) -->
-          <div class="wbs-kpi-outcome-col ${isGoalReached ? 'status-achieved' : 'status-pending'}">
-            <div class="outcome-col-header">
-              <span class="outcome-status-title">
-                <span class="outcome-icon">${isGoalReached ? '🎉' : '⚠️'}</span>
-                ${isGoalReached ? 'บรรลุเป้าหมายแล้ว!' : 'ยังต้องปิดเพิ่มอีก'}
-              </span>
-              <span class="outcome-month-badge">${selectedMonth.shortName} 69</span>
-            </div>
-            <div class="outcome-col-body">
-              <span class="outcome-col-lbl">${isGoalReached ? 'ยอดเกินเป้าหมาย (+)' : 'คงเหลือต้องปิดเพิ่ม'}</span>
-              <span class="outcome-col-val ${isGoalReached ? 'val-success' : 'val-pending'}">
-                ${isGoalReached ? `+${formatCardVal(overAmount)}` : formatCardVal(remainingAmount)}
-              </span>
-              <span class="outcome-col-sub">
-                ${isGoalReached ? `(เกินเป้า ${formatShort(overAmount)})` : `(ต้องปิดอีก ${formatShort(remainingAmount)})`}
-              </span>
             </div>
           </div>
         </div>
       </div>
     `;
+
+    if (typeof window.syncWbsSideKpiCard === 'function') {
+      window.syncWbsSideKpiCard();
+    }
   }
+
+  window.syncWbsSideKpiCard = function () {
+    const card = document.getElementById('wbsExecutiveDonutKpiCard');
+    if (!card) return;
+
+    const copyFields = [
+      ['kpiCard1ScopeBadge', 'wbsKpiCard1ScopeBadge'],
+      ['kpiTotalVal', 'wbsKpiTotalVal'],
+      ['kpiTotalJobsSub', 'wbsKpiTotalJobsSub'],
+      ['kpiClosedJobs', 'wbsKpiClosedJobs'],
+      ['kpiClosedVal', 'wbsKpiClosedVal'],
+      ['kpiAvgKpi', 'wbsKpiAvgKpi'],
+      ['kpiRemainJobs', 'wbsKpiRemainJobs'],
+      ['kpiRemainVal', 'wbsKpiRemainVal'],
+      ['kpiPctVal', 'wbsKpiPctVal'],
+      ['kpiJobPctClosed', 'wbsKpiJobPctClosed']
+    ];
+
+    copyFields.forEach(([srcId, tgtId]) => {
+      const src = document.getElementById(srcId);
+      const tgt = document.getElementById(tgtId);
+      if (src && tgt) {
+        tgt.innerHTML = src.innerHTML;
+      }
+    });
+
+    const barMain = document.getElementById('barMainPctClosed');
+    const wbsBarMain = document.getElementById('wbsBarMainPctClosed');
+    if (barMain && wbsBarMain) {
+      wbsBarMain.style.width = barMain.style.width;
+    }
+
+    const barJob = document.getElementById('barJobPctClosed');
+    const wbsBarJob = document.getElementById('wbsBarJobPctClosed');
+    if (barJob && wbsBarJob) {
+      wbsBarJob.style.width = barJob.style.width;
+    }
+
+    const unitSrc = document.getElementById('kpiAvgUnit');
+    const unitTgt = document.getElementById('wbsKpiAvgUnit');
+    if (unitSrc && unitTgt) {
+      unitTgt.style.display = unitSrc.style.display;
+    }
+
+    const badgeSrc = document.getElementById('kpiTargetCircleBadge');
+    const badgeTgt = document.getElementById('wbsKpiTargetCircleBadge');
+    if (badgeSrc && badgeTgt && badgeSrc.title) {
+      badgeTgt.title = badgeSrc.title;
+    }
+
+    if (typeof window.renderExecutiveDonutChart === 'function') {
+      window.renderExecutiveDonutChart();
+    }
+  };
 
   window.setWbsKpiTargetMonth = function (mNum) {
     const globalState = window.state || {};

@@ -2189,6 +2189,11 @@
 
     // แผนเป้าหมายปิดงานเพิ่ม 3 เดือนถัดไป (ก.ย. - พ.ย. 69)
     renderNext3MonthsProjection();
+
+    // ซิงก์ข้อมูลไปยังการ์ดภาพรวม WBS (รูปที่ 15) ฝั่งซ้ายของการ์ดเปรียบเทียบ
+    if (typeof window.syncWbsSideKpiCard === 'function') {
+      window.syncWbsSideKpiCard();
+    }
   }
 
   // =========================================================================
@@ -2199,33 +2204,12 @@
   function renderExecutiveDonutChart(closedVal, remainVal, totalVal, closedJobs, remainJobs, totalJobs) {
     if (arguments.length >= 3) {
       lastExecDonutData = { closedVal, remainVal, totalVal, closedJobs, remainJobs, totalJobs };
-    } else {
+    } else if (lastExecDonutData) {
       ({ closedVal, remainVal, totalVal, closedJobs, remainJobs, totalJobs } = lastExecDonutData);
+    } else {
+      return;
     }
-
-    const canvas = document.getElementById('executiveDonutChart');
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const dpr = window.devicePixelRatio || 1;
-    const cssSize = 104;
-
-    if (canvas.width !== Math.round(cssSize * dpr) || canvas.height !== Math.round(cssSize * dpr)) {
-      canvas.width = Math.round(cssSize * dpr);
-      canvas.height = Math.round(cssSize * dpr);
-    }
-
-    ctx.save();
-    ctx.scale(dpr, dpr);
-    ctx.clearRect(0, 0, cssSize, cssSize);
-
-    const cx = cssSize / 2;
-    const cy = cssSize / 2;
-    const outerR = 49;
-    const innerR = 36;
-    const lineWidth = outerR - innerR; // 13px
-    const radius = (outerR + innerR) / 2;
+    window.lastExecDonutData = lastExecDonutData;
 
     const isJobCrit = state.filters.criteria && (
       state.filters.criteria.includes('3.1') || state.filters.criteria.includes('3.2') ||
@@ -2254,100 +2238,127 @@
     if (elClosedRatio) elClosedRatio.textContent = (closedRatio * 100).toFixed(1) + '%';
     if (elRemainRatio) elRemainRatio.textContent = (remainRatio * 100).toFixed(1) + '%';
 
-    // Track circle background
-    ctx.beginPath();
-    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
-    ctx.lineWidth = lineWidth;
-    ctx.stroke();
+    const targetCanvasIds = ['executiveDonutChart', 'wbsExecutiveDonutChart'];
+    targetCanvasIds.forEach(canvasId => {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
 
-    if (closedRatio <= 0 && remainRatio <= 0) {
-      ctx.restore();
-      return;
-    }
+      const dpr = window.devicePixelRatio || 1;
+      const cssSize = 104;
 
-    if (closedRatio >= 0.999) {
-      const grad = ctx.createLinearGradient(0, 0, cssSize, cssSize);
-      grad.addColorStop(0, '#34D399');
-      grad.addColorStop(1, '#059669');
-      ctx.beginPath();
-      ctx.arc(cx, cy, radius, 0, Math.PI * 2);
-      ctx.strokeStyle = grad;
-      ctx.lineWidth = lineWidth;
-      ctx.shadowColor = 'rgba(16, 185, 129, 0.4)';
-      ctx.shadowBlur = 8;
-      ctx.stroke();
-    } else if (remainRatio >= 0.999) {
-      const grad = ctx.createLinearGradient(0, 0, cssSize, cssSize);
-      grad.addColorStop(0, '#F87171');
-      grad.addColorStop(1, '#DC2626');
-      ctx.beginPath();
-      ctx.arc(cx, cy, radius, 0, Math.PI * 2);
-      ctx.strokeStyle = grad;
-      ctx.lineWidth = lineWidth;
-      ctx.shadowColor = 'rgba(239, 68, 68, 0.4)';
-      ctx.shadowBlur = 8;
-      ctx.stroke();
-    } else {
-      const gap = 0.08; // gap in radians (~4.5 deg)
-      const availableAngle = Math.PI * 2 - (gap * 2);
-      const closedSweep = Math.max(0.06, closedRatio * availableAngle);
-      const remainSweep = Math.max(0.06, remainRatio * availableAngle);
-
-      // กราฟสีเขียว (ปิดแล้ว) อยู่ด้านบน: กึ่งกลางที่ -Math.PI / 2
-      const closedStart = (-Math.PI / 2) - (closedSweep / 2);
-      const closedEnd = (-Math.PI / 2) + (closedSweep / 2);
-
-      const gradClosed = ctx.createLinearGradient(cx - radius, cy - radius, cx + radius, cy);
-      gradClosed.addColorStop(0, '#10B981');
-      gradClosed.addColorStop(1, '#059669');
+      if (canvas.width !== Math.round(cssSize * dpr) || canvas.height !== Math.round(cssSize * dpr)) {
+        canvas.width = Math.round(cssSize * dpr);
+        canvas.height = Math.round(cssSize * dpr);
+      }
 
       ctx.save();
+      ctx.scale(dpr, dpr);
+      ctx.clearRect(0, 0, cssSize, cssSize);
+
+      const cx = cssSize / 2;
+      const cy = cssSize / 2;
+      const outerR = 49;
+      const innerR = 36;
+      const lineWidth = outerR - innerR; // 13px
+      const radius = (outerR + innerR) / 2;
+
+      // Track circle background
       ctx.beginPath();
-      ctx.arc(cx, cy, radius, closedStart, closedEnd);
-      ctx.strokeStyle = gradClosed;
+      ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
       ctx.lineWidth = lineWidth;
-      ctx.lineCap = 'round';
-      ctx.shadowColor = 'rgba(16, 185, 129, 0.45)';
-      ctx.shadowBlur = 8;
       ctx.stroke();
-      ctx.restore();
 
-      // กราฟสีแดง (คงเหลือ) ปรับอยู่ด้านล่าง: กึ่งกลางที่ +Math.PI / 2
-      const remainStart = (Math.PI / 2) - (remainSweep / 2);
-      const remainEnd = (Math.PI / 2) + (remainSweep / 2);
+      if (closedRatio <= 0 && remainRatio <= 0) {
+        ctx.restore();
+        return;
+      }
 
-      const gradRemain = ctx.createLinearGradient(cx - radius, cy, cx + radius, cy + radius);
-      gradRemain.addColorStop(0, '#EF4444');
-      gradRemain.addColorStop(1, '#B91C1C');
+      if (closedRatio >= 0.999) {
+        const grad = ctx.createLinearGradient(0, 0, cssSize, cssSize);
+        grad.addColorStop(0, '#34D399');
+        grad.addColorStop(1, '#059669');
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = lineWidth;
+        ctx.shadowColor = 'rgba(16, 185, 129, 0.4)';
+        ctx.shadowBlur = 8;
+        ctx.stroke();
+      } else if (remainRatio >= 0.999) {
+        const grad = ctx.createLinearGradient(0, 0, cssSize, cssSize);
+        grad.addColorStop(0, '#F87171');
+        grad.addColorStop(1, '#DC2626');
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = lineWidth;
+        ctx.shadowColor = 'rgba(239, 68, 68, 0.4)';
+        ctx.shadowBlur = 8;
+        ctx.stroke();
+      } else {
+        const gap = 0.08; // gap in radians (~4.5 deg)
+        const availableAngle = Math.PI * 2 - (gap * 2);
+        const closedSweep = Math.max(0.06, closedRatio * availableAngle);
+        const remainSweep = Math.max(0.06, remainRatio * availableAngle);
 
-      ctx.save();
+        // กราฟสีเขียว (ปิดแล้ว) อยู่ด้านบน: กึ่งกลางที่ -Math.PI / 2
+        const closedStart = (-Math.PI / 2) - (closedSweep / 2);
+        const closedEnd = (-Math.PI / 2) + (closedSweep / 2);
+
+        const gradClosed = ctx.createLinearGradient(cx - radius, cy - radius, cx + radius, cy);
+        gradClosed.addColorStop(0, '#10B981');
+        gradClosed.addColorStop(1, '#059669');
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius, closedStart, closedEnd);
+        ctx.strokeStyle = gradClosed;
+        ctx.lineWidth = lineWidth;
+        ctx.lineCap = 'round';
+        ctx.shadowColor = 'rgba(16, 185, 129, 0.45)';
+        ctx.shadowBlur = 8;
+        ctx.stroke();
+        ctx.restore();
+
+        // กราฟสีแดง (คงเหลือ) ปรับอยู่ด้านล่าง: กึ่งกลางที่ +Math.PI / 2
+        const remainStart = (Math.PI / 2) - (remainSweep / 2);
+        const remainEnd = (Math.PI / 2) + (remainSweep / 2);
+
+        const gradRemain = ctx.createLinearGradient(cx - radius, cy, cx + radius, cy + radius);
+        gradRemain.addColorStop(0, '#EF4444');
+        gradRemain.addColorStop(1, '#B91C1C');
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius, remainStart, remainEnd);
+        ctx.strokeStyle = gradRemain;
+        ctx.lineWidth = lineWidth;
+        ctx.lineCap = 'round';
+        ctx.shadowColor = 'rgba(239, 68, 68, 0.45)';
+        ctx.shadowBlur = 8;
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      // Inner subtle gold border
       ctx.beginPath();
-      ctx.arc(cx, cy, radius, remainStart, remainEnd);
-      ctx.strokeStyle = gradRemain;
-      ctx.lineWidth = lineWidth;
-      ctx.lineCap = 'round';
-      ctx.shadowColor = 'rgba(239, 68, 68, 0.45)';
-      ctx.shadowBlur = 8;
+      ctx.arc(cx, cy, innerR, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(255, 184, 28, 0.3)';
+      ctx.lineWidth = 1;
       ctx.stroke();
+
+      // Outer subtle border
+      ctx.beginPath();
+      ctx.arc(cx, cy, outerR, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
       ctx.restore();
-    }
-
-    // Inner subtle gold border
-    ctx.beginPath();
-    ctx.arc(cx, cy, innerR, 0, Math.PI * 2);
-    ctx.strokeStyle = 'rgba(255, 184, 28, 0.3)';
-    ctx.lineWidth = 1;
-    ctx.stroke();
-
-    // Outer subtle border
-    ctx.beginPath();
-    ctx.arc(cx, cy, outerR, 0, Math.PI * 2);
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
-    ctx.lineWidth = 1;
-    ctx.stroke();
-
-    ctx.restore();
+    });
   }
   window.renderExecutiveDonutChart = renderExecutiveDonutChart;
   window.addEventListener('resize', () => {
