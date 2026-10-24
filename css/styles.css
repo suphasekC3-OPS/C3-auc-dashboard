@@ -2562,6 +2562,215 @@ body {
   color: #FECACA;
 }
 
+/* ป้ายสถานะปิดงานใน SAP (CLSD F4 / CLSD F2) - สีเขียวเรืองแสง เด่นชัด แทนคงเหลือ */
+.donut-stat-col.stat-clsd-sap {
+  background: linear-gradient(135deg, rgba(0, 255, 136, 0.12) 0%, rgba(5, 46, 28, 0.55) 100%);
+  border: 1.5px solid rgba(0, 255, 136, 0.65);
+  box-shadow: 0 0 18px rgba(0, 255, 136, 0.28), inset 0 0 12px rgba(0, 255, 136, 0.10);
+}
+
+.donut-stat-col.stat-clsd-sap:hover {
+  border-color: rgba(0, 255, 136, 0.85);
+  box-shadow: 0 0 24px rgba(0, 255, 136, 0.42), inset 0 0 16px rgba(0, 255, 136, 0.18);
+}
+
+.donut-stat-dot.dot-clsd-sap {
+  background: #00FF88;
+  box-shadow: 0 0 8px #00FF88, 0 0 16px rgba(0, 255, 136, 0.85);
+  animation: pulseClsdGlow 2.4s ease-in-out infinite;
+}
+
+@keyframes pulseClsdGlow {
+  0%, 100% {
+    box-shadow: 0 0 8px #00FF88, 0 0 16px rgba(0, 255, 136, 0.85);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 12px #00FF88, 0 0 22px rgba(0, 255, 136, 1);
+    transform: scale(1.15);
+  }
+}
+
+.stat-clsd-sap .donut-stat-label {
+  color: #00FF88;
+  font-weight: 850;
+  text-shadow: 0 0 10px rgba(0, 255, 136, 0.6);
+  letter-spacing: 0.02em;
+}
+
+.donut-stat-jobs.badge-jobs-clsd-sap {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #D1FAE5;
+  background: rgba(0, 255, 136, 0.18);
+  border: 1px solid rgba(0, 255, 136, 0.55);
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.25);
+  border-radius: 999px;
+  padding: 2px 9px;
+  line-height: 1.25;
+}
+
+.donut-stat-jobs.badge-jobs-clsd-sap strong {
+  font-size: 0.90rem;
+  font-weight: 850;
+  color: #00FF88;
+  text-shadow: 0 0 8px rgba(0, 255, 136, 0.8);
+}
+
+.stat-clsd-sap .donut-stat-val,
+.text-clsd-sap-glow {
+  color: #00FF88 !important;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  text-shadow: 0 0 12px rgba(0, 255, 136, 0.85), 0 0 24px rgba(0, 255, 136, 0.45);
+  font-family: var(--font-mono, monospace);
+}
+
+/* บล็อกสถานะแก้ไข (ย้ายมาจากกรอบสี่เหลี่ยมด้านบน มาแสดงที่ตำแหน่งกากบาทให้สวยงามเด่นชัด) */
+.donut-stat-col.stat-edit-status {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%);
+  border: 1.5px solid rgba(245, 158, 11, 0.45);
+  box-shadow: 0 0 18px rgba(245, 158, 11, 0.16), inset 0 0 12px rgba(245, 158, 11, 0.05);
+  transition: all 0.25s ease;
+}
+
+.donut-stat-col.stat-edit-status:hover {
+  border-color: rgba(245, 158, 11, 0.75);
+  box-shadow: 0 0 24px rgba(245, 158, 11, 0.30), inset 0 0 16px rgba(245, 158, 11, 0.10);
+  transform: translateY(-1px);
+}
+
+.donut-stat-dot.dot-edit-inc {
+  background: #F59E0B;
+  box-shadow: 0 0 8px #F59E0B, 0 0 14px rgba(245, 158, 11, 0.7);
+  animation: pulseEditGlow 2.5s ease-in-out infinite;
+}
+
+@keyframes pulseEditGlow {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+}
+
+.stat-edit-status .donut-stat-label {
+  color: #F8FAFC;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  font-size: 0.82rem;
+}
+
+.donut-stat-jobs.badge-jobs-edit-status {
+  font-size: 0.80rem;
+  font-weight: 700;
+  color: #FED7AA;
+  background: rgba(245, 158, 11, 0.16);
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.20);
+  border-radius: 999px;
+  padding: 2px 9px;
+  line-height: 1.25;
+}
+
+.donut-stat-jobs.badge-jobs-edit-status strong {
+  font-size: 0.88rem;
+  font-weight: 850;
+  color: #FFEDD5;
+}
+
+.donut-stat-val.text-edit-inc-glow {
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  font-family: var(--font-mono, monospace);
+  font-size: clamp(1.05rem, 1.2vw, 1.28rem);
+  line-height: 1.25;
+}
+
+[data-theme="light"] .donut-stat-col.stat-edit-status,
+body.theme-light .donut-stat-col.stat-edit-status {
+  background: linear-gradient(135deg, rgba(254, 243, 199, 0.65) 0%, rgba(255, 251, 235, 0.90) 100%);
+  border: 1.5px solid rgba(217, 119, 6, 0.45);
+  box-shadow: 0 2px 10px rgba(217, 119, 6, 0.12);
+}
+
+[data-theme="light"] .stat-edit-status .donut-stat-label,
+body.theme-light .stat-edit-status .donut-stat-label {
+  color: #78350F;
+}
+
+[data-theme="light"] .donut-stat-jobs.badge-jobs-edit-status,
+body.theme-light .donut-stat-jobs.badge-jobs-edit-status {
+  color: #92400E;
+  background: rgba(245, 158, 11, 0.20);
+  border-color: rgba(217, 119, 6, 0.40);
+}
+
+[data-theme="light"] .donut-stat-jobs.badge-jobs-edit-status strong,
+body.theme-light .donut-stat-jobs.badge-jobs-edit-status strong {
+  color: #78350F;
+}
+
+/* ป้ายสถานะการ์ดใหม่ (รวมปรับปรุงมูลค่า & งานที่เพิ่มขึ้น) */
+.badge-new-card-pill {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #00FF88;
+  background: rgba(0, 255, 136, 0.16);
+  border: 1px solid rgba(0, 255, 136, 0.55);
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.25);
+  padding: 1px 7px;
+  border-radius: 999px;
+  letter-spacing: 0.02em;
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+[data-theme="light"] .badge-new-card-pill,
+body.theme-light .badge-new-card-pill {
+  color: #065F46;
+  background: rgba(16, 185, 129, 0.18);
+  border-color: rgba(5, 150, 105, 0.5);
+}
+
+.donut-stat-breakdown-sub {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.68rem;
+  color: #A7F3D0;
+  margin-top: 3px;
+  padding-top: 3px;
+  border-top: 1px dashed rgba(0, 255, 136, 0.3);
+  line-height: 1.25;
+}
+
+[data-theme="light"] .donut-stat-breakdown-sub,
+body.theme-light .donut-stat-breakdown-sub {
+  color: #065F46;
+  border-top-color: rgba(5, 150, 105, 0.35);
+}
+
+/* ข้อความวันที่แก้ไขล่าสุดใต้หัวคอลัมน์สถานะ SAP ในตาราง WBS (ตัวอักษรเรียบๆ ไม่มีการ์ดตกแต่ง ขนาดพอดี) */
+.th-sub-date-text {
+  font-size: 0.70rem;
+  color: #CBD5E1;
+  font-weight: 500;
+  line-height: 1.2;
+  margin: 1px 0 3px 0;
+  text-align: center;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+  pointer-events: none;
+}
+
+[data-theme="light"] .th-sub-date-text {
+  color: #64748B;
+}
+
 .donut-stat-col.stat-box-top .donut-stat-val,
 .donut-stat-col.stat-box-bottom .donut-stat-val {
   font-size: clamp(0.92rem, 1.05vw, 1.08rem);
@@ -3009,6 +3218,40 @@ body {
   background: rgba(239, 68, 68, 0.08);
   border-color: rgba(239, 68, 68, 0.35);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="light"] .donut-stat-col.stat-clsd-sap {
+  background: linear-gradient(135deg, rgba(5, 150, 105, 0.12) 0%, rgba(16, 185, 129, 0.22) 100%);
+  border-color: rgba(5, 150, 105, 0.65);
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.35);
+}
+
+[data-theme="light"] .donut-stat-dot.dot-clsd-sap {
+  background: #059669;
+  box-shadow: 0 0 8px #059669;
+}
+
+[data-theme="light"] .stat-clsd-sap .donut-stat-label {
+  color: #047857;
+  text-shadow: none;
+}
+
+[data-theme="light"] .donut-stat-jobs.badge-jobs-clsd-sap {
+  background: rgba(5, 150, 105, 0.16);
+  color: #065F46;
+  border-color: rgba(5, 150, 105, 0.5);
+  box-shadow: none;
+}
+
+[data-theme="light"] .donut-stat-jobs.badge-jobs-clsd-sap strong {
+  color: #047857;
+  text-shadow: none;
+}
+
+[data-theme="light"] .stat-clsd-sap .donut-stat-val,
+[data-theme="light"] .text-clsd-sap-glow {
+  color: #047857 !important;
+  text-shadow: 0 0 8px rgba(16, 185, 129, 0.35);
 }
 
 [data-theme="light"] .exec-donut-center-content {
@@ -10455,10 +10698,30 @@ body.has-fullscreen-table {
   border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
+/* แท็กไฟล์ 05 CN41 วันเริ่มบัญชี: สีฟ้าไซแอน/เทอร์ควอยซ์สดใส ไม่ซ้ำกับไฟล์อื่นและไม่เหมือนไฟล์ 06 */
 .col-tag-05 {
+  background: rgba(6, 182, 212, 0.22);
+  color: #22D3EE;
+  border: 1px solid rgba(6, 182, 212, 0.45);
+}
+
+[data-theme="light"] .col-tag-05 {
+  background: #ECFEFF;
+  color: #0891B2;
+  border-color: #22D3EE;
+}
+
+/* แท็กไฟล์ 06 CN41 ล่าสุด: สีส้มทองอำพัน */
+.col-tag-06-cn41 {
   background: rgba(245, 158, 11, 0.2);
   color: #FBBF24;
   border: 1px solid rgba(245, 158, 11, 0.38);
+}
+
+[data-theme="light"] .col-tag-06-cn41 {
+  background: #FFFBEB;
+  color: #D97706;
+  border-color: #FBBF24;
 }
 
 .col-tag-custom {
@@ -10473,12 +10736,15 @@ body.has-fullscreen-table {
   border-color: #F472B6;
 }
 
+/* แท็ก G-Sheet แผนงานแล้วเสร็จ */
+.col-tag-sheet,
 .col-tag-06 {
   background: rgba(168, 85, 247, 0.2);
   color: #C084FC;
   border: 1px solid rgba(168, 85, 247, 0.42);
 }
 
+[data-theme="light"] .col-tag-sheet,
 [data-theme="light"] .col-tag-06 {
   background: #FAF5FF;
   color: #9333EA;
@@ -11726,6 +11992,17 @@ body.has-fullscreen-table {
   background: linear-gradient(90deg, #FFB81C 0%, #10B981 50%, #EC4899 100%);
 }
 
+.wbs-side-summary-col .wbs-side-kpi-card .exec-donut-main-row.vertical-layout {
+  gap: 0.55rem;
+  margin: 0.5rem 0;
+  justify-content: center;
+}
+
+.wbs-side-summary-col .wbs-side-kpi-card .donut-stat-col.stat-box-top,
+.wbs-side-summary-col .wbs-side-kpi-card .donut-stat-col.stat-box-bottom {
+  padding: 0.45rem 0.65rem;
+}
+
 .wbs-comparison-main-col {
   flex: 1;
   min-width: 0;
@@ -11853,6 +12130,142 @@ body.has-fullscreen-table {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
+}
+
+/* คอนเทนเนอร์ฝั่งขวาของหัวการ์ดกราฟ WBS (รวมแถบที่มาไฟล์ และปุ่มแอ็กชันขวาสุด) */
+.wbs-chart-header-actions-area {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+  margin-left: auto;
+}
+
+.wbs-chart-btn-group {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+/* แถบแสดงที่มาไฟล์ และวันที่แก้ไขล่าสุด ของ สถานะ SAP & มูลค่า AUC บนหัวการ์ดกราฟ WBS */
+.wbs-chart-header-source-strip {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: nowrap;
+  margin: 0;
+}
+
+.wbs-src-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.22rem 0.55rem;
+  border-radius: 7px;
+  font-size: 0.74rem;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.wbs-src-chip:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.18);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+/* 1. สถานะ SAP (โทนม่วง/น้ำเงิน สอดคล้องกับไฟล์ 04 ZBUDR064) */
+.wbs-src-chip.chip-sap-status {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(109, 40, 217, 0.28) 100%);
+  border: 1px solid rgba(167, 139, 250, 0.45);
+  color: #DDD6FE;
+}
+
+.wbs-src-chip.chip-sap-status .src-chip-label {
+  color: #C4B5FD;
+  font-weight: 600;
+}
+
+.wbs-src-chip.chip-sap-status .src-chip-file {
+  color: #A78BFA;
+  font-weight: 800;
+}
+
+.wbs-src-chip.chip-sap-status .src-chip-date {
+  color: #EDE9FE;
+  font-weight: 600;
+}
+
+/* 2. มูลค่า AUC เริ่มต้น (ไฟล์ 05 WBS CN41 วันเริ่มบัญชี 14 ต.ค. 69) - สีฟ้า Cyan เด่นชัด ไม่ซ้ำกับไฟล์อื่นและไม่เหมือนไฟล์ 06 */
+.wbs-src-chip.chip-auc-init {
+  background: linear-gradient(135deg, rgba(8, 145, 178, 0.22) 0%, rgba(6, 182, 212, 0.3) 100%);
+  border: 1px solid rgba(34, 211, 238, 0.55);
+  color: #CFFAFE;
+}
+
+.wbs-src-chip.chip-auc-init .src-chip-label {
+  color: #A5F3FC;
+  font-weight: 600;
+}
+
+.wbs-src-chip.chip-auc-init .src-chip-file {
+  color: #22D3EE;
+  font-weight: 800;
+}
+
+.wbs-src-chip.chip-auc-init .src-chip-date {
+  color: #ECFEFF;
+  font-weight: 600;
+}
+
+[data-theme="light"] .wbs-src-chip.chip-auc-init {
+  background: linear-gradient(135deg, #ECFEFF 0%, #CFFAFE 100%);
+  border-color: #67E8F9;
+  color: #0E7490;
+}
+
+[data-theme="light"] .wbs-src-chip.chip-auc-init .src-chip-label {
+  color: #0891B2;
+}
+
+[data-theme="light"] .wbs-src-chip.chip-auc-init .src-chip-file {
+  color: #0E7490;
+}
+
+[data-theme="light"] .wbs-src-chip.chip-auc-init .src-chip-date {
+  color: #155E75;
+}
+
+/* 3. มูลค่า AUC ล่าสุด (ไฟล์ 06 CN41 ล่าสุด 22 ต.ค. 69) */
+.wbs-src-chip.chip-auc-value {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(217, 119, 6, 0.28) 100%);
+  border: 1px solid rgba(251, 191, 36, 0.45);
+  color: #FEF3C7;
+}
+
+.wbs-src-chip.chip-auc-value .src-chip-label {
+  color: #FDE68A;
+  font-weight: 600;
+}
+
+.wbs-src-chip.chip-auc-value .src-chip-file {
+  color: #F59E0B;
+  font-weight: 800;
+}
+
+.wbs-src-chip.chip-auc-value .src-chip-date {
+  color: #FFFBEB;
+  font-weight: 600;
+}
+
+.wbs-src-chip .src-chip-icon {
+  font-size: 0.8rem;
 }
 
 /* ปุ่มเลือกการ์ดทุกสถานะ บนขวาของการ์ดกราฟแท่ง WBS */
@@ -16347,4 +16760,217 @@ body.has-fullscreen-table {
   background: #EF4444;
   color: #FFFFFF !important;
 }
+
+/* ==========================================================================
+   WBS Executive Card Redesign (Bar Graphs for Total, Closed & Extended Added Segments)
+   ========================================================================== */
+.wbs-metric-card-box {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 0.60rem 0.75rem;
+  margin-bottom: 0.55rem;
+  transition: all 0.25s ease;
+}
+.wbs-metric-card-box:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 184, 28, 0.35);
+}
+.wbs-metric-card-box.box-total {
+  border-left: 3.5px solid #FFB81C;
+  background: linear-gradient(135deg, rgba(255, 184, 28, 0.09) 0%, rgba(30, 9, 50, 0.65) 100%);
+}
+.wbs-metric-card-box.box-closed {
+  border-left: 3.5px solid #00FF88;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.14) 0%, rgba(5, 46, 28, 0.65) 100%);
+  box-shadow: 0 0 16px rgba(0, 255, 136, 0.16);
+}
+
+.wbs-box-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.2rem;
+}
+.wbs-box-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 750;
+  color: #E2E8F0;
+}
+.wbs-box-title-wrap .box-icon {
+  font-size: 0.88rem;
+}
+
+.wbs-card-metric-job-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  padding: 1px 7px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #F8FAFC;
+}
+.wbs-card-metric-job-badge.badge-green {
+  background: rgba(0, 255, 136, 0.16);
+  border-color: rgba(0, 255, 136, 0.55);
+  color: #D1FAE5;
+}
+.wbs-card-metric-job-badge.badge-green strong {
+  color: #00FF88;
+}
+
+.wbs-val-line {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px;
+  margin: 0.10rem 0 0.35rem;
+}
+.wbs-val-main-group {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+}
+.wbs-val-prefix {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #94A3B8;
+}
+.wbs-val-number {
+  font-family: 'Outfit', -apple-system, sans-serif;
+  font-size: 1.10rem;
+  font-weight: 850;
+  letter-spacing: -0.01em;
+  color: #FFB81C;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+.wbs-val-number.text-success {
+  color: #00FF88 !important;
+  text-shadow: 0 0 12px rgba(0, 255, 136, 0.5);
+}
+.wbs-val-mb-pill {
+  font-size: 0.72rem;
+  font-weight: 750;
+  color: #FDE047;
+  background: rgba(255, 184, 28, 0.15);
+  border: 1px solid rgba(255, 184, 28, 0.40);
+  padding: 1px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+  flex-shrink: 0;
+}
+.wbs-val-mb-pill.pill-green {
+  color: #6EE7B7;
+  background: rgba(0, 255, 136, 0.15);
+  border-color: rgba(0, 255, 136, 0.45);
+}
+
+/* แท่งกราฟ Bar Graph สไตล์ที่วงกลม */
+.wbs-segment-track {
+  width: 100%;
+  height: 9px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 9999px;
+  display: flex;
+  overflow: hidden;
+  margin: 0.3rem 0 0.25rem;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+.wbs-seg-bar {
+  height: 100%;
+  transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.wbs-seg-base-total {
+  background: linear-gradient(90deg, #6366F1, #818CF8);
+}
+.wbs-seg-inc-total {
+  background: linear-gradient(90deg, #F59E0B, #EF4444);
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.7);
+}
+.wbs-seg-base-closed {
+  background: linear-gradient(90deg, #059669, #10B981);
+}
+.wbs-seg-inc-closed {
+  background: #00FF88;
+  box-shadow: 0 0 10px #00FF88;
+}
+
+.wbs-box-sub {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.67rem;
+  color: #CBD5E1;
+  padding-top: 1px;
+}
+.wbs-box-sub.sub-stacked {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 2px;
+}
+.wbs-box-sub-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+/* Composite Progress Bar (สำหรับ % ปิดงาน ที่มีส่วนเพิ่มสีต่างออกไป) */
+.progress-fill-composite {
+  display: flex;
+  height: 100%;
+  position: relative;
+  overflow: visible !important;
+  border-radius: var(--radius-full);
+  transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.progress-fill-composite .fill-base-part {
+  height: 100%;
+  border-top-left-radius: var(--radius-full);
+  border-bottom-left-radius: var(--radius-full);
+  flex: 1 1 auto;
+}
+.progress-fill-composite .fill-inc-part {
+  height: 100%;
+  flex: 0 0 auto;
+  min-width: 14px;
+  background: linear-gradient(90deg, #10B981, #00FF88);
+  box-shadow: 0 0 12px #00FF88, inset 0 0 4px rgba(255, 255, 255, 0.6);
+  border-left: 1.5px solid rgba(255, 255, 255, 0.9);
+  border-top-right-radius: var(--radius-full);
+  border-bottom-right-radius: var(--radius-full);
+  animation: pulseNeonGlow 1.8s infinite alternate ease-in-out;
+}
+@keyframes pulseNeonGlow {
+  0% { box-shadow: 0 0 6px #00FF88; filter: brightness(1); }
+  100% { box-shadow: 0 0 16px #00FF88, 0 0 24px rgba(0,255,136,0.6); filter: brightness(1.25); }
+}
+
+.wbs-pct-breakdown-tag {
+  font-size: 0.70rem;
+  color: #CBD5E1;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.badge-inc-neon {
+  background: rgba(0, 255, 136, 0.18);
+  border: 1px solid rgba(0, 255, 136, 0.65);
+  color: #00FF88;
+  font-weight: 750;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 0.68rem;
+  box-shadow: 0 0 6px rgba(0, 255, 136, 0.35);
+}
+
 

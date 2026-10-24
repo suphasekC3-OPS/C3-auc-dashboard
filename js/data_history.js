@@ -123,12 +123,42 @@
     {
       id: 'src_05',
       groupNo: '05',
-      name: '05-1 WBS CN41 มูลค่า AUC วันเริ่มบัญชี 14 ตค69 (1เดือนเปลี่ยนครั้ง).xlsx',
-      category: 'SAP CN41 AUC Values',
-      importDate: '2026-10-23 08:35:42',
-      importDateTh: '23 ต.ค. 2569, 08:35 น.',
-      lastModifiedTh: '23 ต.ค. 2569, 08:35 น.',
-      sizeText: '338.1 KB',
+      name: '05 WBS CN41 มูลค่า AUC วันเริ่มบัญชี 14 ตค 69.xlsx',
+      category: 'SAP CN41 AUC Values (Baseline)',
+      importDate: '2026-10-24 20:45:00',
+      importDateTh: '24 ต.ค. 2569, 20:45 น.',
+      lastModifiedTh: '14 ต.ค. 2569 (วันเริ่มบัญชี)',
+      sizeText: '339.0 KB',
+      recordCount: 2083,
+      status: 'active',
+      statusText: 'ผสานข้อมูลสำเร็จ (ผูก WBS 03)',
+      storageFile: 'js/data_wbs.js',
+      storageVar: 'window.AUC_WBS_REMAINING_DATA.cn41Cost05',
+      icon: '📁',
+      badgeColor: '#06B6D4',
+      description: 'รายงาน SAP CN41 มูลค่าต้นทุนจริง AUC ณ วันเริ่มบัญชี 14 ต.ค. 2569 ยอดรวม 643,241,099.93 บาท ผูกกับ WBS ไฟล์ 03 สำหรับคำนวณมูลค่า AUC ที่เพิ่มขึ้น',
+      columns: [
+        'cn41Cost05 (ต้นทุนจริง วันเริ่มบัญชี 14 ต.ค. 69)',
+        'cn41CostInc (มูลค่าAUCที่เพิ่มขึ้น = ไฟล์ 06 - ไฟล์ 05)',
+        'cn41ActualCost (ต้นทุนจริง ไฟล์ 06 ล่าสุด 22 ต.ค. 69)'
+      ],
+      sampleProvider: () => (window.AUC_WBS_REMAINING_DATA || []).slice(0, 5).map(r => ({
+        'WBS': r.wbs,
+        'AUC ไฟล์ 06 ล่าสุด (บาท)': (Number(r.cn41ActualCost) || 0).toLocaleString('th-TH', { minimumFractionDigits: 2 }),
+        'AUC ไฟล์ 05 เริ่มต้น (บาท)': (Number(r.cn41Cost05) || 0).toLocaleString('th-TH', { minimumFractionDigits: 2 }),
+        'มูลค่าAUCที่เพิ่มขึ้น (บาท)': (Number(r.cn41CostInc) || 0).toLocaleString('th-TH', { minimumFractionDigits: 2 }),
+        'กฟฟ.': r.office || '-'
+      }))
+    },
+    {
+      id: 'src_06',
+      groupNo: '06',
+      name: '06 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 22 ตค 69.xlsx',
+      category: 'SAP CN41 AUC Values (Latest)',
+      importDate: '2026-10-24 18:42:42',
+      importDateTh: '24 ต.ค. 2569, 18:42 น.',
+      lastModifiedTh: '22 ต.ค. 2569 (ไฟล์ล่าสุด)',
+      sizeText: '336.2 KB',
       recordCount: 2083,
       status: 'active',
       statusText: 'ผสานข้อมูลสำเร็จ',
@@ -136,7 +166,7 @@
       storageVar: 'window.AUC_WBS_REMAINING_DATA.cn41ActualCost',
       icon: '📑',
       badgeColor: '#F59E0B',
-      description: 'รายงาน SAP CN41 ระบุต้นทุนจริงและมูลค่า AUC สะสม (บาท) ของแต่ละโครงการ สำหรับวิเคราะห์มูลค่าสินทรัพย์ระหว่างก่อสร้าง',
+      description: 'รายงาน SAP CN41 ระบุต้นทุนจริงและมูลค่า AUC สะสม (บาท) ของแต่ละโครงการ สำหรับวิเคราะห์มูลค่าสินทรัพย์ระหว่างก่อสร้าง ล่าสุด 22 ต.ค. 69',
       columns: [
         'cn41ActualCost (มูลค่า AUC บาท)', 'cn41ObjDesc (ออบเจคโครงการ)', 'cn41Level (ระดับ)',
         'cn41Currency (สกุลเงิน THB)', 'cn41Row (ลำดับแถว)'
@@ -149,9 +179,9 @@
       }))
     },
     {
-      id: 'src_06',
-      groupNo: '06',
-      name: '06 Google Sheet แผนงานแล้วเสร็จ (Online Live API)',
+      id: 'src_sheet',
+      groupNo: 'G-Sheet',
+      name: 'Google Sheet แผนงานแล้วเสร็จ (Online Live API)',
       category: 'Google Sheet Field Plans',
       importDate: '2026-10-22 17:23:00',
       importDateTh: '22 ต.ค. 2569, 17:23 น.',
@@ -402,6 +432,342 @@
    * System Pre-defined Audit & Modification Log Entries
    */
   const BASE_AUDIT_LOGS = [
+    {
+      id: 'log_000_wbs_add_million_baht_display_and_comma',
+      timestamp: '2026-10-24 23:40:00',
+      timestampTh: '24 ต.ค. 2569, 23:40 น.',
+      type: 'EDIT',
+      typeBadge: 'ปรับปรุงการแสดงผลตัวเลข',
+      badgeClass: 'badge-type-edit',
+      title: 'ปรับข้อความ "เกณฑ์:" เป็น "เดิม:" และเพิ่มการแสดงมูลค่าเป็นหน่วย ล้านบาท (ลบ.) พร้อมใส่เครื่องหมายจุลภาค (,) ครบทุกจุดในการ์ด WBS',
+      targetSubject: 'การ์ดภาพรวมมูลค่า & งาน AUC หน้า WBS (#wbsExecutiveDonutKpiCard)',
+      storageFile: 'js/wbs.js, css/styles.css, js/data_history.js, index.html',
+      changeSummary: 'ดำเนินการตามคำขอ: 1) ปรับข้อความ "เกณฑ์:" ในกล่องมูลค่าปิดงานแล้ว เป็น "เดิม:" ให้สอดคล้องกับกล่องด้านบน 2) เพิ่มการแสดงผลหน่วยล้านบาท (ลบ.) ต่อท้ายตัวเลขมูลค่าหลักทั้ง 2 ส่วน: (2,231.24 ลบ.) และ (1,598.25 ลบ.) 3) ใส่เครื่องหมายจุลภาค (,) ให้กับตัวเลขทุกจำนวนในการ์ดอย่างถูกต้องและสวยงาม พร้อมปรับเลย์เอาต์รายละเอียดใต้แท่งกราฟเป็น sub-stacked 2 แถวสมบูรณ์แบบ',
+      details: 'ดำเนินการตามคำสั่งผู้ใช้งาน "แก้เป็น เดิม และในการ์ดนี้ ตัวเลขใช้ , เพิ่มการแสดง เป็น ลบ.ด้วย และมี ,": 1) ใน js/wbs.js ปรับ wbsBaseDetail จาก "เกณฑ์:" เป็น "เดิม: 1,589.20 ลบ." และ "(8,100 งาน)" พร้อมใส่เครื่องหมายจุลภาค 2) เพิ่มคอมโพเนนต์ .wbs-val-mb-pill (#wbsKpiTotalValMb, #wbsKpiClosedValMb) แสดงยอดเป็นหน่วยล้านบาท เช่น (2,231.24 ลบ.) และ (1,598.25 ลบ.) 3) ใน css/styles.css เพิ่มสไตล์ .wbs-val-mb-pill, .pill-green, และโครงสร้าง .wbs-box-sub.sub-stacked เพื่อให้ข้อมูลเดิมและ SAP แสดงเป็น 2 แถวเรียบร้อยสวยงามไม่ตัดบรรทัด 4) อัปเดต Version Cache Buster ใน index.html เป็น ?v=20261024_2340',
+      sourceFile: 'คำสั่งผู้ใช้งาน (แก้เป็น เดิม และในการ์ดนี้ ตัวเลขใช้ , เพิ่มการแสดง เป็น ลบ.ด้วย และมี ,)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง (ปรับปรุงการแสดงผลหน่วย ลบ. และเครื่องหมายจุลภาคให้อ่านง่าย ชัดเจน ตรงตามมาตรฐาน)',
+    },
+    {
+      id: 'log_000_wbs_redesign_kpi_card_bar_graphs',
+      timestamp: '2026-10-24 23:15:00',
+      timestampTh: '24 ต.ค. 2569, 23:15 น.',
+      type: 'EDIT',
+      typeBadge: 'ปรับปรุงการ์ดภาพรวม WBS',
+      badgeClass: 'badge-type-edit',
+      title: 'ปรับปรุงการ์ด WBS: นำงานคงเหลือออก, ทำภาพรวมมูลค่าและมูลค่าปิดงานเป็นแท่งกราฟแสดงมูลค่า/งาน และทำแท่งกราฟส่วนเพิ่มเป็นสีต่างออกไป',
+      targetSubject: 'การ์ดภาพรวมมูลค่า & งาน AUC หน้า WBS (#wbsExecutiveDonutKpiCard)',
+      storageFile: 'js/wbs.js, css/styles.css, js/data_history.js, index.html',
+      changeSummary: 'ดำเนินการตามคำขอ 4 ข้อ: 1) นำกล่องงานคงเหลือ (คงเหลือดำเนินการ) ออกจากการ์ด 2) ปรับภาพรวมมูลค่าเป็นแบบแท่งกราฟ มีอักษร มูลค่า / งาน และส่วนเพิ่ม/ลดแสดงเป็นแท่งกราฟสีต่างออกไป (ส้มอำพัน/นีออน) 3) ปรับมูลค่าปิดงานเป็นแบบแท่งกราฟ มีอักษร มูลค่า / งาน และส่วน SAP CLSD แสดงแท่งกราฟสีเขียวนีออนสว่างต่างออกไป 4) แถบ % ปิดงานมูลค่า และ % ปิดจำนวนงาน แสดงส่วนที่เพิ่มขึ้นด้วยแท่งกราฟสีเขียวนีออนเรืองแสงต่างออกไปจากสีเดิม',
+      details: 'ดำเนินการตามคำสั่งผู้ใช้งาน 4 ข้อ: 1) ลบกล่องคงเหลือดำเนินการ (#wbsKpiRemainVal, #wbsKpiRemainJobs) ออก 2) ปรับภาพรวมมูลค่าทั้งหมดเป็น .wbs-metric-card-box.box-total มีแท่งกราฟ .wbs-segment-track แบ่งยอดเดิม (สีม่วงคราม) และส่วนต่างเพิ่ม/ลด (สีส้มทองอำพัน) พร้อมแสดงอักษร มูลค่า และ งาน 3) ปรับมูลค่าปิดงานแล้ว (รวม SAP) เป็น .wbs-metric-card-box.box-closed มีแท่งกราฟแบ่งยอดเกณฑ์เดิม (สีเขียวมรกต) และส่วน SAP CLSD (สีเขียวนีออนสว่างสะท้อนแสง) พร้อมแสดงอักษร มูลค่า และ งาน 4) แถบ % ปิดงานมูลค่า AUC และ % ปิดจำนวนงาน ปรับเป็น .progress-fill-composite โดยช่วงเดิม (71.22% / 79.54%) เป็นลายทางทองเดิม และช่วงที่เพิ่มขึ้น (+0.41% / +0.69%) เป็นสีเขียวนีออนเรืองแสง (.fill-inc-part) ต่างออกไปอย่างชัดเจน พร้อมรถ PEA EV วิ่งที่ปลายทางรวม 5) อัปเดต Version Cache Buster ใน index.html เป็น ?v=20261024_2315',
+      sourceFile: 'คำสั่งผู้ใช้งาน (แก้ไขการ์ด 1.งานคงเหลือเอาออก 2.ภาพรวมมูลค่าแท่งกราฟ 3.มูลค่าปิดงานแท่งกราฟ 4.%ปิดงานส่วนเพิ่มสีต่างออกไป)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'สูง (ปรับปรุงโครงสร้างการ์ด WBS ให้ตอบโจทย์การมองเห็นส่วนปรับปรุงและส่วน SAP ชัดเจนเป็นเลิศ)',
+    },
+    {
+      id: 'log_000_wbs_fix_syntax_error_badge_src',
+      timestamp: '2026-10-24 22:45:00',
+      timestampTh: '24 ต.ค. 2569, 22:45 น.',
+      type: 'EDIT',
+      typeBadge: 'แก้ไขข้อผิดพลาดสคริปต์',
+      badgeClass: 'badge-type-edit',
+      title: 'แก้ไขข้อผิดพลาด SyntaxError (Identifier badgeSrc declared twice) ในฟังก์ชัน syncWbsSideKpiCard คืนการแสดงผลหน้า WBS ให้สมบูรณ์ 100%',
+      targetSubject: 'โมดูลติดตามงาน WBS คงเหลือ (js/wbs.js)',
+      storageFile: 'js/wbs.js, js/data_history.js, index.html',
+      changeSummary: 'แก้ไขข้อผิดพลาดตัวแปร badgeSrc ซ้ำในฟังก์ชัน syncWbsSideKpiCard ซึ่งทำให้ไฟล์ js/wbs.js หยุดการประมวลผล ส่งผลให้ตารางและการ์ด WBS ไม่แสดงผล หลังแก้ไข หน้า WBS คงเหลือ ทั้งการ์ดใหม่ ตาราง 25 รายการต่อหน้า และตัวกรองทั้งหมดกลับมาแสดงผลได้อย่างสมบูรณ์แบบ',
+      details: 'ดำเนินการตรวจสอบและแก้ไขปัญหา "ข้อมูลหาย หน้า wbs คงเหลือ": 1) ตรวจพบ SyntaxError: Identifier badgeSrc has already been declared ที่บรรทัด 2201 ใน js/wbs.js จากการประกาศ const ซ้ำ 2 จุด 2) เปลี่ยนชื่อตัวแปรที่บรรทัด 2201 เป็น targetBadgeSrc และ targetBadgeTgt ให้ถูกต้องเฉพาะตัว 3) ทดสอบโหลดสคริปต์ wbs.js ใน Headless Browser ยืนยันว่าโหลดสำเร็จไม่มี Error 4) ทดสอบเปิดแท็บ WBS ยืนยันว่า CARD_EXISTS = true, TBODY_ROWS = 25 แถว, ตัวเลขการ์ดใหม่แสดงครบถ้วนสมบูรณ์ 5) อัปเดต Version Cache Buster ใน index.html เป็น ?v=20261024_2245',
+      sourceFile: 'คำสั่งผู้ใช้งาน (ข้อมูลหาย หน้า wbs คงเหลือ)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'วิกฤต (แก้ไขข้อผิดพลาดสคริปต์ คืนการแสดงผลข้อมูลหน้า WBS คงเหลือ ทั้งระบบให้กลับมาทำงานได้อย่างถูกต้อง)',
+    },
+    {
+      id: 'log_000_wbs_create_new_combined_kpi_card',
+      timestamp: '2026-10-24 22:35:00',
+      timestampTh: '24 ต.ค. 2569, 22:35 น.',
+      type: 'EDIT',
+      typeBadge: 'สร้างการ์ดใหม่รวมปรับปรุง',
+      badgeClass: 'badge-type-edit',
+      title: 'สร้างการ์ดใหม่: รวมภาพรวมมูลค่าที่เพิ่มขึ้น/ลดลง (วงกลม 1) และ รวมมูลค่า/งานปิดงานกับ SAP CLSD (วงกลม 2)',
+      targetSubject: 'การ์ดภาพรวมมูลค่า & งาน AUC หน้า WBS (#wbsExecutiveDonutKpiCard -> .wbs-new-combined-kpi-card)',
+      storageFile: 'js/wbs.js, css/styles.css, js/data_history.js, index.html',
+      changeSummary: 'สร้างการ์ดใหม่ตามภาพที่ผู้ใช้วงกลมเลข 1 และ 2: 1) วงกลม 1: นำภาพรวมมูลค่ารวมกับมูลค่าที่เพิ่มขึ้น/ลดลง (2,231,338,464.73 + (-94,278.85) = 2,231,244,185.88 ฿) 2) วงกลม 2: นำปิดงานแล้วรวมกับ CLSD F4/F2 ทั้งมูลค่าและงาน (1,589,201,672.17 + 9,047,546.49 = 1,598,249,218.66 ฿, 8,100 + 70 = 8,170 งาน) 3) คำนวณคงเหลือสุทธิและเปอร์เซ็นต์ปิดงานใหม่เรียลไทม์ (71.63% มูลค่า และ 80.23% งาน)',
+      details: 'ดำเนินการตามคำสั่งผู้ใช้งาน "นำมารวมกัน ภาพรวมมูลค่า ที่เพิ่มขึ้น/ลดลง แล้ว แสดงการืดใหม่, นำมารวมกัน มูลค่า/งาน ที่เพิ่มขึ้น ที่วงกลม แล้วสร้างการ์ดใหม่" พร้อมภาพวงกลมสีแดงหมายเลข 1 และ 2: 1) ใน js/wbs.js: ปรับปรุงการ์ด #wbsExecutiveDonutKpiCard เป็นการ์ดใหม่ (.wbs-new-combined-kpi-card) พร้อมป้ายกำกับ "การ์ดใหม่ (รวมปรับปรุง)" 2) ใน syncWbsSideKpiCard คำนวณยอดสุทธิ: วงกลม 1 (netTotalVal = baseTotalVal + totalCostInc), วงกลม 2 (netClosedVal = baseClosedVal + clsdSapAuc, netClosedJobs = baseClosedJobs + clsdSapCount), ยอดคงเหลือสุทธิ (netRemainVal = netTotalVal - netClosedVal), เปอร์เซ็นต์ปิดงานใหม่ (netPctVal = 71.63%, netPctJobs = 80.23%) พร้อมแถบแสดงรายละเอียดย่อยอย่างโปร่งใส 3) ใน css/styles.css: เพิ่มสไตล์ .badge-new-card-pill และ .donut-stat-breakdown-sub 4) อัปเดต Version Cache Buster ใน index.html เป็น ?v=20261024_2235',
+      sourceFile: 'คำสั่งผู้ใช้งาน (นำมารวมกัน ภาพรวมมูลค่า ที่เพิ่มขึ้น/ลดลง แล้ว แสดงการืดใหม่, นำมารวมกัน มูลค่า/งาน ที่เพิ่มขึ้น ที่วงกลม แล้วสร้างการ์ดใหม่ พร้อมภาพวงกลม 1 และ 2)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'สูง (ยกระดับการ์ดภาพรวม WBS เป็นการ์ดใหม่ที่ผสานตัวเลขทุกส่วนเข้าด้วยกันอย่างสมบูรณ์แบบ 100%)'
+    },
+    {
+      id: 'log_000_wbs_revert_edit_status_to_rectangle',
+      timestamp: '2026-10-24 22:30:00',
+      timestampTh: '24 ต.ค. 2569, 22:30 น.',
+      type: 'EDIT',
+      typeBadge: 'ยกเลิกการย้ายตำแหน่ง',
+      badgeClass: 'badge-type-edit',
+      title: 'ยกเลิกการย้ายสถานะแก้ไขไปแสดงที่ตำแหน่งกากบาท และคืนค่าแสดงที่กรอบสี่เหลี่ยมด้านบนตามเดิม',
+      targetSubject: 'การ์ดภาพรวมมูลค่า & งาน AUC หน้า WBS (#wbsExecutiveDonutKpiCard)',
+      storageFile: 'js/wbs.js, js/data_history.js, index.html',
+      changeSummary: 'ยกเลิกการย้ายสถานะแก้ไข (มูลค่า AUC ที่เพิ่มขึ้น/ลดลง) ไปไว้ที่บล็อกด้านล่าง (ตำแหน่งกากบาท) โดยคืนค่าการแสดงผลไว้ที่กรอบสี่เหลี่ยมถัดจาก ฿ ใต้ยอดรวมด้านบนตามเดิม และคืนบล็อกด้านล่างเป็นการแสดงสถานะปิดงาน SAP (CLSD F4 / CLSD F2) สีเขียวเรืองแสงตามเดิม',
+      details: 'ดำเนินการตามคำสั่งผู้ใช้งาน "ยกเลิก นำสถานะแก้ไข ที่สีเหลี่ยม ไปแสดง กากบาท ให้สวยงาม": 1) ใน js/wbs.js: คืนคอมโพเนนต์ .exec-total-inc-row (wbsKpiTotalIncBadge) ไว้ถัดจาก ฿ ใต้ยอดรวมด้านบน 2) คืนบล็อกล่าง (.stat-box-bottom) เป็น .stat-clsd-sap แสดงสถานะปิดงานใน SAP (CLSD F4 หรือ CLSD F2) ด้วยสีเขียวเรืองแสง 3) คืนฟังก์ชัน syncWbsSideKpiCard ให้ซิงก์อัปเดต wbsKpiTotalIncBadge 4) อัปเดต Version Cache Buster ใน index.html เป็น ?v=20261024_2230',
+      sourceFile: 'คำสั่งผู้ใช้งาน (ยกเลิก นำสถานะแก้ไข ที่สีเหลี่ยม ไปแสดง กากบาท ให้สวยงาม)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง (คืนค่าการแสดงผลสถานะแก้ไขที่ตำแหน่งกรอบสี่เหลี่ยมเดิมตามความต้องการของผู้ใช้งาน)'
+    },
+    {
+      id: 'log_000_wbs_move_edit_status_to_cross_block',
+      timestamp: '2026-10-24 22:25:00',
+      timestampTh: '24 ต.ค. 2569, 22:25 น.',
+      type: 'EDIT',
+      typeBadge: 'ปรับปรุงตำแหน่งสถานะแก้ไข',
+      badgeClass: 'badge-type-edit',
+      title: 'ย้ายการแสดงผลสถานะแก้ไข (มูลค่า AUC เพิ่มขึ้น/ลดลง) จากกรอบสี่เหลี่ยมด้านบน ไปแสดงที่บล็อกล่าง (ตำแหน่งกากบาท) ให้สวยงาม',
+      targetSubject: 'การ์ดภาพรวมมูลค่า & งาน AUC หน้า WBS (#wbsExecutiveDonutKpiCard)',
+      storageFile: 'js/wbs.js, css/styles.css, js/data_history.js, index.html',
+      changeSummary: 'ย้ายข้อมูลสถานะแก้ไข (มูลค่า AUC ที่เพิ่มขึ้น/ลดลง จากคอลัมน์ cn41CostInc ไฟล์ 06 - 05) จากกรอบสี่เหลี่ยมถัดจาก ฿ ใต้ยอดรวมด้านบน ไปแสดงที่บล็อกด้านล่างของการ์ด (ตำแหน่งกากบาทเดิมของคงเหลือ) พร้อมออกแบบการจัดวางให้สวยงามเด่นชัด แสดงยอดรวมงานคงเดิม และคงข้อมูล CLSD F4/F2 ไว้อย่างกลมกลืน',
+      details: 'ดำเนินการตามคำสั่งผู้ใช้งาน "นำสถานะแก้ไข ที่สีเหลี่ยม ไปแสดง กากบาท ให้สวยงาม": 1) ใน js/wbs.js: นำคอมโพเนนต์ .exec-total-inc-row ออกจาก .exec-summary-val-row ด้านบน คืนความสวยงามสะอาดตาให้ยอดรวมหลักและจำนวนงาน 2) ในบล็อกด้านล่างของการ์ด (.stat-box-bottom ตำแหน่งกากบาท): ปรับเป็น .stat-edit-status แสดงหัวข้อ "สถานะแก้ไข (มูลค่า AUC)", แสดงป้าย "จำนวนงานคงเดิม X งาน" ตามคำสั่งผู้ใช้, แสดงตัวเลขมูลค่าเพิ่ม/ลดขนาดใหญ่เรืองแสง (.text-edit-inc-glow) สีเขียว/ส้มทองตามผลบวก/ลบ และมีแถบย่อยแสดงผลต่างไฟล์ 06-05 พร้อมสถานะ CLSD F4/F2 อย่างสวยงาม 3) ใน css/styles.css: เพิ่มสไตล์เรืองแสง แอนิเมชันชีพจร (pulseEditGlow) และรองรับทั้ง Dark/Light Theme 4) ใน syncWbsSideKpiCard: ซิงก์ค่าตัวเลขและสีสถานะแก้ไขตามตัวกรองแบบเรียลไทม์ 5) อัปเดต Version Cache Buster ใน index.html เป็น ?v=20261024_2225',
+      sourceFile: 'คำสั่งผู้ใช้งาน (นำสถานะแก้ไข ที่สีเหลี่ยม ไปแสดง กากบาท ให้สวยงาม)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง (จัดระเบียบ UI การ์ดภาพรวม WBS ให้สวยงาม ชัดเจน และสอดคล้องกับความต้องการของผู้ใช้งาน)'
+    },
+    {
+      id: 'log_000_wbs_remove_table_top_source_chips',
+      timestamp: '2026-10-24 22:20:00',
+      timestampTh: '24 ต.ค. 2569, 22:20 น.',
+      type: 'EDIT',
+      typeBadge: 'เอาการ์ดออก 3 อัน',
+      badgeClass: 'badge-type-edit',
+      title: 'นำแถบการ์ดชิปที่มาไฟล์ 3 อันเหนือตาราง WBS (.wbs-table-source-chips) ออกตามคำสั่ง',
+      targetSubject: 'แถบแถวบนสุดของตาราง WBS (.wbs-table-top-meta-bar -> .wbs-table-source-chips ใน index.html)',
+      storageFile: 'index.html, js/data_history.js',
+      changeSummary: 'นำแถบการ์ดชิปแสดงที่มาและวันที่แก้ไขไฟล์ 3 อัน (สถานะ SAP, AUC เริ่มต้น, มูลค่า AUC) ที่อยู่เหนือหัวตาราง WBS ออกทั้งหมดตามภาพที่ผู้ใช้วงกลมสีแดง',
+      details: 'ดำเนินการตามคำสั่งผู้ใช้งาน "เอาการ์ด ออกทั้ง 3 อัน" พร้อมภาพวงกลมสีแดงที่แถบ .wbs-table-source-chips เหนือหัวตาราง WBS: 1) ใน index.html: นำคอนเทนเนอร์ .wbs-table-source-chips ที่มีการ์ดทั้ง 3 อัน (ไฟล์ 04 ZBUDR064, ไฟล์ 05 CN41, ไฟล์ 06 CN41) ออกจาก .wbs-table-top-meta-bar อย่างสมบูรณ์ 2) อัปเดต Version Cache Buster ใน index.html เป็น ?v=20261024_2220',
+      sourceFile: 'คำสั่งผู้ใช้งาน (เอาการ์ด ออกทั้ง 3 อัน พร้อมภาพวงกลมสีแดงที่แถบการ์ดทั้ง 3 อันเหนือหัวตาราง WBS)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ (เคลียร์พื้นที่แถบข้อมูลเหนือหัวตาราง WBS ให้สะอาดตาและกระชับ)'
+    },
+    {
+      id: 'log_000_wbs_add_th_date_and_remove_banner_cards',
+      timestamp: '2026-10-24 22:15:00',
+      timestampTh: '24 ต.ค. 2569, 22:15 น.',
+      type: 'EDIT',
+      typeBadge: 'เพิ่มวันที่หัวตาราง & นำการ์ดออก',
+      badgeClass: 'badge-type-edit',
+      title: 'นำวันที่แก้ไขมาแสดงในหัวคอลัมน์ต้นทุนจริงและมูลค่า AUC และนำแถบการ์ดชิปที่มาไฟล์ 3 อันด้านบนออก',
+      targetSubject: 'หัวคอลัมน์ตาราง WBS (ต้นทุนจริง cn41Cost05 & มูลค่า AUC cn41ActualCost) และแถบชิปที่มาไฟล์ด้านบน (#wbsChartHeaderSourceStrip)',
+      storageFile: 'js/wbs.js, index.html & js/data_history.js',
+      changeSummary: '1) นำวันที่แก้ไขล่าสุดมาแสดงต่อจากบรรทัดชื่อคอลัมน์ "ต้นทุนจริง (ไฟล์ 05)" (แก้ไขล่าสุด: 14 ต.ค. 69) และ "มูลค่า AUC(บาท)" (แก้ไขล่าสุด: 22 ต.ค. 69) เป็นตัวอักษรขนาดพอดี เรียบๆ ไม่มีการ์ดตกแต่ง 2) นำการ์ดชิปแสดงที่มาไฟล์ 3 อันด้านบน (#wbsChartHeaderSourceStrip) ออกทั้งหมดตามคำสั่ง',
+      details: 'ดำเนินการตามคำสั่งผู้ใช้งาน 2 ข้อ: 1. "นำ วันที่แก้ไข มาแสดงในคอลัม และปรับขนาดพอดี ต่อจากบรรทัด ต้นทุนจริง และมูลค่า เป็นแค่อักษรไม่ต้องมีการ์ดตกแต่ง" 2. "และเอาการ์ด ตามรูป 35 ออกทั้ง 3 อัน": 1) ใน js/wbs.js: ที่ฟังก์ชัน renderWbsTableHead ในหัวคอลัมน์ cn41Cost05 แทรก <div class="th-sub-date-text">แก้ไขล่าสุด: 14 ต.ค. 69</div> และใน cn41ActualCost แทรก <div class="th-sub-date-text">แก้ไขล่าสุด: 22 ต.ค. 69</div> ขนาด 0.70rem ตัวอักษรเรียบๆ ไม่มีการ์ดตกแต่ง 2) ใน index.html: นำคอมโพเนนต์ #wbsChartHeaderSourceStrip (การ์ดชิป 3 อัน ได้แก่ สถานะ SAP, AUC เริ่มต้น, มูลค่า AUC) ออกจากส่วนหัวการ์ดกราฟแท่ง WBS 3) อัปเดต Version Cache Buster ใน index.html เป็น ?v=20261024_2215',
+      sourceFile: 'คำสั่งผู้ใช้งาน (นำวันที่แก้ไขมาแสดงในคอลัมน์ต้นทุนจริงและมูลค่า, เอาการ์ดออกทั้ง 3 อัน พร้อมภาพชี้ลูกศรและภาพการ์ด 3 อัน)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ (ปรับปรุง UI ให้กระชับ สวยงาม และวางข้อมูลวันที่แก้ไขตรงกับคอลัมน์ที่เกี่ยวข้อง)'
+    },
+    {
+      id: 'log_000_wbs_total_cost_inc_badge',
+      timestamp: '2026-10-24 22:10:00',
+      timestampTh: '24 ต.ค. 2569, 22:10 น.',
+      type: 'EDIT',
+      typeBadge: 'เพิ่มมูลค่าAUCเพิ่ม/ลด',
+      badgeClass: 'badge-type-edit',
+      title: 'แสดงมูลค่า AUC ที่เพิ่มขึ้น/ลดลงใต้ตัวเลขมูลค่ารวมในการ์ดภาพรวม WBS (โดยจำนวนงานเท่าเดิม)',
+      targetSubject: 'การ์ดภาพรวมมูลค่า & งาน AUC หน้า WBS (#wbsExecutiveDonutKpiCard -> .exec-summary-val-row)',
+      storageFile: 'js/wbs.js, js/data_history.js & index.html',
+      changeSummary: 'แสดงผลรวมมูลค่าที่เพิ่มขึ้น/ลดลง จากคอลัมน์ตาราง "มูลค่าAUCที่เพิ่มขึ้น" (cn41CostInc: ผลต่างไฟล์ 06 - 05) อยู่ในตำแหน่งกรอบสีแดงถัดจากสัญลักษณ์ ฿ (เช่น เพิ่ม/ลด: -94,278.85 ฿) ในการ์ดภาพรวม WBS โดยจำนวนงาน 3,229 งาน ทางขวามือคงอยู่เท่าเดิม',
+      details: 'ดำเนินการตามคำสั่งผู้ใช้งาน "แสดงมูลค่าที่เพิ่มขึ้น/ลดลง โดยใช้ข้อมูลคอลัมตาราง มูลค่าAUCที่เพิ่มขึ้น (โดยจำนวนงานเท่าเดิม)" พร้อมภาพกรอบสี่เหลี่ยมสีแดงถัดจาก ฿ ใต้ยอด 292,486,085.05 ฿: 1) ใน js/wbs.js คำนวณผลรวม totalCn41CostInc จากข้อมูล WBS ที่กรองได้ (filtered) 2) ใน #wbsExecutiveDonutKpiCard เพิ่มคอมโพเนนต์ .exec-total-val-group จัดวางยอดรวม wbsKpiTotalVal และแถบ wbsKpiTotalIncBadge แสดงมูลค่าที่เพิ่มขึ้น/ลดลงอย่างเด่นชัด 3) ใน syncWbsSideKpiCard เพิ่มฟังก์ชันซิงก์อัปเดตยอดผลรวมเพิ่ม/ลดแบบเรียลไทม์ตามตัวกรอง 4) อัปเดต Version Cache Buster ใน index.html เป็น 20261024_2210',
+      sourceFile: 'คำสั่งผู้ใช้งาน (แสดงมูลค่าที่เพิ่มขึ้น/ลดลง โดยใช้ข้อมูลคอลัมตาราง มูลค่าAUCที่เพิ่มขึ้น (โดยจำนวนงานเท่าเดิม))',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ (เพิ่มความชัดเจนของข้อมูลผลต่างมูลค่าเพิ่ม/ลดในระดับภาพรวม WBS)'
+    },
+    {
+      id: 'log_000_wbs_clsd_sap_neon_and_th_date',
+      timestamp: '2026-10-24 22:05:00',
+      timestampTh: '24 ต.ค. 2569, 22:05 น.',
+      type: 'EDIT',
+      typeBadge: 'ปรับปรุงเฉพาะหน้า WBS',
+      badgeClass: 'badge-type-edit',
+      title: 'แทนที่บล็อกคงเหลือด้วย CLSD F4 / CLSD F2 สีเขียวเรืองแสง และแสดงวันที่แก้ไขใต้หัวคอลัมน์สถานะ SAP (เฉพาะหน้า WBS)',
+      targetSubject: 'การ์ดภาพรวม WBS (#wbsExecutiveDonutKpiCard) และหัวคอลัมน์สถานะ SAP ในตาราง WBS (#wbsMasterTable thead)',
+      storageFile: 'js/wbs.js, css/styles.css, js/data_history.js & index.html',
+      changeSummary: '1) เฉพาะหน้า WBS คงเหลือ: นำบล็อกคงเหลือสีแดงออก และแทนที่ด้วยบล็อกแสดงมูลค่าและจำนวนงาน CLSD F4 (สำหรับเกณฑ์วัดข้อ 1, 2, 3, 5 หรือ ALL) หรือ CLSD F2 (สำหรับเกณฑ์วัดข้อ 4) ด้วยสไตล์สีเขียวเรืองแสง (Luminous Neon Green Glow) เด่นชัดสวยงาม 2) ใต้บรรทัดสถานะ SAP ในหัวคอลัมน์ตาราง WBS แสดงข้อความวันที่แก้ไขล่าสุดของไฟล์ 04 ZBUDR064 ("แก้ไขล่าสุด: 23 ต.ค. 69") ปรับขนาดพอดีตัวอักษรเรียบๆ ไม่มีการ์ดตกแต่ง 3) คืนค่าหน้า Overview เป็นค่าเดิมทั้งหมด 100%',
+      details: 'ดำเนินการตามคำสั่งผู้ใช้งาน 3 คำสั่ง: 1. "เอาคงเหลือออก และให้เพิ่ม ...แทน ดังนี้: 1.เพิ่มมูลค่า และ จำนวนงานที่ CLSD F4 (เงื่อนไขเกนวัดข้อ 1 2 3 5) หรือ CLSD F2 (เลือกเกณข้อ 4) 2.ใช้สีเขียวเรืองแสงให้ สวยงามเด่นชัด" 2. "นำ วันที่แก้ไข มาแสดงในคอลัม และปรับขนาดพอดี ต่อจากบรรทัด สถานะsap เป็นแค่อักษรไม่ต้องมีการ์ดตกแต่ง" 3. "ให้แก้ไขเฉพาะหน้า WBS คงเหลือเท่านั้น" และ "หน้า overview ย้อนกลับค่าเดิมทั้งหมด": 1) ใน js/wbs.js: ปรับปรุง renderWbsTargetComparisonSection ใน #wbsExecutiveDonutKpiCard นำบล็อก .stat-remain ออก และใส่บล็อก .stat-clsd-sap แสดงผลป้ายสถานะตามเกณฑ์วัด (ข้อ 4 ➔ CLSD F2, อื่นๆ ➔ CLSD F4), จำนวนงาน และยอดมูลค่ารวม พร้อมสไตล์สีเขียวเรืองแสง 2) ใน syncWbsSideKpiCard นำการคัดลอกค่า remainJobs และ remainVal ออก เพื่อรักษาค่า CLSD SAP ของหน้า WBS ไว้ไม่ให้โดนทับ 3) ใน renderWbsTableHead ใต้บรรทัดสถานะ SAP แทรก <div class="th-sub-date-text">แก้ไขล่าสุด: 23 ต.ค. 69</div> ขนาดพอดี เป็นตัวอักษรเรียบๆ ไม่มีการ์ดตกแต่ง 4) ใน css/styles.css: เพิ่มสไตล์สีเขียวเรืองแสง .donut-stat-col.stat-clsd-sap, .dot-clsd-sap, .badge-jobs-clsd-sap, .text-clsd-sap-glow พร้อม pulse animation และ light theme styles และสไตล์ .th-sub-date-text 5) ใน index.html: ย้อนกลับบล็อกคงเหลือของหน้า Overview กลับเป็นค่าเดิมทั้งหมด 100% และอัปเดต Version Cache Buster เป็น ?v=20261024_2205',
+      sourceFile: 'คำสั่งผู้ใช้งาน (เอาคงเหลือออก เพิ่ม CLSD F4/F2 สีเขียวเรืองแสง, นำวันที่แก้ไขมาแสดงในคอลัมน์ต่อจากสถานะsap, แก้ไขเฉพาะหน้า WBS และ Overview ย้อนกลับค่าเดิมทั้งหมด)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง (ปรับปรุง UX/UI หน้า WBS คงเหลือให้ตรงตามเกณฑ์วัด SAP ปิดงานสมบูรณ์ และเพิ่มข้อมูลวันที่แก้ไขในหัวตาราง)'
+    },
+    {
+      id: 'log_000_add_thousand_separators_to_numbers',
+      timestamp: '2026-10-24 21:35:00',
+      timestampTh: '24 ต.ค. 2569, 21:35 น.',
+      type: 'EDIT',
+      typeBadge: 'เพิ่มคอมม่าคั่นหลักพัน',
+      badgeClass: 'badge-type-edit',
+      title: 'เพิ่มเครื่องหมายจุลภาค (,) คั่นหลักพันตัวเลขบนกราฟเส้นและตาราง % เพิ่ม/ลด รายเดือน',
+      targetSubject: 'กราฟเส้นแสดงแนวโน้มมูลค่า AUC (#timelineAmountChart), ป้ายตัวเลขบนจุดกราฟ (Data Point Badges), ตาราง % เพิ่ม/ลด รายเดือน (#timelineAmountGrowthTableWrap) และข้อความสรุปมูลค่าล้านบาท',
+      storageFile: 'js/app.js, js/wbs.js, js/data_history.js & index.html',
+      changeSummary: 'ปรับปรุงการแสดงผลตัวเลขมูลค่าระดับหลักพันขึ้นไป ให้มีเครื่องหมายจุลภาค (,) คั่นหลักพันเสมอ เช่น 1,931.31 ลบ., 2,074.26 ลบ., +1,563.80 ในป้ายกราฟเส้น ตารางผลต่างรายเดือน และ Tooltip',
+      details: 'ดำเนินการตามคำสั่งผู้ใช้งาน "เพิ่ม , ตัวเลขด้วย" พร้อมภาพประกอบกราฟเส้นและตาราง % เพิ่ม/ลด รายเดือน: 1) ใน js/app.js แก้ไข formatValue ของกราฟเส้น timelineAmountChart ให้จัดรูปแบบด้วย toLocaleString(\'th-TH\', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) แสดงผล เช่น 1,931.31 ลบ., 2,074.26 ลบ. 2) ใน computeMonthlyGrowthData() ปรับปรุงตัวเลขผลต่างรายเดือน (totalValText, closedValText, avgTotalValText, avgClosedValText) ให้มีเครื่องหมายคอมม่าคั่นหลักพัน เช่น +1,563.80 3) ปรับปรุง formatCurrencyShort และจุดแสดงผลล้านบาท (valMillions, amtStr, fsTotMbStr ฯลฯ) ให้มีคอมม่าคั่นหลักพัน 4) ใน js/wbs.js ปรับปรุง formatFull, formatShort และ title ของ badge ให้มีคอมม่า 5) อัปเดต Version Cache Buster ใน index.html เป็น ?v=20261024_2135',
+      sourceFile: 'คำสั่งผู้ใช้งาน (เพิ่ม , ตัวเลขด้วย พร้อมภาพกราฟเส้นและตาราง % เพิ่ม/ลด รายเดือน)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ (ปรับปรุงความถูกต้องและสวยงามของการแสดงผลตัวเลขให้อ่านง่ายตามหลักสากล)'
+    },
+    {
+      id: 'log_000_remove_old_labels_and_customize_file_05_cyan_color',
+      timestamp: '2026-10-24 21:25:00',
+      timestampTh: '24 ต.ค. 2569, 21:25 น.',
+      type: 'EDIT',
+      typeBadge: 'ลบชื่อเดิม & ปรับสีแท็กไฟล์ 05',
+      badgeClass: 'badge-type-edit',
+      title: 'ลบชื่อเดิม (เดิม: ...) ในกล่องเลือกคอลัมน์ และปรับแต่งสีไฟล์ 05 เป็นสีฟ้า Cyan เด่นชัด ไม่ซ้ำกับไฟล์อื่นและไม่เหมือนไฟล์ 06',
+      targetSubject: 'กล่องเลือกคอลัมน์ WBS (Column Selector Dropdown), แท็กกลุ่มไฟล์ (05 CN41 vs 06 CN41), ชิปที่มาไฟล์ด้านบน และสีตัวเลขต้นทุนจริงไฟล์ 05',
+      storageFile: 'js/wbs.js, css/styles.css, js/data_history.js & index.html',
+      changeSummary: '1) ลบข้อความชื่อเดิม "(เดิม: ...)" และ property oldLabel ออกจากกล่องเลือกคอลัมน์ทั้งหมดตามชื่อจริงใน Excel 2) ปรับแต่งสีของไฟล์ 05 (05 CN41) ให้เป็นสีฟ้าไซแอน/เทอร์ควอยซ์สดใส (#22D3EE / #06B6D4) ทั้งป้ายแท็กคอลัมน์ .col-tag-05, ชิปที่มาไฟล์ .chip-auc-init, เมทริกซ์ผลรวม th/footer และตัวเลขในตาราง เพื่อให้แตกต่างจากไฟล์อื่นๆ และไม่ซ้ำกับสีส้มทองของไฟล์ 06',
+      details: 'ดำเนินการตามคำสั่งผู้ใช้งาน "1.ชื่อเดิม ไม่ต้องมี เพราะใช้ตามชื่อคอลัมใน excel อยุ่แล้ว 2.แก้ไขสี ให้ต่างไฟล์อื่นๆ ไม่ต้องเหมือนสีไฟล์ 06": 1) ใน js/wbs.js: ลบ property oldLabel ออกจาก WBS_COL_DEFS สำหรับคอลัมน์ cn41ActualCost และ cn41Cost05, ใน renderWbsColDropdownList นำการแสดงผล "(เดิม: ...)" ออกจาก title และ span ทั้งในโหมดลำดับการแสดงและโหมดแยกตามกลุ่มไฟล์ 2) แก้ไข CSS Class ของแท็กคอลัมน์ใน renderWbsColDropdownList ให้แยกขาดระหว่าง is05 -> col-tag-05 (สีฟ้า Cyan #22D3EE) และ is06 -> col-tag-06-cn41 (สีส้มทอง Amber #FBBF24) พร้อมทั้ง col-tag-sheet (สีม่วง) 3) ใน css/styles.css: ปรับปรุง .col-tag-05 และ .wbs-src-chip.chip-auc-init ให้เป็นโทนสีฟ้าไซแอน/เทอร์ควอยซ์ ทั้งในธีมมืดและธีมสว่าง 4) ใน js/wbs.js ปรับสีตัวเลขคอลัมน์ cn41Cost05 ใน Header Badge, Summary Footer และเซลล์ข้อมูลตารางเป็นสีฟ้า #22D3EE 5) ใน js/data_history.js อัปเดต badgeColor ของ src_05 เป็น #06B6D4 6) อัปเดต Version Cache Buster ใน index.html เป็น ?v=20261024_2125',
+      sourceFile: 'คำสั่งผู้ใช้งาน (1.ชื่อเดิม ไม่ต้องมี เพราะใช้ตามชื่อคอลัมใน excel อยุ่แล้ว 2.แก้ไขสี ให้ต่างไฟล์อื่นๆ ไม่ต้องเหมือนสีไฟล์ 06 พร้อมภาพวงกลมสีแดงที่ (เดิม: ต้นทุน และแท็ก 06 CN41)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง (ปรับปรุง UX/UI ความชัดเจนของชื่อคอลัมน์และแยกระบบสีของไฟล์ 05 กับ 06 อย่างเด็ดขาด)'
+    },
+    {
+      id: 'log_000_revert_chevron_colors',
+      timestamp: '2026-10-24 21:15:00',
+      timestampTh: '24 ต.ค. 2569, 21:15 น.',
+      type: 'EDIT',
+      typeBadge: 'ย้อนคืนค่าสีเดิมแถบเดือน',
+      badgeClass: 'badge-type-config',
+      title: 'ยกเลิกคำสั่งแก้สี ย้อนคืนค่าสีแถบเดือน (พ.ย. สีเขียว และ ธ.ค. สีฟ้า) ทั้งหน้า Overview และ WBS คงเหลือ',
+      targetSubject: 'แถบเป้าหมายที่ต้องปิดงานเพิ่มรายเดือน (#next3mProjectionSection ในหน้าภาพรวม) และแถบเลือกลูกศรเป้าหมายเดือน (#wbsKpiMonthSelector ในหน้า WBS คงเหลือ)',
+      storageFile: 'css/styles.css, index.html & js/data_history.js',
+      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน "ยกเลิกคำสั่งแก้สี" และ "ย้อนคืน": ย้อนคืนค่าสีของแถบเดือนที่ 2 และ 3 กลับสู่สีเดิม (เดือนที่ 2 พ.ย. เป็นสีเขียว #10B981 และเดือนที่ 3 ธ.ค. เป็นสีฟ้า #0284C7 / #38BDF8) ทั้งแบบปกติและขณะ Active',
+      details: 'ดำเนินการตามคำสั่งผู้ใช้งาน "ยกเลิกคำสั่งแก้สี" และ "ย้อนคืน": 1) ใน css/styles.css คืนค่า .single-bar-segment.seg-2 กลับเป็น linear-gradient(#047857 -> #10B981 -> #34D399) และ .seg-3 กลับเป็น linear-gradient(#0284C7 -> #06B6D4 -> #38BDF8) 2) คืนค่า .btn-wbs-kpi-month.m-seg-2 และ .m-seg-3 ทั้งสถานะปกติและ .active กลับเป็นโทนสีเขียวและฟ้าตามเดิม 3) อัปเดต Cache Buster ของ styles.css เป็น ?v=20261024_2120',
+      sourceFile: 'คำสั่งผู้ใช้งาน (ยกเลิกคำสั่งแก้สี / ย้อนคืน)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ (ย้อนคืนค่าสไตล์สีเดิมของแถบเดือน UI)'
+    },
+    {
+      id: 'log_000_chevron_colors_pastel_orange_and_grey',
+      timestamp: '2026-10-24 21:10:00',
+      timestampTh: '24 ต.ค. 2569, 21:10 น.',
+      type: 'EDIT',
+      typeBadge: 'ปรับแต่งสีแถบเดือนพาสเทล',
+      badgeClass: 'badge-type-edit',
+      title: 'เปลี่ยนสีแถบเดือนเป้าหมายที่วงกลมเป็นสีส้มพาสเทลหวานๆ และสีเทากัลหวานๆ ทั้งหน้า Overview และ WBS คงเหลือ',
+      targetSubject: 'แถบเป้าหมายที่ต้องปิดงานเพิ่มรายเดือน (Single Bar Track ในหน้า Overview) และแถบปุ่มเลือกลูกศรเป้าหมายเดือน (Chevron Buttons ในหน้า WBS คงเหลือ)',
+      storageFile: 'css/styles.css, index.html & js/data_history.js',
+      changeSummary: 'เปลี่ยนสีแถบเดือนที่วงกลมสีแดง (เดือนที่ 2 และ 3: พ.ย. และ ธ.ค.) ให้เป็นสีส้มพาสเทลหวานๆ (Sweet Pastel Peach-Orange) และสีเทากัลหวานๆ (Sweet Pastel Galvanized Grey / Soft Silver Slate) ทั้งแบบปกติและตอน Active ทั้งในหน้าภาพรวมผู้บริหาร (Overview) และหน้า WBS คงเหลือ',
+      details: 'ดำเนินการตามคำสั่งผู้ใช้งาน "ที่วงกลมเปลี่ยนสีส้ม พาสเทลหวานๆ และสีเทากัล หวานๆ ทั้ง หน้า over view และ wbs คงเหลือ": 1) หน้า Overview (.single-bar-segment): ปรับ .seg-2 เป็นสีส้มพาสเทลหวานๆ (linear-gradient #EA580C -> #F97316 -> #FB923C -> #FFEDD5) พร้อม text-shadow และ badge เข้าชุด, ปรับ .seg-3 เป็นสีเทากัลหวานๆ (linear-gradient #475569 -> #64748B -> #94A3B8 -> #F1F5F9) 2) หน้า WBS คงเหลือ (.btn-wbs-kpi-month): ปรับ .m-seg-2 และ .active.m-seg-2 เป็นสีส้มพาสเทลหวานๆ เปล่งประกาย, ปรับ .m-seg-3 และ .active.m-seg-3 เป็นสีเทากัลหวานๆ ซิลเวอร์พาสเทลหรูหรา 3) อัปเดต Cache Buster ของ styles.css เป็น ?v=20261024_2110',
+      sourceFile: 'คำสั่งผู้ใช้งาน (ที่วงกลมเปลี่ยนสีส้ม พาสเทลหวานๆ และสีเทากัล หวานๆ ทั้ง หน้า over view และ wbs คงเหลือ พร้อมภาพประกอบวงกลมสีแดง)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ (ปรับแต่งธีมสีและสไตล์ความสวยงามของแถบเดือน UI)'
+    },
+    {
+      id: 'log_000_add_file_05_and_auc_increase_col',
+      timestamp: '2026-10-24 20:55:00',
+      timestampTh: '24 ต.ค. 2569, 20:55 น.',
+      type: 'MERGE',
+      typeBadge: 'นำเข้าไฟล์ 05 & คำนวณมูลค่าAUCที่เพิ่มขึ้น',
+      badgeClass: 'badge-type-merge',
+      title: 'นำเข้าไฟล์ 05 WBS CN41 ผูกกับ WBS ไฟล์ 03 เท่านั้น (2,083 งาน) และสร้างคอลัมน์ใหม่ "มูลค่าAUCที่เพิ่มขึ้น" (ไฟล์ 06 - ไฟล์ 05)',
+      targetSubject: 'ฐานข้อมูล WBS (js/data_wbs.js), ชิปที่มาไฟล์ด้านบน (index.html), ตาราง WBS ตามรูปที่ 26 และกล่องเลือกคอลัมน์ (js/wbs.js)',
+      storageFile: 'js/data_wbs.js, index.html, css/styles.css, js/wbs.js & js/data_history.js',
+      changeSummary: '1) นำเข้าไฟล์ 05 WBS CN41 วันเริ่มบัญชี 14 ตค 69.xlsx ผูกรหัส WBS เฉพาะไฟล์ 03 (2,083 งาน) ยอดรวม 643,241,099.93 บาท โดยไม่แตะต้องไฟล์ 06 2) สร้างคอลัมน์ "มูลค่าAUCที่เพิ่มขึ้น" ในตาราง WBS ต่อจากมูลค่า AUC(บาท) ตามรูปที่ 26 คำนวณจาก [ไฟล์ 06 ต้นทุนจริง] - [ไฟล์ 05 ต้นทุนจริง] ผลต่างรวม -94,278.85 บาท 3) แสดงชิปที่มาไฟล์ 05 และวันแก้ไข (14 ต.ค. 69) ด้านบน 4) รองรับทุกเมนูและกล่องเลือกคอลัมน์',
+      details: 'ดำเนินการตามคำสั่งผู้ใช้งาน 4 ข้อ: 1) นำเข้าข้อมูลจากไฟล์ "05 WBS CN41 มูลค่า AUC วันเริ่มบัญชี 14 ตค 69.xlsx" (339.0 KB) โดยผูกเฉพาะกับรหัส WBS ของไฟล์ 03 เท่านั้น (2,083 รายการ) โดยรักษาข้อมูลไฟล์ 06 และไฟล์อื่นๆ ไว้ 100% 2) บันทึกฟิลด์ cn41Cost05 (ยอดรวม 643,241,099.93 บาท) และ cn41CostInc (ผลต่าง = cn41ActualCost 06 - cn41Cost05 05 ผลต่างรวม -94,278.85 บาท ต่างกัน 35 งาน) ลงใน js/data_wbs.js 3) เพิ่มชิปแสดงที่มาไฟล์ 05 CN41 และวันที่แก้ไขล่าสุด "14 ต.ค. 69" ใน index.html และ css/styles.css ทั้งบนหัวการ์ดกราฟและหัวตาราง WBS 4) ใน js/wbs.js เพิ่มคอลัมน์ "มูลค่าAUCที่เพิ่มขึ้น" (cn41CostInc) และ "ต้นทุนจริง (ไฟล์ 05)" (cn41Cost05) วางต่อจาก "มูลค่า AUC(บาท)" ตามรูปที่ 26 พร้อมแสดงผลรวมใน Header Metric Badge, Footer Summary Row, Presets (core, budget, cn41), Dropdown คอลัมน์ และ Export CSV',
+      sourceFile: 'คำสั่งผู้ใช้งาน (นำไฟล์ใหม่ เข้าระบบ ห้ามไปยุ่งกับไฟล์อื่นๆ เด็ดขาด โดยเฉพาะไฟล์ 06 1.นำไฟล์ 05 WBS เข้าระบบ และให้ผูกกับ WBS ไฟล์ 03 เท่านั้น 2. ให้แสดงใน ตารางรูปที่ 26 และในระบบที่เกี่ยวข้องทุกเมนู 3.ให้แสดงชื่อไฟล์ และวันแก้ไขด้วย ด้านบน 4.หลังจากนั้น ให้สร้างคอลัม ในตารางใหม่ โดยนำไฟล์ 06 ชื่อคอลัม ต้นทุนจริง ลบด้วย ไฟล์ 05 ชื่อคอลัม ต้นทุนจริง เป็นคอลัมใหม่ชื่อ มูลค่าAUCที่เพิ่มขึ้น)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'สูง (เพิ่มมิติข้อมูลเปรียบเทียบมูลค่า AUC เริ่มต้นกับล่าสุด พร้อมคอลัมน์คำนวณผลต่าง)'
+    },
+    {
+      id: 'log_000_rename_file_05_2_to_06',
+      timestamp: '2026-10-24 20:25:00',
+      timestampTh: '24 ต.ค. 2569, 20:25 น.',
+      type: 'CONFIG',
+      typeBadge: 'เปลี่ยนชื่อไฟล์ 05-2 เป็น 06',
+      badgeClass: 'badge-type-config',
+      title: 'อัปเดตระบบตามการเปลี่ยนชื่อไฟล์ 05-2 เป็นไฟล์ 06 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 22 ตค 69.xlsx',
+      targetSubject: 'ชิปที่มาไฟล์การ์ดกราฟและตาราง WBS, กล่องเลือกคอลัมน์ (06 CN41), Model View (Data Flow Diagram) และ DATA_SOURCE_CATALOG',
+      storageFile: 'index.html, js/wbs.js, js/data_history.js & scratch/merge_wbs_latest.ps1',
+      changeSummary: 'อัปเดตชื่อไฟล์จาก 05-2 เป็น "06 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 22 ตค 69.xlsx" ทั้งในป้ายชิปหัวตาราง WBS, กล่องเลือกคอลัมน์ (06 CN41), Model View และสคริปต์นำเข้า',
+      details: 'ดำเนินการตามคำสั่งผู้ใช้งาน "ได้เปลี่ยนชื่อไฟล 05-2 เป็น 06 ให้แก้ไขทุกอย่างตามด้วย": 1) ใน index.html อัปเดตป้ายที่มาไฟล์มูลค่า AUC ทั้งบนหัวการ์ดกราฟและหัวตาราง WBS เป็น "ไฟล์ 06 CN41" พร้อมชี้ไปยังชื่อไฟล์ 06 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 22 ตค 69.xlsx 2) ใน js/wbs.js ปรับกลุ่มคอลัมน์และป้ายแท็กคอลัมน์เป็น "06 CN41" และอัปเดตข้อความ Tooltip ชี้แจงมูลค่า AUC จากไฟล์ 06 3) ใน js/data_history.js อัปเดตรายการ src_06 ให้เป็นไฟล์ 06 WBS CN41 (336.2 KB) และเพิ่ม src_05 เป็นไฟล์ 05 WBS CN41 วันเริ่มบัญชี 14 ตค 69 พร้อมอัปเดตผัง Data Flow Diagram 4) ใน scratch/merge_wbs_latest.ps1 อัปเดตชื่อไฟล์ $f5Path / $f6Path ให้เป็นไฟล์ 06 5) ปรับปรุง Version Cache Buster เป็น ?v=20261024_2025',
+      sourceFile: 'คำสั่งผู้ใช้งาน (ได้เปลี่ยนชื่อไฟล 05-2 เป็น 06 ให้แก้ไขทุกอย่างตามด้วย)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง (เปลี่ยนรหัสเรียกและชื่อไฟล์ 05-2 เป็น 06 ทั้งระบบ)'
+    },
+    {
+      id: 'log_000_cancel_05_1_revert_to_05_2',
+      timestamp: '2026-10-24 20:15:00',
+      timestampTh: '24 ต.ค. 2569, 20:15 น.',
+      type: 'CONFIG',
+      typeBadge: 'ยกเลิกคำสั่งนำเข้า 05-1 คืนค่าไฟล์ 05-2',
+      badgeClass: 'badge-type-config',
+      title: 'ยกเลิกคำสั่งนำเข้าไฟล์ 05-1 และคืนค่าระบบกลับมาใช้ไฟล์ 05-2 WBS CN41 ล่าสุด ทั้งระบบและ Model View',
+      targetSubject: 'การ์ดกราฟ WBS, ตาราง WBS, กล่องเลือกคอลัมน์, Model View (Data Flow Diagram) และแคตตาล็อกแหล่งข้อมูล',
+      storageFile: 'index.html, js/wbs.js & js/data_history.js',
+      changeSummary: 'ดำเนินการยกเลิกคำสั่งนำเข้าไฟล์ 05-1 ตามคำขอของผู้ใช้ โดยคืนค่าป้ายที่มาไฟล์, รายการคอลัมน์ และ Model View กลับมาใช้ข้อมูลไฟล์ 05-2 WBS CN41 ล่าสุด (22 ตค 69)',
+      details: 'ดำเนินการตามคำสั่งผู้ใช้งาน "ยกเลิกคำสั่ง ให้ นำไฟล์ 05-1 WBS เข้าระบบ 1. ให้ผูกกับ WBS ไฟล์ 03 เท่านั้น 2. ให้แก้ ใน model view ด้วย" และ "ยกเลิก": 1) ใน index.html คืนค่าป้ายชิปที่มาไฟล์มูลค่า AUC ทั้งบนหัวการ์ดกราฟและหัวตาราง WBS เป็นไฟล์ 05-2 CN41 (แก้ไขล่าสุด 22 ต.ค. 69) 2) ใน js/wbs.js คืนค่ากลุ่มคอลัมน์ ป้ายแท็ก 05-2 CN41 และข้อความ Tooltip ให้ระบุไฟล์ 05-2 3) ใน js/data_history.js คืนค่ารายการ src_05 และกล่องไฟล์ในแผนผัง Data Flow Diagram ของ Model View กลับมาเป็นไฟล์ 05-2 (336.2 KB) 4) อัปเดต Version Cache Buster เป็น ?v=20261024_2020',
+      sourceFile: 'คำสั่งผู้ใช้งาน (ยกเลิกคำสั่ง ให้ นำไฟล์ 05-1 WBS เข้าระบบ... / ยกเลิก)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง (คืนค่าไฟล์ 05-2 ในระบบ WBS และ Model View)'
+    },
+    {
+      id: 'log_000_wbs_col_selector_update_file_05_2',
+      timestamp: '2026-10-24 19:35:00',
+      timestampTh: '24 ต.ค. 2569, 19:35 น.',
+      type: 'EDIT',
+      typeBadge: 'อัปเดตไฟล์ 05-2 ในเลือกคอลัมน์ & จัดวางปุ่มขวาสุด',
+      badgeClass: 'badge-type-edit',
+      title: 'อัปเดตไฟล์ 05 เป็น 05-2 ในกล่องเลือกคอลัมน์ที่ต้องการแสดง และจัดวางป้ายที่มาไฟล์บนขวาพร้อมย้ายปุ่มไปขวาสุด',
+      targetSubject: 'กล่องเลือกคอลัมน์ที่ต้องการแสดง (Column Selector Dropdown), ส่วนหัวการ์ดกราฟ WBS และแถบหัวตาราง WBS (#wbsTableCard)',
+      storageFile: 'js/wbs.js, index.html, css/styles.css & js/data_history.js',
+      changeSummary: '1) อัปเดตกลุ่มไฟล์และป้ายคอลัมน์ในกล่องเลือกคอลัมน์ที่ต้องการแสดง จากไฟล์ 05 เป็นไฟล์ 05-2 WBS CN41 2) แสดงป้ายที่มาไฟล์และวันที่แก้ไขล่าสุดของสถานะ SAP และมูลค่า AUC บนขวาของตาราง WBS 3) ย้ายปุ่มเลือกทุกสถานะและล้างข้อมูลไปชิดขวาสุด',
+      details: 'ดำเนินการตามคำสั่งผู้ใช้งาน "ย้ายไปทางขวาสุด", "บนขวา ให้แสดงที่มาไฟล์ และวันที่แก้ไขล่าสุด ของ 1. สถานะ sap 2. มูลค่า AUC" และ "เลือกคอมลัมที่ต้องการแสดง ไฟล์ 05 ให้ update ไฟล์ใหม่ด้วย": 1) ใน js/wbs.js อัปเดต WBS_COL_GROUPS ให้แสดงชื่อกลุ่มเป็น "ข้อมูล CN41 มูลค่า AUC (ไฟล์ 05-2)" และอัปเดตป้ายคอลัมน์แท็กเป็น "05-2 CN41" พร้อมเพิ่มคีย์เวิร์ดค้นหา 05, 05-2, cn41 ให้ค้นหาคอลัมน์ได้แม่นยำ 2) ใน index.html เพิ่ม .wbs-table-top-meta-bar บนหัวการ์ดตาราง WBS (#wbsTableCard) โดยแสดงป้ายเกณฑ์วัดฝั่งซ้าย และป้ายที่มาไฟล์ 1. สถานะ SAP (ไฟล์ 04 ZBUDR064) และ 2. มูลค่า AUC (ไฟล์ 05-2 CN41) ไว้บนขวาสุด 3) ในหัวการ์ดกราฟ WBS ปรับคอนเทนเนอร์ .wbs-chart-header-actions-area และ .wbs-chart-btn-group ให้ปุ่ม "เลือกทุกสถานะ" และ "ล้างข้อมูลทุกสถานะ" ชิดขวาสุดเสมอ ไม่ตกแถวหรือเบียดซ้าย 4) ใน index.html เพิ่มปุ่มสลับโหมดมุมมองคอลัมน์ "แยกตามกลุ่มไฟล์" (btnModeGroup) ร่วมกับ "ลำดับการแสดง" 5) ปรับปรุง Version Cache Buster เป็น ?v=20261024_1935',
+      sourceFile: 'คำสั่งผู้ใช้งาน (ย้ายไปทางขวาสุด / บนขวา ให้แสดงที่มาไฟล์ และวันที่แก้ไขล่าสุด ของ 1. สถานะ sap 2. มูลค่า AUC / เลือกคอมลัมที่ต้องการแสดง ไฟล์ 05 ให้ update ไฟล์ใหม่ด้วย)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง (ปรับปรุงกล่องเลือกคอลัมน์ และการจัดวางหัวตาราง/หัวการ์ด WBS)'
+    },
+    {
+      id: 'log_000_wbs_chart_add_source_badges',
+      timestamp: '2026-10-24 19:02:00',
+      timestampTh: '24 ต.ค. 2569, 19:02 น.',
+      type: 'EDIT',
+      typeBadge: 'เพิ่มป้ายที่มาไฟล์บนหัวการ์ด WBS',
+      badgeClass: 'badge-type-edit',
+      title: 'เพิ่มป้ายแสดงที่มาไฟล์และวันที่แก้ไขล่าสุดของ 1. สถานะ SAP และ 2. มูลค่า AUC บนหัวการ์ดกราฟ WBS',
+      targetSubject: 'ส่วนหัวการ์ดกราฟแท่ง WBS (#wbsChartHeaderSourceStrip ใน .card-header ของการ์ดกราฟ WBS)',
+      storageFile: 'index.html, css/styles.css & js/data_history.js',
+      changeSummary: 'เพิ่มป้ายแท็กแสดงที่มาไฟล์และวันที่แก้ไขล่าสุด 2 รายการ ในตำแหน่งกรอบสี่เหลี่ยมสีแดงบนหัวการ์ดกราฟ WBS: 1) สถานะ SAP: ไฟล์ 04 ZBUDR064 (แก้ไขล่าสุด: 23 ต.ค. 69) 2) มูลค่า AUC: ไฟล์ 05-2 CN41 (แก้ไขล่าสุด: 22 ต.ค. 69) พร้อมคลิกเปิดดู Model View',
+      details: 'ดำเนินการตามคำสั่งผู้ใช้งาน "สีเหลี่ยมสีแดง ให้แสดงที่มาไฟล์ และวันที่แก้ไขล่าสุด ของ 1. สถานะ sap 2. มูลค่า AUC" พร้อมภาพกรอบสีแดง: 1) ใน index.html เพิ่มคอมโพเนนต์ #wbsChartHeaderSourceStrip คั่นกลางระหว่างป้ายมูลค่ารวมและปุ่มเลือกทุกสถานะ 2) แสดงป้ายที่ 1 (สถานะ SAP) ชี้ไปยังไฟล์ 04 ZBUDR064 พร้อมวันที่แก้ไขล่าสุด 23 ต.ค. 2569 3) แสดงป้ายที่ 2 (มูลค่า AUC) ชี้ไปยังไฟล์ 05-2 CN41 พร้อมวันที่แก้ไขล่าสุด 22 ต.ค. 2569 4) ออกแบบสไตล์ CSS โทน Cyber-Gold / PEA Dark พร้อม Hover Effect และเชื่อมโยงฟังก์ชัน openDhModelModal เปิดดู Model View ได้ทันที 5) อัปเดต Version Cache Buster ใน index.html เป็น 20261024_1902',
+      sourceFile: 'คำสั่งผู้ใช้งาน พร้อมภาพกรอบสี่เหลี่ยมสีแดงระบุตำแหน่งบนหัวการ์ดกราฟ WBS',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ (เพิ่มป้ายข้อมูลที่มาไฟล์บนหัวการ์ดกราฟ WBS)'
+    },
+    {
+      id: 'log_000_update_filename_05_1_to_05_2',
+      timestamp: '2026-10-24 18:48:00',
+      timestampTh: '24 ต.ค. 2569, 18:48 น.',
+      type: 'EDIT',
+      typeBadge: 'ปรับปรุงชื่อไฟล์ 05-2',
+      badgeClass: 'badge-type-edit',
+      title: 'แก้ไขชื่อไฟล์ 05-1 เป็น 05-2 ทั้งในหน้า WBS คงเหลือ และหน้าประวัตินำเข้าข้อมูล',
+      targetSubject: 'แถบป้ายแหล่งข้อมูลหน้า WBS (#wbsActiveFilterPills) และแคตตาล็อกหน้าประวัตินำเข้าข้อมูล (src_05 ใน DATA_SOURCE_CATALOG)',
+      storageFile: 'js/wbs.js, js/data_history.js & index.html',
+      changeSummary: 'แก้ไขชื่อไฟล์จาก "05-1 WBS CN41 มูลค่า AUC วันเริ่มบัญชี 14 ตค69 (1เดือนเปลี่ยนครั้ง).xlsx" เป็น "05-2 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 22 ตค 69.xlsx" ทั้งในป้ายหัวตาราง WBS และหน้ารายละเอียดประวัตินำเข้าข้อมูล',
+      details: 'ดำเนินการตามคำสั่งผู้ใช้งาน "แก้ไขชื่อไฟล์ 05-1 เป็น 05-2" และ "ให้แก้ไขชื่อไฟล์ หน้าประวัตินำเข้าด้วย": 1) ใน js/wbs.js ปรับปรุงแถบป้าย pill-file-05 ให้แสดงชื่อไฟล์ 05-2 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 22 ตค 69.xlsx 2) ใน js/data_history.js อัปเดตข้อมูลไฟล์ src_05 ใน DATA_SOURCE_CATALOG ให้ชื่อไฟล์ตรงกับ 05-2 ขนาด 336.2 KB 3) อัปเดตผัง Data Flow Architecture ไฟล์ 05-2 ในหน้าประวัตินำเข้า 4) อัปเดต Version Cache Buster ใน index.html เป็น 20261024_1848',
+      sourceFile: 'คำสั่งผู้ใช้งาน (แก้ไขชื่อไฟล์ 05-1 เป็น 05-2 / ให้แก้ไขชื่อไฟล์ หน้าประวัตินำเข้าด้วย)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ (ปรับปรุงชื่อไฟล์แสดงผลในหน้า WBS และหน้าประวัตินำเข้า)'
+    },
+    {
+      id: 'log_000_wbs_remove_kpi_circle',
+      timestamp: '2026-10-24 18:35:00',
+      timestampTh: '24 ต.ค. 2569, 18:35 น.',
+      type: 'EDIT',
+      typeBadge: 'ปรับแต่งการ์ด WBS',
+      badgeClass: 'badge-type-edit',
+      title: 'นำวงกลมกราฟ KPI ออกจากการ์ดภาพรวมมูลค่า & งาน AUC เฉพาะในหน้า WBS คงเหลือ',
+      targetSubject: 'การ์ดสรุปภาพรวมมูลค่า & งาน AUC (#wbsExecutiveDonutKpiCard) ในแท็บ WBS คงเหลือ (#tab-wbs)',
+      storageFile: 'js/wbs.js, css/styles.css, index.html & js/data_history.js',
+      changeSummary: 'นำวงกลมกราฟโดนัทและคะแนน KPI ตรงกลางออกจากการ์ดภาพรวมมูลค่า & งาน AUC เฉพาะในหน้า WBS คงเหลือ ตามคำสั่งผู้ใช้งาน พร้อมจัดวางกล่องปิดงานแล้วและคงเหลือให้สมดุลสวยงาม',
+      details: 'ดำเนินการตามคำสั่งผู้ใช้งาน: "เฉพาะ หน้าWBS คงเหลือ ให้เอาวงกลมออก" พร้อมภาพวงกลมสีแดง: 1) ใน js/wbs.js (ฟังก์ชัน renderWbsTargetComparisonSection) นำคอมโพเนนต์ .exec-donut-chart-wrapper (#wbsExecutiveDonutChart และ #wbsExecDonutCenterContent) ออกจากการ์ด #wbsExecutiveDonutKpiCard ในแท็บ WBS 2) ใน js/wbs.js ปรับฟังก์ชัน syncWbsSideKpiCard ให้ตัดฟิลด์ kpiAvgKpi ออก 3) ใน css/styles.css ปรับแต่งระยะห่าง gap (0.55rem) และ padding ของกล่องปิดงานแล้วและคงเหลือให้ได้สัดส่วนสวยงาม รับกับความสูงของการ์ดเปรียบเทียบ KPI ฝั่งขวา 4) คงวงกลมกราฟ KPI ในหน้าภาพรวมผู้บริหาร (Overview) ไว้ตามเดิม 5) อัปเดต Version Cache Buster ใน index.html เป็น 20261024_1835',
+      sourceFile: 'คำสั่งผู้ใช้งาน (เฉพาะ หน้าWBS คงเหลือ ให้เอาวงกลมออก) พร้อมภาพวงกลมสีแดง',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ (ปรับปรุง UI การ์ดภาพรวมในหน้า WBS คงเหลือ)'
+    },
     {
       id: 'log_000_update_dept_name_to_koryor',
       timestamp: '2026-10-23 21:45:00',
@@ -2375,15 +2741,15 @@
                     <div class="dh-node-title">ZBUDR064 (%พัสดุ/สถานะ SAP)</div>
                     <div class="dh-node-meta">นำเข้า: 23 ต.ค. 69 • 731.7 KB</div>
                   </div>
-                  <div class="dh-flow-node" onclick="window.openModelViewModal('src_05', 'source')">
-                    <div class="dh-node-badge" style="background:#F59E0B;">ไฟล์ 05</div>
-                    <div class="dh-node-title">CN41 (มูลค่า AUC บาท)</div>
-                    <div class="dh-node-meta">นำเข้า: 23 ต.ค. 69 • 338.1 KB</div>
-                  </div>
                   <div class="dh-flow-node" onclick="window.openModelViewModal('src_06', 'source')">
-                    <div class="dh-node-badge" style="background:#10B981;">ไฟล์ 06</div>
+                    <div class="dh-node-badge" style="background:#F59E0B;">ไฟล์ 06</div>
+                    <div class="dh-node-title">CN41 (มูลค่า AUC บาท)</div>
+                    <div class="dh-node-meta">นำเข้า: 24 ต.ค. 69 • 336.2 KB</div>
+                  </div>
+                  <div class="dh-flow-node" onclick="window.openModelViewModal('src_sheet', 'source')">
+                    <div class="dh-node-badge" style="background:#10B981;">G-Sheet</div>
                     <div class="dh-node-title">Google Sheet (แผนปิดงาน/หมายเหตุ)</div>
-                    <div class="dh-node-meta">นำเข้า: 13 ต.ค. 69 • 127 KB</div>
+                    <div class="dh-node-meta">ซิงค์: 22 ต.ค. 69 • Live API</div>
                   </div>
                   <div class="dh-flow-node" onclick="window.openModelViewModal('src_02', 'source')">
                     <div class="dh-node-badge" style="background:#3B82F6;">ไฟล์ 02</div>
@@ -2946,6 +3312,10 @@
       modalEl.classList.remove('show');
       modalEl.style.display = 'none';
     }
+  };
+
+  window.openDhModelModal = function (itemId) {
+    window.openModelViewModal(itemId, 'source');
   };
 
   window.openDhAddLogModal = function () {

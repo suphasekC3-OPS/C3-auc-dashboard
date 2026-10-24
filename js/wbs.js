@@ -16,11 +16,12 @@
     { id: '04_budget', label: 'งบประมาณ (ไฟล์ 04 ZBUDR064)', icon: '💰' },
     { id: '04_act', label: 'ค่าใช้จ่ายจริง Actual (ไฟล์ 04 ZBUDR064)', icon: '⚡' },
     { id: '04_plan', label: 'แผนงาน Plan (ไฟล์ 04 ZBUDR064)', icon: '📊' },
-    { id: '05_cn41', label: 'ข้อมูล CN41 มูลค่า AUC (ไฟล์ 05)', icon: '📑' },
+    { id: '05_cn41', label: 'ข้อมูล CN41 วันเริ่มบัญชี 14 ต.ค. (ไฟล์ 05)', icon: '📁' },
+    { id: '06_cn41', label: 'ข้อมูล CN41 มูลค่า AUC ล่าสุด (ไฟล์ 06)', icon: '📑' },
     { id: '06_sheet', label: 'แผนงานแล้วเสร็จ (G-Sheet)', icon: '📅' }
   ];
 
-  // Comprehensive Column definitions (03 WBS base + 04 WBS ZBUDR064 + 05 WBS CN41)
+  // Comprehensive Column definitions (03 WBS base + 04 WBS ZBUDR064 + 05 WBS CN41 + 06 WBS CN41)
   const WBS_COL_DEFS = [
     // --- Group 1: File 03 Base Columns ---
     { id: 'id', label: 'ลำดับ', width: '55px', align: 'center', sortKey: 'id', defaultVisible: true, group: '03' },
@@ -66,12 +67,14 @@
     { id: 'pctExpenseWithdraw', label: '% เบิก คชจ.', minWidth: '115px', align: 'right', sortKey: 'pctExpenseWithdraw', defaultVisible: true, isPercent: true, isNumeric: true, group: 'custom' },
     { id: 'apprSite', label: 'อนุมัติ คชจ.หน้างาน', minWidth: '130px', align: 'right', sortKey: 'apprSite', defaultVisible: false, isMoney: true, isNumeric: true, group: '04_plan' },
 
-    // --- Group 6: File 05 CN41 AUC Values ---
-    { id: 'cn41ActualCost', label: 'มูลค่า AUC(บาท)', oldLabel: 'ต้นทุนจริง (มูลค่า AUC CN41)', minWidth: '165px', align: 'right', sortKey: 'cn41ActualCost', defaultVisible: true, isMoney: true, isNumeric: true, group: '05_cn41' },
-    { id: 'cn41ObjDesc', label: 'ออบเจคโครงการ (CN41)', minWidth: '220px', align: 'left', sortKey: 'cn41ObjDesc', defaultVisible: false, group: '05_cn41' },
-    { id: 'cn41Level', label: 'ระดับ (CN41)', width: '75px', align: 'center', sortKey: 'cn41Level', defaultVisible: false, group: '05_cn41' },
-    { id: 'cn41Currency', label: 'สกุลเงิน (CN41)', width: '75px', align: 'center', sortKey: 'cn41Currency', defaultVisible: false, group: '05_cn41' },
-    { id: 'cn41Row', label: 'ลำดับ CN41 (.)', width: '75px', align: 'center', sortKey: 'cn41Row', defaultVisible: false, group: '05_cn41' },
+    // --- Group 6: File 06 CN41 AUC Values & Differences ---
+    { id: 'cn41ActualCost', label: 'มูลค่า AUC(บาท)', minWidth: '165px', align: 'right', sortKey: 'cn41ActualCost', defaultVisible: true, isMoney: true, isNumeric: true, group: '06_cn41' },
+    { id: 'cn41CostInc', label: 'มูลค่าAUCที่เพิ่มขึ้น', minWidth: '165px', align: 'right', sortKey: 'cn41CostInc', defaultVisible: true, isMoney: true, isNumeric: true, group: 'custom' },
+    { id: 'cn41Cost05', label: 'ต้นทุนจริง (ไฟล์ 05)', minWidth: '165px', align: 'right', sortKey: 'cn41Cost05', defaultVisible: true, isMoney: true, isNumeric: true, group: '05_cn41' },
+    { id: 'cn41ObjDesc', label: 'ออบเจคโครงการ (CN41)', minWidth: '220px', align: 'left', sortKey: 'cn41ObjDesc', defaultVisible: false, group: '06_cn41' },
+    { id: 'cn41Level', label: 'ระดับ (CN41)', width: '75px', align: 'center', sortKey: 'cn41Level', defaultVisible: false, group: '06_cn41' },
+    { id: 'cn41Currency', label: 'สกุลเงิน (CN41)', width: '75px', align: 'center', sortKey: 'cn41Currency', defaultVisible: false, group: '06_cn41' },
+    { id: 'cn41Row', label: 'ลำดับ CN41 (.)', width: '75px', align: 'center', sortKey: 'cn41Row', defaultVisible: false, group: '06_cn41' },
 
     // --- Group 7: Google Sheet แผนงานแล้วเสร็จ ---
     { id: 'planClose', label: 'แผนปิดงาน (G-Sheet)', minWidth: '140px', align: 'center', sortKey: 'planClose', defaultVisible: true, group: '06_sheet' },
@@ -131,6 +134,8 @@
     'description',
     'statusSap',
     'cn41ActualCost',
+    'cn41CostInc',
+    'cn41Cost05',
     'pctMatWithdraw',
     'pctExpenseWithdraw',
     'engineer',
@@ -144,8 +149,8 @@
     return [...DEFAULT_WBS_COL_ORDER, ...remaining];
   }
 
-  const WBS_COL_STORAGE_KEY = 'auc_wbs_visible_cols_v9';
-  const WBS_COL_ORDER_KEY = 'auc_wbs_col_order_v5';
+  const WBS_COL_STORAGE_KEY = 'auc_wbs_visible_cols_v10';
+  const WBS_COL_ORDER_KEY = 'auc_wbs_col_order_v6';
 
   function loadVisibleColumns() {
     try {
@@ -616,10 +621,10 @@
       <span class="wbs-pill pill-file pill-file-04" onclick="if(window.openDhModelModal)window.openDhModelModal('src_04')" title="วันที่/เวลา นำเข้าข้อมูล: 23 ต.ค. 2569, 08:28 น. (ไฟล์ 04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx)">
         ⚡ <strong>04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx:</strong> 23 ต.ค. 2569, 08:28 น.
       </span>
-      <span class="wbs-pill pill-file pill-file-05" onclick="if(window.openDhModelModal)window.openDhModelModal('src_05')" title="วันที่/เวลา นำเข้าข้อมูล: 23 ต.ค. 2569, 08:35 น. (ไฟล์ 05-1 WBS CN41 มูลค่า AUC วันเริ่มบัญชี 14 ตค69 (1เดือนเปลี่ยนครั้ง).xlsx)">
-        📑 <strong>05-1 WBS CN41 มูลค่า AUC วันเริ่มบัญชี 14 ตค69:</strong> 23 ต.ค. 2569, 08:35 น.
+      <span class="wbs-pill pill-file pill-file-05" onclick="if(window.openDhModelModal)window.openDhModelModal('src_06')" title="วันที่/เวลา นำเข้าข้อมูล: 24 ต.ค. 2569, 18:42 น. (ไฟล์ 06 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 22 ตค 69.xlsx)">
+        📑 <strong>06 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 22 ตค 69:</strong> 24 ต.ค. 2569, 18:42 น.
       </span>
-      <span class="wbs-pill pill-file pill-file-06" onclick="if(window.openDhModelModal)window.openDhModelModal('src_06')" title="วันที่/เวลา ซิงค์ข้อมูล: 22 ต.ค. 2569, 17:23 น. (Google Sheet แผนงานแล้วเสร็จ ออนไลน์)">
+      <span class="wbs-pill pill-file pill-file-06" onclick="if(window.openDhModelModal)window.openDhModelModal('src_sheet')" title="วันที่/เวลา ซิงค์ข้อมูล: 22 ต.ค. 2569, 17:23 น. (Google Sheet แผนงานแล้วเสร็จ ออนไลน์)">
         📊 <strong>Google Sheet แผนงานแล้วเสร็จ:</strong> 22 ต.ค. 2569 (Live API)
       </span>
     `;
@@ -1607,10 +1612,10 @@
     let isCrit3 = false;
     let sapTargetStatus = 'CLSD F4';
 
-    if (cStr.includes('ข้อ 4') || cStr.includes('ข้อ4') || cStr.includes('C02.2')) {
+    if (cStr.includes('ข้อ 4') || cStr.includes('ข้อ4') || cStr.includes('C02.2') || cStr === 'C04') {
       isCrit4 = true;
       sapTargetStatus = 'CLSD F2';
-    } else if (cStr.includes('ข้อ 3') || cStr.includes('ข้อ3') || cStr.includes('TECO') || cStr.includes('teco')) {
+    } else if (cStr.includes('ข้อ 3') || cStr.includes('ข้อ3') || cStr.includes('TECO') || cStr.includes('teco') || cStr === 'C03') {
       isCrit3 = true;
       sapTargetStatus = 'CLSD F4';
     }
@@ -1634,6 +1639,19 @@
         }
       }
     });
+
+    // Compute Total cn41CostInc (มูลค่า AUC ที่เพิ่มขึ้น/ลดลง ตามคำสั่งผู้ใช้งาน)
+    let totalCn41CostInc = 0;
+    (filtered || []).forEach(item => {
+      const inc = Number(item.cn41CostInc);
+      if (!isNaN(inc)) {
+        totalCn41CostInc += inc;
+      }
+    });
+    const incSign = totalCn41CostInc > 0 ? '+' : '';
+    const incColor = totalCn41CostInc > 0 ? '#10B981' : (totalCn41CostInc < 0 ? '#F59E0B' : '#94A3B8');
+    const incBg = totalCn41CostInc > 0 ? 'rgba(16, 185, 129, 0.14)' : (totalCn41CostInc < 0 ? 'rgba(245, 158, 11, 0.14)' : 'rgba(148, 163, 184, 0.10)');
+    const incBorder = totalCn41CostInc > 0 ? 'rgba(16, 185, 129, 0.45)' : (totalCn41CostInc < 0 ? 'rgba(245, 158, 11, 0.45)' : 'rgba(148, 163, 184, 0.3)');
 
     // Compute Selected from Checkbox
     let selectedCheckboxCount = 0;
@@ -1670,14 +1688,14 @@
 
     const formatFull = (val) => {
       if (isVal) {
-        return `฿${formatMoney(val)} (${(val / 1e6).toFixed(2)} ลบ.)`;
+        return `฿${formatMoney(val)} (${(val / 1e6).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ลบ.)`;
       }
       return `${Number(val || 0).toLocaleString('th-TH')} งาน`;
     };
 
     const formatShort = (val) => {
       if (isVal) {
-        return `${(val / 1e6).toFixed(2)} ลบ.`;
+        return `${(val / 1e6).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ลบ.`;
       }
       return `${Number(val || 0).toLocaleString('th-TH')} งาน`;
     };
@@ -1741,73 +1759,80 @@
       <div class="wbs-comparison-unified-grid">
         <!-- Left Column: ภาพรวมมูลค่า & งาน AUC (ตามรูปที่ 15: กว้างเท่าเดิม ปรับความสูงเท่ากับการ์ดเปรียบเทียบ) -->
         <div class="wbs-side-summary-col">
-          <div class="content-card executive-donut-kpi-card wbs-side-kpi-card" id="wbsExecutiveDonutKpiCard">
-            <!-- แถวบน: สรุปรวมมูลค่าและงานทั้งหมด -->
-            <div class="exec-donut-top-summary">
+          <div class="content-card executive-donut-kpi-card wbs-side-kpi-card wbs-new-combined-kpi-card" id="wbsExecutiveDonutKpiCard">
+            <!-- แถบหัวการ์ด -->
+            <div class="exec-donut-top-summary" style="margin-bottom: 0.45rem;">
               <div class="exec-summary-title-row">
                 <span class="badge-pea-tag" id="wbsKpiCard1ScopeBadge">กฟก.3</span>
                 <span class="exec-summary-title">ภาพรวมมูลค่า & งาน AUC</span>
-              </div>
-              <div class="exec-summary-val-row">
-                <span class="exec-total-main-val" id="wbsKpiTotalVal">0.00 ฿</span>
-                <span class="exec-total-jobs-badge" id="wbsKpiTotalJobsSub">0 งาน</span>
+                <span class="badge-new-card-pill" id="wbsKpiNewCardBadge" title="นำภาพรวมมูลค่า + ที่เพิ่มขึ้น/ลดลง และ ปิดงาน + SAP มารวมกันสร้างเป็นการ์ดใหม่ตามคำสั่ง">การ์ดใหม่ (รวมปรับปรุง)</span>
               </div>
             </div>
 
-            <!-- แถวกลาง: ปิดงานแล้ว (บน) -> กราฟวงกลม KPI (กลาง) -> คงเหลือ (ล่าง) -->
-            <div class="exec-donut-main-row vertical-layout">
-              <!-- ปิดงานแล้ว -->
-              <div class="donut-stat-col stat-closed stat-box-top">
-                <div class="donut-stat-head-row">
-                  <div class="donut-stat-label">
-                    <span class="donut-stat-dot dot-closed"></span>
-                    <span>ปิดงานแล้ว</span>
-                  </div>
-                  <div class="donut-stat-jobs badge-jobs-closed">
-                    <span>ปิดแล้ว <strong id="wbsKpiClosedJobs">0</strong> งาน</span>
-                  </div>
+            <!-- ส่วนที่ 1: ภาพรวมมูลค่า (ทำแบบแท่งกราฟ แสดงอักษร มูลค่า / งาน และส่วนเพิ่ม/ลดเป็นสีต่างออกไป) -->
+            <div class="wbs-metric-card-box box-total">
+              <div class="wbs-box-head">
+                <div class="wbs-box-title-wrap">
+                  <span class="box-icon">📊</span>
+                  <span>ภาพรวมมูลค่าทั้งหมด</span>
                 </div>
-                <div class="donut-stat-val text-success" id="wbsKpiClosedVal">0.00 ฿</div>
-              </div>
-
-              <!-- กราฟวงกลมโดนัท AUC พร้อมคะแนน KPI -->
-              <div class="exec-donut-chart-wrapper">
-                <div class="exec-donut-canvas-box">
-                  <canvas id="wbsExecutiveDonutChart" width="104" height="104"></canvas>
-                  <div class="exec-donut-center-content" id="wbsExecDonutCenterContent">
-                    <div class="donut-kpi-star-label">
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
-                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                      </svg>
-                      <span>KPI</span>
-                    </div>
-                    <div class="donut-kpi-score-row">
-                      <span class="donut-kpi-score" id="wbsKpiAvgKpi">-</span>
-                      <span class="donut-kpi-unit" id="wbsKpiAvgUnit" style="display:none;">/ 5</span>
-                    </div>
-                  </div>
+                <div class="wbs-card-metric-job-badge" id="wbsKpiTotalJobsSubBadge">
+                  <span>งาน: <strong id="wbsKpiTotalJobsSub">0</strong> งาน</span>
                 </div>
               </div>
-
-              <!-- คงเหลือ -->
-              <div class="donut-stat-col stat-remain stat-box-bottom">
-                <div class="donut-stat-head-row">
-                  <div class="donut-stat-label">
-                    <span class="donut-stat-dot dot-remain"></span>
-                    <span>คงเหลือ</span>
-                  </div>
-                  <div class="donut-stat-jobs badge-jobs-remain">
-                    <span>คงเหลือ <strong id="wbsKpiRemainJobs">0</strong> งาน</span>
-                  </div>
-                </div>
-                <div class="donut-stat-val text-danger" id="wbsKpiRemainVal">0.00 ฿</div>
+              <div class="wbs-val-line">
+                <span class="wbs-val-prefix">มูลค่า:</span>
+                <span class="wbs-val-number" id="wbsKpiTotalVal">0.00 ฿</span>
+                <span class="wbs-val-mb-pill" id="wbsKpiTotalValMb">(0.00 ลบ.)</span>
+              </div>
+              <!-- แท่งกราฟภาพรวม (ส่วนเพิ่ม/ลด สีต่างออกไป) -->
+              <div class="wbs-segment-track" id="wbsTotalSegmentTrack" title="แท่งกราฟภาพรวมมูลค่า (แสดงส่วนเพิ่ม/ลดด้วยสีต่างออกไป)">
+                <div class="wbs-seg-bar wbs-seg-base-total" id="wbsTotalSegBase" style="width: 96%;" title="มูลค่าเดิมก่อนปรับปรุง"></div>
+                <div class="wbs-seg-bar wbs-seg-inc-total" id="wbsTotalSegInc" style="width: 4%;" title="ส่วนเพิ่ม/ลด"></div>
+              </div>
+              <div class="wbs-box-sub">
+                <span id="wbsKpiTotalBaseSubText">เดิม 0.00 ลบ.</span>
+                <span id="wbsKpiTotalIncSubText" style="color: #F59E0B; font-weight: 700;">ส่วนต่าง: 0.00 ฿</span>
               </div>
             </div>
 
-            <!-- ด้านล่าง: แถบ % ปิดงานมูลค่า AUC และ % ปิดจำนวนงาน -->
-            <div class="exec-dual-progress-section">
+            <!-- ส่วนที่ 2: มูลค่าปิดงาน (ทำเหมือนกันใช้แท่งกราฟ มีแสดงอักษร มูลค่า / งาน และส่วน SAP สีต่างออกไป) -->
+            <div class="wbs-metric-card-box box-closed">
+              <div class="wbs-box-head">
+                <div class="wbs-box-title-wrap">
+                  <span class="donut-stat-dot dot-closed" style="background: #00FF88; box-shadow: 0 0 8px #00FF88;"></span>
+                  <span style="color: #00FF88;">มูลค่าปิดงานแล้ว (รวม SAP)</span>
+                </div>
+                <div class="wbs-card-metric-job-badge badge-green" id="wbsKpiClosedJobsSubBadge">
+                  <span>งาน: <strong id="wbsKpiClosedJobs">0</strong> งาน</span>
+                </div>
+              </div>
+              <div class="wbs-val-line">
+                <span class="wbs-val-prefix" style="color: #6EE7B7;">มูลค่า:</span>
+                <span class="wbs-val-number text-success" id="wbsKpiClosedVal">0.00 ฿</span>
+                <span class="wbs-val-mb-pill pill-green" id="wbsKpiClosedValMb">(0.00 ลบ.)</span>
+              </div>
+              <!-- แท่งกราฟปิดงาน (ส่วน SAP สีต่างออกไป) -->
+              <div class="wbs-segment-track" id="wbsClosedSegmentTrack" title="แท่งกราฟปิดงาน (ส่วน SAP สีเขียวนีออนสว่างต่างออกไป)">
+                <div class="wbs-seg-bar wbs-seg-base-closed" id="wbsClosedSegBase" style="width: 95%;" title="ปิดงานเดิมก่อนรวม SAP"></div>
+                <div class="wbs-seg-bar wbs-seg-inc-closed" id="wbsClosedSegSap" style="width: 5%;" title="ปิดงานใน SAP"></div>
+              </div>
+              <div class="wbs-box-sub sub-stacked">
+                <div class="wbs-box-sub-row">
+                  <span id="wbsKpiBaseClosedDetail">เดิม: 0.00 ลบ.</span>
+                  <span id="wbsKpiBaseClosedJobs" style="color: #A7F3D0;">(0 งาน)</span>
+                </div>
+                <div class="wbs-box-sub-row" style="color: #00FF88;">
+                  <span id="wbsKpiSapClosedDetail">+ SAP (${sapTargetStatus}): 0.00 ลบ.</span>
+                  <span id="wbsKpiSapClosedJobs" style="font-weight: 700;">(0 งาน)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- ส่วนที่ 3: % ปิดงานมูลค่า AUC และ % ปิดจำนวนงาน (ส่วนที่เพิ่มขึ้นใช้แท่งกราฟสีต่างออกไป) -->
+            <div class="exec-dual-progress-section" style="margin-top: 0.30rem;">
               <!-- แถบ 1: % ปิดงานมูลค่า AUC -->
-              <div class="exec-progress-block">
+              <div class="exec-progress-block" style="margin-bottom: 0.55rem;">
                 <div class="exec-progress-head-row">
                   <div class="exec-progress-label-wrap">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
@@ -1823,12 +1848,15 @@
                     </svg>
                   </div>
                 </div>
-                <div class="exec-progress-val-row">
+                <div class="exec-progress-val-row" style="display: flex; justify-content: space-between; align-items: baseline;">
                   <span class="exec-progress-big-val text-gold" id="wbsKpiPctVal">0.00%</span>
+                  <span class="wbs-pct-breakdown-tag" id="wbsKpiPctValSubText">เดิม 0.00% <span class="badge-inc-neon">+0.00%</span></span>
                 </div>
                 <div class="progress-track track-gold-pattern">
-                  <div class="progress-fill fill-gold-stripe" id="wbsBarMainPctClosed" style="width:0%">
-                    <div class="pea-ev-runner" title="รถบริการเคลื่อนที่ กฟภ. (PEA EV)">
+                  <div class="progress-fill-composite" id="wbsBarMainComposite" style="width: 0%;">
+                    <div class="progress-fill fill-gold-stripe fill-base-part" id="wbsBarMainBaseSeg"></div>
+                    <div class="fill-inc-part" id="wbsBarMainIncSeg" title="ส่วนปรับปรุงที่เพิ่มขึ้น"></div>
+                    <div class="pea-ev-runner" style="display: block;" title="รถบริการเคลื่อนที่ กฟภ. (PEA EV)">
                       <div class="pea-ev-car-body">
                         <img src="assets/pea_truck_right.png" alt="รถบริการเคลื่อนที่ กฟภ." class="pea-ev-truck-img" />
                         <span class="pea-ev-beam"></span>
@@ -1851,12 +1879,15 @@
                     <span>% ปิดจำนวนงาน</span>
                   </div>
                 </div>
-                <div class="exec-progress-val-row">
+                <div class="exec-progress-val-row" style="display: flex; justify-content: space-between; align-items: baseline;">
                   <span class="exec-progress-big-val text-gold" id="wbsKpiJobPctClosed">0.00%</span>
+                  <span class="wbs-pct-breakdown-tag" id="wbsKpiJobPctSubText">เดิม 0.00% <span class="badge-inc-neon">+0.00%</span></span>
                 </div>
                 <div class="progress-track track-gold-pattern">
-                  <div class="progress-fill fill-gold-stripe" id="wbsBarJobPctClosed" style="width:0%">
-                    <div class="pea-ev-runner" title="รถบริการเคลื่อนที่ กฟภ. (PEA EV)">
+                  <div class="progress-fill-composite" id="wbsBarJobComposite" style="width: 0%;">
+                    <div class="progress-fill fill-gold-stripe fill-base-part" id="wbsBarJobBaseSeg"></div>
+                    <div class="fill-inc-part" id="wbsBarJobIncSeg" title="ส่วนปรับปรุงที่เพิ่มขึ้น"></div>
+                    <div class="pea-ev-runner" style="display: block;" title="รถบริการเคลื่อนที่ กฟภ. (PEA EV)">
                       <div class="pea-ev-car-body">
                         <img src="assets/pea_truck_right.png" alt="รถบริการเคลื่อนที่ กฟภ." class="pea-ev-truck-img" />
                         <span class="pea-ev-beam"></span>
@@ -2030,37 +2061,202 @@
     const card = document.getElementById('wbsExecutiveDonutKpiCard');
     if (!card) return;
 
-    const copyFields = [
-      ['kpiCard1ScopeBadge', 'wbsKpiCard1ScopeBadge'],
-      ['kpiTotalVal', 'wbsKpiTotalVal'],
-      ['kpiTotalJobsSub', 'wbsKpiTotalJobsSub'],
-      ['kpiClosedJobs', 'wbsKpiClosedJobs'],
-      ['kpiClosedVal', 'wbsKpiClosedVal'],
-      ['kpiAvgKpi', 'wbsKpiAvgKpi'],
-      ['kpiRemainJobs', 'wbsKpiRemainJobs'],
-      ['kpiRemainVal', 'wbsKpiRemainVal'],
-      ['kpiPctVal', 'wbsKpiPctVal'],
-      ['kpiJobPctClosed', 'wbsKpiJobPctClosed']
-    ];
+    // 1. ซิงก์ป้ายขอบเขตข้อมูลจากการ์ดภาพรวม
+    const badgeSrc = document.getElementById('kpiCard1ScopeBadge');
+    const badgeTgt = document.getElementById('wbsKpiCard1ScopeBadge');
+    if (badgeSrc && badgeTgt) {
+      badgeTgt.innerHTML = badgeSrc.innerHTML;
+    }
 
-    copyFields.forEach(([srcId, tgtId]) => {
-      const src = document.getElementById(srcId);
-      const tgt = document.getElementById(tgtId);
-      if (src && tgt) {
-        tgt.innerHTML = src.innerHTML;
+    // 2. ดึงค่าฐานจากหน้าภาพรวม (หน้า Overview ยังคงค่าเดิม 100% ไม่ได้รับผลกระทบ)
+    const srcTotalValEl = document.getElementById('kpiTotalVal');
+    const srcTotalJobsEl = document.getElementById('kpiTotalJobsSub');
+    const srcClosedValEl = document.getElementById('kpiClosedVal');
+    const srcClosedJobsEl = document.getElementById('kpiClosedJobs');
+
+    const parseMoneyStr = (el) => {
+      if (!el) return 0;
+      const txt = el.textContent.replace(/[฿, ]/g, '').trim();
+      const n = parseFloat(txt);
+      return isNaN(n) ? 0 : n;
+    };
+    const parseIntStr = (el) => {
+      if (!el) return 0;
+      const txt = el.textContent.replace(/[^0-9]/g, '').trim();
+      const n = parseInt(txt, 10);
+      return isNaN(n) ? 0 : n;
+    };
+
+    const baseTotalVal = parseMoneyStr(srcTotalValEl);
+    const baseTotalJobs = parseIntStr(srcTotalJobsEl);
+    const baseClosedVal = parseMoneyStr(srcClosedValEl);
+    const baseClosedJobs = parseIntStr(srcClosedJobsEl);
+
+    // 3. คำนวณส่วนเพิ่ม/ลด (cn41CostInc) และปิดงานใน SAP (CLSD F4 หรือ CLSD F2) จากข้อมูล WBS
+    let totalCostInc = 0;
+    let clsdSapCount = 0;
+    let clsdSapAuc = 0;
+
+    const filteredItems = (typeof getFilteredWbsData === 'function')
+      ? (getFilteredWbsData(false, false, true) || [])
+      : [];
+
+    const currentCrit = (typeof wbsState !== 'undefined' && wbsState.selectedCriteria) ? wbsState.selectedCriteria : 'ALL';
+    const cStr = String(currentCrit || '').trim();
+    const isCrit4 = (cStr.includes('ข้อ 4') || cStr.includes('ข้อ4') || cStr.includes('C02.2') || cStr === 'C04');
+    const sapTargetStatus = isCrit4 ? 'CLSD F2' : 'CLSD F4';
+
+    filteredItems.forEach(i => {
+      const inc = Number(i.cn41CostInc);
+      if (!isNaN(inc)) totalCostInc += inc;
+
+      const sap = (i.statusSap || (typeof formatSapStatusShort === 'function' ? formatSapStatusShort(i.status) : '') || '').toUpperCase().trim();
+      const auc = Number(i.cn41ActualCost) || 0;
+      if (isCrit4) {
+        if (sap === 'CLSD F2' || sap.includes('F2') || sap.includes('CLSD 2')) {
+          clsdSapCount++;
+          clsdSapAuc += auc;
+        }
+      } else {
+        if (sap === 'CLSD F4' || sap.includes('F4') || sap.includes('CLSD 4')) {
+          clsdSapCount++;
+          clsdSapAuc += auc;
+        }
       }
     });
 
-    const barMain = document.getElementById('barMainPctClosed');
-    const wbsBarMain = document.getElementById('wbsBarMainPctClosed');
-    if (barMain && wbsBarMain) {
-      wbsBarMain.style.width = barMain.style.width;
+    // 4. นำมารวมกันตามคำสั่งผู้ใช้งาน (การ์ดใหม่):
+    // วงกลม 1: ภาพรวมมูลค่า + มูลค่าที่เพิ่มขึ้น/ลดลง
+    const netTotalVal = baseTotalVal + totalCostInc;
+    const netTotalJobs = baseTotalJobs || filteredItems.length;
+
+    // วงกลม 2: ปิดงานแล้ว + SAP CLSD (ทั้งมูลค่าและจำนวนงาน)
+    const netClosedVal = baseClosedVal + clsdSapAuc;
+    const netClosedJobs = baseClosedJobs + clsdSapCount;
+
+    // เปอร์เซ็นต์ก่อนการปรับปรุง (Base Percentage)
+    const basePctVal = baseTotalVal > 0 ? (baseClosedVal / baseTotalVal) * 100 : 0;
+    const basePctJobs = baseTotalJobs > 0 ? (baseClosedJobs / baseTotalJobs) * 100 : 0;
+
+    // เปอร์เซ็นต์ความสำเร็จใหม่ (Net Percentage)
+    const netPctVal = netTotalVal > 0 ? (netClosedVal / netTotalVal) * 100 : 0;
+    const netPctJobs = netTotalJobs > 0 ? (netClosedJobs / netTotalJobs) * 100 : 0;
+
+    // ส่วนต่างที่เพิ่มขึ้นจากการปรับปรุง (ส่วนต่าง > 0)
+    const diffPctVal = Math.max(0, netPctVal - basePctVal);
+    const diffPctJobs = Math.max(0, netPctJobs - basePctJobs);
+
+    // 5. แสดงผลในการ์ดใหม่ (#wbsExecutiveDonutKpiCard)
+    // 5.1 ส่วนภาพรวมมูลค่า (ทำแบบแท่งกราฟ มีอักษร มูลค่า / งาน และส่วนเพิ่ม/ลด สีต่างออกไป)
+    const wbsTotalVal = document.getElementById('wbsKpiTotalVal');
+    const wbsTotalValMb = document.getElementById('wbsKpiTotalValMb');
+    const wbsTotalJobs = document.getElementById('wbsKpiTotalJobsSub');
+    const totalBaseSub = document.getElementById('wbsKpiTotalBaseSubText');
+    const totalIncSub = document.getElementById('wbsKpiTotalIncSubText');
+    const totalSegBase = document.getElementById('wbsTotalSegBase');
+    const totalSegInc = document.getElementById('wbsTotalSegInc');
+
+    const s = totalCostInc > 0 ? '+' : '';
+    const incColor = totalCostInc > 0 ? '#10B981' : (totalCostInc < 0 ? '#F59E0B' : '#94A3B8');
+
+    if (wbsTotalVal) {
+      wbsTotalVal.textContent = `${netTotalVal.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ฿`;
+    }
+    if (wbsTotalValMb) {
+      wbsTotalValMb.textContent = `(${(netTotalVal / 1e6).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ลบ.)`;
+    }
+    if (wbsTotalJobs) {
+      wbsTotalJobs.textContent = netTotalJobs.toLocaleString('th-TH');
+    }
+    if (totalBaseSub) {
+      totalBaseSub.textContent = `เดิม ${(baseTotalVal / 1e6).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ลบ.`;
+    }
+    if (totalIncSub) {
+      totalIncSub.style.color = incColor;
+      totalIncSub.innerHTML = `ส่วนต่าง: <strong>${s}${totalCostInc.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ฿</strong>`;
+    }
+    if (totalSegBase && totalSegInc) {
+      totalSegBase.style.width = 'calc(100% - 24px)';
+      totalSegInc.style.width = '24px';
+      totalSegInc.style.background = totalCostInc < 0
+        ? 'linear-gradient(90deg, #F59E0B, #EF4444)'
+        : 'linear-gradient(90deg, #10B981, #00FF88)';
+      totalSegInc.title = `ส่วนเพิ่ม/ลด: ${s}${totalCostInc.toLocaleString('th-TH', { minimumFractionDigits: 2 })} ฿`;
     }
 
-    const barJob = document.getElementById('barJobPctClosed');
+    // 5.2 ส่วนมูลค่าปิดงาน (ทำแบบแท่งกราฟ มีอักษร มูลค่า / งาน และส่วน SAP สีต่างออกไป)
+    const wbsClosedVal = document.getElementById('wbsKpiClosedVal');
+    const wbsClosedValMb = document.getElementById('wbsKpiClosedValMb');
+    const wbsClosedJobs = document.getElementById('wbsKpiClosedJobs');
+    const wbsBaseDetail = document.getElementById('wbsKpiBaseClosedDetail');
+    const wbsBaseJobs = document.getElementById('wbsKpiBaseClosedJobs');
+    const wbsSapDetail = document.getElementById('wbsKpiSapClosedDetail');
+    const wbsSapJobs = document.getElementById('wbsKpiSapClosedJobs');
+    const closedSegBase = document.getElementById('wbsClosedSegBase');
+    const closedSegSap = document.getElementById('wbsClosedSegSap');
+
+    if (wbsClosedVal) {
+      wbsClosedVal.textContent = `${netClosedVal.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ฿`;
+    }
+    if (wbsClosedValMb) {
+      wbsClosedValMb.textContent = `(${(netClosedVal / 1e6).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ลบ.)`;
+    }
+    if (wbsClosedJobs) {
+      wbsClosedJobs.textContent = netClosedJobs.toLocaleString('th-TH');
+    }
+    if (wbsBaseDetail) {
+      wbsBaseDetail.innerHTML = `เดิม: <strong style="color: #fff;">${(baseClosedVal / 1e6).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ลบ.</strong>`;
+    }
+    if (wbsBaseJobs) {
+      wbsBaseJobs.textContent = `(${baseClosedJobs.toLocaleString('th-TH')} งาน)`;
+    }
+    if (wbsSapDetail) {
+      wbsSapDetail.innerHTML = `+ SAP (${sapTargetStatus}): <strong>${(clsdSapAuc / 1e6).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ลบ.</strong>`;
+    }
+    if (wbsSapJobs) {
+      wbsSapJobs.textContent = `(${clsdSapCount.toLocaleString('th-TH')} งาน)`;
+    }
+    if (closedSegBase && closedSegSap) {
+      closedSegBase.style.width = 'calc(100% - 28px)';
+      closedSegSap.style.width = '28px';
+      closedSegSap.title = `ปิดใน SAP (${sapTargetStatus}): ${clsdSapCount.toLocaleString('th-TH')} งาน (${(clsdSapAuc / 1e6).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ลบ.)`;
+    }
+
+    // 5.3 ส่วน % ปิดงานมูลค่า และ % ปิดจำนวนงาน (ส่วนที่เพิ่มขึ้นใช้แท่งกราฟสีต่างออกไป)
+    const wbsPctVal = document.getElementById('wbsKpiPctVal');
+    const wbsPctValSubText = document.getElementById('wbsKpiPctValSubText');
+    const wbsBarMainComposite = document.getElementById('wbsBarMainComposite');
+    const wbsBarMain = document.getElementById('wbsBarMainPctClosed');
+
+    if (wbsPctVal) {
+      wbsPctVal.textContent = `${netPctVal.toFixed(2)}%`;
+    }
+    if (wbsPctValSubText) {
+      wbsPctValSubText.innerHTML = `เดิม <strong>${basePctVal.toFixed(2)}%</strong> <span class="badge-inc-neon">+${diffPctVal.toFixed(2)}% ปรับปรุง</span>`;
+    }
+    if (wbsBarMainComposite) {
+      wbsBarMainComposite.style.width = `${Math.min(100, Math.max(0, netPctVal))}%`;
+    }
+    if (wbsBarMain) {
+      wbsBarMain.style.width = `${Math.min(100, Math.max(0, netPctVal))}%`;
+    }
+
+    const wbsJobPct = document.getElementById('wbsKpiJobPctClosed');
+    const wbsJobPctSubText = document.getElementById('wbsKpiJobPctSubText');
+    const wbsBarJobComposite = document.getElementById('wbsBarJobComposite');
     const wbsBarJob = document.getElementById('wbsBarJobPctClosed');
-    if (barJob && wbsBarJob) {
-      wbsBarJob.style.width = barJob.style.width;
+
+    if (wbsJobPct) {
+      wbsJobPct.textContent = `${netPctJobs.toFixed(2)}%`;
+    }
+    if (wbsJobPctSubText) {
+      wbsJobPctSubText.innerHTML = `เดิม <strong>${basePctJobs.toFixed(2)}%</strong> <span class="badge-inc-neon">+${diffPctJobs.toFixed(2)}% SAP</span>`;
+    }
+    if (wbsBarJobComposite) {
+      wbsBarJobComposite.style.width = `${Math.min(100, Math.max(0, netPctJobs))}%`;
+    }
+    if (wbsBarJob) {
+      wbsBarJob.style.width = `${Math.min(100, Math.max(0, netPctJobs))}%`;
     }
 
     const unitSrc = document.getElementById('kpiAvgUnit');
@@ -2069,10 +2265,10 @@
       unitTgt.style.display = unitSrc.style.display;
     }
 
-    const badgeSrc = document.getElementById('kpiTargetCircleBadge');
-    const badgeTgt = document.getElementById('wbsKpiTargetCircleBadge');
-    if (badgeSrc && badgeTgt && badgeSrc.title) {
-      badgeTgt.title = badgeSrc.title;
+    const targetBadgeSrc = document.getElementById('kpiTargetCircleBadge');
+    const targetBadgeTgt = document.getElementById('wbsKpiTargetCircleBadge');
+    if (targetBadgeSrc && targetBadgeTgt && targetBadgeSrc.title) {
+      targetBadgeTgt.title = targetBadgeSrc.title;
     }
 
     if (typeof window.renderExecutiveDonutChart === 'function') {
@@ -2268,9 +2464,17 @@
 
     let html = '';
 
+    const matchCol = c => {
+      if (!q) return true;
+      const tag = c.group === 'custom' ? 'custom' : (c.group === '03' ? '03 wbs' : (c.group === '05_cn41' ? '05 cn41' : (c.group === '06_cn41' ? '06 cn41 auc' : (c.group === '06_sheet' ? 'g-sheet sheet' : '04 zbudr'))));
+      return c.label.toLowerCase().includes(q) ||
+        c.id.toLowerCase().includes(q) ||
+        tag.includes(q);
+    };
+
     if (wbsState.colViewMode === 'order') {
       // Mode: Display Order (1 to 41)
-      const filteredCols = orderedDefs.filter(c => !q || c.label.toLowerCase().includes(q) || c.id.toLowerCase().includes(q) || (c.oldLabel && c.oldLabel.toLowerCase().includes(q)));
+      const filteredCols = orderedDefs.filter(matchCol);
 
       html += `
         <div style="padding:0.25rem 0.5rem; font-size:0.75rem; color:var(--text-dim); display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.08); margin-bottom:0.35rem;">
@@ -2283,10 +2487,11 @@
         const isChecked = !!wbsState.visibleColumns[col.id];
         const is03 = col.group === '03';
         const is05 = col.group === '05_cn41';
-        const is06 = col.group === '06_sheet';
+        const is06 = col.group === '06_cn41';
+        const isSheet = col.group === '06_sheet';
         const isCustom = col.group === 'custom';
-        const tagClass = isCustom ? 'col-tag-custom' : (is03 ? 'col-tag-03' : (is05 ? 'col-tag-05' : (is06 ? 'col-tag-06' : 'col-tag-04')));
-        const tagText = isCustom ? 'CUSTOM' : (is03 ? '03 WBS' : (is05 ? '05 CN41' : (is06 ? 'G-SHEET' : '04 ZBUDR')));
+        const tagClass = isCustom ? 'col-tag-custom' : (is03 ? 'col-tag-03' : (is05 ? 'col-tag-05' : (is06 ? 'col-tag-06-cn41' : (isSheet ? 'col-tag-sheet' : 'col-tag-04'))));
+        const tagText = isCustom ? 'CUSTOM' : (is03 ? '03 WBS' : (is05 ? '05 CN41' : (is06 ? '06 CN41' : (isSheet ? 'G-SHEET' : '04 ZBUDR'))));
 
         const realOrderIdx = orderedDefs.findIndex(c => c.id === col.id);
         const isFirst = realOrderIdx === 0;
@@ -2300,14 +2505,14 @@
                ondragleave="window.handleDropdownItemDragLeave(event)"
                ondrop="window.handleDropdownItemDrop(event, '${col.id}')"
                ondragend="window.handleDropdownItemDragEnd(event)"
-               title="${escapeHtml(col.label)}${col.oldLabel ? ' (เดิม: ' + escapeHtml(col.oldLabel) + ')' : ''} (${tagText}) - ลากหรือกดปุ่มเพื่อเลื่อนลำดับ">
+               title="${escapeHtml(col.label)} (${tagText}) - ลากหรือกดปุ่มเพื่อเลื่อนลำดับ">
             <div class="col-check-item-left">
               <span class="th-drag-handle" style="font-size:0.75rem;" title="คลิกค้างแล้วลากเพื่อสลับตำแหน่ง">⠿</span>
               <span class="col-order-num-badge">${realOrderIdx + 1}</span>
               <input type="checkbox" data-col-id="${col.id}" ${isChecked ? 'checked' : ''}
                 onchange="window.toggleSingleWbsCol('${col.id}', this.checked)">
               <span style="${isChecked ? 'color:var(--text-main); font-weight:600;' : 'color:var(--text-dim);'}">
-                ${escapeHtml(col.label)}${col.oldLabel ? `<span style="font-size:0.7rem; color:var(--pea-gold-400, #FBBF24); opacity:0.9; margin-left:4px; font-weight:normal;" title="ชื่อเดิม: ${escapeHtml(col.oldLabel)}">(เดิม: ${escapeHtml(col.oldLabel)})</span>` : ''}
+                ${escapeHtml(col.label)}
               </span>
             </div>
             <div class="col-check-item-right">
@@ -2324,7 +2529,7 @@
       // Mode: Grouped by category (with reorder buttons on each item)
       WBS_COL_GROUPS.forEach(grp => {
         const groupCols = orderedDefs.filter(c => c.group === grp.id);
-        const filteredCols = groupCols.filter(c => !q || c.label.toLowerCase().includes(q) || c.id.toLowerCase().includes(q) || (c.oldLabel && c.oldLabel.toLowerCase().includes(q)));
+        const filteredCols = groupCols.filter(matchCol);
         if (!filteredCols.length) return;
 
         const groupActiveCount = groupCols.filter(c => wbsState.visibleColumns[c.id]).length;
@@ -2343,10 +2548,11 @@
           const isChecked = !!wbsState.visibleColumns[col.id];
           const is03 = col.group === '03';
           const is05 = col.group === '05_cn41';
-          const is06 = col.group === '06_sheet';
+          const is06 = col.group === '06_cn41';
+          const isSheet = col.group === '06_sheet';
           const isCustom = col.group === 'custom';
-          const tagClass = isCustom ? 'col-tag-custom' : (is03 ? 'col-tag-03' : (is05 ? 'col-tag-05' : (is06 ? 'col-tag-06' : 'col-tag-04')));
-          const tagText = isCustom ? 'CUSTOM' : (is03 ? '03 WBS' : (is05 ? '05 CN41' : (is06 ? 'G-SHEET' : '04 ZBUDR')));
+          const tagClass = isCustom ? 'col-tag-custom' : (is03 ? 'col-tag-03' : (is05 ? 'col-tag-05' : (is06 ? 'col-tag-06-cn41' : (isSheet ? 'col-tag-sheet' : 'col-tag-04'))));
+          const tagText = isCustom ? 'CUSTOM' : (is03 ? '03 WBS' : (is05 ? '05 CN41' : (is06 ? '06 CN41' : (isSheet ? 'G-SHEET' : '04 ZBUDR'))));
 
           const realOrderIdx = orderedDefs.findIndex(c => c.id === col.id);
           const isFirst = realOrderIdx === 0;
@@ -2360,14 +2566,14 @@
                  ondragleave="window.handleDropdownItemDragLeave(event)"
                  ondrop="window.handleDropdownItemDrop(event, '${col.id}')"
                  ondragend="window.handleDropdownItemDragEnd(event)"
-                 title="${escapeHtml(col.label)}${col.oldLabel ? ' (เดิม: ' + escapeHtml(col.oldLabel) + ')' : ''} (${tagText}) - ลากหรือกดปุ่มเพื่อเลื่อนลำดับ">
+                 title="${escapeHtml(col.label)} (${tagText}) - ลากหรือกดปุ่มเพื่อเลื่อนลำดับ">
               <div class="col-check-item-left">
                 <span class="th-drag-handle" style="font-size:0.75rem;" title="คลิกค้างแล้วลากเพื่อสลับตำแหน่ง">⠿</span>
                 <span class="col-order-num-badge">${realOrderIdx + 1}</span>
                 <input type="checkbox" data-col-id="${col.id}" ${isChecked ? 'checked' : ''}
                   onchange="window.toggleSingleWbsCol('${col.id}', this.checked)">
                 <span style="${isChecked ? 'color:var(--text-main); font-weight:600;' : 'color:var(--text-dim);'}">
-                  ${escapeHtml(col.label)}${col.oldLabel ? `<span style="font-size:0.7rem; color:var(--pea-gold-400, #FBBF24); opacity:0.9; margin-left:4px; font-weight:normal;" title="ชื่อเดิม: ${escapeHtml(col.oldLabel)}">(เดิม: ${escapeHtml(col.oldLabel)})</span>` : ''}
+                  ${escapeHtml(col.label)}
                 </span>
               </div>
               <div class="col-check-item-right">
@@ -2405,8 +2611,10 @@
     const currentData = data || getFilteredWbsData(false);
     const totalFiltered = currentData.length;
 
-    // 1. Calculate Accumulated Total AUC Value (ผลรวมสะสมมูลค่า AUC)
+    // 1. Calculate Accumulated Total AUC Value (ผลรวมสะสมมูลค่า AUC ไฟล์ 06, 05, และผลต่าง)
     let totalCn41Cost = 0;
+    let totalCn41Cost05 = 0;
+    let totalCn41CostInc = 0;
 
     // 2. Calculate Average % for Materials and Expenses (% เบิกพัสดุ, % เบิก คชจ.)
     let sumMat = 0, countMat = 0;
@@ -2416,10 +2624,22 @@
     const officesSet = new Set();
 
     currentData.forEach(item => {
-      // AUC Sum
+      // AUC Sum (ไฟล์ 06 ล่าสุด)
       const cost = Number(item.cn41ActualCost);
       if (!isNaN(cost)) {
         totalCn41Cost += cost;
+      }
+
+      // AUC Sum (ไฟล์ 05 วันเริ่มบัญชี)
+      const cost05 = Number(item.cn41Cost05);
+      if (!isNaN(cost05)) {
+        totalCn41Cost05 += cost05;
+      }
+
+      // AUC Difference (06 - 05)
+      const costInc = Number(item.cn41CostInc);
+      if (!isNaN(costInc)) {
+        totalCn41CostInc += costInc;
       }
 
       // % เบิกพัสดุ
@@ -2468,7 +2688,7 @@
         rowJustify = 'justify-content: flex-end;';
       }
 
-      // Build Header Metric HTML เฉพาะ 5 คอลัมน์ที่วงกลมไว้
+      // Build Header Metric HTML เฉพาะคอลัมน์สำคัญ
       let headerMetricHtml = '';
       if (totalFiltered > 0) {
         switch (col.id) {
@@ -2494,8 +2714,31 @@
             headerMetricHtml = `
               <div class="th-header-metric-badge th-header-stacked">
                 <span class="th-header-type-badge">รวม</span>
-                <span class="th-header-gold-val" title="ผลรวมสะสมมูลค่า AUC ทั้งหมด: ${formatMoney(totalCn41Cost)} บาท">
+                <span class="th-header-gold-val" title="ผลรวมสะสมมูลค่า AUC ทั้งหมด (ไฟล์ 06): ${formatMoney(totalCn41Cost)} บาท">
                   ${formatMoney(totalCn41Cost)}
+                </span>
+              </div>`;
+            break;
+
+          case 'cn41CostInc': {
+            const incSign = totalCn41CostInc > 0 ? '+' : '';
+            const incColor = totalCn41CostInc > 0 ? '#10B981' : (totalCn41CostInc < 0 ? '#F59E0B' : 'var(--text-muted)');
+            headerMetricHtml = `
+              <div class="th-header-metric-badge th-header-stacked">
+                <span class="th-header-type-badge">รวมเพิ่ม/ลด</span>
+                <span class="th-header-gold-val" style="color: ${incColor};" title="ผลรวมมูลค่า AUC ที่เพิ่มขึ้น (06 - 05): ${incSign}${formatMoney(totalCn41CostInc)} บาท">
+                  ${incSign}${formatMoney(totalCn41CostInc)}
+                </span>
+              </div>`;
+            break;
+          }
+
+          case 'cn41Cost05':
+            headerMetricHtml = `
+              <div class="th-header-metric-badge th-header-stacked">
+                <span class="th-header-type-badge">รวม (05)</span>
+                <span class="th-header-cyan-val" style="color: #22D3EE; font-weight: 700;" title="ผลรวมสะสมต้นทุนจริง ไฟล์ 05 (14 ต.ค. 69): ${formatMoney(totalCn41Cost05)} บาท">
+                  ${formatMoney(totalCn41Cost05)}
                 </span>
               </div>`;
             break;
@@ -2581,6 +2824,9 @@
                 <span class="sort-indicator" style="font-size:0.75rem; margin-left:2px; color:var(--pea-gold-400);">${sortArrow}</span>
               </div>
             </div>
+            ${col.id === 'statusSap' ? `<div class="th-sub-date-text" style="font-size: 0.70rem; color: #CBD5E1; font-weight: 500; line-height: 1.2; margin: 1px 0 3px 0; text-align: center; white-space: nowrap;" title="วันที่แก้ไขล่าสุดของไฟล์ 04 ZBUDR064: 23 ต.ค. 2569">แก้ไขล่าสุด: 23 ต.ค. 69</div>` : ''}
+            ${col.id === 'cn41Cost05' ? `<div class="th-sub-date-text" style="font-size: 0.70rem; color: #CBD5E1; font-weight: 500; line-height: 1.2; margin: 1px 0 3px 0; text-align: center; white-space: nowrap;" title="วันที่แก้ไขล่าสุดของไฟล์ 05 CN41: 14 ต.ค. 2569">แก้ไขล่าสุด: 14 ต.ค. 69</div>` : ''}
+            ${col.id === 'cn41ActualCost' ? `<div class="th-sub-date-text" style="font-size: 0.70rem; color: #CBD5E1; font-weight: 500; line-height: 1.2; margin: 1px 0 3px 0; text-align: center; white-space: nowrap;" title="วันที่แก้ไขล่าสุดของไฟล์ 06 CN41: 22 ต.ค. 2569">แก้ไขล่าสุด: 22 ต.ค. 69</div>` : ''}
             ${headerMetricHtml}
           </div>
         </th>
@@ -2616,8 +2862,10 @@
     const totalFiltered = sortedData.length;
     if (totalFiltered === 0) return '';
 
-    // 1. Calculate Accumulated Total AUC Value (ผลรวมสะสมมูลค่า AUC)
+    // 1. Calculate Accumulated Total AUC Value (ผลรวมสะสมมูลค่า AUC ไฟล์ 06, 05, และผลต่าง)
     let totalCn41Cost = 0;
+    let totalCn41Cost05 = 0;
+    let totalCn41CostInc = 0;
 
     // 2. Calculate Average % for Materials and Expenses (% เบิกพัสดุ, % เบิก คชจ.)
     let sumMat = 0, countMat = 0;
@@ -2628,10 +2876,22 @@
     const engSet = new Set();
 
     sortedData.forEach(item => {
-      // AUC Sum
+      // AUC Sum (ไฟล์ 06 ล่าสุด)
       const cost = Number(item.cn41ActualCost);
       if (!isNaN(cost)) {
         totalCn41Cost += cost;
+      }
+
+      // AUC Sum (ไฟล์ 05 วันเริ่มบัญชี)
+      const cost05 = Number(item.cn41Cost05);
+      if (!isNaN(cost05)) {
+        totalCn41Cost05 += cost05;
+      }
+
+      // AUC Difference (06 - 05)
+      const costInc = Number(item.cn41CostInc);
+      if (!isNaN(costInc)) {
+        totalCn41CostInc += costInc;
       }
 
       // % เบิกพัสดุ
@@ -2715,8 +2975,35 @@
             <td style="text-align: right; vertical-align: middle;">
               <div class="wbs-summary-cell-stacked">
                 <span class="wbs-summary-cell-type">รวม</span>
-                <span class="wbs-summary-gold-val" title="ผลรวมสะสมมูลค่า AUC ทั้งหมด (${totalFiltered.toLocaleString('th-TH')} รายการ): ${formatMoney(totalCn41Cost)} บาท">
+                <span class="wbs-summary-gold-val" title="ผลรวมสะสมมูลค่า AUC ทั้งหมด ไฟล์ 06 (${totalFiltered.toLocaleString('th-TH')} รายการ): ${formatMoney(totalCn41Cost)} บาท">
                   ${formatMoney(totalCn41Cost)}
+                </span>
+              </div>
+            </td>`;
+          break;
+
+        case 'cn41CostInc': {
+          const incSign = totalCn41CostInc > 0 ? '+' : '';
+          const incColor = totalCn41CostInc > 0 ? '#10B981' : (totalCn41CostInc < 0 ? '#F59E0B' : 'var(--text-muted)');
+          cellsHtml += `
+            <td style="text-align: right; vertical-align: middle;">
+              <div class="wbs-summary-cell-stacked">
+                <span class="wbs-summary-cell-type">รวมเพิ่ม/ลด</span>
+                <span class="wbs-summary-gold-val" style="color: ${incColor};" title="ผลรวมมูลค่า AUC ที่เพิ่มขึ้น (06 - 05) (${totalFiltered.toLocaleString('th-TH')} รายการ): ${incSign}${formatMoney(totalCn41CostInc)} บาท">
+                  ${incSign}${formatMoney(totalCn41CostInc)}
+                </span>
+              </div>
+            </td>`;
+          break;
+        }
+
+        case 'cn41Cost05':
+          cellsHtml += `
+            <td style="text-align: right; vertical-align: middle;">
+              <div class="wbs-summary-cell-stacked">
+                <span class="wbs-summary-cell-type">รวม (05)</span>
+                <span class="wbs-summary-cyan-val" style="color: #22D3EE; font-weight: 700;" title="ผลรวมสะสมต้นทุนจริง ไฟล์ 05 (${totalFiltered.toLocaleString('th-TH')} รายการ): ${formatMoney(totalCn41Cost05)} บาท">
+                  ${formatMoney(totalCn41Cost05)}
                 </span>
               </div>
             </td>`;
@@ -3013,9 +3300,31 @@
               </td>`;
               break;
             }
-            // File 05 Columns
+            // File 06 Columns (CN41 มูลค่า AUC ล่าสุด 22 ต.ค. 69)
             case 'cn41ActualCost':
-              rowHtml += `<td style="text-align: right; font-family: var(--font-mono, monospace); font-size: 0.85rem; font-weight: 700; color: #38BDF8;">${formatMoney(item.cn41ActualCost)}</td>`;
+              rowHtml += `<td style="text-align: right; font-family: var(--font-mono, monospace); font-size: 0.85rem; font-weight: 700; color: #38BDF8;" title="มูลค่า AUC ล่าสุด (ไฟล์ 06): ${formatMoney(item.cn41ActualCost)} บาท">${formatMoney(item.cn41ActualCost)}</td>`;
+              break;
+            // คอลัมน์ใหม่ตามคำสั่งผู้ใช้งาน: มูลค่าAUCที่เพิ่มขึ้น (ไฟล์ 06 ล่าสุด - ไฟล์ 05 วันเริ่มบัญชี)
+            case 'cn41CostInc': {
+              const incVal = Number(item.cn41CostInc);
+              let incColor = 'var(--text-dim)';
+              let incSign = '';
+              if (!isNaN(incVal)) {
+                if (incVal > 0) {
+                  incColor = '#10B981'; // เขียว มูลค่าเพิ่มขึ้น
+                  incSign = '+';
+                } else if (incVal < 0) {
+                  incColor = '#F59E0B'; // ส้มอำพัน มูลค่าลดลง
+                  incSign = '';
+                }
+              }
+              const displayVal = (!isNaN(incVal) && incVal !== 0) ? (incSign + formatMoney(incVal)) : (incVal === 0 ? '-' : '-');
+              rowHtml += `<td style="text-align: right; font-family: var(--font-mono, monospace); font-size: 0.85rem; font-weight: 700; color: ${incColor};" title="มูลค่า AUC ที่เพิ่มขึ้น (ไฟล์ 06 - ไฟล์ 05): ${formatMoney(item.cn41CostInc)} บาท">${displayVal}</td>`;
+              break;
+            }
+            // File 05 Columns (CN41 มูลค่า AUC วันเริ่มบัญชี 14 ต.ค. 69)
+            case 'cn41Cost05':
+              rowHtml += `<td style="text-align: right; font-family: var(--font-mono, monospace); font-size: 0.85rem; font-weight: 600; color: #22D3EE;" title="ต้นทุนจริง วันเริ่มบัญชี 14 ต.ค. 69 (ไฟล์ 05): ${formatMoney(item.cn41Cost05)} บาท">${formatMoney(item.cn41Cost05)}</td>`;
               break;
             case 'cn41ObjDesc':
               rowHtml += `<td><div style="font-size: 0.85rem; color: var(--text-main); font-weight: 500; min-width: 220px; line-height: 1.35;" title="${escapeHtml(item.cn41ObjDesc)}">${escapeHtml(item.cn41ObjDesc || '-')}</div></td>`;
@@ -3647,7 +3956,7 @@
 
     if (aucBadgeEl) {
       aucBadgeEl.textContent = `มูลค่ารวม: ฿${formatMoney(displayTotalAuc)}`;
-      aucBadgeEl.title = `มูลค่าต้นทุนจริง AUC (จากไฟล์ 05 CN41) รวมของงานที่แสดง: ฿${formatMoney(displayTotalAuc)} บาท (${(displayTotalAuc / 1e6).toFixed(2)} ล้านบาท)`;
+      aucBadgeEl.title = `มูลค่าต้นทุนจริง AUC (จากไฟล์ 06 CN41) รวมของงานที่แสดง: ฿${formatMoney(displayTotalAuc)} บาท (${(displayTotalAuc / 1e6).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ล้านบาท)`;
     }
 
     // Update Legend Counts: แสดงจำนวนงานคงเหลือแยกตามสถานะ CLSD, TECO, REL
@@ -4135,20 +4444,20 @@
       const coreIds = new Set([
         'id', 'wbs', 'description', 'statusSap', 'province', 'office', 'budget',
         'engineer', 'department', 'type', 'budgetCurrent', 'actTotalCtrl', 'budgetRemain',
-        'pctMatWithdraw', 'pctExpenseWithdraw', 'cn41ActualCost'
+        'pctMatWithdraw', 'pctExpenseWithdraw', 'cn41ActualCost', 'cn41CostInc', 'cn41Cost05'
       ]);
       WBS_COL_DEFS.forEach(c => { wbsState.visibleColumns[c.id] = coreIds.has(c.id); });
     } else if (presetName === 'budget') {
       const budgetIds = new Set([
         'id', 'wbs', 'description', 'budget', 'office', 'budgetOrigin', 'budgetCurrent',
         'budgetAlloc', 'budgetDist', 'budgetRemain', 'actTotalCtrl', 'actMatCheck', 'actOtherSite',
-        'planMat', 'pctMatWithdraw', 'planSite', 'pctExpenseWithdraw', 'cn41ActualCost'
+        'planMat', 'pctMatWithdraw', 'planSite', 'pctExpenseWithdraw', 'cn41ActualCost', 'cn41CostInc', 'cn41Cost05'
       ]);
       WBS_COL_DEFS.forEach(c => { wbsState.visibleColumns[c.id] = budgetIds.has(c.id); });
     } else if (presetName === 'cn41') {
       const cn41Ids = new Set([
         'id', 'wbs', 'province', 'office', 'budget', 'engineer',
-        'cn41ActualCost', 'cn41ObjDesc', 'cn41Level', 'cn41Currency', 'budgetRemain'
+        'cn41ActualCost', 'cn41CostInc', 'cn41Cost05', 'cn41ObjDesc', 'cn41Level', 'cn41Currency', 'budgetRemain'
       ]);
       WBS_COL_DEFS.forEach(c => { wbsState.visibleColumns[c.id] = cn41Ids.has(c.id); });
     } else if (presetName === 'file03') {
@@ -4156,7 +4465,7 @@
     } else if (presetName === 'plan06') {
       const plan06Ids = new Set([
         'id', 'wbs', 'description', 'statusSap', 'office', 'engineer',
-        'planClose', 'note', 'budgetRemain', 'cn41ActualCost'
+        'planClose', 'note', 'budgetRemain', 'cn41ActualCost', 'cn41CostInc'
       ]);
       WBS_COL_DEFS.forEach(c => { wbsState.visibleColumns[c.id] = plan06Ids.has(c.id); });
     }

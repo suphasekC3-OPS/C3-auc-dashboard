@@ -2815,7 +2815,7 @@
         ? `เดือนถัดไปที่ ${idx + 1} (สิ้นปี 69)`
         : `เดือนถัดไปที่ ${idx + 1}`;
 
-      const valMillions = (ms.sumReqValCat125 / 1e6).toFixed(2);
+      const valMillions = (ms.sumReqValCat125 / 1e6).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
       const valFormatted = formatCurrency(ms.sumReqValCat125);
       const jobsFormatted = formatNumber(ms.sumReqJobsCat34);
 
@@ -3059,7 +3059,7 @@
             `;
           }
           const amtStr = isVal
-            ? `${(mc.reqAmount / 1e6).toFixed(2)} ลบ.`
+            ? `${(mc.reqAmount / 1e6).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ลบ.`
             : `${formatNumber(mc.reqAmount)} งาน`;
           const fivePctVal = isVal ? (0.05 * cr.remainVal) : Math.ceil(0.05 * cr.remainJobs);
           const fivePctStr = isVal ? formatCurrencyShort(fivePctVal) : `${fivePctVal} งาน`;
@@ -3269,9 +3269,9 @@
         activeCritName.includes('C02')
       )) || (!isVal);
 
-    const fsTotMbStr = `${(fsTotVal / 1e6).toFixed(2)} ลบ.`;
-    const fsClosedMbStr = `${(fsClosedVal / 1e6).toFixed(2)} ลบ.`;
-    const fsRemainMbStr = `${(fsRemainVal / 1e6).toFixed(2)} ลบ.`;
+    const fsTotMbStr = `${(fsTotVal / 1e6).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ลบ.`;
+    const fsClosedMbStr = `${(fsClosedVal / 1e6).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ลบ.`;
+    const fsRemainMbStr = `${(fsRemainVal / 1e6).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ลบ.`;
 
     let fsTotalDisplay = '';
     let fsClosedDisplay = '';
@@ -3445,7 +3445,7 @@
 
       const amt = isVal ? ms.sumReqValCat125 : ms.sumReqJobsCat34;
       const kpiPct = isVal ? ms.valTargetPctDisplay : ms.jobTargetPctDisplay;
-      const amtStr = isVal ? `${(amt / 1e6).toFixed(2)} ลบ.` : `${formatNumber(amt)} งาน`;
+      const amtStr = isVal ? `${(amt / 1e6).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ลบ.` : `${formatNumber(amt)} งาน`;
       const isAchieved = hasKpiTarget && file01HasWork && amt === 0;
 
       // Base share ให้เพียงพอกับเนื้อหาป้ายและตัวอักษรขนาดใหญ่
@@ -3580,7 +3580,7 @@
       const unit = (singleCr ? singleCr.critDef.type === 'job' : isCritJob) ? 'job' : 'val';
       const unitLabel = unit === 'job' ? 'งาน' : 'บาท';
       const unitShort = unit === 'job' ? 'งาน' : 'ลบ.';
-      const amtStr = unit === 'job' ? `${formatNumber(amt)} งาน` : `${(amt / 1e6).toFixed(2)} ลบ.`;
+      const amtStr = unit === 'job' ? `${formatNumber(amt)} งาน` : `${(amt / 1e6).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ลบ.`;
 
       return {
         monthNum: ms.monthInfo.monthNum,
@@ -4495,8 +4495,8 @@
                 isSelected: isSelected,
                 isDimmed: !isSelected,
                 showDividerAfter: o.showDividerAfter,
-                closed: o.isNoWork ? 'ไม่มีงาน' : (isJobUnit ? o.closedJobs.toLocaleString('th-TH') + ' งาน' : (o.closed / 1000000).toFixed(2) + ' ลบ.'),
-                total: o.isNoWork ? 'ไม่มีงาน' : (isJobUnit ? o.totalJobs.toLocaleString('th-TH') + ' งาน' : (o.total / 1000000).toFixed(2) + ' ลบ.'),
+                closed: o.isNoWork ? 'ไม่มีงาน' : (isJobUnit ? o.closedJobs.toLocaleString('th-TH') + ' งาน' : (o.closed / 1000000).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ลบ.'),
+                total: o.isNoWork ? 'ไม่มีงาน' : (isJobUnit ? o.totalJobs.toLocaleString('th-TH') + ' งาน' : (o.total / 1000000).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ลบ.'),
                 kpi: o.isNoWork ? '-' : o.kpi
               };
             })
@@ -4841,11 +4841,11 @@
         const needBaht = Math.max(0, requiredToL5Baht - closedValBaht);
         totalGapValue += needBaht;
 
-        totalStr = (totalValBaht / 1000000).toFixed(2) + ' ลบ.';
-        closedStr = (closedValBaht / 1000000).toFixed(2) + ' ลบ.';
-        remainStr = (remainValBaht / 1000000).toFixed(2) + ' ลบ.';
+        totalStr = (totalValBaht / 1000000).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ลบ.';
+        closedStr = (closedValBaht / 1000000).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ลบ.';
+        remainStr = (remainValBaht / 1000000).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ลบ.';
         gapStr = needBaht >= 1000000
-          ? (needBaht / 1000000).toFixed(2) + ' ล้านบาท'
+          ? (needBaht / 1000000).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ล้านบาท'
           : Math.round(needBaht).toLocaleString('th-TH') + ' บาท';
 
         gapDesc = `ต้องเร่งปิดงานเพิ่มอีกอย่างน้อย <strong>${gapStr}</strong> (คิดเป็น ${(totalValBaht > 0 ? (needBaht / totalValBaht * 100).toFixed(1) : '0')}%) เพื่อยกระดับสู่ KPI ระดับ 5`;
@@ -5149,7 +5149,7 @@
       let totalTooltip = '';
 
       if (rawTot !== null) {
-        const valFormatted = isJobCrit ? `${Math.round(rawTot).toLocaleString()} งาน` : `${rawTot.toFixed(2)} ลบ.`;
+        const valFormatted = isJobCrit ? `${Math.round(rawTot).toLocaleString('th-TH')} งาน` : `${rawTot.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ลบ.`;
         if (prevValidTotal === null) {
           // First reporting month (Baseline)
           totalValText = '-';
@@ -5169,9 +5169,10 @@
 
           // Formatted value delta [เลข 3]
           if (isJobCrit) {
-            totalValText = deltaTot > 0 ? `+${Math.round(deltaTot).toLocaleString()}` : `${Math.round(deltaTot).toLocaleString()}`;
+            totalValText = deltaTot > 0 ? `+${Math.round(deltaTot).toLocaleString('th-TH')}` : `${Math.round(deltaTot).toLocaleString('th-TH')}`;
           } else {
-            totalValText = deltaTot > 0.001 ? `+${deltaTot.toFixed(2)}` : `${deltaTot.toFixed(2)}`;
+            const formattedTotal = Math.abs(deltaTot).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            totalValText = deltaTot > 0.001 ? `+${formattedTotal}` : (deltaTot < -0.001 ? `-${formattedTotal}` : '0.00');
           }
 
           if (deltaTot > 0.001) totalValCls = 'val-growth-pos';
@@ -5190,9 +5191,10 @@
             totalPctCls = 'val-growth-zero';
           }
 
+          const formattedDeltaAbs = Math.abs(deltaTot).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
           const deltaFormatted = isJobCrit 
-            ? (deltaTot >= 0 ? `+${Math.round(deltaTot).toLocaleString()} งาน` : `${Math.round(deltaTot).toLocaleString()} งาน`)
-            : (deltaTot >= 0 ? `+${deltaTot.toFixed(2)} ลบ.` : `${deltaTot.toFixed(2)} ลบ.`);
+            ? (deltaTot >= 0 ? `+${Math.round(deltaTot).toLocaleString('th-TH')} งาน` : `${Math.round(deltaTot).toLocaleString('th-TH')} งาน`)
+            : (deltaTot >= 0.001 ? `+${formattedDeltaAbs} ลบ.` : (deltaTot < -0.001 ? `-${formattedDeltaAbs} ลบ.` : '0.00 ลบ.'));
           totalTooltip = `${months[m]} 2569: ภาพรวม ${valFormatted} (เปลี่ยนแปลง ${deltaFormatted} หรือ ${totalPctText})`;
         }
       }
@@ -5220,9 +5222,10 @@
           closedValCount++;
 
           if (isJobCrit) {
-            closedValText = deltaClsVal > 0 ? `+${Math.round(deltaClsVal).toLocaleString()}` : `${Math.round(deltaClsVal).toLocaleString()}`;
+            closedValText = deltaClsVal > 0 ? `+${Math.round(deltaClsVal).toLocaleString('th-TH')}` : `${Math.round(deltaClsVal).toLocaleString('th-TH')}`;
           } else {
-            closedValText = deltaClsVal > 0.001 ? `+${deltaClsVal.toFixed(2)}` : `${deltaClsVal.toFixed(2)}`;
+            const formattedCls = Math.abs(deltaClsVal).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            closedValText = deltaClsVal > 0.001 ? `+${formattedCls}` : (deltaClsVal < -0.001 ? `-${formattedCls}` : '0.00');
           }
 
           if (deltaClsVal > 0.001) closedValCls = 'val-growth-pos';
@@ -5255,7 +5258,7 @@
         }
 
         const closedValStr = rawCls !== null 
-          ? (isJobCrit ? `${Math.round(rawCls).toLocaleString()} งาน` : `${rawCls.toFixed(2)} ลบ.`)
+          ? (isJobCrit ? `${Math.round(rawCls).toLocaleString('th-TH')} งาน` : `${rawCls.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ลบ.`)
           : '';
         const closedDeltaStr = rawCls !== null
           ? (isJobCrit ? `${closedValText} งาน` : `${closedValText} ลบ.`)
@@ -5285,8 +5288,11 @@
     const avgTotalVal = totalValCount > 0 ? (totalValSum / totalValCount) : null;
     const avgTotalValText = avgTotalVal !== null
       ? (isJobCrit
-          ? (avgTotalVal > 0 ? `+${Math.round(avgTotalVal).toLocaleString()}` : `${Math.round(avgTotalVal).toLocaleString()}`)
-          : (avgTotalVal > 0.001 ? `+${avgTotalVal.toFixed(2)}` : `${avgTotalVal.toFixed(2)}`))
+          ? (avgTotalVal > 0 ? `+${Math.round(avgTotalVal).toLocaleString('th-TH')}` : `${Math.round(avgTotalVal).toLocaleString('th-TH')}`)
+          : (() => {
+              const absAvgTot = Math.abs(avgTotalVal).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+              return avgTotalVal > 0.001 ? `+${absAvgTot}` : (avgTotalVal < -0.001 ? `-${absAvgTot}` : '0.00');
+            })())
       : '-';
 
     const avgTotalPct = totalMoMCount > 0 ? (totalMoMSum / totalMoMCount) : null;
@@ -5297,8 +5303,11 @@
     const avgClosedVal = closedValCount > 0 ? (closedValSum / closedValCount) : null;
     const avgClosedValText = avgClosedVal !== null
       ? (isJobCrit
-          ? (avgClosedVal > 0 ? `+${Math.round(avgClosedVal).toLocaleString()}` : `${Math.round(avgClosedVal).toLocaleString()}`)
-          : (avgClosedVal > 0.001 ? `+${avgClosedVal.toFixed(2)}` : `${avgClosedVal.toFixed(2)}`))
+          ? (avgClosedVal > 0 ? `+${Math.round(avgClosedVal).toLocaleString('th-TH')}` : `${Math.round(avgClosedVal).toLocaleString('th-TH')}`)
+          : (() => {
+              const absAvgCls = Math.abs(avgClosedVal).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+              return avgClosedVal > 0.001 ? `+${absAvgCls}` : (avgClosedVal < -0.001 ? `-${absAvgCls}` : '0.00');
+            })())
       : '-';
 
     const avgClosedPct = closedPctCount > 0 ? (closedPctSum / closedPctCount) : null;
@@ -6153,7 +6162,7 @@
             remainVal: formatCurrency(remVal),
             remainMb: `${rMb.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ลบ.`,
             pct: `${p}%`,
-            tooltipText: `ปิด ${cMb.toFixed(2)} / รวม ${tMb.toFixed(2)} ลบ. (${p}%)`
+            tooltipText: `ปิด ${cMb.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} / รวม ${tMb.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ลบ. (${p}%)`
           });
         }
       } else {
@@ -6215,7 +6224,7 @@
       valueColor: '#FFD25A',
       valueBorderColor: 'rgba(255, 184, 28, 0.9)',
       hidden: isHiddenTotal,
-      formatValue: (v) => isJobCrit ? `${Math.round(v).toLocaleString()} งาน` : `${Number(v).toFixed(2)} ลบ.`,
+      formatValue: (v) => isJobCrit ? `${Math.round(v).toLocaleString('th-TH')} งาน` : `${Number(v).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ลบ.`,
       extra: monthlyAmountDetails.map(d => d ? {
         tooltipText: isJobCrit ? `${labelTotal}: ${d.totalVal}` : `${labelTotal}: ${d.totalVal} (${d.totalMb})`
       } : null)
@@ -6234,7 +6243,7 @@
       valueColor: '#34D399',
       valueBorderColor: 'rgba(16, 185, 129, 0.85)',
       hidden: isHiddenClosed,
-      formatValue: (v) => isJobCrit ? `${Math.round(v).toLocaleString()} งาน` : `${Number(v).toFixed(2)} ลบ.`,
+      formatValue: (v) => isJobCrit ? `${Math.round(v).toLocaleString('th-TH')} งาน` : `${Number(v).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ลบ.`,
       extra: monthlyAmountDetails.map(d => d ? {
         tooltipText: isJobCrit ? `${labelClosed}: ${d.closedVal} (สัดส่วน ${d.pct})` : `${labelClosed}: ${d.closedVal} (${d.closedMb} • สัดส่วน ${d.pct})`
       } : null)
@@ -6253,7 +6262,7 @@
       valueColor: '#FCA5A5',
       valueBorderColor: 'rgba(239, 68, 68, 0.85)',
       hidden: isHiddenRemain,
-      formatValue: (v) => isJobCrit ? `${Math.round(v).toLocaleString()} งาน` : `${Number(v).toFixed(2)} ลบ.`,
+      formatValue: (v) => isJobCrit ? `${Math.round(v).toLocaleString('th-TH')} งาน` : `${Number(v).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ลบ.`,
       extra: monthlyAmountDetails.map(d => d ? {
         tooltipText: isJobCrit ? `${labelRemain}: ${d.remainVal}` : `${labelRemain}: ${d.remainVal} (${d.remainMb})`
       } : null)
@@ -8810,10 +8819,10 @@
   function formatCurrencyShort(val) {
     const num = Number(val || 0);
     if (Math.abs(num) >= 1000000) {
-      return (num / 1000000).toFixed(2) + ' ลบ.';
+      return (num / 1000000).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ลบ.';
     }
     if (Math.abs(num) >= 1000) {
-      return (num / 1000).toFixed(1) + ' พัน฿';
+      return (num / 1000).toLocaleString('th-TH', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + ' พัน฿';
     }
     return num.toLocaleString('th-TH', { maximumFractionDigits: 0 }) + ' ฿';
   }

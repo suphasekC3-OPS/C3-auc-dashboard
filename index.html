@@ -8,7 +8,7 @@
   <meta name="description"
     content="ระบบสารสนเทศและแดชบอร์ดติดตามงานก่อสร้างและขึ้นทะเบียนทรัพย์สิน AUC การไฟฟ้าส่วนภูมิภาค เขต 3 (ภาคกลาง)">
   <link rel="icon" type="image/svg+xml" href="assets/pea_logo.svg">
-  <link rel="stylesheet" href="css/styles.css?v=20261023_2138">
+  <link rel="stylesheet" href="css/styles.css?v=20261024_2315">
 
 </head>
 
@@ -1593,27 +1593,30 @@
                   <!-- ป้ายแสดงมูลค่ารวมที่เลือกตามคำสั่งผู้ใช้งาน (เปลี่ยนพื้นหลังสีเหลืองทองเหมือนป้ายข้างๆ) -->
                   <span id="wbsOfficesChartAucBadge" class="tab-badge" style="background:rgba(255,210,90,0.18); color:#FFD25A; border:1px solid rgba(255,210,90,0.35); font-size:0.75rem; padding:0.15rem 0.55rem; border-radius:12px; margin-left:6px; font-weight:700;"></span>
                 </div>
-                <!-- ปุ่มแอ็กชันด้านบนขวา: เลือกทุกสถานะ & ล้างข้อมูล -->
-                <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
-                  <button type="button" class="btn-wbs-card-select-all" id="wbsOfficeChartSelectAllBtn"
-                    onclick="window.selectAllWbsSapStatuses()"
-                    title="เลือกการ์ดสถานะ SAP ทั้งหมด (แสดงข้อมูลทุกสถานะ)">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M7 12l5 5L22 7"></path>
-                      <path d="M2 12l5 5L9 15"></path>
-                    </svg>
-                    <span>เลือกทุกสถานะ</span>
-                  </button>
-                  <button type="button" class="btn-wbs-card-clear" id="wbsOfficeChartClearBtn"
-                    onclick="window.clearAllWbsSelection()"
-                    title="ล้างข้อมูลทุกสถานะ (ทั้งสถานะการ์ด กราฟ และรายการที่เลือก)">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
-                      <polyline points="3 6 5 6 21 6"></polyline>
-                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                    </svg>
-                    <span id="wbsOfficeChartClearLabel">ล้างข้อมูลทุกสถานะ</span>
-                    <span id="wbsOfficeChartClearCount" class="btn-clear-count" style="display:none;"></span>
-                  </button>
+
+                <div class="wbs-chart-header-actions-area">
+                  <!-- ปุ่มแอ็กชันด้านบนขวาสุด: เลือกทุกสถานะ & ล้างข้อมูล -->
+                  <div class="wbs-chart-btn-group">
+                    <button type="button" class="btn-wbs-card-select-all" id="wbsOfficeChartSelectAllBtn"
+                      onclick="window.selectAllWbsSapStatuses()"
+                      title="เลือกการ์ดสถานะ SAP ทั้งหมด (แสดงข้อมูลทุกสถานะ)">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M7 12l5 5L22 7"></path>
+                        <path d="M2 12l5 5L9 15"></path>
+                      </svg>
+                      <span>เลือกทุกสถานะ</span>
+                    </button>
+                    <button type="button" class="btn-wbs-card-clear" id="wbsOfficeChartClearBtn"
+                      onclick="window.clearAllWbsSelection()"
+                      title="ล้างข้อมูลทุกสถานะ (ทั้งสถานะการ์ด กราฟ และรายการที่เลือก)">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                      </svg>
+                      <span id="wbsOfficeChartClearLabel">ล้างข้อมูลทุกสถานะ</span>
+                      <span id="wbsOfficeChartClearCount" class="btn-clear-count" style="display:none;"></span>
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -1630,21 +1633,20 @@
 
             <!-- MASTER WBS DATA TABLE CARD -->
             <div class="table-card" id="wbsTableCard">
-              <div class="table-header-bar">
-                <div style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap; flex:1;">
-
-
-                  <!-- ประเภทเกณฑ์วัดแสดงด้านบนแทนคอลัมน์ในตาราง -->
-                  <div class="wbs-table-active-criteria" id="wbsTableActiveCriteria"
-                    title="ประเภทเกณฑ์วัดที่กำลังแสดงผล">
-                    <span class="criteria-tag-icon">📌</span>
-                    <span class="criteria-tag-label">เกณฑ์วัด:</span>
-                    <strong class="criteria-tag-val" id="wbsTableActiveCriteriaVal">ข้อ 1.1 งบ C.1 ก่อน 69</strong>
-                  </div>
+              <!-- แถวบนสุดของตาราง WBS: เกณฑ์วัด (ซ้าย) และ ที่มาไฟล์สถานะ SAP & มูลค่า AUC (บนขวา) -->
+              <div class="wbs-table-top-meta-bar" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.65rem; padding:0.65rem 0.95rem; border-bottom:1px solid rgba(255,255,255,0.07); background:rgba(255,255,255,0.015); border-radius:var(--radius-md, 10px) var(--radius-md, 10px) 0 0;">
+                <!-- ฝั่งซ้าย: ประเภทเกณฑ์วัด -->
+                <div class="wbs-table-active-criteria" id="wbsTableActiveCriteria"
+                  title="ประเภทเกณฑ์วัดที่กำลังแสดงผล">
+                  <span class="criteria-tag-icon">📌</span>
+                  <span class="criteria-tag-label">เกณฑ์วัด:</span>
+                  <strong class="criteria-tag-val" id="wbsTableActiveCriteriaVal">ข้อ 1.1 งบ C.1 ก่อน 69</strong>
                 </div>
+              </div>
 
+              <div class="table-header-bar" style="padding-top:0.65rem;">
                 <!-- Pagination Stats & Rows per page & Column Visibility Selector -->
-                <div style="display:flex; align-items:center; gap:0.65rem; flex-wrap:wrap;">
+                <div style="display:flex; align-items:center; gap:0.65rem; flex-wrap:wrap; width:100%;">
                   <!-- ปุ่มส่งออก WBS (CSV) -->
                   <button type="button" class="btn btn-gold btn-sm" id="btnExportWbsCsv" onclick="window.exportWbsToCsv()"
                     title="ส่งออกข้อมูล WBS เป็นไฟล์ CSV/Excel สำหรับเปิดในโปรแกรม Excel"
@@ -1704,12 +1706,14 @@
                         </div>
                       </div>
 
-                      <!-- Column View Mode Bar: Reorder List -->
+                      <!-- Column View Mode Bar: Reorder List & Grouped -->
                       <div class="col-view-mode-bar">
                         <button type="button" class="btn-col-mode active" id="btnModeOrder"
                           onclick="window.setWbsColViewMode('order')"
-                          title="แสดงคอลัมน์เรียงตามลำดับจริงในตาราง สามารถลากหรือกดเลื่อนได้">↕️ ลำดับการแสดง
-                          (1-41)</button>
+                          title="แสดงคอลัมน์เรียงตามลำดับจริงในตาราง สามารถลากหรือกดเลื่อนได้">↕️ ลำดับการแสดง (1-41)</button>
+                        <button type="button" class="btn-col-mode" id="btnModeGroup"
+                          onclick="window.setWbsColViewMode('group')"
+                          title="จัดกลุ่มตามไฟล์ต้นทาง (03, 04, 06, G-Sheet)">📁 แยกตามกลุ่มไฟล์</button>
                       </div>
 
                       <!-- Real-time Column Search Input -->
@@ -2430,10 +2434,10 @@
   <script src="js/data_sep.js?v=20261022_2315"></script>
   <script src="js/kpi_matrix.js?v=20261003_0930"></script>
   <script src="js/chart.js?v=20261023_2030"></script>
-  <script src="js/data_wbs.js?v=20261023_1020"></script>
-  <script src="js/wbs.js?v=20261023_2138"></script>
-  <script src="js/data_history.js?v=20261023_2145"></script>
-  <script src="js/app.js?v=20261023_2138"></script>
+  <script src="js/data_wbs.js?v=20261024_2055"></script>
+  <script src="js/wbs.js?v=20261024_2340"></script>
+  <script src="js/data_history.js?v=20261024_2340"></script>
+  <script src="js/app.js?v=20261024_2135"></script>
   <script src="js/criteria_dropdown.js?v=20261017_2055"></script>
 </body>
 
