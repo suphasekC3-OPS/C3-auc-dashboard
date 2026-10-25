@@ -30,7 +30,7 @@
     { id: 'province', label: 'พื้นที่', minWidth: '100px', align: 'left', sortKey: 'province', defaultVisible: false, group: '03' },
     { id: 'office', label: 'กอง / กฟฟ.', minWidth: '150px', align: 'left', sortKey: 'office', defaultVisible: true, group: '03' },
     { id: 'budget', label: 'งบ', width: '75px', align: 'center', sortKey: 'budget', defaultVisible: false, group: '03' },
-    { id: 'engineer', label: 'ช่างคุมงาน', minWidth: '180px', align: 'left', sortKey: 'engineer', defaultVisible: true, group: '03' },
+    { id: 'engineer', label: 'ช่างคุมงาน', minWidth: '180px', align: 'left', sortKey: 'engineer', defaultVisible: false, group: '03' },
     { id: 'department', label: 'สังกัด', minWidth: '160px', align: 'left', sortKey: 'department', defaultVisible: false, group: '03' },
     { id: 'type', label: 'ประเภท', width: '85px', align: 'center', sortKey: 'type', defaultVisible: false, group: '03' },
 
@@ -69,8 +69,8 @@
 
     // --- Group 6: File 06 CN41 AUC Values & Differences ---
     { id: 'cn41ActualCost', label: 'มูลค่า AUC(บาท)', minWidth: '165px', align: 'right', sortKey: 'cn41ActualCost', defaultVisible: true, isMoney: true, isNumeric: true, group: '06_cn41' },
-    { id: 'cn41CostInc', label: 'มูลค่าAUCที่เพิ่มขึ้น', minWidth: '165px', align: 'right', sortKey: 'cn41CostInc', defaultVisible: true, isMoney: true, isNumeric: true, group: 'custom' },
-    { id: 'cn41Cost05', label: 'ต้นทุนจริง (ไฟล์ 05)', minWidth: '165px', align: 'right', sortKey: 'cn41Cost05', defaultVisible: true, isMoney: true, isNumeric: true, group: '05_cn41' },
+    { id: 'cn41CostInc', label: 'มูลค่าAUCที่เพิ่มขึ้น', minWidth: '165px', align: 'right', sortKey: 'cn41CostInc', defaultVisible: false, isMoney: true, isNumeric: true, group: 'custom' },
+    { id: 'cn41Cost05', label: 'ต้นทุนจริง (ไฟล์ 05)', minWidth: '165px', align: 'right', sortKey: 'cn41Cost05', defaultVisible: false, isMoney: true, isNumeric: true, group: '05_cn41' },
     { id: 'cn41ObjDesc', label: 'ออบเจคโครงการ (CN41)', minWidth: '220px', align: 'left', sortKey: 'cn41ObjDesc', defaultVisible: false, group: '06_cn41' },
     { id: 'cn41Level', label: 'ระดับ (CN41)', width: '75px', align: 'center', sortKey: 'cn41Level', defaultVisible: false, group: '06_cn41' },
     { id: 'cn41Currency', label: 'สกุลเงิน (CN41)', width: '75px', align: 'center', sortKey: 'cn41Currency', defaultVisible: false, group: '06_cn41' },
@@ -134,11 +134,8 @@
     'description',
     'statusSap',
     'cn41ActualCost',
-    'cn41CostInc',
-    'cn41Cost05',
     'pctMatWithdraw',
     'pctExpenseWithdraw',
-    'engineer',
     'planClose',
     'note'
   ];
@@ -149,8 +146,8 @@
     return [...DEFAULT_WBS_COL_ORDER, ...remaining];
   }
 
-  const WBS_COL_STORAGE_KEY = 'auc_wbs_visible_cols_v10';
-  const WBS_COL_ORDER_KEY = 'auc_wbs_col_order_v6';
+  const WBS_COL_STORAGE_KEY = 'auc_wbs_visible_cols_v11';
+  const WBS_COL_ORDER_KEY = 'auc_wbs_col_order_v7';
 
   function loadVisibleColumns() {
     try {
@@ -4530,7 +4527,7 @@
   };
 
   /**
-   * Set columns visibility and order to Default view (11 columns according to รูปที่ 16)
+   * Set columns visibility and order to Default view (10 columns)
    */
   window.setWbsColsDefaultPreset = function () {
     const defaultSet = new Set(DEFAULT_WBS_COL_ORDER);
@@ -4548,7 +4545,7 @@
     renderWbsTable(sorted, filtered.length);
 
     if (window.showToast) {
-      window.showToast('ตั้งค่าคอลัมน์และลำดับเป็นค่า Default (11 คอลัมน์) เรียบร้อยแล้ว', 'info');
+      window.showToast('ตั้งค่าคอลัมน์และลำดับเป็นค่า Default (10 คอลัมน์) เรียบร้อยแล้ว', 'info');
     }
   };
 

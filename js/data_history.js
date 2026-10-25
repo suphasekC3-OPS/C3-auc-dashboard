@@ -433,6 +433,22 @@
    */
   const BASE_AUDIT_LOGS = [
     {
+      id: 'log_000_wbs_col_selector_default_10_columns',
+      timestamp: '2026-10-25 19:55:00',
+      timestampTh: '25 ต.ค. 2569, 19:55 น.',
+      type: 'CONFIG',
+      typeBadge: 'ตั้งค่า Default 10 คอลัมน์',
+      badgeClass: 'badge-type-config',
+      title: 'ปรับปรุงปุ่มเลือกคอลัมน์และค่าเริ่มต้น (Default) ให้แสดง 10 คอลัมน์หลักตามภาพ',
+      targetSubject: 'เมนูเลือกคอลัมน์ตาราง WBS (Column Selector Dropdown) และลำดับคอลัมน์เริ่มต้น (#btnWbsColToggle, #wbsColDropdownPanel, #wbsMasterTable)',
+      storageFile: 'js/wbs.js, index.html, js/data_history.js',
+      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน "แก้ไข ปุ่มเลือกคอมลัม ให้ default 10 คอลัมนี้" พร้อมภาพวงกลมสีแดงที่ปุ่มเลือกคอลัมน์ 10/43: ปรับปรุงค่าเริ่มต้นของการแสดงคอลัมน์ (defaultVisible) และลำดับคอลัมน์เริ่มต้น (DEFAULT_WBS_COL_ORDER) รวมถึงปุ่ม Default ในดรอปดาวน์ให้เปิดแสดงเฉพาะ 10 คอลัมน์หลัก ได้แก่ 1. ลำดับ 2. WBS (เลขที่งาน) 3. กอง / กฟฟ. 4. คำอธิบายภาษาไทย (ชื่องาน) 5. สถานะ SAP 6. มูลค่า AUC(บาท) 7. % เบิกพัสดุ 8. % เบิก คชจ. 9. แผนปิดงาน (G-SHEET) 10. หมายเหตุ (G-SHEET) โดยซ่อนคอลัมน์ช่างคุมงาน, มูลค่าAUCที่เพิ่มขึ้น และต้นทุนจริง (ไฟล์ 05) ออกจากค่าเริ่มต้น พร้อมอัปเดต Storage Key เป็น v11 เพื่อให้มีผลกับผู้ใช้งานทันที',
+      details: 'ดำเนินการครบถ้วนตามคำสั่งผู้ใช้งาน: 1) ใน js/wbs.js: กำหนด defaultVisible: false ให้กับคอลัมน์ engineer, cn41CostInc, cn41Cost05 คงเหลือคอลัมน์ defaultVisible: true จำนวน 10 คอลัมน์ตรงตามภาพ 2) ปรับ DEFAULT_WBS_COL_ORDER ให้เรียงลำดับ 10 คอลัมน์ ได้แก่ id, wbs, office, description, statusSap, cn41ActualCost, pctMatWithdraw, pctExpenseWithdraw, planClose, note 3) อัปเดต WBS_COL_STORAGE_KEY เป็น auc_wbs_visible_cols_v11 และ WBS_COL_ORDER_KEY เป็น auc_wbs_col_order_v7 เพื่อรีเซ็ตค่าแคชเบราว์เซอร์ให้แสดง 10 คอลัมน์อัตโนมัติ 4) ปรับปรุงฟังก์ชัน setWbsColsDefaultPreset() และข้อความแจ้งเตือน Toast ให้ระบุ 10 คอลัมน์ 5) ใน index.html อัปเดตป้ายตัวนับเริ่มต้นเป็น 10/43 และปรับ Tooltip ปุ่ม Default 6) อัปเดต Version Cache Buster เป็น ?v=20261025_1955 7) บันทึกประวัติการแก้ไขลงใน BASE_AUDIT_LOGS ตามข้อบังคับ',
+      sourceFile: 'คำสั่งผู้ใช้งาน (แก้ไข ปุ่มเลือกคอมลัม ให้ default 10 คอลัมนี้ พร้อมภาพประกอบ)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'เล็กน้อย (ปรับปรุงมุมมองตาราง WBS ให้กระชับ สบายตา และมี 10 คอลัมน์หลักตามความต้องการ)',
+    },
+    {
       id: 'log_000_wbs_target_marker_label_to_bottom',
       timestamp: '2026-10-25 10:40:00',
       timestampTh: '25 ต.ค. 2569, 10:40 น.',
