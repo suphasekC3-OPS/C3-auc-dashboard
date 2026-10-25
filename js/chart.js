@@ -996,8 +996,72 @@ class PeaChart {
         } else {
           ctx.textAlign = 'center';
           ctx.textBaseline = 'top';
-          ctx.fillText(displayLabel, gX, height - pad.bottom + 6);
-          this.renderedXLabels.push({ gIdx, label, rotated: false, ox: gX, oy: height - pad.bottom + 6, angle: 0, w: labelTextW, fs: labelFontSize });
+          const labelY = height - pad.bottom + 6;
+          ctx.fillText(displayLabel, gX, labelY);
+
+          let totalLabelH = labelFontSize * 1.35;
+
+          // วาดป้ายหน่วยวัด (มูลค่า / งาน) ใต้ชื่อเกณฑ์วัด แนวนอนปกติ ตามคำสั่งผู้ใช้งาน
+          if (options.showCriteriaUnitBadge || (ext && (ext.unitKind || ext.unitText))) {
+            const unitKind = (ext && ext.unitKind) ? ext.unitKind : ((ext && ext.isJobUnit) ? 'job' : 'value');
+            const unitText = (ext && ext.unitText) ? ext.unitText : (unitKind === 'job' ? 'งาน' : 'มูลค่า');
+
+            const badgeW = Math.max(40, Math.min(54, groupW * 0.48));
+            const badgeH = 17;
+            const badgeX = gX - badgeW / 2;
+            const badgeY = labelY + labelFontSize + 4;
+            totalLabelH += (badgeH + 6);
+
+            ctx.save();
+            ctx.setLineDash([]);
+
+            if (unitKind === 'job') {
+              // ป้าย 'งาน': สีฟ้าคราม-ไซแอนเรืองแสง (ตรงกับ .crit-unit-job)
+              const grad = ctx.createLinearGradient(badgeX, badgeY, badgeX + badgeW, badgeY + badgeH);
+              grad.addColorStop(0, '#A5F3FC');
+              grad.addColorStop(0.55, '#22D3EE');
+              grad.addColorStop(1, '#0EA5E9');
+              ctx.fillStyle = grad;
+              ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+              ctx.lineWidth = 1;
+              ctx.shadowColor = 'rgba(34, 211, 238, 0.6)';
+              ctx.shadowBlur = 5;
+              this.roundRect(ctx, badgeX, badgeY, badgeW, badgeH, badgeH / 2);
+              ctx.fill();
+              ctx.stroke();
+
+              ctx.fillStyle = '#032B3A'; // สีน้ำเงินเข้มจัดเพื่อความคมชัดสูงสุด
+              ctx.font = `800 10.5px 'Prompt', 'Sarabun', sans-serif`;
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'middle';
+              ctx.shadowColor = 'transparent';
+              ctx.fillText(unitText, gX, badgeY + badgeH / 2 + 0.5);
+            } else {
+              // ป้าย 'มูลค่า': สีเหลืองทองอร่ามเรืองแสง (ตรงกับ .crit-unit-value)
+              const grad = ctx.createLinearGradient(badgeX, badgeY, badgeX + badgeW, badgeY + badgeH);
+              grad.addColorStop(0, '#FFE08A');
+              grad.addColorStop(0.55, '#FFB81C');
+              grad.addColorStop(1, '#F59E0B');
+              ctx.fillStyle = grad;
+              ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+              ctx.lineWidth = 1;
+              ctx.shadowColor = 'rgba(255, 184, 28, 0.6)';
+              ctx.shadowBlur = 5;
+              this.roundRect(ctx, badgeX, badgeY, badgeW, badgeH, badgeH / 2);
+              ctx.fill();
+              ctx.stroke();
+
+              ctx.fillStyle = '#3B1700'; // สีน้ำตาลเข้มเพื่อความคมชัดสูงสุด
+              ctx.font = `800 10.5px 'Prompt', 'Sarabun', sans-serif`;
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'middle';
+              ctx.shadowColor = 'transparent';
+              ctx.fillText(unitText, gX, badgeY + badgeH / 2 + 0.5);
+            }
+            ctx.restore();
+          }
+
+          this.renderedXLabels.push({ gIdx, label, rotated: false, ox: gX, oy: labelY, angle: 0, w: Math.max(labelTextW, 46), fs: labelFontSize, totalH: totalLabelH });
         }
         ctx.restore();
       }
@@ -1021,7 +1085,8 @@ class PeaChart {
           inside = lx >= -L.w - 4 && lx <= 4 && Math.abs(ly) <= L.fs * 0.7;
           dist = Math.abs(ly);
         } else {
-          inside = lx >= -L.w / 2 - 3 && lx <= L.w / 2 + 3 && ly >= -2 && ly <= L.fs * 1.4;
+          const hitH = L.totalH || (L.fs * 1.4);
+          inside = lx >= -L.w / 2 - 4 && lx <= L.w / 2 + 4 && ly >= -2 && ly <= hitH + 2;
           dist = Math.abs(lx);
         }
         if (inside && dist < bestDist) {

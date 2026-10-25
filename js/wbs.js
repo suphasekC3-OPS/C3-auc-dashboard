@@ -1761,11 +1761,15 @@
         <div class="wbs-side-summary-col">
           <div class="content-card executive-donut-kpi-card wbs-side-kpi-card wbs-new-combined-kpi-card" id="wbsExecutiveDonutKpiCard">
             <!-- แถบหัวการ์ด -->
-            <div class="exec-donut-top-summary" style="margin-bottom: 0.45rem;">
-              <div class="exec-summary-title-row">
-                <span class="badge-pea-tag" id="wbsKpiCard1ScopeBadge">กฟก.3</span>
-                <span class="exec-summary-title">ภาพรวมมูลค่า & งาน AUC</span>
-                <span class="badge-new-card-pill" id="wbsKpiNewCardBadge" title="นำภาพรวมมูลค่า + ที่เพิ่มขึ้น/ลดลง และ ปิดงาน + SAP มารวมกันสร้างเป็นการ์ดใหม่ตามคำสั่ง">การ์ดใหม่ (รวมปรับปรุง)</span>
+            <div class="exec-donut-top-summary" style="margin-bottom: 0.40rem; padding-bottom: 0.35rem; border-bottom: 1px solid rgba(216, 180, 254, 0.14);">
+              <div class="exec-summary-title-row" style="display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <span class="badge-pea-tag" id="wbsKpiCard1ScopeBadge">กฟก.3</span>
+                  <span class="exec-summary-title" style="font-size: 0.92rem; color: #FFFFFF; font-weight: 800;">ภาพรวมมูลค่า & งาน AUC</span>
+                </div>
+              </div>
+              <div style="display: flex; justify-content: flex-end; margin-top: 3px;">
+                <span class="wbs-sap-date-plain-text" id="wbsKpiSapDateText" onclick="if(window.openDhModelModal)window.openDhModelModal('src_04')" title="ข้อมูลสถานะ SAP จากไฟล์ 04 ZBUDR064 แก้ไขล่าสุด: 23 ต.ค. 2569 (คลิกเพื่อดูผัง Model View)">สถานะ SAP แก้ไขล่าสุดวันที่ 23 ต.ค. 69</span>
               </div>
             </div>
 
@@ -1791,7 +1795,7 @@
                 <div class="wbs-seg-bar wbs-seg-inc-total" id="wbsTotalSegInc" style="width: 4%;" title="ส่วนเพิ่ม/ลด"></div>
               </div>
               <div class="wbs-box-sub">
-                <span id="wbsKpiTotalBaseSubText">เดิม 0.00 ลบ.</span>
+                <span id="wbsKpiTotalBaseSubText" style="color: #FFFFFF; font-weight: 700;">เดิม 0.00 ลบ.</span>
                 <span id="wbsKpiTotalIncSubText" style="color: #F59E0B; font-weight: 700;">ส่วนต่าง: 0.00 ฿</span>
               </div>
             </div>
@@ -1801,7 +1805,7 @@
               <div class="wbs-box-head">
                 <div class="wbs-box-title-wrap">
                   <span class="donut-stat-dot dot-closed" style="background: #00FF88; box-shadow: 0 0 8px #00FF88;"></span>
-                  <span style="color: #00FF88;">มูลค่าปิดงานแล้ว (รวม SAP)</span>
+                  <span style="color: #00FF88;">มูลค่าปิดงานแล้ว</span>
                 </div>
                 <div class="wbs-card-metric-job-badge badge-green" id="wbsKpiClosedJobsSubBadge">
                   <span>งาน: <strong id="wbsKpiClosedJobs">0</strong> งาน</span>
@@ -1818,13 +1822,13 @@
                 <div class="wbs-seg-bar wbs-seg-inc-closed" id="wbsClosedSegSap" style="width: 5%;" title="ปิดงานใน SAP"></div>
               </div>
               <div class="wbs-box-sub sub-stacked">
-                <div class="wbs-box-sub-row">
-                  <span id="wbsKpiBaseClosedDetail">เดิม: 0.00 ลบ.</span>
-                  <span id="wbsKpiBaseClosedJobs" style="color: #A7F3D0;">(0 งาน)</span>
-                </div>
                 <div class="wbs-box-sub-row" style="color: #00FF88;">
                   <span id="wbsKpiSapClosedDetail">+ SAP (${sapTargetStatus}): 0.00 ลบ.</span>
                   <span id="wbsKpiSapClosedJobs" style="font-weight: 700;">(0 งาน)</span>
+                </div>
+                <div class="wbs-box-sub-row">
+                  <span id="wbsKpiBaseClosedDetail" style="color: #FFFFFF; font-weight: 700;">เดิม: 0.00 ลบ.</span>
+                  <span id="wbsKpiBaseClosedJobs" style="color: #FFFFFF; font-weight: 700;">(0 งาน)</span>
                 </div>
               </div>
             </div>
@@ -1849,8 +1853,8 @@
                   </div>
                 </div>
                 <div class="exec-progress-val-row" style="display: flex; justify-content: space-between; align-items: baseline;">
+                  <span class="wbs-pct-breakdown-tag" id="wbsKpiPctValSubText"></span>
                   <span class="exec-progress-big-val text-gold" id="wbsKpiPctVal">0.00%</span>
-                  <span class="wbs-pct-breakdown-tag" id="wbsKpiPctValSubText">เดิม 0.00% <span class="badge-inc-neon">+0.00%</span></span>
                 </div>
                 <div class="progress-track track-gold-pattern">
                   <div class="progress-fill-composite" id="wbsBarMainComposite" style="width: 0%;">
@@ -1880,8 +1884,8 @@
                   </div>
                 </div>
                 <div class="exec-progress-val-row" style="display: flex; justify-content: space-between; align-items: baseline;">
+                  <span class="wbs-pct-breakdown-tag" id="wbsKpiJobPctSubText"></span>
                   <span class="exec-progress-big-val text-gold" id="wbsKpiJobPctClosed">0.00%</span>
-                  <span class="wbs-pct-breakdown-tag" id="wbsKpiJobPctSubText">เดิม 0.00% <span class="badge-inc-neon">+0.00%</span></span>
                 </div>
                 <div class="progress-track track-gold-pattern">
                   <div class="progress-fill-composite" id="wbsBarJobComposite" style="width: 0%;">
@@ -1979,6 +1983,7 @@
                     <div class="bar-header-left">
                       <span class="bar-tag tag-progress">⚡ กราฟล่าง (ยอดดำเนินการ)</span>
                       <span class="bar-month-pill">${selectedMonth.shortName} 69</span>
+                      <span class="bar-sap-date-plain" onclick="if(window.openDhModelModal)window.openDhModelModal('src_04')" style="cursor:pointer;" title="ข้อมูลสถานะ SAP จากไฟล์ 04 ZBUDR064 แก้ไขล่าสุด: 23 ต.ค. 2569 (คลิกเพื่อดูผัง Model View)">สถานะ SAP แก้ไขล่าสุด: 23 ต.ค. 69</span>
                     </div>
                     <div class="bar-header-right">
                       <!-- CLSD F4 / F2: ขนาดอักษรเท่ากับจำนวนเงิน -->
@@ -2170,6 +2175,8 @@
     }
     if (totalBaseSub) {
       totalBaseSub.textContent = `เดิม ${(baseTotalVal / 1e6).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ลบ.`;
+      totalBaseSub.style.color = '#FFFFFF';
+      totalBaseSub.style.fontWeight = '700';
     }
     if (totalIncSub) {
       totalIncSub.style.color = incColor;
@@ -2205,10 +2212,14 @@
       wbsClosedJobs.textContent = netClosedJobs.toLocaleString('th-TH');
     }
     if (wbsBaseDetail) {
-      wbsBaseDetail.innerHTML = `เดิม: <strong style="color: #fff;">${(baseClosedVal / 1e6).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ลบ.</strong>`;
+      wbsBaseDetail.innerHTML = `เดิม: <strong style="color: #FFFFFF; font-weight: 700;">${(baseClosedVal / 1e6).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ลบ.</strong>`;
+      wbsBaseDetail.style.color = '#FFFFFF';
+      wbsBaseDetail.style.fontWeight = '700';
     }
     if (wbsBaseJobs) {
       wbsBaseJobs.textContent = `(${baseClosedJobs.toLocaleString('th-TH')} งาน)`;
+      wbsBaseJobs.style.color = '#FFFFFF';
+      wbsBaseJobs.style.fontWeight = '700';
     }
     if (wbsSapDetail) {
       wbsSapDetail.innerHTML = `+ SAP (${sapTargetStatus}): <strong>${(clsdSapAuc / 1e6).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ลบ.</strong>`;
@@ -2232,7 +2243,11 @@
       wbsPctVal.textContent = `${netPctVal.toFixed(2)}%`;
     }
     if (wbsPctValSubText) {
-      wbsPctValSubText.innerHTML = `เดิม <strong>${basePctVal.toFixed(2)}%</strong> <span class="badge-inc-neon">+${diffPctVal.toFixed(2)}% ปรับปรุง</span>`;
+      wbsPctValSubText.innerHTML = (typeof basePctVal === 'number' && !isNaN(basePctVal))
+        ? `เดิม ${basePctVal.toFixed(2)}%`
+        : '';
+      wbsPctValSubText.style.color = '#FFFFFF';
+      wbsPctValSubText.style.fontWeight = '700';
     }
     if (wbsBarMainComposite) {
       wbsBarMainComposite.style.width = `${Math.min(100, Math.max(0, netPctVal))}%`;
@@ -2250,7 +2265,11 @@
       wbsJobPct.textContent = `${netPctJobs.toFixed(2)}%`;
     }
     if (wbsJobPctSubText) {
-      wbsJobPctSubText.innerHTML = `เดิม <strong>${basePctJobs.toFixed(2)}%</strong> <span class="badge-inc-neon">+${diffPctJobs.toFixed(2)}% SAP</span>`;
+      wbsJobPctSubText.innerHTML = (typeof basePctJobs === 'number' && !isNaN(basePctJobs))
+        ? `เดิม ${basePctJobs.toFixed(2)}%`
+        : '';
+      wbsJobPctSubText.style.color = '#FFFFFF';
+      wbsJobPctSubText.style.fontWeight = '700';
     }
     if (wbsBarJobComposite) {
       wbsBarJobComposite.style.width = `${Math.min(100, Math.max(0, netPctJobs))}%`;
@@ -5363,15 +5382,6 @@
    * Setup Event Listeners
    */
   function setupWbsListeners() {
-    // 0. Auto-sync Google Sheet when user clicks/opens WBS tab
-    document.querySelectorAll('[data-tab="tab-wbs"]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        if (window.syncLiveNotesFromGoogleSheet) {
-          window.syncLiveNotesFromGoogleSheet(false);
-        }
-      });
-    });
-
     // 1. In-table Search Input
     const sInput = document.getElementById('wbsTableSearchInput');
     if (sInput) {
@@ -5971,24 +5981,11 @@
   window.renderWbsTab = renderWbsTab;
   window.refreshWbsPlanCloseDropdownOptions = refreshWbsPlanCloseDropdownOptions;
 
-  // Initialize when DOM is ready (Auto-sync Google Sheet เมื่อเปิดแท็บ WBS และล้างข้อมูลเก่าเพื่อยึด Google Sheet เท่านั้น)
+  // Initialize when DOM is ready (ซิงค์ Google Sheet เฉพาะเมื่อกดปุ่ม #btnSyncGoogleSheet เท่านั้น)
   function initWbsApp() {
-    // กำหนดสถานะเริ่มต้นอย่างนุ่มนวล โดยให้ Auto-sync เป็นผู้ดึงข้อมูลสดและตรวจสอบความมีอยู่จริงจาก Google Sheet
-    const allData = window.AUC_WBS_REMAINING_DATA || [];
-    allData.forEach(item => {
-      item.planClose = '';
-      item.note = '';
-      item.notFoundInSheet = false;
-    });
-
     setupWbsListeners();
     renderWbsTab();
     refreshWbsPlanCloseDropdownOptions();
-
-    // Auto-sync Google Sheet ทันทีเพื่อดึงข้อมูลสด
-    if (window.syncLiveNotesFromGoogleSheet) {
-      window.syncLiveNotesFromGoogleSheet(false);
-    }
   }
 
   if (document.readyState === 'loading') {

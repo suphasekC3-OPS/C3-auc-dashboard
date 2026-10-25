@@ -8,7 +8,7 @@
   <meta name="description"
     content="ระบบสารสนเทศและแดชบอร์ดติดตามงานก่อสร้างและขึ้นทะเบียนทรัพย์สิน AUC การไฟฟ้าส่วนภูมิภาค เขต 3 (ภาคกลาง)">
   <link rel="icon" type="image/svg+xml" href="assets/pea_logo.svg">
-  <link rel="stylesheet" href="css/styles.css?v=20261024_2315">
+  <link rel="stylesheet" href="css/styles.css?v=20261025_1040">
 
 </head>
 
@@ -1594,6 +1594,19 @@
                   <span id="wbsOfficesChartAucBadge" class="tab-badge" style="background:rgba(255,210,90,0.18); color:#FFD25A; border:1px solid rgba(255,210,90,0.35); font-size:0.75rem; padding:0.15rem 0.55rem; border-radius:12px; margin-left:6px; font-weight:700;"></span>
                 </div>
 
+                <!-- หมายเลข 1: แสดง สถานะ SAP / มูลค่า วันที่แก้ไขล่าสุด (เป็นอักษร ไม่ต้องเป็นการ์ด เหมือนสี่เหลี่ยมหัวตาราง) -->
+                <div class="wbs-header-dates-plain" id="wbsHeaderDatesPlain">
+                  <div class="wbs-hdr-date-col" onclick="if(window.openDhModelModal)window.openDhModelModal('src_04')" style="cursor:pointer;" title="ข้อมูลสถานะ SAP จากไฟล์ 04 ZBUDR064 แก้ไขล่าสุด: 23 ต.ค. 2569 (คลิกเพื่อดูผัง Model View)">
+                    <span class="wbs-hdr-date-title">สถานะ SAP</span>
+                    <span class="wbs-hdr-date-sub">แก้ไขล่าสุด: 23 ต.ค. 69</span>
+                  </div>
+                  <div class="wbs-hdr-date-divider"></div>
+                  <div class="wbs-hdr-date-col" onclick="if(window.openDhModelModal)window.openDhModelModal('src_06')" style="cursor:pointer;" title="ข้อมูลมูลค่า AUC จากไฟล์ 06 CN41 แก้ไขล่าสุด: 22 ต.ค. 2569 (คลิกเพื่อดูผัง Model View)">
+                    <span class="wbs-hdr-date-title">มูลค่า AUC(บาท)</span>
+                    <span class="wbs-hdr-date-sub">แก้ไขล่าสุด: 22 ต.ค. 69</span>
+                  </div>
+                </div>
+
                 <div class="wbs-chart-header-actions-area">
                   <!-- ปุ่มแอ็กชันด้านบนขวาสุด: เลือกทุกสถานะ & ล้างข้อมูล -->
                   <div class="wbs-chart-btn-group">
@@ -1633,8 +1646,8 @@
 
             <!-- MASTER WBS DATA TABLE CARD -->
             <div class="table-card" id="wbsTableCard">
-              <!-- แถวบนสุดของตาราง WBS: เกณฑ์วัด (ซ้าย) และ ที่มาไฟล์สถานะ SAP & มูลค่า AUC (บนขวา) -->
-              <div class="wbs-table-top-meta-bar" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.65rem; padding:0.65rem 0.95rem; border-bottom:1px solid rgba(255,255,255,0.07); background:rgba(255,255,255,0.015); border-radius:var(--radius-md, 10px) var(--radius-md, 10px) 0 0;">
+              <!-- แถวบนสุดของตาราง WBS: รวมเกณฑ์วัด (ซ้าย) และแถบเครื่องมือ/ปุ่มควบคุม (ขวา) ในแถวเดียวกัน -->
+              <div class="wbs-table-top-meta-bar table-header-bar" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.65rem; padding:0.55rem 0.95rem; border-bottom:1px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.02); border-radius:var(--radius-md, 10px) var(--radius-md, 10px) 0 0;">
                 <!-- ฝั่งซ้าย: ประเภทเกณฑ์วัด -->
                 <div class="wbs-table-active-criteria" id="wbsTableActiveCriteria"
                   title="ประเภทเกณฑ์วัดที่กำลังแสดงผล">
@@ -1642,11 +1655,9 @@
                   <span class="criteria-tag-label">เกณฑ์วัด:</span>
                   <strong class="criteria-tag-val" id="wbsTableActiveCriteriaVal">ข้อ 1.1 งบ C.1 ก่อน 69</strong>
                 </div>
-              </div>
 
-              <div class="table-header-bar" style="padding-top:0.65rem;">
-                <!-- Pagination Stats & Rows per page & Column Visibility Selector -->
-                <div style="display:flex; align-items:center; gap:0.65rem; flex-wrap:wrap; width:100%;">
+                <!-- ฝั่งขวา: แถบเครื่องมือจัดการข้อมูลและตัวเลือกตาราง (ชิดขวา) -->
+                <div class="wbs-table-toolbar-actions" style="display:flex; align-items:center; gap:0.55rem; flex-wrap:wrap; justify-content:flex-end;">
                   <!-- ปุ่มส่งออก WBS (CSV) -->
                   <button type="button" class="btn btn-gold btn-sm" id="btnExportWbsCsv" onclick="window.exportWbsToCsv()"
                     title="ส่งออกข้อมูล WBS เป็นไฟล์ CSV/Excel สำหรับเปิดในโปรแกรม Excel"
@@ -1727,14 +1738,14 @@
                     </div>
                   </div>
 
-                  <div class="table-stats-info">
+                  <div class="table-stats-info" style="font-size:0.84rem; margin:0 3px;">
                     แสดงข้อมูลรายการที่ <strong id="wbsPageRange">0 - 0</strong> จากที่กรองได้ <strong
                       id="wbsFilteredCount">0</strong> รายการ
                   </div>
-                  <div style="display:flex; align-items:center; gap:0.5rem;">
-                    <label style="font-size:0.8rem; color:var(--text-muted);">แถวต่อหน้า:</label>
+                  <div style="display:flex; align-items:center; gap:0.4rem;">
+                    <label style="font-size:0.8rem; color:var(--text-muted); white-space:nowrap;">แถวต่อหน้า:</label>
                     <select class="form-select" id="wbsPageSizeSelect"
-                      style="width:80px; padding:0.35rem 0.5rem; font-size:0.8rem;">
+                      style="width:78px; padding:0.30rem 0.5rem; font-size:0.8rem;">
                       <option value="15">15</option>
                       <option value="25" selected>25</option>
                       <option value="50">50</option>
@@ -2433,11 +2444,11 @@
   <script src="js/data_aug.js?v=20260929_1655"></script>
   <script src="js/data_sep.js?v=20261022_2315"></script>
   <script src="js/kpi_matrix.js?v=20261003_0930"></script>
-  <script src="js/chart.js?v=20261023_2030"></script>
+  <script src="js/chart.js?v=20261025_1005"></script>
   <script src="js/data_wbs.js?v=20261024_2055"></script>
-  <script src="js/wbs.js?v=20261024_2340"></script>
-  <script src="js/data_history.js?v=20261024_2340"></script>
-  <script src="js/app.js?v=20261024_2135"></script>
+  <script src="js/wbs.js?v=20261025_1030"></script>
+  <script src="js/data_history.js?v=20261025_1030"></script>
+  <script src="js/app.js?v=20261025_1005"></script>
   <script src="js/criteria_dropdown.js?v=20261017_2055"></script>
 </body>
 

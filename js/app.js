@@ -1860,9 +1860,6 @@
       if (tabId === 'tab-analytics') renderAnalyticsCharts();
       if (tabId === 'tab-wbs') {
         if (window.renderWbsTab) window.renderWbsTab();
-        if (window.syncLiveNotesFromGoogleSheet) {
-          window.syncLiveNotesFromGoogleSheet(false);
-        }
       }
       if (tabId === 'tab-data-history' && window.renderDataHistoryTab) window.renderDataHistoryTab();
     }, 50);
@@ -2361,11 +2358,53 @@
     });
   }
   window.renderExecutiveDonutChart = renderExecutiveDonutChart;
+
+  // ปรับความสูงการ์ดภาพรวมผู้บริหาร (#executiveDonutKpiCard) ให้ตรงกับเส้นระดับล่างสุดของการ์ดกราฟ 8 เกณฑ์วัด (#topCriteriaChartCard)
+  function syncExecutiveDonutCardHeight() {
+    const leftCard = document.getElementById('executiveDonutKpiCard');
+    const rightCard = document.getElementById('topCriteriaChartCard');
+    if (!leftCard || !rightCard) return;
+
+    if (window.innerWidth <= 1080) {
+      leftCard.style.height = '';
+      leftCard.style.minHeight = '';
+      return;
+    }
+
+    const rightRect = rightCard.getBoundingClientRect();
+    const leftRect = leftCard.getBoundingClientRect();
+    const targetH = Math.round(rightRect.bottom - leftRect.top);
+
+    if (targetH > 350 && targetH < 900) {
+      leftCard.style.height = targetH + 'px';
+      leftCard.style.minHeight = targetH + 'px';
+    }
+  }
+  window.syncExecutiveDonutCardHeight = syncExecutiveDonutCardHeight;
+
   window.addEventListener('resize', () => {
     if (typeof renderExecutiveDonutChart === 'function') {
       renderExecutiveDonutChart();
     }
+    syncExecutiveDonutCardHeight();
   });
+
+  if (typeof ResizeObserver !== 'undefined') {
+    const setupRo = () => {
+      const rightCard = document.getElementById('topCriteriaChartCard');
+      if (rightCard) {
+        const ro = new ResizeObserver(() => {
+          syncExecutiveDonutCardHeight();
+        });
+        ro.observe(rightCard);
+      }
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', setupRo);
+    } else {
+      setupRo();
+    }
+  }
 
   // =========================================================================
   // 5.2 แผนเป้าหมายปิดงานเพิ่ม 3 เดือนถัดไป (ก.ย. - พ.ย. 69)
@@ -4032,6 +4071,9 @@
     renderMonthlyTimelineChart();
     renderMonthlyAmountTimelineChart();
     renderOfficePercentBarChart();
+    if (typeof syncExecutiveDonutCardHeight === 'function') {
+      syncExecutiveDonutCardHeight();
+    }
   }
 
   // ==========================================
@@ -7865,6 +7907,9 @@
         closed: isJobUnit ? `${closedVal.toLocaleString()} งาน` : `${formatCurrency(closedVal)} บาท`,
         total: isJobUnit ? `${totalVal.toLocaleString()} งาน` : `${formatCurrency(totalVal)} บาท`,
         isNoWork: isNoWork,
+        isJobUnit: isJobUnit,
+        unitKind: isJobUnit ? 'job' : 'value',
+        unitText: isJobUnit ? 'งาน' : 'มูลค่า',
         kpi: isNoWork ? '-' : kpi,
         targetBenchmark: targetLatest,
         barTargetLines: barTargetLines,
@@ -7893,7 +7938,7 @@
       type: 'bar',
       barRatio: 0.88, // สัดส่วนความกว้างแท่งกราฟ เพิ่มให้แท่งกราฟกว้าง เต็มตา สมส่วน
       maxBarWidth: 120, // ขยายความกว้างแท่งสูงสุดจาก 80 เป็น 120px ให้กว้างสวยงามสมส่วน
-      padding: { top: 52, right: 20, bottom: 85, left: 62 },
+      padding: { top: 52, right: 20, bottom: 58, left: 62 },
       formatY: (v) => `${Number(v).toFixed(2)}%`,
       yLabelAlign: 'right', // จัดชิดขวาของแกน Y เว้นระยะห่างจากเส้นกราฟอย่างสมดุล ไม่ชิดหรือทับกราฟ
       yLabelRightGap: 8, // เว้นระยะห่างจากขอบกราฟ 8px
@@ -7915,8 +7960,9 @@
       barValueFullWidth: true, // ปรับความกว้างของป้าย % ล่างสุดให้ขยายเต็มแท่งกราฟ (เว้นขอบ 3px) ไม่เกินกราฟ
       showBarTargetLines: false, // เอาเส้นตรงแนวนอนออกทั้งหมด (ไม่วาดเส้นประแนวนอนเป้าหมายบนแท่งกราฟ)
       showGridLines: false, // เอาเส้นตรงแนวนอนออกทั้งหมด (ไม่วาดเส้นกริดแนวนอน)
-      rotateXLabels: true,
-      xLabelFontWeight: '600',
+      rotateXLabels: false, // ปรับแนวนอนปกติ ตามคำสั่งผู้ใช้งาน
+      showCriteriaUnitBadge: true, // แสดงป้ายหน่วยวัด มูลค่า/งาน ใต้ชื่อเกณฑ์วัด
+      xLabelFontWeight: '700',
       xLabelFontSize: 12,
       xLabelColor: '#FFFFFF',
       targetLines: [], // ไม่ใช้เส้นรวมทั้งกราฟ แต่แยกอิสระในแต่ละแท่งตามเกณฑ์วัด
