@@ -2412,8 +2412,247 @@
   // - เกณฑ์ 3, 4 (จำนวนงาน): (รวมงาน AUC * % ระดับ 5) - ปิดงานล่าสุด + 5% ของคงเหลืองาน AUC
   // =========================================================================
 
+  // =========================================================================
+  // Admin PIN Authorization & Target Cards Lock
+  // รหัสผ่าน Admin PIN: '225588'
+  // =========================================================================
+  const DEFAULT_ADMIN_PIN = '225588';
+
+  // Always sync storage to new PIN if previous default was stored
+  if (localStorage.getItem('auc_admin_pin') === '2569') {
+    localStorage.setItem('auc_admin_pin', DEFAULT_ADMIN_PIN);
+  }
+
+  // Target Cards Authentication State
+  window.isTargetCardsAuthenticated = function () {
+    return sessionStorage.getItem('auc_target_cards_authenticated') === 'true';
+  };
+
+  // WBS Table Edit Authentication State (Independent from Target Cards)
+  window.isWbsEditAuthenticated = function () {
+    return sessionStorage.getItem('auc_wbs_edit_authenticated') === 'true';
+  };
+
+  // Backwards compatibility alias
+  window.isAdminAuthenticated = function () {
+    return window.isTargetCardsAuthenticated();
+  };
+
+  window.setTargetCardsAuthenticated = function (auth) {
+    if (auth) {
+      sessionStorage.setItem('auc_target_cards_authenticated', 'true');
+    } else {
+      sessionStorage.removeItem('auc_target_cards_authenticated');
+    }
+    window.updateNext3mCardsButtonUI();
+  };
+
+  window.setWbsEditAuthenticated = function (auth) {
+    if (auth) {
+      sessionStorage.setItem('auc_wbs_edit_authenticated', 'true');
+    } else {
+      sessionStorage.removeItem('auc_wbs_edit_authenticated');
+    }
+    if (typeof window.updateWbsEditLockUI === 'function') {
+      window.updateWbsEditLockUI();
+    }
+  };
+
+  // Backwards compatibility
+  window.setAdminAuthenticated = function (auth) {
+    window.setTargetCardsAuthenticated(auth);
+  };
+
+  window.logoutTargetCards = function () {
+    window.setTargetCardsAuthenticated(false);
+    const container = document.getElementById('next3mCardsContainer');
+    if (container) {
+      container.style.display = 'none';
+    }
+    isNext3mCardsExpanded = false;
+    const toggleText = document.getElementById('next3mCardsToggleText');
+    if (toggleText) toggleText.textContent = 'แสดงการ์ดเป้าหมาย';
+    window.updateNext3mCardsButtonUI();
+    if (typeof window.showToast === 'function') {
+      window.showToast('🔒 ล็อกการ์ดเป้าหมายแล้ว', 'info');
+    }
+  };
+
+  window.logoutWbsEdit = function () {
+    window.setWbsEditAuthenticated(false);
+    if (typeof window.updateWbsEditLockUI === 'function') {
+      window.updateWbsEditLockUI();
+    }
+    if (typeof window.showToast === 'function') {
+      window.showToast('🔒 ล็อกการแก้ไขแผนงานและหมายเหตุแล้ว', 'info');
+    }
+  };
+
+  // General logout helper
+  window.logoutAdmin = function () {
+    window.logoutTargetCards();
+    window.logoutWbsEdit();
+  };
+
+  window.openAdminPinModal = function (targetContext) {
+    window.adminPinTargetContext = targetContext || 'cards';
+    const modal = document.getElementById('adminPinModal');
+    const input = document.getElementById('adminPinInput');
+    const errorMsg = document.getElementById('adminPinErrorMsg');
+    const btn = document.getElementById('btnTogglePinVisibility');
+    const subtitle = document.getElementById('adminPinSubtitle');
+    const desc = document.getElementById('adminPinDesc');
+
+    if (!modal) return;
+    if (errorMsg) errorMsg.style.display = 'none';
+    if (btn) btn.textContent = '👁️';
+    if (input) {
+      input.value = '';
+      input.type = 'password'; // Reset to masked password on open
+      input.classList.remove('pin-input-shake');
+    }
+
+    if (window.adminPinTargetContext === 'wbs') {
+      if (subtitle) subtitle.textContent = 'ปลดล็อกการแก้ไขแผนปิดงานและหมายเหตุ WBS';
+      if (desc) desc.innerHTML = 'กรุณากรอกรหัสผ่าน <strong>Admin PIN</strong> เพื่อปลดล็อกการแก้ไขแผนปิดงานและหมายเหตุในตาราง WBS ทุกแถว';
+    } else {
+      if (subtitle) subtitle.textContent = 'เข้าถึงฟังก์ชันการ์ดเป้าหมายรายเดือน';
+      if (desc) desc.innerHTML = 'กรุณากรอกรหัสผ่าน <strong>Admin PIN</strong> เพื่อปลดล็อกและเปิดดูการ์ดเป้าหมายปิดงานรายเดือน';
+    }
+
+    modal.style.display = 'flex';
+    modal.classList.add('show');
+    setTimeout(() => {
+      if (input) {
+        input.focus();
+        input.select();
+      }
+    }, 150);
+  };
+
+  window.closeAdminPinModal = function () {
+    const modal = document.getElementById('adminPinModal');
+    if (!modal) return;
+    modal.classList.remove('show');
+    modal.style.display = 'none';
+    const input = document.getElementById('adminPinInput');
+    if (input) input.value = '';
+  };
+
+  window.verifyAdminPin = function () {
+    const input = document.getElementById('adminPinInput');
+    const errorMsg = document.getElementById('adminPinErrorMsg');
+    if (!input) return;
+    const enteredPin = String(input.value || '').trim();
+    const currentPin = localStorage.getItem('auc_admin_pin') || DEFAULT_ADMIN_PIN;
+
+    if (enteredPin === currentPin || enteredPin === '225588') {
+      // Success
+      window.closeAdminPinModal();
+
+      if (window.adminPinTargetContext === 'wbs') {
+        // Unlock WBS Edit ONLY (Independent from target cards)
+        window.setWbsEditAuthenticated(true);
+        if (typeof window.showToast === 'function') {
+          window.showToast('🔓 ปลดล็อกการแก้ไขแผนงานและหมายเหตุสำเร็จ! สามารถแก้ไขได้ทุกแถว', 'success');
+        }
+        if (typeof window.updateWbsEditLockUI === 'function') {
+          window.updateWbsEditLockUI();
+        }
+
+        // Check if there was a pending WBS row edit
+        if (window.pendingWbsEditWbs) {
+          const targetWbs = window.pendingWbsEditWbs;
+          window.pendingWbsEditWbs = null;
+          if (typeof window.openWbsEditNoteModal === 'function') {
+            setTimeout(() => {
+              window.openWbsEditNoteModal(targetWbs);
+            }, 150);
+          }
+        }
+      } else {
+        // Unlock Target Cards ONLY (Independent from WBS Edit)
+        window.setTargetCardsAuthenticated(true);
+        if (typeof window.showToast === 'function') {
+          window.showToast('🔓 ปลดล็อกการ์ดเป้าหมายสำเร็จ!', 'success');
+        }
+        const container = document.getElementById('next3mCardsContainer');
+        const toggleText = document.getElementById('next3mCardsToggleText');
+        isNext3mCardsExpanded = true;
+        if (container) container.style.display = '';
+        if (toggleText) toggleText.textContent = 'ซ่อนการ์ดเป้าหมาย';
+        window.updateNext3mCardsButtonUI();
+      }
+    } else {
+      // Failed PIN
+      input.classList.remove('pin-input-shake');
+      void input.offsetWidth; // re-flow
+      input.classList.add('pin-input-shake');
+      if (errorMsg) {
+        errorMsg.textContent = '❌ รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง';
+        errorMsg.style.display = 'block';
+      }
+      input.select();
+    }
+  };
+
+  window.toggleAdminPinVisibility = function () {
+    const input = document.getElementById('adminPinInput');
+    const btn = document.getElementById('btnTogglePinVisibility');
+    if (!input) return;
+    if (input.type === 'password') {
+      input.type = 'text';
+      if (btn) {
+        btn.textContent = '🙈';
+        btn.title = 'ซ่อนรหัสผ่าน';
+      }
+    } else {
+      input.type = 'password';
+      if (btn) {
+        btn.textContent = '👁️';
+        btn.title = 'แสดงรหัสผ่าน';
+      }
+    }
+  };
+
+  window.updateNext3mCardsButtonUI = function () {
+    const btn = document.getElementById('btnToggleNext3mCards');
+    const lockIcon = document.getElementById('next3mCardsLockIcon');
+    const toggleText = document.getElementById('next3mCardsToggleText');
+    const isAuth = window.isTargetCardsAuthenticated();
+
+    if (btn) {
+      if (isAuth) {
+        btn.classList.add('admin-unlocked');
+        btn.title = 'สิทธิ์ Admin การ์ดเป้าหมายปลดล็อกแล้ว (คลิกแสดง/ซ่อนการ์ด, ดับเบิลคลิกล็อกกลับ)';
+      } else {
+        btn.classList.remove('admin-unlocked');
+        btn.title = 'เฉพาะผู้ดูแลระบบ: คลิกเพื่อกรอก Admin PIN ดูการ์ดเป้าหมาย';
+      }
+    }
+    if (lockIcon) {
+      lockIcon.textContent = isAuth ? '🔓' : '🔒';
+    }
+    if (toggleText) {
+      toggleText.textContent = isNext3mCardsExpanded ? 'ซ่อนการ์ดเป้าหมาย' : 'แสดงการ์ดเป้าหมาย';
+    }
+  };
+
+  window.handleNext3mCardsToggle = function (evt) {
+    if (evt) evt.preventDefault();
+    if (!window.isTargetCardsAuthenticated()) {
+      window.openAdminPinModal('cards');
+      return;
+    }
+    window.toggleNext3mCards();
+  };
+
   let isNext3mCardsExpanded = false;
   window.toggleNext3mCards = function () {
+    if (!window.isTargetCardsAuthenticated()) {
+      window.openAdminPinModal('cards');
+      return;
+    }
     const container = document.getElementById('next3mCardsContainer');
     const toggleText = document.getElementById('next3mCardsToggleText');
     if (!container) return;
@@ -2422,7 +2661,17 @@
     if (toggleText) {
       toggleText.textContent = isNext3mCardsExpanded ? 'ซ่อนการ์ดเป้าหมาย' : 'แสดงการ์ดเป้าหมาย';
     }
+    window.updateNext3mCardsButtonUI();
   };
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      const pinModal = document.getElementById('adminPinModal');
+      if (pinModal && (pinModal.style.display === 'flex' || pinModal.classList.contains('show'))) {
+        window.closeAdminPinModal();
+      }
+    }
+  });
 
   let isNext3mTableExpanded = false;
   window.toggleNext3mTable = function () {
@@ -3395,15 +3644,12 @@
               style="background:rgba(16,185,129,0.15); color:#6EE7B7; border-color:rgba(16,185,129,0.4); font-size:0.72rem; padding:0.18rem 0.5rem;">
               ฐานข้อมูล: ${baseMonthName} 69
             </span>
-            <button type="button" class="btn-sm btn-outline" id="btnToggleNext3mCards"
-              onclick="window.toggleNext3mCards()" title="สลับแสดง/ซ่อน การ์ดเป้าหมายรายเดือนทั้ง 3 ใบ"
-              style="padding:0.18rem 0.55rem; font-size:0.74rem;">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="3" y="3" width="7" height="7" rx="1"></rect>
-                <rect x="14" y="3" width="7" height="7" rx="1"></rect>
-                <rect x="14" y="14" width="7" height="7" rx="1"></rect>
-                <rect x="3" y="14" width="7" height="7" rx="1"></rect>
-              </svg>
+            <button type="button" class="btn-sm btn-outline ${window.isTargetCardsAuthenticated && window.isTargetCardsAuthenticated() ? 'admin-unlocked' : ''}" id="btnToggleNext3mCards"
+              onclick="window.handleNext3mCardsToggle(event)"
+              ondblclick="if(window.isTargetCardsAuthenticated && window.isTargetCardsAuthenticated()){ window.logoutTargetCards(); }"
+              title="${window.isTargetCardsAuthenticated && window.isTargetCardsAuthenticated() ? 'สิทธิ์ Admin การ์ดเป้าหมายปลดล็อกแล้ว (คลิกแสดง/ซ่อนการ์ด, ดับเบิลคลิกล็อกกลับ)' : 'เฉพาะผู้ดูแลระบบ: คลิกเพื่อกรอก Admin PIN ดูการ์ดเป้าหมาย'}"
+              style="padding:0.18rem 0.55rem; font-size:0.74rem; display:inline-flex; align-items:center; gap:5px;">
+              <span id="next3mCardsLockIcon" style="font-size:0.82rem; line-height:1;">${window.isTargetCardsAuthenticated && window.isTargetCardsAuthenticated() ? '🔓' : '🔒'}</span>
               <span id="next3mCardsToggleText">${isNext3mCardsExpanded ? 'ซ่อนการ์ดเป้าหมาย' : 'แสดงการ์ดเป้าหมาย'}</span>
             </button>
             <button type="button" class="btn-fullscreen" onclick="toggleCardFullscreen(this)" title="${isCardFullscreen ? 'ย่อขนาดปกติ (ESC)' : 'ขยายกราฟเต็มหน้าจอ'}"
@@ -7355,22 +7601,19 @@
   }
 
   // ==========================================
-  // CELEBRATORY FIREWORKS SYSTEM FOR CRITERIA > KPI ธ.ค.
+  // ==========================================
+  // ==========================================
+  // ROYAL GOLDEN CROWN CELEBRATION FOR CRITERIA > KPI ธ.ค. (มงกุฎทองคำสวยงาม แสดงความสำเร็จ 👑)
   // ==========================================
   window.CriteriaFireworks = {
     canvas: null,
     ctx: null,
     animId: null,
     targets: [],
-    particles: [],
-    stars: [],
-    rings: [],
     width: 0,
     height: 0,
     dpr: 1,
     initialized: false,
-    burstTimer: 0,
-    burstInterval: 1100, // แสดงพลุฉลองต่อเนื่องตลอดเวลา (Continuous Fireworks) ทุก 1.1 วินาที ไม่ขาดตอน
 
     init() {
       if (this.initialized && this.canvas) return;
@@ -7394,7 +7637,7 @@
     resize() {
       if (!this.canvas || !this.canvas.parentElement) return;
       const rect = this.canvas.parentElement.getBoundingClientRect();
-      this.dpr = Math.min(window.devicePixelRatio || 1, 1.5); // จำกัด DPR เพื่อประสิทธิภาพ ไม่ให้กินแรงเครื่อง
+      this.dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       this.width = rect.width || 400;
       this.height = rect.height || 280;
       this.canvas.width = Math.floor(this.width * this.dpr);
@@ -7416,43 +7659,45 @@
         return;
       }
 
-      // กรองแท่งทั้งหมดที่ผ่านเกณฑ์ KPI ธ.ค.
+      // กรองแท่งทั้งหมดที่ผ่านเกณฑ์ KPI ธ.ค. (สิ้นปี 69)
       const qualifying = chart.renderedBars.filter(b => b.ext && b.ext.isExceedDecKpi);
       if (!qualifying.length) {
         this.clearAndStop();
         return;
       }
 
-      this.targets = qualifying.map((b, idx) => ({
-        centerX: b.centerX,
-        topY: b.topY,
-        barW: b.barW,
-        label: b.label,
-        val: b.value,
-        decTarget: b.ext.decTarget,
-        paletteIdx: idx % 3
-      }));
+      const padTop = (chart.options && chart.options.padding && chart.options.padding.top) || 62;
+      this.targets = qualifying.map((b, idx) => {
+        const achieveBadgeH = b.achieveBadgeH || 16.5;
+        const achieveBadgeY = (b.achieveBadgeY !== undefined)
+          ? b.achieveBadgeY
+          : ((b.value >= 100 || b.topY <= padTop + 6) ? (padTop - achieveBadgeH - 5) : (b.topY - achieveBadgeH - 5));
+        const achieveBadgeW = b.achieveBadgeW || Math.max(24, b.barW - 6);
 
-      this.burstTimer = 0;
+        // ปรับสัดส่วนขนาดมงกุฎทองคำให้สมส่วน สง่างาม พอดีกับป้ายบรรลุเป้าหมาย
+        const crownSize = Math.max(16, Math.min(22, b.barW * 0.32));
 
-      // แสดงพลุพร้อมกันทุกเกณฑ์วัดที่ผ่านเงื่อนไขทันที
-      this.triggerSimultaneousBursts();
-      this.start();
-    },
-
-    triggerSimultaneousBursts() {
-      if (!this.targets || !this.targets.length) return;
-      // จุดพลุพร้อมกันทุกเกณฑ์วัดที่ผ่านเกณฑ์ KPI ธ.ค. ตลอดเวลา
-      this.targets.forEach((t) => {
-        this.createBurst(t.centerX, Math.max(18, t.topY - 22), t.paletteIdx);
+        return {
+          centerX: b.centerX,
+          topY: b.topY,
+          barW: b.barW,
+          achieveBadgeY: Math.max(2, achieveBadgeY),
+          achieveBadgeW: achieveBadgeW,
+          achieveBadgeH: achieveBadgeH,
+          crownSize: crownSize,
+          label: b.label,
+          val: b.value,
+          decTarget: b.ext.decTarget,
+          paletteIdx: idx % 3,
+          staggerOffset: idx * 280
+        };
       });
+
+      this.start();
     },
 
     clearAndStop() {
       this.targets = [];
-      this.particles = [];
-      this.stars = [];
-      this.rings = [];
       if (this.ctx) {
         this.ctx.clearRect(0, 0, this.width, this.height);
       }
@@ -7463,12 +7708,10 @@
       if (this.animId) return;
       let lastTime = performance.now();
       const loop = (now) => {
-        const dt = Math.min(35, now - lastTime);
         lastTime = now;
-        this.tick(dt, now);
         this.render(now);
 
-        if (this.targets.length > 0 || this.particles.length > 0 || this.stars.length > 0 || this.rings.length > 0) {
+        if (this.targets.length > 0) {
           this.animId = requestAnimationFrame(loop);
         } else {
           this.animId = null;
@@ -7484,104 +7727,175 @@
       }
     },
 
-    createBurst(x, y, paletteIdx = 0) {
-      // โทนสีปลอดสีเหลือง 100% (No Yellow): ม่วง กฟภ., เขียวมรกตแห่งความสำเร็จ, ฟ้าคราม และชมพูสดใส
-      const palettes = [
-        ['#C084FC', '#A855F7', '#E9D5FF', '#FFFFFF'], // PEA Violet & Pure White
-        ['#10B981', '#34D399', '#6EE7B7', '#FFFFFF'], // Emerald & Mint Green
-        ['#38BDF8', '#06B6D4', '#F472B6', '#FFFFFF']  // Cyan & Radiant Rose
-      ];
-      const colors = palettes[paletteIdx % palettes.length];
-
-      // 1. วงแหวนกระจายแสง 1 วง (เบาบางและนุ่มนวล)
-      this.rings.push({
-        x: x,
-        y: y,
-        r: 3,
-        maxR: 20,
-        alpha: 0.55,
-        color: colors[0]
-      });
-
-      // 2. ละอองประกายไฟ (6 อนุภาคต่อจุด เบาสบายตา ไม่ใช้สีเหลือง)
-      const count = 6;
-      for (let i = 0; i < count; i++) {
-        const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.35;
-        const speed = 0.9 + Math.random() * 1.5;
-        const col = colors[i % colors.length];
-        this.particles.push({
-          x: x,
-          y: y,
-          vx: Math.cos(angle) * speed,
-          vy: Math.sin(angle) * speed * 0.8 - 0.25,
-          color: col,
-          size: 1.1 + Math.random() * 0.9,
-          alpha: 0.92,
-          decay: 0.02 + Math.random() * 0.008, // ค่อยๆ จางลงพอดีกับรอบถัดไป
-          gravity: 0.028,
-          drag: 0.965
-        });
+    roundRect(ctx, x, y, w, h, r) {
+      if (typeof ctx.roundRect === 'function') {
+        ctx.roundRect(x, y, w, h, r);
+      } else {
+        ctx.moveTo(x + r, y);
+        ctx.lineTo(x + w - r, y);
+        ctx.arcTo(x + w, y, x + w, y + r, r);
+        ctx.lineTo(x + w, y + h - r);
+        ctx.arcTo(x + w, y + h, x + w - r, y + h, r);
+        ctx.lineTo(x + r, y + h);
+        ctx.arcTo(x, y + h, x, y + h - r, r);
+        ctx.lineTo(x, y + r);
+        ctx.arcTo(x, y, x + r, y, r);
       }
-
-      // 3. ดาวประกายระยิบ 1 ดวง
-      this.stars.push({
-        x: x + (Math.random() - 0.5) * 10,
-        y: y - 5 + (Math.random() - 0.5) * 8,
-        vx: (Math.random() - 0.5) * 0.25,
-        vy: -0.2 - Math.random() * 0.2,
-        size: 3.0,
-        rotation: 0,
-        rotSpeed: 0.04,
-        alpha: 0.92,
-        decay: 0.018,
-        color: colors[1] || colors[0]
-      });
     },
 
-    tick(dt, now) {
-      // แสดงพลุพร้อมกันทุกเกณฑ์วัดที่ผ่านเงื่อนไขอย่างต่อเนื่องตลอดเวลา
-      if (this.targets.length > 0) {
-        this.burstTimer += dt;
-        if (this.burstTimer >= this.burstInterval) {
-          this.burstTimer = 0;
-          this.triggerSimultaneousBursts();
-        }
-      }
+    drawGoldenCrown(ctx, cx, cy, size, tNow) {
+      ctx.save();
 
-      // อัปเดตวงแหวน
-      for (let i = this.rings.length - 1; i >= 0; i--) {
-        const r = this.rings[i];
-        r.r += 0.8;
-        r.alpha -= 0.035;
-        if (r.alpha <= 0 || r.r >= r.maxR) {
-          this.rings.splice(i, 1);
-        }
-      }
+      // แอนิเมชันลอยนุ่มนวลสง่างาม (Gentle Majestic Floating)
+      const floatY = Math.sin(tNow * 0.0035) * 1.0;
+      ctx.translate(cx, cy + floatY);
 
-      // อัปเดตละอองไฟ
-      for (let i = this.particles.length - 1; i >= 0; i--) {
-        const p = this.particles[i];
-        p.vx *= p.drag;
-        p.vy = (p.vy * p.drag) + p.gravity;
-        p.x += p.vx;
-        p.y += p.vy;
-        p.alpha -= p.decay;
-        if (p.alpha <= 0) {
-          this.particles.splice(i, 1);
-        }
-      }
+      const W = size; // ความกว้างมงกุฎ
+      const H = size * 0.65; // ความสูงมงกุฎ
+      const halfW = W / 2;
 
-      // อัปเดตดาวประกาย
-      for (let i = this.stars.length - 1; i >= 0; i--) {
-        const s = this.stars[i];
-        s.x += s.vx;
-        s.y += s.vy;
-        s.rotation += s.rotSpeed;
-        s.alpha -= s.decay;
-        if (s.alpha <= 0) {
-          this.stars.splice(i, 1);
-        }
+      // 1. ออร่าสีทองเปล่งประกายนุ่มนวลรอบมงกุฎ (Soft Golden Aura)
+      const aura = ctx.createRadialGradient(0, -H * 0.55, 1, 0, -H * 0.55, W * 0.75);
+      aura.addColorStop(0, 'rgba(255, 215, 0, 0.40)');
+      aura.addColorStop(0.55, 'rgba(251, 191, 36, 0.12)');
+      aura.addColorStop(1, 'rgba(251, 191, 36, 0)');
+      ctx.fillStyle = aura;
+      ctx.beginPath();
+      ctx.arc(0, -H * 0.55, W * 0.75, 0, Math.PI * 2);
+      ctx.fill();
+
+      // 2. ซับในกำมะหยี่สีม่วงรอยัลด้านหลัง (Inner Royal Velvet Arch)
+      ctx.beginPath();
+      ctx.moveTo(-halfW * 0.8, -H * 0.22);
+      ctx.quadraticCurveTo(0, -H * 0.82, halfW * 0.8, -H * 0.22);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(76, 29, 149, 0.5)';
+      ctx.fill();
+
+      // 3. ตัวเรือนมงกุฎทองคำ 5 ยอด (5-Peak Majestic Golden Crown)
+      ctx.beginPath();
+      ctx.moveTo(-halfW * 0.95, -H * 0.20);
+      ctx.lineTo(-halfW * 0.98, -H * 0.72); // ยอดปีกซ้าย (Peak 1)
+      ctx.lineTo(-halfW * 0.58, -H * 0.42); // ร่อง 1
+      ctx.lineTo(-halfW * 0.38, -H * 0.88); // ยอดกลางซ้าย (Peak 2)
+      ctx.lineTo(-halfW * 0.12, -H * 0.48); // ร่อง 2
+      ctx.lineTo(0, -H * 1.05);             // ยอดกลางสูงสุด (Center Peak 3)
+      ctx.lineTo(halfW * 0.12, -H * 0.48);  // ร่อง 3
+      ctx.lineTo(halfW * 0.38, -H * 0.88);  // ยอดกลางขวา (Peak 4)
+      ctx.lineTo(halfW * 0.58, -H * 0.42);  // ร่อง 4
+      ctx.lineTo(halfW * 0.98, -H * 0.72);  // ยอดปีกขวา (Peak 5)
+      ctx.lineTo(halfW * 0.95, -H * 0.20);
+      ctx.quadraticCurveTo(0, -H * 0.12, -halfW * 0.95, -H * 0.20);
+      ctx.closePath();
+
+      // ไล่เฉดสีทองคำเปลว 3D เงาวาว (Luminous 3D Metallic Gold)
+      const goldGrad = ctx.createLinearGradient(-halfW, -H, halfW, 0);
+      goldGrad.addColorStop(0, '#F59E0B');
+      goldGrad.addColorStop(0.22, '#FDE047');
+      goldGrad.addColorStop(0.48, '#FFFBEB');
+      goldGrad.addColorStop(0.72, '#FBBF24');
+      goldGrad.addColorStop(1, '#D97706');
+      ctx.fillStyle = goldGrad;
+      ctx.fill();
+
+      // เส้นขอบทองคำเรืองแสง
+      ctx.strokeStyle = '#FEF08A';
+      ctx.lineWidth = 0.9;
+      ctx.shadowColor = 'rgba(255, 215, 0, 0.75)';
+      ctx.shadowBlur = 3;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      // 4. แถบคาดฐานมงกุฎ (Crown Base Headband)
+      const rimH = H * 0.24;
+      const rimY = -rimH - 0.5;
+      const rimW = halfW * 1.88;
+      ctx.beginPath();
+      this.roundRect(ctx, -rimW / 2, rimY, rimW, rimH, 2.2);
+      const rimGrad = ctx.createLinearGradient(-halfW, rimY, halfW, rimY);
+      rimGrad.addColorStop(0, '#B45309');
+      rimGrad.addColorStop(0.25, '#FDE047');
+      rimGrad.addColorStop(0.5, '#FFFFFF');
+      rimGrad.addColorStop(0.75, '#FBBF24');
+      rimGrad.addColorStop(1, '#92400E');
+      ctx.fillStyle = rimGrad;
+      ctx.fill();
+      ctx.strokeStyle = '#FEF08A';
+      ctx.lineWidth = 0.75;
+      ctx.stroke();
+
+      // 5. อัญมณี 3 เม็ดประดับฐานมงกุฎ (Royal Gems on Base)
+      const gemY = rimY + rimH * 0.5;
+      // มรกตแห่งความสำเร็จ (Emerald of Achievement) ตรงกลาง
+      ctx.beginPath();
+      ctx.arc(0, gemY, 1.35, 0, Math.PI * 2);
+      ctx.fillStyle = '#00FF88';
+      ctx.fill();
+      ctx.strokeStyle = '#FFFFFF';
+      ctx.lineWidth = 0.6;
+      ctx.stroke();
+
+      // ทับทิมสยาม (Ruby) ซ้าย
+      ctx.beginPath();
+      ctx.arc(-halfW * 0.52, gemY, 1.1, 0, Math.PI * 2);
+      ctx.fillStyle = '#FF2D55';
+      ctx.fill();
+
+      // ไพลินน้ำงาม (Sapphire) ขวา
+      ctx.beginPath();
+      ctx.arc(halfW * 0.52, gemY, 1.1, 0, Math.PI * 2);
+      ctx.fillStyle = '#38BDF8';
+      ctx.fill();
+
+      // 6. ไข่มุกทองคำประดับบนยอดมงกุฎทั้ง 5 ยอด (Golden Pearls on Peaks)
+      const pearls = [
+        { x: -halfW * 0.98, y: -H * 0.72, r: 1.2 },
+        { x: -halfW * 0.38, y: -H * 0.88, r: 1.4 },
+        { x: 0,             y: -H * 1.05, r: 1.85, isCenter: true },
+        { x: halfW * 0.38,  y: -H * 0.88, r: 1.4 },
+        { x: halfW * 0.98,  y: -H * 0.72, r: 1.2 }
+      ];
+
+      pearls.forEach(p => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = p.isCenter ? '#FFFFFF' : '#FEF08A';
+        ctx.fill();
+        ctx.strokeStyle = '#B45309';
+        ctx.lineWidth = 0.55;
+        ctx.stroke();
+      });
+
+      // 7. ประกายดาววิบวับ ระยิบระยับ (Animated Sparkle Stars)
+      const star1Alpha = 0.35 + 0.65 * Math.sin(tNow * 0.007);
+      this.drawSparkleStar(ctx, 0, -H * 1.05, 2.2, star1Alpha, '#FFFFFF');
+
+      const star2Alpha = 0.25 + 0.75 * Math.cos(tNow * 0.0055 + 1.2);
+      this.drawSparkleStar(ctx, halfW * 0.65, -H * 0.6, 1.6, star2Alpha, '#FEF08A');
+
+      ctx.restore();
+    },
+
+    drawSparkleStar(ctx, x, y, size, alpha, color = '#FFFFFF') {
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, Math.min(1, alpha));
+      ctx.fillStyle = color;
+      ctx.shadowColor = color;
+      ctx.shadowBlur = 3;
+      ctx.beginPath();
+      const rOuter = size;
+      const rInner = size * 0.24;
+      for (let pt = 0; pt < 8; pt++) {
+        const r = (pt % 2 === 0) ? rOuter : rInner;
+        const a = (pt * Math.PI) / 4;
+        const px = x + Math.cos(a) * r;
+        const py = y + Math.sin(a) * r;
+        if (pt === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
       }
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
     },
 
     render(now) {
@@ -7589,58 +7903,28 @@
       const ctx = this.ctx;
       ctx.clearRect(0, 0, this.width, this.height);
 
-      if (this.rings.length === 0 && this.particles.length === 0 && this.stars.length === 0) {
-        return;
-      }
+      if (!this.targets || !this.targets.length) return;
 
+      // ล็อค Safe Ceiling เพื่อป้องกันไม่ให้มงกุฎหรือประกายเลยขึ้นไปทับแถบกำกับ (Legend) ด้านบน
+      const safeCeilingY = 22;
       ctx.save();
-      ctx.globalCompositeOperation = 'lighter'; // ให้แสงสว่างเรืองรองโดยไม่ต้องใช้ shadowBlur
+      ctx.beginPath();
+      ctx.rect(0, safeCeilingY, this.width, Math.max(0, this.height - safeCeilingY));
+      ctx.clip();
 
-      // 1. วงแหวน (Rings)
-      for (let i = 0; i < this.rings.length; i++) {
-        const r = this.rings[i];
-        ctx.beginPath();
-        ctx.arc(r.x, r.y, r.r, 0, Math.PI * 2);
-        ctx.strokeStyle = r.color;
-        ctx.globalAlpha = Math.max(0, r.alpha);
-        ctx.lineWidth = 1.2;
-        ctx.stroke();
-      }
+      // วาดมงกุฎทองคำแสดงความสำเร็จ บนแต่ละแท่งที่บรรลุเป้าหมาย
+      this.targets.forEach(t => {
+        const centerX = t.centerX;
+        const badgeY = (t.achieveBadgeY !== undefined) ? t.achieveBadgeY : Math.max(18, t.topY - 22.5);
+        const crownSize = t.crownSize || Math.max(16, Math.min(22, t.barW * 0.32));
 
-      // 2. ละอองไฟ (Sparks - วาดเร็วขึ้น ไม่เรียก save/restore และ shadowBlur ในลูป)
-      for (let i = 0; i < this.particles.length; i++) {
-        const p = this.particles[i];
-        ctx.beginPath();
-        ctx.globalAlpha = Math.max(0, p.alpha);
-        ctx.fillStyle = p.color;
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fill();
-      }
+        // วางตำแหน่งฐานมงกุฎ อยู่เหนือป้าย "✓ บรรลุเป้าหมาย" ตรงกลางพอดี
+        const crownBaseX = centerX;
+        const crownBaseY = badgeY - 1.5;
 
-      // 3. ดาวประกายระยิบ (Stars)
-      for (let i = 0; i < this.stars.length; i++) {
-        const s = this.stars[i];
-        ctx.save();
-        ctx.translate(s.x, s.y);
-        ctx.rotate(s.rotation);
-        ctx.globalAlpha = Math.max(0, s.alpha);
-        ctx.fillStyle = s.color;
-
-        const rOuter = s.size;
-        const rInner = s.size * 0.25;
-        ctx.beginPath();
-        for (let pt = 0; pt < 8; pt++) {
-          const r = (pt % 2 === 0) ? rOuter : rInner;
-          const a = (pt * Math.PI) / 4;
-          const px = Math.cos(a) * r;
-          const py = Math.sin(a) * r;
-          if (pt === 0) ctx.moveTo(px, py);
-          else ctx.lineTo(px, py);
-        }
-        ctx.closePath();
-        ctx.fill();
-        ctx.restore();
-      }
+        // วาดมงกุฎทองคำสง่างาม แสดงความสำเร็จ 👑
+        this.drawGoldenCrown(ctx, crownBaseX, crownBaseY, crownSize, now + t.staggerOffset);
+      });
 
       ctx.restore();
     }
@@ -7670,6 +7954,7 @@
     // Target Lines for criteriaComparisonChart: เดือนล่าสุด และ 3 เดือนถัดไป เท่านั้น (ทศนิยม 2 ตำแหน่ง)
     const monthNames = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
     const curMonthIdx = (typeof state.filters.month === 'number') ? state.filters.month : getLatestAvailableMonthIndex(); // ค่าเริ่มต้นเดือนล่าสุด ก.ย. (index 8)
+    const latestMonthName = monthNames[curMonthIdx] || 'ก.ย.';
 
     // Helper to get Level 5 KPI Target for any criteria and month
     function getCriteriaTarget(critName, mIdx) {
@@ -7828,19 +8113,19 @@
           }
           const mNames = existing.monthNames;
           if (mNames.includes('ก.ย.') && mNames.includes('ธ.ค.') && mNames.length >= 2) {
-            existing.label = `ก.ย.-ธ.ค. ${valStr}`;
+            existing.label = `KPI ก.ย.-ธ.ค. ${valStr}`;
           } else if (mNames.includes('ต.ค.') && mNames.includes('ธ.ค.') && mNames.length >= 2) {
-            existing.label = `ต.ค.-ธ.ค. ${valStr}`;
+            existing.label = `KPI ต.ค.-ธ.ค. ${valStr}`;
           } else if (mNames.includes('ก.ย.') && mNames.includes('ต.ค.') && mNames.length >= 2) {
-            existing.label = `ก.ย.-ต.ค. ${valStr}`;
+            existing.label = `KPI ก.ย.-ต.ค. ${valStr}`;
           } else if (mNames.length > 1) {
-            existing.label = `${mNames.join(', ')} ${valStr}`;
+            existing.label = `KPI ${mNames.join(', ')} ${valStr}`;
           }
         } else {
           barTargetLines.push({
             ...bt,
             monthNames: [bt.monthName],
-            label: `${bt.monthName} ${valStr}`
+            label: `KPI ${bt.monthName} ${valStr}`
           });
         }
       });
@@ -7916,7 +8201,8 @@
         kpiTargets: kpiTargets,
         decTarget: decTarget,
         isExceedDecKpi: isExceedDecKpi,
-        starCount: starCount
+        starCount: starCount,
+        latestMonthName: latestMonthName
       });
     });
 
@@ -7936,9 +8222,10 @@
 
     const chartOptions = {
       type: 'bar',
+      showTooltip: false, // เอา Tooltip ออก ไม่ต้องแสดงตามคำสั่งผู้ใช้งาน (เอาที่วงกลมออก ไม่ต้องแสดง)
       barRatio: 0.88, // สัดส่วนความกว้างแท่งกราฟ เพิ่มให้แท่งกราฟกว้าง เต็มตา สมส่วน
       maxBarWidth: 120, // ขยายความกว้างแท่งสูงสุดจาก 80 เป็น 120px ให้กว้างสวยงามสมส่วน
-      padding: { top: 52, right: 20, bottom: 58, left: 62 },
+      padding: { top: 62, right: 20, bottom: 58, left: 62 },
       formatY: (v) => `${Number(v).toFixed(2)}%`,
       yLabelAlign: 'right', // จัดชิดขวาของแกน Y เว้นระยะห่างจากเส้นกราฟอย่างสมดุล ไม่ชิดหรือทับกราฟ
       yLabelRightGap: 8, // เว้นระยะห่างจากขอบกราฟ 8px
@@ -7955,7 +8242,7 @@
       barValuePosition: 'bottom', // เฉพาะกราฟนี้ ปรับ % ทุกกราฟแท่ง มาไว้ล่างสุด
       barValueTheme: 'gold', // เปลี่ยนสี % ทุกแท่งเป็นสีเหลืองทองตามคำขอ
       barValueColor: '#FFD25A', // สีเหลืองทอง PEA Gold
-      barValueFontSize: 11, // ขนาดตัวเลข % สีเหลืองทอง ใหญ่ขึ้น ชัดเจน
+      barValueFontSize: 10.5, // ขนาดตัวเลข % สีเหลืองทอง ใหญ่ขึ้น ชัดเจน
       barValueHeight: 17, // ความสูงป้าย % ล่างสุด
       barValueFullWidth: true, // ปรับความกว้างของป้าย % ล่างสุดให้ขยายเต็มแท่งกราฟ (เว้นขอบ 3px) ไม่เกินกราฟ
       showBarTargetLines: false, // เอาเส้นตรงแนวนอนออกทั้งหมด (ไม่วาดเส้นประแนวนอนเป้าหมายบนแท่งกราฟ)
@@ -7968,18 +8255,19 @@
       targetLines: [], // ไม่ใช้เส้นรวมทั้งกราฟ แต่แยกอิสระในแต่ละแท่งตามเกณฑ์วัด
       formatBarValue: (val, idx) => {
         const ext = extraList[idx];
-        if (ext && ext.isNoWork) return 'ไม่มีงาน';
-        return `${Number(val).toFixed(2)}%`;
+        const mName = (ext && ext.latestMonthName) || latestMonthName;
+        if (ext && ext.isNoWork) return `${mName} ไม่มีงาน`;
+        return `${mName} ${Number(val).toFixed(2)}%`;
       },
       showLegend: true,
       customLegend: [
         { label: 'KPI ระดับ 5 (ผ่านเป้าหมาย)', color: '#10B981' },
         { label: 'KPI ระดับ 1-4 (ต้องเร่งรัด)', color: '#EF4444' },
-        { label: `เป้า ${monthNames[curMonthIdx] || 'ส.ค.'} (ล่าสุด)`, color: '#FFB81C' },
+        { label: `เป้า KPI ${latestMonthName} (ล่าสุด)`, color: '#FFB81C' },
         { label: 'เป้าถัดไป-สิ้นปี (ผ่านเกณฑ์)', color: '#00FF88' },
         { label: 'เป้าถัดไป-สิ้นปี (ต้องเร่งรัด)', color: '#FF2D55' },
         { label: '★ ผ่านเกณฑ์สะสม (1 ดาว/เดือน)', color: '#FFD25A' },
-        { label: '✓ บรรลุเป้าหมาย ธ.ค. (สิ้นปี 69)', color: '#00FF88' }
+        { label: '👑 บรรลุเป้าหมาย ธ.ค. (สิ้นปี 69)', color: '#FFD700' }
       ],
       onClick: (item) => {
         if (item && item.extra && item.extra.fullTitle && typeof window.selectSidebarCriteria === 'function') {

@@ -13323,14 +13323,14 @@ body.theme-light .bar-sap-date-plain:hover {
   margin-bottom: 2rem;
 }
 
-/* Target Line Marker (รูป 32: เส้นบอกระดับเป้าหมายสีทองเปล่งประกายเรืองแสง ปลายมนสีขาว ทุกอัน) */
+/* Target Line Marker (เส้นบอกระดับเป้าหมายสีทองเปล่งประกายเรืองแสง พร้อมไฟวิ่งล่างขึ้นบน สวยๆ เด่นๆ) */
 .target-marker-line {
   position: absolute;
-  top: -6px;
-  bottom: -6px;
-  width: 6px;
+  top: -7px;
+  bottom: -7px;
+  width: 6.5px;
   background: linear-gradient(180deg, #FFFFFF 0%, #FFF566 18%, #FFB81C 50%, #F59E0B 82%, #FFFFFF 100%);
-  border-radius: 6px;
+  border-radius: 8px;
   z-index: 15;
   box-shadow: 0 0 10px rgba(255, 215, 0, 0.95), 0 0 22px rgba(245, 158, 11, 0.8), 0 0 4px #FFFFFF;
   border-left: 1px solid #FFFFFF;
@@ -13338,6 +13338,99 @@ body.theme-light .bar-sap-date-plain:hover {
   pointer-events: none;
   transform: translateX(-50%);
   transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: visible;
+  animation: targetLineAuraGlow 2.4s ease-in-out infinite;
+}
+
+@keyframes targetLineAuraGlow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.95), 0 0 22px rgba(245, 158, 11, 0.8), 0 0 4px #FFFFFF;
+  }
+  50% {
+    box-shadow: 0 0 14px rgba(255, 255, 255, 1), 0 0 28px rgba(255, 215, 0, 1), 0 0 42px rgba(245, 158, 11, 0.95);
+  }
+}
+
+/* ลำแสงไฟวิ่ง ล่างขึ้นบนเส้น สวยๆ เด่นๆ (Luminous Running Light Laser Bottom to Top) */
+.target-marker-beam {
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* 1. ลำแสงเลเซอร์ไฟวิ่งพุ่งขึ้นจากล่างสู่บน (Rising Energy Laser Column) */
+.target-marker-beam::before {
+  content: '';
+  position: absolute;
+  left: -1px;
+  right: -1px;
+  height: 24px;
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0) 0%, rgba(255, 215, 0, 0.4) 25%, #FFF566 65%, #FFFFFF 95%, #FFFFFF 100%);
+  border-radius: 999px;
+  box-shadow: 0 0 10px #FFFFFF, 0 0 20px #FFD700, 0 0 32px rgba(255, 184, 28, 0.95);
+  pointer-events: none;
+  z-index: 16;
+  animation: targetLineBeamAscend 1.35s cubic-bezier(0.2, 0.85, 0.25, 1) infinite;
+}
+
+/* 2. หัวประกายไฟสว่างจ้าเรืองแสงพุ่งนำร่องจากล่างสู่บน (Leading Blazing Spark & Glow Flare) */
+.target-marker-beam::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #FFFFFF 35%, #FFF566 65%, rgba(255, 215, 0, 0) 100%);
+  box-shadow: 0 0 12px #FFFFFF, 0 0 24px #FFF566, 0 0 38px rgba(255, 184, 28, 0.95);
+  pointer-events: none;
+  z-index: 17;
+  animation: targetLineSparkAscend 1.35s cubic-bezier(0.2, 0.85, 0.25, 1) infinite;
+}
+
+@keyframes targetLineBeamAscend {
+  0% {
+    bottom: -24px;
+    opacity: 0;
+    transform: scaleY(0.4) scaleX(0.7);
+  }
+  15% {
+    opacity: 1;
+    transform: scaleY(1) scaleX(1);
+  }
+  75% {
+    opacity: 1;
+    transform: scaleY(1.05) scaleX(1.05);
+  }
+  100% {
+    bottom: calc(100% + 4px);
+    opacity: 0;
+    transform: scaleY(0.6) scaleX(1.15);
+  }
+}
+
+@keyframes targetLineSparkAscend {
+  0% {
+    bottom: -14px;
+    opacity: 0;
+    transform: translateX(-50%) scale(0.4);
+  }
+  18% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.1);
+  }
+  75% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.25);
+  }
+  100% {
+    bottom: calc(100% + 10px);
+    opacity: 0;
+    transform: translateX(-50%) scale(0.5);
+  }
 }
 
 /* ป้ายบอกเส้นเป้าหมาย (ย้ายมาด้านล่างกราฟ ตามคำสั่งผู้ใช้งาน) */
@@ -17291,4 +17384,196 @@ body.theme-light .wbs-pct-breakdown-tag {
   text-shadow: none !important;
 }
 
+/* ==========================================================================
+   Admin PIN Authorization Modal & Button
+   ========================================================================== */
+.admin-pin-dialog {
+  max-width: 440px !important;
+  background: linear-gradient(145deg, rgba(28, 8, 45, 0.98), rgba(15, 3, 25, 0.98)) !important;
+  border: 1px solid rgba(255, 184, 28, 0.45) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.75), 0 0 35px rgba(255, 184, 28, 0.18) !important;
+  overflow: hidden;
+}
 
+[data-theme="light"] .admin-pin-dialog {
+  background: #FFFFFF !important;
+  border-color: rgba(104, 44, 145, 0.3) !important;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.15), 0 0 25px rgba(104, 44, 145, 0.1) !important;
+}
+
+[data-theme="light"] #adminPinInput {
+  background: #F8FAFC !important;
+  color: #1E293B !important;
+  border-color: rgba(104, 44, 145, 0.4) !important;
+}
+
+.pin-input-shake {
+  animation: pinShakeAnim 0.45s ease-in-out !important;
+  border-color: #EF4444 !important;
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.5) !important;
+}
+
+@keyframes pinShakeAnim {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-8px); }
+  40%, 80% { transform: translateX(8px); }
+}
+
+#btnToggleNext3mCards {
+  transition: all 0.25s ease;
+}
+
+#btnToggleNext3mCards:hover {
+  border-color: rgba(255, 184, 28, 0.6);
+  box-shadow: 0 0 10px rgba(255, 184, 28, 0.2);
+}
+
+#btnToggleNext3mCards.admin-unlocked {
+  border-color: rgba(16, 185, 129, 0.5) !important;
+  background: rgba(16, 185, 129, 0.12) !important;
+  color: #34D399 !important;
+}
+
+#btnToggleNext3mCards.admin-unlocked:hover {
+  border-color: rgba(16, 185, 129, 0.8) !important;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.3) !important;
+}
+
+/* WBS Edit Lock Button in Toolbar */
+.btn-wbs-lock {
+  border-color: rgba(255, 184, 28, 0.45) !important;
+  color: var(--pea-gold-400) !important;
+  background: rgba(255, 184, 28, 0.08) !important;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-wbs-lock:hover {
+  background: rgba(255, 184, 28, 0.18) !important;
+  border-color: var(--pea-gold-400) !important;
+  box-shadow: 0 0 10px rgba(255, 184, 28, 0.25);
+}
+
+.btn-wbs-lock.admin-unlocked {
+  border-color: rgba(16, 185, 129, 0.5) !important;
+  background: rgba(16, 185, 129, 0.12) !important;
+  color: #34D399 !important;
+}
+
+.btn-wbs-lock.admin-unlocked:hover {
+  border-color: rgba(16, 185, 129, 0.8) !important;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.35) !important;
+}
+
+/* Light Theme support */
+[data-theme="light"] .btn-wbs-lock {
+  border-color: rgba(104, 44, 145, 0.4) !important;
+  color: var(--pea-purple-800) !important;
+  background: rgba(104, 44, 145, 0.06) !important;
+}
+
+[data-theme="light"] .btn-wbs-lock.admin-unlocked {
+  border-color: rgba(5, 150, 105, 0.5) !important;
+  color: #059669 !important;
+  background: rgba(16, 185, 129, 0.1) !important;
+}
+
+/* Inline row button when locked */
+.btn-wbs-inline-edit.is-locked {
+  opacity: 0.85;
+  filter: drop-shadow(0 0 3px rgba(255, 184, 28, 0.4));
+}
+
+.btn-wbs-inline-edit.is-locked:hover {
+  opacity: 1;
+  transform: scale(1.15);
+  box-shadow: 0 0 8px rgba(255, 184, 28, 0.4);
+}
+
+/* WBS Header Lock / Unlock Badge Button (วางใต้ชื่อคอลัมน์ แผนปิดงาน และ หมายเหตุ) */
+.th-header-lock-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 3px;
+  width: 100%;
+}
+
+.btn-th-wbs-lock {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 2px 8px;
+  font-size: 0.70rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #FBBF24;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.btn-th-wbs-lock:hover {
+  background: rgba(245, 158, 11, 0.25);
+  border-color: rgba(245, 158, 11, 0.75);
+  color: #FDE68A;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.25);
+}
+
+.btn-th-wbs-lock .lock-icon {
+  font-size: 0.74rem;
+  line-height: 1;
+}
+
+.btn-th-wbs-lock .lock-text {
+  font-size: 0.68rem;
+  letter-spacing: 0.01em;
+}
+
+/* Header Lock Button When Unlocked (Admin) */
+.btn-th-wbs-lock.admin-unlocked {
+  color: #34D399;
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.55);
+  box-shadow: 0 1px 3px rgba(16, 185, 129, 0.2);
+}
+
+.btn-th-wbs-lock.admin-unlocked:hover {
+  background: rgba(16, 185, 129, 0.3);
+  border-color: rgba(16, 185, 129, 0.85);
+  color: #A7F3D0;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+
+/* Light Theme Support for Header Lock Button */
+[data-theme="light"] .btn-th-wbs-lock {
+  color: #B45309;
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(217, 119, 6, 0.45);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .btn-th-wbs-lock:hover {
+  background: rgba(245, 158, 11, 0.22);
+  border-color: rgba(217, 119, 6, 0.75);
+  color: #92400E;
+}
+
+[data-theme="light"] .btn-th-wbs-lock.admin-unlocked {
+  color: #065F46;
+  background: rgba(16, 185, 129, 0.14);
+  border-color: rgba(5, 150, 105, 0.55);
+}
+
+[data-theme="light"] .btn-th-wbs-lock.admin-unlocked:hover {
+  background: rgba(16, 185, 129, 0.25);
+  border-color: rgba(5, 150, 105, 0.85);
+  color: #044E39;
+}

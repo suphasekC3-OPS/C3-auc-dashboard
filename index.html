@@ -8,7 +8,7 @@
   <meta name="description"
     content="ระบบสารสนเทศและแดชบอร์ดติดตามงานก่อสร้างและขึ้นทะเบียนทรัพย์สิน AUC การไฟฟ้าส่วนภูมิภาค เขต 3 (ภาคกลาง)">
   <link rel="icon" type="image/svg+xml" href="assets/pea_logo.svg">
-  <link rel="stylesheet" href="css/styles.css?v=20261025_1040">
+  <link rel="stylesheet" href="css/styles.css?v=20261026_1020">
 
 </head>
 
@@ -1674,7 +1674,7 @@
                   <button type="button" class="btn-wbs-sync-sheet" id="btnSyncGoogleSheet"
                     onclick="window.syncLiveNotesFromGoogleSheet(true)" title="กดเพื่อซิงค์แผนงานและหมายเหตุล่าสุดจาก Google Sheet ทั้ง 9 แท็บ">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                      <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+                    <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
                     </svg>
                     <span>ซิงค์ Google Sheet</span>
                     <span id="wbsSyncStatusDot" style="width:7px; height:7px; border-radius:50%; background:#10B981; display:inline-block; box-shadow:0 0 6px #10B981;"></span>
@@ -2429,6 +2429,51 @@
       </div>
     </div>
 
+    <!-- Modal: Admin PIN Authorization (เฉพาะ Admin) -->
+    <div id="adminPinModal" class="modal-overlay" style="display:none; align-items:center; justify-content:center; z-index:99999; backdrop-filter:blur(8px); background:rgba(0,0,0,0.72);" onclick="if(event.target===this) window.closeAdminPinModal();">
+      <div class="modal-card admin-pin-dialog" style="max-width:440px; width:92%; background:linear-gradient(145deg, #1b0a2d, #11041d); border:1.5px solid rgba(255,184,28,0.5); border-radius:18px; box-shadow:0 24px 50px rgba(0,0,0,0.8), 0 0 35px rgba(255,184,28,0.2); overflow:hidden;">
+        <div class="modal-header" style="background:linear-gradient(135deg, rgba(74,21,107,0.85), rgba(28,8,45,0.95)); padding:1.1rem 1.35rem; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,184,28,0.25);">
+          <div style="display:flex; align-items:center; gap:0.65rem;">
+            <span style="font-size:1.4rem; line-height:1; filter:drop-shadow(0 0 6px rgba(255,184,28,0.5));">🔒</span>
+            <div>
+              <h3 style="margin:0; font-size:1.05rem; font-weight:700; color:#FDE047; letter-spacing:0.3px;">ยืนยันสิทธิ์ผู้ดูแลระบบ (Admin)</h3>
+              <p id="adminPinSubtitle" style="margin:0; font-size:0.75rem; color:var(--text-muted, #A78BFA);">เข้าถึงฟังก์ชันการ์ดเป้าหมายรายเดือน</p>
+            </div>
+          </div>
+          <button type="button" class="btn-modal-close" onclick="window.closeAdminPinModal()" style="background:none; border:none; color:var(--text-muted); font-size:1.4rem; cursor:pointer; line-height:1; padding:0 4px;" title="ปิดหน้าต่าง">&times;</button>
+        </div>
+        <div class="modal-body" style="padding:1.35rem 1.5rem; display:flex; flex-direction:column; gap:1rem;">
+          <div id="adminPinDesc" style="font-size:0.86rem; color:var(--text-main, #E2E8F0); line-height:1.55;">
+            กรุณากรอกรหัสผ่าน <strong>Admin PIN</strong> เพื่อปลดล็อกและเปิดดูการ์ดเป้าหมายปิดงานรายเดือน
+          </div>
+          <div>
+            <label for="adminPinInput" style="display:block; font-size:0.80rem; font-weight:600; color:#FCD34D; margin-bottom:0.45rem;">
+              🔑 รหัสผ่าน Admin PIN:
+            </label>
+            <div style="position:relative; display:flex; align-items:center;">
+              <input type="password" id="adminPinInput" class="form-input" maxlength="20" placeholder="กรอกรหัสผ่าน Admin PIN"
+                autocomplete="off"
+                onkeydown="if(event.key==='Enter') window.verifyAdminPin();"
+                style="width:100%; padding:0.65rem 2.6rem 0.65rem 0.85rem; font-size:1.05rem; letter-spacing:3px; font-weight:700; border-radius:10px; background:rgba(0,0,0,0.35); border:1.5px solid rgba(255,184,28,0.4); color:#FFFFFF;" />
+              <button type="button" id="btnTogglePinVisibility" onclick="window.toggleAdminPinVisibility()"
+                tabindex="-1"
+                style="position:absolute; right:8px; background:transparent; border:none; color:var(--text-muted); cursor:pointer; font-size:1.15rem; padding:4px; line-height:1; display:flex; align-items:center; justify-content:center;"
+                title="แสดง/ซ่อนรหัสผ่าน">👁️</button>
+            </div>
+            <div id="adminPinErrorMsg" style="display:none; color:#F87171; font-size:0.80rem; margin-top:0.45rem; font-weight:600;">
+              ❌ รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer" style="padding:0.9rem 1.35rem; display:flex; justify-content:flex-end; gap:0.65rem; border-top:1px solid rgba(255,255,255,0.08); background:rgba(0,0,0,0.25);">
+          <button type="button" class="btn btn-outline" onclick="window.closeAdminPinModal()" style="padding:0.45rem 1rem; font-size:0.85rem;">ยกเลิก</button>
+          <button type="button" class="btn btn-primary" onclick="window.verifyAdminPin()" style="background:linear-gradient(135deg, #D97706, #B45309); border:1px solid #F59E0B; padding:0.45rem 1.25rem; font-size:0.85rem; font-weight:600; display:inline-flex; align-items:center; gap:6px;">
+            <span>ปลดล็อก 🔓</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
   </div>
 
 
@@ -2444,11 +2489,11 @@
   <script src="js/data_aug.js?v=20260929_1655"></script>
   <script src="js/data_sep.js?v=20261022_2315"></script>
   <script src="js/kpi_matrix.js?v=20261003_0930"></script>
-  <script src="js/chart.js?v=20261025_1005"></script>
+  <script src="js/chart.js?v=20261026_1100"></script>
   <script src="js/data_wbs.js?v=20261024_2055"></script>
-  <script src="js/wbs.js?v=20261025_1955"></script>
-  <script src="js/data_history.js?v=20261025_1955"></script>
-  <script src="js/app.js?v=20261025_1005"></script>
+  <script src="js/wbs.js?v=20261026_1020"></script>
+  <script src="js/data_history.js?v=20261026_1100"></script>
+  <script src="js/app.js?v=20261026_1100"></script>
   <script src="js/criteria_dropdown.js?v=20261017_2055"></script>
 </body>
 

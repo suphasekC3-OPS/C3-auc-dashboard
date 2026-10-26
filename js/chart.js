@@ -482,7 +482,7 @@ class PeaChart {
                 badgeX = Math.max(pad.left + 1, Math.min(width - pad.right - badgeW - 1, badgeX));
 
                 if (textW + 6 > badgeW) {
-                  currentFontSize = Math.max(6.5, currentFontSize * ((badgeW - 6) / textW));
+                  currentFontSize = Math.max(5.5, currentFontSize * ((badgeW - 6) / textW));
                   ctx.font = `700 ${currentFontSize}px 'Prompt', 'Sarabun', sans-serif`;
                   textW = ctx.measureText(item.label).width;
                 }
@@ -581,14 +581,19 @@ class PeaChart {
                 : (options.formatBarValue ? options.formatBarValue(val, gIdx) : `${Math.round(val)}%`);
               valText = valText.replace(/^★\s*/, '');
 
-              const kpiH = options.barValueHeight || 16;
-              const kpiFontSize = options.barValueFontSize || (currentBarW < 32 ? 8 : (currentBarW < 42 ? 8.8 : (currentBarW < 55 ? 9.5 : 10.5)));
+              const kpiH = options.barValueHeight || 17;
+              let kpiFontSize = options.barValueFontSize || (currentBarW < 32 ? 8 : (currentBarW < 42 ? 8.8 : (currentBarW < 55 ? 9.5 : 10.5)));
               ctx.save();
               ctx.font = `800 ${kpiFontSize}px 'Prompt', 'Sarabun', sans-serif`;
-              const textW = ctx.measureText(valText).width;
+              let textW = ctx.measureText(valText).width;
               const isFullW = options.barValueFullWidth !== false;
               const badgeInset = options.badgeInset !== undefined ? options.badgeInset : (currentBarW < 40 ? 4 : 6);
               const maxBadgeW = Math.max(24, currentBarW - badgeInset);
+              if (textW > maxBadgeW - 6) {
+                kpiFontSize = Math.max(7.5, Math.floor(kpiFontSize * ((maxBadgeW - 6) / textW) * 10) / 10);
+                ctx.font = `800 ${kpiFontSize}px 'Prompt', 'Sarabun', sans-serif`;
+                textW = ctx.measureText(valText).width;
+              }
               const pillW = isFullW ? maxBadgeW : Math.min(maxBadgeW, textW + 8);
               let pillX = currentX + (currentBarW - pillW) / 2;
               pillX = Math.max(pad.left + 1, Math.min(width - pad.right - pillW - 1, pillX));
@@ -678,13 +683,18 @@ class PeaChart {
           valText = valText.replace(/^★\s*/, '');
 
           if (options.barValuePosition === 'bottom' && !isKfg) {
-            const kpiH = 17;
-            const kpiFontSize = currentBarW < 32 ? 7.5 : (currentBarW < 42 ? 8.5 : (currentBarW < 55 ? 9.5 : 10.5));
+            const kpiH = options.barValueHeight || 17;
+            let kpiFontSize = options.barValueFontSize || (currentBarW < 32 ? 7.5 : (currentBarW < 42 ? 8.5 : (currentBarW < 55 ? 9.5 : 10.5)));
             ctx.font = `800 ${kpiFontSize}px 'Prompt', 'Sarabun', sans-serif`;
-            const textW = ctx.measureText(valText).width;
+            let textW = ctx.measureText(valText).width;
             const isFullW = options.barValueFullWidth !== false;
             const badgeInset = options.badgeInset !== undefined ? options.badgeInset : (currentBarW < 40 ? 4 : 6);
             const maxBadgeW = Math.max(24, currentBarW - badgeInset);
+            if (textW > maxBadgeW - 6) {
+              kpiFontSize = Math.max(7.5, Math.floor(kpiFontSize * ((maxBadgeW - 6) / textW) * 10) / 10);
+              ctx.font = `800 ${kpiFontSize}px 'Prompt', 'Sarabun', sans-serif`;
+              textW = ctx.measureText(valText).width;
+            }
             const pillW = isFullW ? maxBadgeW : Math.min(maxBadgeW, textW + 10);
             const pillX = currentX + (currentBarW - pillW) / 2;
             const pillY = pad.top + plotH - kpiH - 6;
@@ -870,9 +880,17 @@ class PeaChart {
 
           // Position sitting right on top of the bar (or in top padding headroom if bar is at ceiling)
           let achieveBadgeY = (val >= 100 || y <= pad.top + 6)
-            ? (pad.top - achieveBadgeH - 6)
-            : (y - achieveBadgeH - 6);
+            ? (pad.top - achieveBadgeH - 5)
+            : (y - achieveBadgeH - 5);
           if (achieveBadgeY < 2) achieveBadgeY = 2;
+
+          const curBarObj = this.renderedBars && this.renderedBars.find(b => b.gIdx === gIdx && b.dIdx === dIdx);
+          if (curBarObj) {
+            curBarObj.achieveBadgeX = achieveBadgeX;
+            curBarObj.achieveBadgeY = achieveBadgeY;
+            curBarObj.achieveBadgeW = achieveBadgeW;
+            curBarObj.achieveBadgeH = achieveBadgeH;
+          }
 
           ctx.save();
           ctx.setLineDash([]);
@@ -1189,8 +1207,8 @@ class PeaChart {
       this.drawLegend(datasets);
     }
 
-    // Draw Tooltip
-    if (hoveredBar) {
+    // Draw Tooltip (ปิดการแสดงผลหากตั้ง showTooltip: false)
+    if (hoveredBar && options.showTooltip !== false) {
       const isNoWork = hoveredBar.extra && hoveredBar.extra.isNoWork;
       const isKfg = hoveredBar.extra && hoveredBar.extra.isKfg3Total;
       const isGoodKpi = hoveredBar.extra ? (hoveredBar.extra.kpi >= 5) : true;
@@ -1847,7 +1865,7 @@ class PeaChart {
       } else {
         ctx.fillStyle = color;
         ctx.shadowColor = color;
-        ctx.shadowBlur = (color === '#FF2D55' || color === '#FFB81C' || color === '#00FF88') ? 5 : 0;
+        ctx.shadowBlur = (color === '#FF2D55' || color === '#FFB81C' || color === '#00FF88' || color === '#FFD700') ? 5 : 0;
         ctx.beginPath();
         this.roundRect(ctx, startX, curY - 4, 12, 8, 2);
         ctx.fill();
@@ -1866,6 +1884,7 @@ class PeaChart {
   }
 
   drawTooltip(x, y, title, items, isSpecial = false, isGoodKpi = true) {
+    if (this.options && this.options.showTooltip === false) return;
     const { ctx, width, height } = this;
     const pad = 8;
     const isManyItems = items.length > 5;

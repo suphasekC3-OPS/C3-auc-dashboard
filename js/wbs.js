@@ -2007,7 +2007,8 @@
                     <div class="target-marker-line"
                       style="left: ${targetMarkerLeft};"
                       title="เส้นเป้าหมาย KPI ระดับ 5: ${targetDisplay}">
-                      <span class="target-marker-label ${markerAlignClass}">▲ เส้นเป้าหมาย (${formatShort(targetAmount)})</span>
+                      <div class="target-marker-beam"></div>
+                      <span class="target-marker-label ${markerAlignClass}">เส้นเป้าหมาย (${formatShort(targetAmount)}) ▲</span>
                     </div>
 
                     <!-- Multi-segment Fill -->
@@ -2680,6 +2681,10 @@
     const avgPctMat = countMat > 0 ? (sumMat / countMat) : 0;
     const avgPctExpense = countExpense > 0 ? (sumExpense / countExpense) : 0;
 
+    const isWbsAuth = (typeof window.isWbsEditAuthenticated === 'function')
+      ? window.isWbsEditAuthenticated()
+      : (sessionStorage.getItem('auc_wbs_edit_authenticated') === 'true');
+
     const orderedDefs = getOrderedColDefs();
     const visibleOrdered = orderedDefs.filter(col => wbsState.visibleColumns[col.id]);
 
@@ -2814,6 +2819,20 @@
               </div>`;
             break;
           }
+
+          case 'planClose':
+          case 'note':
+            headerMetricHtml = `
+              <div class="th-header-metric-badge th-header-lock-badge" onclick="event.stopPropagation()">
+                <button type="button" class="btn-th-wbs-lock ${isWbsAuth ? 'admin-unlocked' : ''}" 
+                  id="btnWbsHeaderLock_${col.id}"
+                  onclick="window.handleWbsEditLockToggle(event)"
+                  title="${isWbsAuth ? 'สิทธิ์ Admin ปลดล็อกแล้ว: สามารถแก้ไขได้ทุกแถว (คลิกเพื่อล็อกกลับ)' : 'ล็อกการแก้ไข: คลิกเพื่อกรอก Admin PIN ปลดล็อกทุกแถว'}">
+                  <span class="lock-icon">${isWbsAuth ? '🔓' : '🔒'}</span>
+                  <span class="lock-text">${isWbsAuth ? 'ปลดล็อกแล้ว' : 'ปลดล็อกแก้ไข'}</span>
+                </button>
+              </div>`;
+            break;
 
           default:
             headerMetricHtml = '';
@@ -3160,7 +3179,14 @@
       const globalState = window.state || {};
       const globalFilters = globalState.filters || {};
       const currentCrit = globalFilters.criteria || (document.getElementById('filterCriteria') ? document.getElementById('filterCriteria').value : 'ALL');
-      const excludedSap = getExcludedSapForCriteria(currentCrit);
+      const isWbsAuth = (typeof window.isWbsEditAuthenticated === 'function')
+        ? window.isWbsEditAuthenticated()
+        : (sessionStorage.getItem('auc_wbs_edit_authenticated') === 'true');
+      const editBtnIcon = isWbsAuth ? '✏️' : '🔒';
+      const editBtnClass = isWbsAuth ? 'btn-wbs-inline-edit' : 'btn-wbs-inline-edit is-locked';
+      const editBtnTitle = isWbsAuth
+        ? 'คลิกเพื่อแก้ไขแผนปิดงาน / หมายเหตุ (Google Sheet)'
+        : 'เฉพาะผู้ดูแลระบบ: คลิกเพื่อกรอกรหัส Admin PIN ปลดล็อกการแก้ไขทุกแถว';
 
       let rowsHtml = '';
       pageItems.forEach((item, index) => {
@@ -3362,8 +3388,8 @@
                 rowHtml += `<td style="text-align: center; background: rgba(220, 38, 38, 0.28) !important; border-top: 1px solid rgba(239, 68, 68, 0.4); border-bottom: 1px solid rgba(239, 68, 68, 0.4); border-left: 2px solid #EF4444;">
                   <div class="wbs-cell-edit-wrap is-center">
                     <span class="badge-plan-not-found" style="background: #DC2626; color: #FFFFFF; font-weight: 700; font-size: 0.72rem; padding: 2px 7px; border-radius: 4px; box-shadow: 0 0 8px rgba(220, 38, 38, 0.45); white-space: nowrap;" title="ไม่พบเลขที่ WBS นี้ใน Google Sheet (ยึดตาม Google Sheet เท่านั้น)">❌ ไม่พบใน Google Sheet</span>
-                    <button type="button" class="btn-wbs-inline-edit" onclick="window.openWbsEditNoteModal('${safeWbsAttr}')" title="คลิกเพื่อระบุแผนปิดงาน / หมายเหตุ เพื่อส่งเข้า Google Sheet">
-                      ✏️
+                    <button type="button" class="${editBtnClass}" onclick="window.openWbsEditNoteModal('${safeWbsAttr}')" title="${editBtnTitle}">
+                      ${editBtnIcon}
                     </button>
                   </div>
                 </td>`;
@@ -3371,8 +3397,8 @@
                 rowHtml += `<td style="text-align: center;">
                   <div class="wbs-cell-edit-wrap is-center">
                     ${pVal ? `<span class="badge-plan-close" title="${escapeHtml(pVal)}">📅 ${escapeHtml(pVal)}</span>` : `<span style="color: var(--text-dim); font-size: 0.8rem;">-</span>`}
-                    <button type="button" class="btn-wbs-inline-edit" onclick="window.openWbsEditNoteModal('${safeWbsAttr}')" title="คลิกเพื่อแก้ไขแผนปิดงาน / หมายเหตุ (Google Sheet)">
-                      ✏️
+                    <button type="button" class="${editBtnClass}" onclick="window.openWbsEditNoteModal('${safeWbsAttr}')" title="${editBtnTitle}">
+                      ${editBtnIcon}
                     </button>
                   </div>
                 </td>`;
@@ -3386,8 +3412,8 @@
                 rowHtml += `<td style="background: rgba(220, 38, 38, 0.28) !important; border-top: 1px solid rgba(239, 68, 68, 0.4); border-bottom: 1px solid rgba(239, 68, 68, 0.4); border-right: 2px solid #EF4444; text-align: left !important;">
                   <div class="wbs-cell-edit-wrap is-between" style="text-align: left; justify-content: space-between;">
                     <div class="wbs-note-cell" style="flex:1; text-align: left !important; color: #FCA5A5; font-size: 0.78rem; font-weight: 600;" title="ไม่พบเลขที่ WBS นี้ใน Google Sheet (ยึดตาม Google Sheet เท่านั้น)">❌ ไม่พบใน Google Sheet</div>
-                    <button type="button" class="btn-wbs-inline-edit" onclick="window.openWbsEditNoteModal('${safeWbsAttr}')" title="คลิกเพื่อระบุหมายเหตุ / แผนปิดงาน เพื่อส่งเข้า Google Sheet">
-                      ✏️
+                    <button type="button" class="${editBtnClass}" onclick="window.openWbsEditNoteModal('${safeWbsAttr}')" title="${editBtnTitle}">
+                      ${editBtnIcon}
                     </button>
                   </div>
                 </td>`;
@@ -3395,8 +3421,8 @@
                 rowHtml += `<td style="text-align: left !important;">
                   <div class="wbs-cell-edit-wrap is-between" style="text-align: left; justify-content: space-between;">
                     <div class="wbs-note-cell" style="flex:1; text-align: left !important;" title="${escapeHtml(nVal)}">${escapeHtml(nVal || '-')}</div>
-                    <button type="button" class="btn-wbs-inline-edit" onclick="window.openWbsEditNoteModal('${safeWbsAttr}')" title="คลิกเพื่อแก้ไขหมายเหตุ / แผนปิดงาน (Google Sheet)">
-                      ✏️
+                    <button type="button" class="${editBtnClass}" onclick="window.openWbsEditNoteModal('${safeWbsAttr}')" title="${editBtnTitle}">
+                      ${editBtnIcon}
                     </button>
                   </div>
                 </td>`;
@@ -3430,6 +3456,7 @@
     // Refresh left scrollbar position
     setTimeout(() => {
       if (window.updateWbsLeftScrollbar) window.updateWbsLeftScrollbar();
+      if (window.updateWbsEditLockUI) window.updateWbsEditLockUI();
     }, 40);
   }
 
@@ -5742,6 +5769,18 @@
 
   window.openWbsEditNoteModal = function (wbsCode) {
     if (!wbsCode) return;
+    const isWbsAuth = (typeof window.isWbsEditAuthenticated === 'function')
+      ? window.isWbsEditAuthenticated()
+      : (sessionStorage.getItem('auc_wbs_edit_authenticated') === 'true');
+
+    if (!isWbsAuth) {
+      window.pendingWbsEditWbs = wbsCode;
+      if (typeof window.openAdminPinModal === 'function') {
+        window.openAdminPinModal('wbs');
+      }
+      return;
+    }
+
     const allData = window.AUC_WBS_REMAINING_DATA || [];
     const item = allData.find(x => x.wbs === wbsCode);
     if (!item) {
@@ -5782,6 +5821,90 @@
     const modal = document.getElementById('wbsEditNoteModal');
     if (modal) modal.style.display = 'none';
     currentEditingWbsItem = null;
+  };
+
+  window.handleWbsEditLockToggle = function (evt) {
+    if (evt) {
+      evt.preventDefault();
+      evt.stopPropagation();
+    }
+    const isWbsAuth = (typeof window.isWbsEditAuthenticated === 'function')
+      ? window.isWbsEditAuthenticated()
+      : (sessionStorage.getItem('auc_wbs_edit_authenticated') === 'true');
+
+    if (!isWbsAuth) {
+      window.pendingWbsEditWbs = null;
+      if (typeof window.openAdminPinModal === 'function') {
+        window.openAdminPinModal('wbs');
+      }
+    } else {
+      if (typeof window.logoutWbsEdit === 'function') {
+        window.logoutWbsEdit();
+      } else {
+        sessionStorage.removeItem('auc_wbs_edit_authenticated');
+        window.updateWbsEditLockUI();
+      }
+    }
+  };
+
+  window.updateWbsEditLockUI = function () {
+    const isWbsAuth = (typeof window.isWbsEditAuthenticated === 'function')
+      ? window.isWbsEditAuthenticated()
+      : (sessionStorage.getItem('auc_wbs_edit_authenticated') === 'true');
+
+    // 1. Update header lock buttons in table header (under planClose and note)
+    const headerLockBtns = document.querySelectorAll('.btn-th-wbs-lock');
+    headerLockBtns.forEach(btn => {
+      if (isWbsAuth) {
+        btn.classList.add('admin-unlocked');
+        btn.innerHTML = `
+          <span class="lock-icon">🔓</span>
+          <span class="lock-text">ปลดล็อกแล้ว</span>
+        `;
+        btn.title = 'สิทธิ์ Admin ปลดล็อกแล้ว: สามารถแก้ไขได้ทุกแถว (คลิกเพื่อล็อกกลับ)';
+      } else {
+        btn.classList.remove('admin-unlocked');
+        btn.innerHTML = `
+          <span class="lock-icon">🔒</span>
+          <span class="lock-text">ปลดล็อกแก้ไข</span>
+        `;
+        btn.title = 'ล็อกการแก้ไขแผนงานและหมายเหตุ: คลิกเพื่อกรอก Admin PIN ปลดล็อกทุกแถว';
+      }
+    });
+
+    // Toolbar lock button fallback if present
+    const btnLock = document.getElementById('btnToggleWbsEditLock');
+    if (btnLock) {
+      if (isWbsAuth) {
+        btnLock.classList.add('admin-unlocked');
+        btnLock.innerHTML = `
+          <span style="font-size:0.9rem;">🔓</span>
+          <span>ปลดล็อกแก้ไขแล้ว (Admin)</span>
+        `;
+        btnLock.title = 'สิทธิ์ Admin ปลดล็อกแล้ว: สามารถแก้ไขได้ทุกแถว (คลิกเพื่อล็อกกลับ)';
+      } else {
+        btnLock.classList.remove('admin-unlocked');
+        btnLock.innerHTML = `
+          <span style="font-size:0.9rem;">🔒</span>
+          <span>ล็อกการแก้ไข</span>
+        `;
+        btnLock.title = 'ล็อกการแก้ไขแผนงานและหมายเหตุ: คลิกเพื่อกรอก Admin PIN ปลดล็อกทุกแถว';
+      }
+    }
+
+    // 2. Update inline edit buttons in the table
+    const editBtns = document.querySelectorAll('.btn-wbs-inline-edit');
+    editBtns.forEach(btn => {
+      if (isWbsAuth) {
+        btn.classList.remove('is-locked');
+        btn.innerHTML = '✏️';
+        btn.title = 'คลิกเพื่อแก้ไขแผนปิดงาน / หมายเหตุ (Google Sheet)';
+      } else {
+        btn.classList.add('is-locked');
+        btn.innerHTML = '🔒';
+        btn.title = 'เฉพาะผู้ดูแลระบบ: คลิกเพื่อกรอกรหัส Admin PIN ปลดล็อกการแก้ไขทุกแถว';
+      }
+    });
   };
 
   window.submitWbsEditNoteModal = async function () {
