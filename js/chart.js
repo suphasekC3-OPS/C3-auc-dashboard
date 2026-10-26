@@ -439,7 +439,7 @@ class PeaChart {
               }
               // หากมีป้าย ✓ บรรลุเป้าหมาย อยู่บนหัวแท่ง: ล็อคไม่ให้เป้าหมายในแท่งดันขึ้นไปเกิน pad.top เด็ดขาด (เริ่มที่ pad.top + 3 เสมอ)
               const minAllowedY = hasAchieveBadge ? (pad.top + 3) : ((val >= 100 || y <= pad.top + 6) ? (pad.top - 20) : (pad.top + 2));
-              const maxAllowedY = isBottomKpi ? (pad.top + plotH - 46) : (pad.top + plotH - badgeH - 2);
+              const maxAllowedY = isBottomKpi ? (pad.top + plotH - 50) : (pad.top + plotH - badgeH - 2);
               if (barItems.length > 0) {
                 if (barItems[0].badgeY < minAllowedY) barItems[0].badgeY = minAllowedY;
                 if (barItems[barItems.length - 1].badgeY + barItems[barItems.length - 1].h > maxAllowedY) {
@@ -456,7 +456,7 @@ class PeaChart {
               }
             }
             // Strict backward guarantee pass if pushed beyond bottom
-            const maxAllowedBottom = isBottomKpi ? (pad.top + plotH - 46) : (pad.top + plotH - 2);
+            const maxAllowedBottom = isBottomKpi ? (pad.top + plotH - 50) : (pad.top + plotH - 2);
             if (barItems.length > 0 && barItems[barItems.length - 1].badgeY + barItems[barItems.length - 1].h > maxAllowedBottom) {
               barItems[barItems.length - 1].badgeY = maxAllowedBottom - barItems[barItems.length - 1].h;
               for (let i = barItems.length - 2; i >= 0; i--) {
@@ -581,57 +581,83 @@ class PeaChart {
                 : (options.formatBarValue ? options.formatBarValue(val, gIdx) : `${Math.round(val)}%`);
               valText = valText.replace(/^★\s*/, '');
 
+              const isNoCard = !!options.barValueNoCard;
               const kpiH = options.barValueHeight || 17;
-              let kpiFontSize = options.barValueFontSize || (currentBarW < 32 ? 8 : (currentBarW < 42 ? 8.8 : (currentBarW < 55 ? 9.5 : 10.5)));
+              let kpiFontSize = options.barValueFontSize || (isNoCard ? (currentBarW < 32 ? 11 : (currentBarW < 42 ? 13.5 : (currentBarW < 55 ? 16 : 18.5))) : (currentBarW < 32 ? 8 : (currentBarW < 42 ? 8.8 : (currentBarW < 55 ? 9.5 : 10.5))));
               ctx.save();
               ctx.font = `800 ${kpiFontSize}px 'Prompt', 'Sarabun', sans-serif`;
               let textW = ctx.measureText(valText).width;
-              const isFullW = options.barValueFullWidth !== false;
-              const badgeInset = options.badgeInset !== undefined ? options.badgeInset : (currentBarW < 40 ? 4 : 6);
-              const maxBadgeW = Math.max(24, currentBarW - badgeInset);
-              if (textW > maxBadgeW - 6) {
-                kpiFontSize = Math.max(7.5, Math.floor(kpiFontSize * ((maxBadgeW - 6) / textW) * 10) / 10);
+              const maxAllowedW = isNoCard ? Math.max(22, currentBarW - 2) : Math.max(24, currentBarW - (options.badgeInset !== undefined ? options.badgeInset : (currentBarW < 40 ? 4 : 6)) - 6);
+
+              if (textW > maxAllowedW) {
+                kpiFontSize = Math.max(isNoCard ? 10 : 7.5, Math.floor(kpiFontSize * (maxAllowedW / textW) * 10) / 10);
                 ctx.font = `800 ${kpiFontSize}px 'Prompt', 'Sarabun', sans-serif`;
                 textW = ctx.measureText(valText).width;
               }
-              const pillW = isFullW ? maxBadgeW : Math.min(maxBadgeW, textW + 8);
-              let pillX = currentX + (currentBarW - pillW) / 2;
-              pillX = Math.max(pad.left + 1, Math.min(width - pad.right - pillW - 1, pillX));
-              const pillY = pad.top + plotH - kpiH - 6;
 
-              // Glowing VIP Pill Background
-              ctx.setLineDash([]);
+              const centerX = currentX + currentBarW / 2;
               const isGoldTheme = (options.barValueTheme === 'gold' || !!options.barValueColor);
-              const bgCol = isNoWork
-                ? 'rgba(30, 41, 59, 0.96)'
-                : (isGoldTheme ? 'rgba(20, 6, 34, 0.95)' : (isGoodKpi ? 'rgba(6, 78, 59, 0.96)' : 'rgba(127, 29, 29, 0.96)'));
-              const strokeCol = isNoWork
-                ? '#94A3B8'
-                : (isGoldTheme ? (options.barValueBorderColor || '#FFB81C') : (isGoodKpi ? '#34D399' : '#F87171'));
-              const glowCol = isNoWork
-                ? 'transparent'
-                : (isGoldTheme ? 'rgba(255, 184, 28, 0.75)' : (isGoodKpi ? 'rgba(16, 185, 129, 0.85)' : 'rgba(239, 68, 68, 0.85)'));
               const textCol = isNoWork
                 ? '#94A3B8'
-                : (isGoldTheme ? (options.barValueTextColor || options.barValueColor || '#FFD25A') : '#FFFFFF');
+                : (isGoldTheme ? (options.barValueTextColor || options.barValueColor || '#FFF67A') : '#FFFFFF');
 
-              ctx.fillStyle = bgCol;
-              ctx.strokeStyle = strokeCol;
-              ctx.lineWidth = 1.6;
-              ctx.shadowColor = glowCol;
-              ctx.shadowBlur = 6;
-              this.roundRect(ctx, pillX, pillY, pillW, kpiH, 4);
-              ctx.fill();
-              ctx.stroke();
+              let starY;
 
-              // Text
-              ctx.fillStyle = textCol;
-              ctx.textAlign = 'center';
-              ctx.textBaseline = 'middle';
-              ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
-              ctx.shadowBlur = 2;
-              ctx.shadowOffsetY = 0.5;
-              ctx.fillText(valText, pillX + pillW / 2, pillY + kpiH / 2 + 0.5);
+              if (isNoCard) {
+                // ไม่มีการ์ดขอบทองพื้นดำ: แสดงตัวอักษรสีทองสว่างจ้า คมชัดสูง ไม่ทึบ ไม่มึนตา
+                const textY = pad.top + plotH - (kpiFontSize * 0.5) - 6;
+                ctx.fillStyle = textCol;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                // Single crisp, razor-sharp drop shadow (no blurry haze, no dirty double-pass)
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
+                ctx.shadowBlur = 1.5;
+                ctx.shadowOffsetX = 0;
+                ctx.shadowOffsetY = 1;
+                ctx.fillText(valText, centerX, textY);
+
+                starY = textY - (kpiFontSize * 0.5) - 3.5;
+              } else {
+                const isFullW = options.barValueFullWidth !== false;
+                const badgeInset = options.badgeInset !== undefined ? options.badgeInset : (currentBarW < 40 ? 4 : 6);
+                const maxBadgeW = Math.max(24, currentBarW - badgeInset);
+                const pillW = isFullW ? maxBadgeW : Math.min(maxBadgeW, textW + 8);
+                let pillX = currentX + (currentBarW - pillW) / 2;
+                pillX = Math.max(pad.left + 1, Math.min(width - pad.right - pillW - 1, pillX));
+                const pillY = pad.top + plotH - kpiH - 6;
+
+                // Glowing VIP Pill Background
+                ctx.setLineDash([]);
+                const bgCol = isNoWork
+                  ? 'rgba(30, 41, 59, 0.96)'
+                  : (isGoldTheme ? 'rgba(20, 6, 34, 0.95)' : (isGoodKpi ? 'rgba(6, 78, 59, 0.96)' : 'rgba(127, 29, 29, 0.96)'));
+                const strokeCol = isNoWork
+                  ? '#94A3B8'
+                  : (isGoldTheme ? (options.barValueBorderColor || '#FFB81C') : (isGoodKpi ? '#34D399' : '#F87171'));
+                const glowCol = isNoWork
+                  ? 'transparent'
+                  : (isGoldTheme ? 'rgba(255, 184, 28, 0.75)' : (isGoodKpi ? 'rgba(16, 185, 129, 0.85)' : 'rgba(239, 68, 68, 0.85)'));
+
+                ctx.fillStyle = bgCol;
+                ctx.strokeStyle = strokeCol;
+                ctx.lineWidth = 1.6;
+                ctx.shadowColor = glowCol;
+                ctx.shadowBlur = 6;
+                this.roundRect(ctx, pillX, pillY, pillW, kpiH, 4);
+                ctx.fill();
+                ctx.stroke();
+
+                // Text
+                ctx.fillStyle = textCol;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
+                ctx.shadowBlur = 2;
+                ctx.shadowOffsetY = 0.5;
+                ctx.fillText(valText, pillX + pillW / 2, pillY + kpiH / 2 + 0.5);
+
+                starY = pillY - 2.5;
+              }
               ctx.restore();
 
               // วาดดาว KPI ระดับ 5 เหนือป้าย % ปิดงาน ("ไว้ด้านบน %ปิดงาน")
@@ -643,25 +669,16 @@ class PeaChart {
               if (starCount > 0 && !isNoWork) {
                 const starStr = '★'.repeat(starCount);
                 const maxW = Math.max(26, currentBarW - 4);
-                const rawSize = starCount >= 4 ? 9.5 : (starCount === 3 ? 11 : 12.5);
-                const starFSize = Math.min(rawSize, Math.max(8.5, maxW / (starCount * 1.12)));
-                const centerX = currentX + currentBarW / 2;
-                const starY = pillY - 2.5;
+                const rawSize = starCount >= 4 ? 10.5 : (starCount === 3 ? 12 : 13.5);
+                const starFSize = Math.min(rawSize, Math.max(9, maxW / (starCount * 1.12)));
 
                 ctx.save();
                 ctx.font = `900 ${starFSize}px 'Prompt', 'Sarabun', sans-serif`;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'bottom';
 
-                // Luminous golden glow layer
-                ctx.shadowColor = 'rgba(255, 184, 28, 0.9)';
-                ctx.shadowBlur = 7;
-                ctx.shadowOffsetY = 0;
-                ctx.fillStyle = '#FFD25A';
-                ctx.fillText(starStr, centerX, starY);
-
-                // Sharp foreground highlight with dark drop shadow for high contrast against bar
-                ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
+                // Sharp foreground highlight with clean drop shadow
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
                 ctx.shadowBlur = 2;
                 ctx.shadowOffsetY = 1;
                 ctx.fillStyle = '#FFF8C7';
@@ -683,79 +700,97 @@ class PeaChart {
           valText = valText.replace(/^★\s*/, '');
 
           if (options.barValuePosition === 'bottom' && !isKfg) {
+            const isNoCard = !!options.barValueNoCard;
             const kpiH = options.barValueHeight || 17;
-            let kpiFontSize = options.barValueFontSize || (currentBarW < 32 ? 7.5 : (currentBarW < 42 ? 8.5 : (currentBarW < 55 ? 9.5 : 10.5)));
+            let kpiFontSize = options.barValueFontSize || (isNoCard ? (currentBarW < 32 ? 11 : (currentBarW < 42 ? 13.5 : (currentBarW < 55 ? 16 : 18.5))) : (currentBarW < 32 ? 7.5 : (currentBarW < 42 ? 8.5 : (currentBarW < 55 ? 9.5 : 10.5))));
             ctx.font = `800 ${kpiFontSize}px 'Prompt', 'Sarabun', sans-serif`;
             let textW = ctx.measureText(valText).width;
-            const isFullW = options.barValueFullWidth !== false;
-            const badgeInset = options.badgeInset !== undefined ? options.badgeInset : (currentBarW < 40 ? 4 : 6);
-            const maxBadgeW = Math.max(24, currentBarW - badgeInset);
-            if (textW > maxBadgeW - 6) {
-              kpiFontSize = Math.max(7.5, Math.floor(kpiFontSize * ((maxBadgeW - 6) / textW) * 10) / 10);
+            const maxAllowedW = isNoCard ? Math.max(22, currentBarW - 2) : Math.max(24, currentBarW - (options.badgeInset !== undefined ? options.badgeInset : (currentBarW < 40 ? 4 : 6)) - 6);
+            if (textW > maxAllowedW) {
+              kpiFontSize = Math.max(isNoCard ? 10 : 7.5, Math.floor(kpiFontSize * (maxAllowedW / textW) * 10) / 10);
               ctx.font = `800 ${kpiFontSize}px 'Prompt', 'Sarabun', sans-serif`;
               textW = ctx.measureText(valText).width;
             }
-            const pillW = isFullW ? maxBadgeW : Math.min(maxBadgeW, textW + 10);
-            const pillX = currentX + (currentBarW - pillW) / 2;
-            const pillY = pad.top + plotH - kpiH - 6;
 
+            const centerX = currentX + currentBarW / 2;
             const isGoldTheme = (options.barValueTheme === 'gold' || !!options.barValueColor);
-            const bgCol = isNoWork
-              ? 'rgba(30, 41, 59, 0.96)'
-              : (isGoldTheme ? 'rgba(20, 6, 34, 0.95)' : (isGoodKpi ? 'rgba(6, 78, 59, 0.96)' : 'rgba(127, 29, 29, 0.96)'));
-            const strokeCol = isNoWork
-              ? '#94A3B8'
-              : (isGoldTheme ? (options.barValueBorderColor || '#FFB81C') : (isGoodKpi ? '#34D399' : '#F87171'));
-            const glowCol = isNoWork
-              ? 'transparent'
-              : (isGoldTheme ? 'rgba(255, 184, 28, 0.75)' : (isGoodKpi ? 'rgba(16, 185, 129, 0.85)' : 'rgba(239, 68, 68, 0.85)'));
             const textCol = isNoWork
               ? '#94A3B8'
-              : (isGoldTheme ? (options.barValueTextColor || options.barValueColor || '#FFD25A') : '#FFFFFF');
+              : (isGoldTheme ? (options.barValueTextColor || options.barValueColor || '#FFF67A') : '#FFFFFF');
 
-            ctx.setLineDash([]);
-            ctx.fillStyle = bgCol;
-            ctx.strokeStyle = strokeCol;
-            ctx.lineWidth = 1.6;
-            ctx.shadowColor = glowCol;
-            ctx.shadowBlur = 6;
-            this.roundRect(ctx, pillX, pillY, pillW, kpiH, 4);
-            ctx.fill();
-            ctx.stroke();
+            let starY;
 
-            ctx.fillStyle = textCol;
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
-            ctx.shadowBlur = 2;
-            ctx.shadowOffsetY = 0.5;
-            ctx.fillText(valText, pillX + pillW / 2, pillY + kpiH / 2 + 0.5);
+            if (isNoCard) {
+              // ไม่มีการ์ดขอบทองพื้นดำ: แสดงตัวอักษรสีทองสว่างจ้า คมชัดสูง ไม่ทึบ ไม่มึนตา
+              const textY = pad.top + plotH - (kpiFontSize * 0.5) - 6;
+              ctx.fillStyle = textCol;
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'middle';
+              ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
+              ctx.shadowBlur = 1.5;
+              ctx.shadowOffsetX = 0;
+              ctx.shadowOffsetY = 1;
+              ctx.fillText(valText, centerX, textY);
+
+              starY = textY - (kpiFontSize * 0.5) - 3.5;
+            } else {
+              const isFullW = options.barValueFullWidth !== false;
+              const badgeInset = options.badgeInset !== undefined ? options.badgeInset : (currentBarW < 40 ? 4 : 6);
+              const maxBadgeW = Math.max(24, currentBarW - badgeInset);
+              const pillW = isFullW ? maxBadgeW : Math.min(maxBadgeW, textW + 10);
+              const pillX = currentX + (currentBarW - pillW) / 2;
+              const pillY = pad.top + plotH - kpiH - 6;
+
+              const bgCol = isNoWork
+                ? 'rgba(30, 41, 59, 0.96)'
+                : (isGoldTheme ? 'rgba(20, 6, 34, 0.95)' : (isGoodKpi ? 'rgba(6, 78, 59, 0.96)' : 'rgba(127, 29, 29, 0.96)'));
+              const strokeCol = isNoWork
+                ? '#94A3B8'
+                : (isGoldTheme ? (options.barValueBorderColor || '#FFB81C') : (isGoodKpi ? '#34D399' : '#F87171'));
+              const glowCol = isNoWork
+                ? 'transparent'
+                : (isGoldTheme ? 'rgba(255, 184, 28, 0.75)' : (isGoodKpi ? 'rgba(16, 185, 129, 0.85)' : 'rgba(239, 68, 68, 0.85)'));
+
+              ctx.setLineDash([]);
+              ctx.fillStyle = bgCol;
+              ctx.strokeStyle = strokeCol;
+              ctx.lineWidth = 1.6;
+              ctx.shadowColor = glowCol;
+              ctx.shadowBlur = 6;
+              this.roundRect(ctx, pillX, pillY, pillW, kpiH, 4);
+              ctx.fill();
+              ctx.stroke();
+
+              ctx.fillStyle = textCol;
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'middle';
+              ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
+              ctx.shadowBlur = 2;
+              ctx.shadowOffsetY = 0.5;
+              ctx.fillText(valText, pillX + pillW / 2, pillY + kpiH / 2 + 0.5);
+
+              starY = pillY - 2.5;
+            }
 
             // วาดดาว KPI ระดับ 5 เหนือป้าย % ปิดงาน ("ไว้ด้านบน %ปิดงาน")
             // ผ่านเกณฑ์ KPI 1 เดือน ให้ 1 ดาว, 2 เดือน ให้ 2 ดาว ตามลำดับ
-            const starCount = (ext && typeof ext.starCount === 'number') ? ext.starCount : 0;
+            let starCount = (ext && typeof ext.starCount === 'number') ? ext.starCount : 0;
+            if (starCount === 0 && isGoodKpi && !isNoWork) {
+              starCount = 1;
+            }
             if (starCount > 0 && !isNoWork) {
               const starStr = '★'.repeat(starCount);
               const maxW = Math.max(26, currentBarW - 4);
-              const rawSize = starCount >= 4 ? 9 : (starCount === 3 ? 10.5 : 12);
-              const starFSize = Math.min(rawSize, Math.max(8, maxW / (starCount * 1.12)));
-              const centerX = currentX + currentBarW / 2;
-              const starY = pillY - 2.5;
+              const rawSize = starCount >= 4 ? 10.5 : (starCount === 3 ? 12 : 13.5);
+              const starFSize = Math.min(rawSize, Math.max(9, maxW / (starCount * 1.12)));
 
               ctx.save();
               ctx.font = `900 ${starFSize}px 'Prompt', 'Sarabun', sans-serif`;
               ctx.textAlign = 'center';
               ctx.textBaseline = 'bottom';
 
-              // Luminous golden glow layer
-              ctx.shadowColor = 'rgba(255, 184, 28, 0.9)';
-              ctx.shadowBlur = 7;
-              ctx.shadowOffsetY = 0;
-              ctx.fillStyle = '#FFD25A';
-              ctx.fillText(starStr, centerX, starY);
-
-              // Sharp foreground highlight with dark drop shadow for high contrast against bar
-              ctx.shadowColor = 'rgba(0, 0, 0, 0.95)';
+              // Sharp foreground highlight with clean drop shadow
+              ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
               ctx.shadowBlur = 2;
               ctx.shadowOffsetY = 1;
               ctx.fillStyle = '#FFF8C7';
@@ -871,11 +906,12 @@ class PeaChart {
           ctx.restore();
         }
 
-        // Draw "✓ บรรลุเป้าหมาย" (Goal Achieved) badge if bar exceeds December KPI target
+        // Draw "✓ บรรลุเป้าหมาย" (Goal Achieved) text if bar exceeds December KPI target
+        // (ตามคำสั่งผู้ใช้งาน: บรรลุเป้าหมาย เพิ่มขนาดอักษร และให้อ่านง่ายไม่มั่วแบบนี้ และเปลี่ยนเป็นสีเหลืองทองอร่ามแจ่มๆ)
         if (ext && ext.isExceedDecKpi && !isNoWork && height > 25) {
           const badgeInset = options.badgeInset !== undefined ? options.badgeInset : (currentBarW < 40 ? 4 : 6);
           const achieveBadgeW = Math.max(24, currentBarW - badgeInset);
-          const achieveBadgeH = 16.5;
+          const achieveBadgeH = 18;
           const achieveBadgeX = currentX + (currentBarW - achieveBadgeW) / 2;
 
           // Position sitting right on top of the bar (or in top padding headroom if bar is at ceiling)
@@ -895,38 +931,50 @@ class PeaChart {
           ctx.save();
           ctx.setLineDash([]);
 
-          // Luminous Radiant Emerald Gradient Badge Background
-          const achieveGrad = ctx.createLinearGradient(achieveBadgeX, achieveBadgeY, achieveBadgeX, achieveBadgeY + achieveBadgeH);
-          achieveGrad.addColorStop(0, 'rgba(4, 60, 36, 0.98)');
-          achieveGrad.addColorStop(1, 'rgba(1, 32, 18, 0.98)');
-          ctx.fillStyle = achieveGrad;
-
-          // Glowing Electric Neon Green Border & Shadow
-          ctx.strokeStyle = '#00FF88';
-          ctx.lineWidth = 1.6;
-          ctx.shadowColor = 'rgba(0, 255, 136, 0.95)';
-          ctx.shadowBlur = 9;
-          this.roundRect(ctx, achieveBadgeX, achieveBadgeY, achieveBadgeW, achieveBadgeH, 3.5);
-          ctx.fill();
-          ctx.stroke();
-
-          // High-contrast Success Text: "✓ บรรลุเป้าหมาย"
-          const achieveText = '✓ บรรลุเป้าหมาย';
-          let fSize = currentBarW < 45 ? 7.2 : (currentBarW < 60 ? 8 : 8.8);
+          // สไตล์ สี และแบบอักษร ตามรูปหัวข้อเกณฑ์วัด (Prompt 800, Linear Gradient #FFF3B3 -> #FFD25A -> #FFB81C -> #F59E0B, Drop-shadow 0 2px 8px rgba(255,184,28,0.35))
+          const achieveText = 'บรรลุเป้าหมาย';
+          let fSize = currentBarW < 45 ? 11 : (currentBarW < 65 ? 12.5 : 13.8);
           ctx.font = `800 ${fSize}px 'Prompt', 'Sarabun', sans-serif`;
           let textW = ctx.measureText(achieveText).width;
-          if (textW > achieveBadgeW - 6) {
-            fSize = Math.max(6.5, fSize * ((achieveBadgeW - 8) / textW));
+          const maxTextW = Math.max(currentBarW + 18, 115);
+          if (textW > maxTextW) {
+            fSize = Math.max(10.5, fSize * (maxTextW / textW));
             ctx.font = `800 ${fSize}px 'Prompt', 'Sarabun', sans-serif`;
+            textW = ctx.measureText(achieveText).width;
           }
 
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
-          ctx.fillStyle = '#E8FFF4';
-          ctx.shadowColor = 'rgba(0, 255, 136, 0.8)';
-          ctx.shadowBlur = 3;
+          const textCenterX = currentX + currentBarW / 2;
+          const textCenterY = achieveBadgeY + achieveBadgeH / 2;
+
+          // ไล่เฉดสีทองหรูหรา 135 องศา ตามรูป (CSS: linear-gradient(135deg, #FFF3B3 0%, #FFD25A 38%, #FFB81C 72%, #F59E0B 100%))
+          const x0 = textCenterX - textW * 0.45;
+          const y0 = textCenterY - fSize * 0.55;
+          const x1 = textCenterX + textW * 0.45;
+          const y1 = textCenterY + fSize * 0.55;
+          const titleGoldGrad = ctx.createLinearGradient(x0, y0, x1, y1);
+          titleGoldGrad.addColorStop(0.00, '#FFF3B3');
+          titleGoldGrad.addColorStop(0.38, '#FFD25A');
+          titleGoldGrad.addColorStop(0.72, '#FFB81C');
+          titleGoldGrad.addColorStop(1.00, '#F59E0B');
+
+          // ชั้นที่ 1: เงาสีทองเรืองรองนุ่มนวลตามรูป (CSS: drop-shadow(0 2px 8px rgba(255, 184, 28, 0.35)))
+          ctx.shadowColor = 'rgba(255, 184, 28, 0.45)';
+          ctx.shadowOffsetX = 0;
+          ctx.shadowOffsetY = 2;
+          ctx.shadowBlur = 8;
+          ctx.fillStyle = titleGoldGrad;
+          ctx.fillText(achieveText, textCenterX, textCenterY);
+
+          // ชั้นที่ 2: แกนอักษรสีทองคมชัดระดับพิกเซล ไร้รอยเบลอ
+          ctx.shadowColor = 'transparent';
+          ctx.shadowBlur = 0;
+          ctx.shadowOffsetX = 0;
           ctx.shadowOffsetY = 0;
-          ctx.fillText(achieveText, achieveBadgeX + achieveBadgeW / 2, achieveBadgeY + achieveBadgeH / 2 + 0.5);
+          ctx.fillStyle = titleGoldGrad;
+          ctx.fillText(achieveText, textCenterX, textCenterY);
+
           ctx.restore();
         }
 

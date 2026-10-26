@@ -24,61 +24,61 @@
   // Comprehensive Column definitions (03 WBS base + 04 WBS ZBUDR064 + 05 WBS CN41 + 06 WBS CN41)
   const WBS_COL_DEFS = [
     // --- Group 1: File 03 Base Columns ---
-    { id: 'id', label: 'ลำดับ', width: '55px', align: 'center', sortKey: 'id', defaultVisible: true, group: '03' },
-    { id: 'wbs', label: 'WBS (เลขที่งาน)', minWidth: '220px', align: 'left', sortKey: 'wbs', defaultVisible: true, group: '03' },
-    { id: 'criteria', label: 'ประเภทเกณฑ์วัด', minWidth: '180px', align: 'left', sortKey: 'criteria', defaultVisible: false, group: '03' },
-    { id: 'province', label: 'พื้นที่', minWidth: '100px', align: 'left', sortKey: 'province', defaultVisible: false, group: '03' },
-    { id: 'office', label: 'กอง / กฟฟ.', minWidth: '150px', align: 'left', sortKey: 'office', defaultVisible: true, group: '03' },
-    { id: 'budget', label: 'งบ', width: '75px', align: 'center', sortKey: 'budget', defaultVisible: false, group: '03' },
-    { id: 'engineer', label: 'ช่างคุมงาน', minWidth: '180px', align: 'left', sortKey: 'engineer', defaultVisible: false, group: '03' },
-    { id: 'department', label: 'สังกัด', minWidth: '160px', align: 'left', sortKey: 'department', defaultVisible: false, group: '03' },
-    { id: 'type', label: 'ประเภท', width: '85px', align: 'center', sortKey: 'type', defaultVisible: false, group: '03' },
+    { id: 'id', label: 'ที่', width: '38px', minWidth: '35px', maxWidth: '42px', align: 'center', sortKey: 'id', defaultVisible: true, group: '03' },
+    { id: 'wbs', label: 'WBS (เลขที่งาน)', minWidth: '160px', align: 'left', sortKey: 'wbs', defaultVisible: true, group: '03' },
+    { id: 'criteria', label: 'ประเภทเกณฑ์วัด', minWidth: '150px', align: 'left', sortKey: 'criteria', defaultVisible: false, group: '03' },
+    { id: 'province', label: 'พื้นที่', minWidth: '90px', align: 'left', sortKey: 'province', defaultVisible: false, group: '03' },
+    { id: 'office', label: 'กอง / กฟฟ.', minWidth: '120px', align: 'left', sortKey: 'office', defaultVisible: true, group: '03' },
+    { id: 'budget', label: 'งบ', width: '65px', align: 'center', sortKey: 'budget', defaultVisible: false, group: '03' },
+    { id: 'engineer', label: 'ช่างคุมงาน', minWidth: '150px', align: 'left', sortKey: 'engineer', defaultVisible: false, group: '03' },
+    { id: 'department', label: 'สังกัด', minWidth: '135px', align: 'left', sortKey: 'department', defaultVisible: false, group: '03' },
+    { id: 'type', label: 'ประเภท', width: '70px', align: 'center', sortKey: 'type', defaultVisible: false, group: '03' },
 
     // --- Group 2: File 04 Project Info & SAP Status ---
-    { id: 'description', label: 'คำอธิบายภาษาไทย (ชื่องาน)', minWidth: '230px', align: 'left', sortKey: 'description', defaultVisible: true, group: '04_info' },
-    { id: 'statusSap', label: 'สถานะ SAP', minWidth: '145px', width: '150px', align: 'center', sortKey: 'statusSap', defaultVisible: true, group: 'custom' },
-    { id: 'status', label: 'Status (สถานะ SAP เต็ม)', minWidth: '180px', align: 'left', sortKey: 'status', defaultVisible: false, group: '04_info' },
-    { id: 'level', label: 'Lv', width: '60px', align: 'center', sortKey: 'level', defaultVisible: false, isNumeric: true, group: '04_info' },
+    { id: 'description', label: 'คำอธิบายภาษาไทย (ชื่องาน)', minWidth: '155px', align: 'left', sortKey: 'description', defaultVisible: true, group: '04_info' },
+    { id: 'statusSap', label: 'สถานะ SAP', minWidth: '100px', width: '105px', align: 'center', sortKey: 'statusSap', defaultVisible: true, group: 'custom' },
+    { id: 'status', label: 'Status (สถานะ SAP เต็ม)', minWidth: '145px', align: 'left', sortKey: 'status', defaultVisible: false, group: '04_info' },
+    { id: 'level', label: 'Lv', width: '50px', align: 'center', sortKey: 'level', defaultVisible: false, isNumeric: true, group: '04_info' },
 
     // --- Group 3: File 04 Budgets ---
-    { id: 'budgetOrigin', label: 'งบประมาณต้นแบบ', minWidth: '135px', align: 'right', sortKey: 'budgetOrigin', defaultVisible: false, isMoney: true, isNumeric: true, group: '04_budget' },
-    { id: 'budgetCurrent', label: 'งบประมาณปัจจุบัน', minWidth: '135px', align: 'right', sortKey: 'budgetCurrent', defaultVisible: false, isMoney: true, isNumeric: true, group: '04_budget' },
-    { id: 'budgetAlloc', label: 'ที่จัดสรร', minWidth: '120px', align: 'right', sortKey: 'budgetAlloc', defaultVisible: false, isMoney: true, isNumeric: true, group: '04_budget' },
-    { id: 'budgetDist', label: 'ที่กระจายได้', minWidth: '125px', align: 'right', sortKey: 'budgetDist', defaultVisible: false, isMoney: true, isNumeric: true, group: '04_budget' },
-    { id: 'budgetRemain', label: 'งบประมาณคงเหลือ', minWidth: '135px', align: 'right', sortKey: 'budgetRemain', defaultVisible: false, isMoney: true, isNumeric: true, group: '04_budget' },
+    { id: 'budgetOrigin', label: 'งบประมาณต้นแบบ', minWidth: '115px', align: 'right', sortKey: 'budgetOrigin', defaultVisible: false, isMoney: true, isNumeric: true, group: '04_budget' },
+    { id: 'budgetCurrent', label: 'งบประมาณปัจจุบัน', minWidth: '115px', align: 'right', sortKey: 'budgetCurrent', defaultVisible: false, isMoney: true, isNumeric: true, group: '04_budget' },
+    { id: 'budgetAlloc', label: 'ที่จัดสรร', minWidth: '105px', align: 'right', sortKey: 'budgetAlloc', defaultVisible: false, isMoney: true, isNumeric: true, group: '04_budget' },
+    { id: 'budgetDist', label: 'ที่กระจายได้', minWidth: '105px', align: 'right', sortKey: 'budgetDist', defaultVisible: false, isMoney: true, isNumeric: true, group: '04_budget' },
+    { id: 'budgetRemain', label: 'งบประมาณคงเหลือ', minWidth: '115px', align: 'right', sortKey: 'budgetRemain', defaultVisible: false, isMoney: true, isNumeric: true, group: '04_budget' },
 
     // --- Group 4: File 04 Actual Costs ---
-    { id: 'actTotalCtrl', label: 'รวม Act.ทั้งหมดที่ควบคุม งปม.', minWidth: '160px', align: 'right', sortKey: 'actTotalCtrl', defaultVisible: false, isMoney: true, isNumeric: true, group: '04_act' },
-    { id: 'prPo', label: 'PR/PO', minWidth: '110px', align: 'right', sortKey: 'prPo', defaultVisible: false, isMoney: true, isNumeric: true, group: '04_act' },
-    { id: 'actMat121', label: 'Act.ค่าวัสดุ 121*', minWidth: '125px', align: 'right', sortKey: 'actMat121', defaultVisible: false, isMoney: true, isNumeric: true, group: '04_act' },
-    { id: 'actMatCheck', label: 'Act.ค่าวัสดุ(เช็คงบ)', minWidth: '135px', align: 'right', sortKey: 'actMatCheck', defaultVisible: false, isMoney: true, isNumeric: true, group: '04_act' },
-    { id: 'actMatPost', label: 'Act.ค่าวัสดุ(Post ย้อน 2016)', minWidth: '145px', align: 'right', sortKey: 'actMatPost', defaultVisible: false, isMoney: true, isNumeric: true, group: '04_act' },
-    { id: 'actMatNoCheck', label: 'Act.ค่าวัสดุ(ไม่เช็คงบ)', minWidth: '135px', align: 'right', sortKey: 'actMatNoCheck', defaultVisible: false, isMoney: true, isNumeric: true, group: '04_act' },
-    { id: 'actMatSite', label: 'Act.ค่าวัสดุเข้างาน (53051080)', minWidth: '150px', align: 'right', sortKey: 'actMatSite', defaultVisible: false, isMoney: true, isNumeric: true, group: '04_act' },
-    { id: 'actLabor', label: 'Act.ค่าจ้างเหมา', minWidth: '125px', align: 'right', sortKey: 'actLabor', defaultVisible: false, isMoney: true, isNumeric: true, group: '04_act' },
-    { id: 'actCoord', label: 'Act.ค่าประสานงาน', minWidth: '125px', align: 'right', sortKey: 'actCoord', defaultVisible: false, isMoney: true, isNumeric: true, group: '04_act' },
-    { id: 'actOtherSite', label: 'Act.คชจ.หน้างานอื่นๆ', minWidth: '135px', align: 'right', sortKey: 'actOtherSite', defaultVisible: false, isMoney: true, isNumeric: true, group: '04_act' },
+    { id: 'actTotalCtrl', label: 'รวม Act.ทั้งหมดที่ควบคุม งปม.', minWidth: '135px', align: 'right', sortKey: 'actTotalCtrl', defaultVisible: false, isMoney: true, isNumeric: true, group: '04_act' },
+    { id: 'prPo', label: 'PR/PO', minWidth: '95px', align: 'right', sortKey: 'prPo', defaultVisible: false, isMoney: true, isNumeric: true, group: '04_act' },
+    { id: 'actMat121', label: 'Act.ค่าวัสดุ 121*', minWidth: '110px', align: 'right', sortKey: 'actMat121', defaultVisible: false, isMoney: true, isNumeric: true, group: '04_act' },
+    { id: 'actMatCheck', label: 'Act.ค่าวัสดุ(เช็คงบ)', minWidth: '115px', align: 'right', sortKey: 'actMatCheck', defaultVisible: false, isMoney: true, isNumeric: true, group: '04_act' },
+    { id: 'actMatPost', label: 'Act.ค่าวัสดุ(Post ย้อน 2016)', minWidth: '120px', align: 'right', sortKey: 'actMatPost', defaultVisible: false, isMoney: true, isNumeric: true, group: '04_act' },
+    { id: 'actMatNoCheck', label: 'Act.ค่าวัสดุ(ไม่เช็คงบ)', minWidth: '115px', align: 'right', sortKey: 'actMatNoCheck', defaultVisible: false, isMoney: true, isNumeric: true, group: '04_act' },
+    { id: 'actMatSite', label: 'Act.ค่าวัสดุเข้างาน (53051080)', minWidth: '125px', align: 'right', sortKey: 'actMatSite', defaultVisible: false, isMoney: true, isNumeric: true, group: '04_act' },
+    { id: 'actLabor', label: 'Act.ค่าจ้างเหมา', minWidth: '110px', align: 'right', sortKey: 'actLabor', defaultVisible: false, isMoney: true, isNumeric: true, group: '04_act' },
+    { id: 'actCoord', label: 'Act.ค่าประสานงาน', minWidth: '110px', align: 'right', sortKey: 'actCoord', defaultVisible: false, isMoney: true, isNumeric: true, group: '04_act' },
+    { id: 'actOtherSite', label: 'Act.คชจ.หน้างานอื่นๆ', minWidth: '115px', align: 'right', sortKey: 'actOtherSite', defaultVisible: false, isMoney: true, isNumeric: true, group: '04_act' },
 
     // --- Group 5: File 04 Plan & Approvals ---
-    { id: 'planMat', label: 'Plan ค่าวัสดุ', minWidth: '125px', align: 'right', sortKey: 'planMat', defaultVisible: false, isMoney: true, isNumeric: true, group: '04_plan' },
-    { id: 'pctMatWithdraw', label: '% เบิกพัสดุ', minWidth: '115px', align: 'right', sortKey: 'pctMatWithdraw', defaultVisible: true, isPercent: true, isNumeric: true, group: 'custom' },
-    { id: 'planMatSite', label: 'Plan ค่าวัสดุเข้างาน (53051080)', minWidth: '150px', align: 'right', sortKey: 'planMatSite', defaultVisible: false, isMoney: true, isNumeric: true, group: '04_plan' },
-    { id: 'planSite', label: 'Plan คชจ.หน้างาน', minWidth: '130px', align: 'right', sortKey: 'planSite', defaultVisible: false, isMoney: true, isNumeric: true, group: '04_plan' },
-    { id: 'pctExpenseWithdraw', label: '% เบิก คชจ.', minWidth: '115px', align: 'right', sortKey: 'pctExpenseWithdraw', defaultVisible: true, isPercent: true, isNumeric: true, group: 'custom' },
-    { id: 'apprSite', label: 'อนุมัติ คชจ.หน้างาน', minWidth: '130px', align: 'right', sortKey: 'apprSite', defaultVisible: false, isMoney: true, isNumeric: true, group: '04_plan' },
+    { id: 'planMat', label: 'Plan ค่าวัสดุ', minWidth: '110px', align: 'right', sortKey: 'planMat', defaultVisible: false, isMoney: true, isNumeric: true, group: '04_plan' },
+    { id: 'pctMatWithdraw', label: '% เบิกพัสดุ', minWidth: '78px', width: '82px', align: 'right', sortKey: 'pctMatWithdraw', defaultVisible: true, isPercent: true, isNumeric: true, group: 'custom' },
+    { id: 'planMatSite', label: 'Plan ค่าวัสดุเข้างาน (53051080)', minWidth: '125px', align: 'right', sortKey: 'planMatSite', defaultVisible: false, isMoney: true, isNumeric: true, group: '04_plan' },
+    { id: 'planSite', label: 'Plan คชจ.หน้างาน', minWidth: '110px', align: 'right', sortKey: 'planSite', defaultVisible: false, isMoney: true, isNumeric: true, group: '04_plan' },
+    { id: 'pctExpenseWithdraw', label: '% เบิก คชจ.', minWidth: '78px', width: '82px', align: 'right', sortKey: 'pctExpenseWithdraw', defaultVisible: true, isPercent: true, isNumeric: true, group: 'custom' },
+    { id: 'apprSite', label: 'อนุมัติ คชจ.หน้างาน', minWidth: '110px', align: 'right', sortKey: 'apprSite', defaultVisible: false, isMoney: true, isNumeric: true, group: '04_plan' },
 
     // --- Group 6: File 06 CN41 AUC Values & Differences ---
-    { id: 'cn41ActualCost', label: 'มูลค่า AUC(บาท)', minWidth: '165px', align: 'right', sortKey: 'cn41ActualCost', defaultVisible: true, isMoney: true, isNumeric: true, group: '06_cn41' },
-    { id: 'cn41CostInc', label: 'มูลค่าAUCที่เพิ่มขึ้น', minWidth: '165px', align: 'right', sortKey: 'cn41CostInc', defaultVisible: false, isMoney: true, isNumeric: true, group: 'custom' },
-    { id: 'cn41Cost05', label: 'ต้นทุนจริง (ไฟล์ 05)', minWidth: '165px', align: 'right', sortKey: 'cn41Cost05', defaultVisible: false, isMoney: true, isNumeric: true, group: '05_cn41' },
-    { id: 'cn41ObjDesc', label: 'ออบเจคโครงการ (CN41)', minWidth: '220px', align: 'left', sortKey: 'cn41ObjDesc', defaultVisible: false, group: '06_cn41' },
-    { id: 'cn41Level', label: 'ระดับ (CN41)', width: '75px', align: 'center', sortKey: 'cn41Level', defaultVisible: false, group: '06_cn41' },
-    { id: 'cn41Currency', label: 'สกุลเงิน (CN41)', width: '75px', align: 'center', sortKey: 'cn41Currency', defaultVisible: false, group: '06_cn41' },
-    { id: 'cn41Row', label: 'ลำดับ CN41 (.)', width: '75px', align: 'center', sortKey: 'cn41Row', defaultVisible: false, group: '06_cn41' },
+    { id: 'cn41ActualCost', label: 'มูลค่า AUC(บาท)', minWidth: '122px', width: '126px', align: 'right', sortKey: 'cn41ActualCost', defaultVisible: true, isMoney: true, isNumeric: true, group: '06_cn41' },
+    { id: 'cn41CostInc', label: 'มูลค่าAUCที่เพิ่มขึ้น', minWidth: '125px', align: 'right', sortKey: 'cn41CostInc', defaultVisible: false, isMoney: true, isNumeric: true, group: 'custom' },
+    { id: 'cn41Cost05', label: 'ต้นทุนจริง (ไฟล์ 05)', minWidth: '125px', align: 'right', sortKey: 'cn41Cost05', defaultVisible: false, isMoney: true, isNumeric: true, group: '05_cn41' },
+    { id: 'cn41ObjDesc', label: 'ออบเจคโครงการ (CN41)', minWidth: '160px', align: 'left', sortKey: 'cn41ObjDesc', defaultVisible: false, group: '06_cn41' },
+    { id: 'cn41Level', label: 'ระดับ (CN41)', width: '65px', align: 'center', sortKey: 'cn41Level', defaultVisible: false, group: '06_cn41' },
+    { id: 'cn41Currency', label: 'สกุลเงิน (CN41)', width: '65px', align: 'center', sortKey: 'cn41Currency', defaultVisible: false, group: '06_cn41' },
+    { id: 'cn41Row', label: 'ลำดับ CN41 (.)', width: '65px', align: 'center', sortKey: 'cn41Row', defaultVisible: false, group: '06_cn41' },
 
     // --- Group 7: Google Sheet แผนงานแล้วเสร็จ ---
-    { id: 'planClose', label: 'แผนปิดงาน (G-Sheet)', minWidth: '140px', align: 'center', sortKey: 'planClose', defaultVisible: true, group: '06_sheet' },
-    { id: 'note', label: 'หมายเหตุ (G-Sheet)', minWidth: '240px', align: 'left', sortKey: 'note', defaultVisible: true, group: '06_sheet' }
+    { id: 'planClose', label: 'แผนปิดงาน (G-Sheet)', minWidth: '115px', width: '120px', align: 'center', sortKey: 'planClose', defaultVisible: true, group: '06_sheet' },
+    { id: 'note', label: 'หมายเหตุ (G-Sheet)', minWidth: '135px', align: 'left', sortKey: 'note', defaultVisible: true, group: '06_sheet' }
   ];
 
   /**
@@ -615,11 +615,11 @@
       <span class="wbs-pill pill-file pill-file-03" onclick="if(window.openDhModelModal)window.openDhModelModal('src_03')" title="วันที่/เวลา นำเข้าข้อมูล: 23 ต.ค. 2569, 08:04 น. (ไฟล์ 03 WBSงานคงเหลือเดือนล่าสุด.xlsx)">
         📋 <strong>03 WBSงานคงเหลือเดือนล่าสุด.xlsx:</strong> 23 ต.ค. 2569, 08:04 น.
       </span>
-      <span class="wbs-pill pill-file pill-file-04" onclick="if(window.openDhModelModal)window.openDhModelModal('src_04')" title="วันที่/เวลา นำเข้าข้อมูล: 23 ต.ค. 2569, 08:28 น. (ไฟล์ 04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx)">
-        ⚡ <strong>04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx:</strong> 23 ต.ค. 2569, 08:28 น.
+      <span class="wbs-pill pill-file pill-file-04" onclick="if(window.openDhModelModal)window.openDhModelModal('src_04')" title="วันที่/เวลา นำเข้าข้อมูล: 26 ต.ค. 2569, 14:15 น. (ไฟล์ 04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx)">
+        ⚡ <strong>04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx:</strong> 26 ต.ค. 2569, 14:15 น.
       </span>
-      <span class="wbs-pill pill-file pill-file-05" onclick="if(window.openDhModelModal)window.openDhModelModal('src_06')" title="วันที่/เวลา นำเข้าข้อมูล: 24 ต.ค. 2569, 18:42 น. (ไฟล์ 06 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 22 ตค 69.xlsx)">
-        📑 <strong>06 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 22 ตค 69:</strong> 24 ต.ค. 2569, 18:42 น.
+      <span class="wbs-pill pill-file pill-file-05" onclick="if(window.openDhModelModal)window.openDhModelModal('src_06')" title="วันที่/เวลา นำเข้าข้อมูล: 26 ต.ค. 2569, 14:15 น. (ไฟล์ 06 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 26 ตค 69.xlsx)">
+        📑 <strong>06 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 26 ตค 69:</strong> 26 ต.ค. 2569, 14:15 น.
       </span>
       <span class="wbs-pill pill-file pill-file-06" onclick="if(window.openDhModelModal)window.openDhModelModal('src_sheet')" title="วันที่/เวลา ซิงค์ข้อมูล: 22 ต.ค. 2569, 17:23 น. (Google Sheet แผนงานแล้วเสร็จ ออนไลน์)">
         📊 <strong>Google Sheet แผนงานแล้วเสร็จ:</strong> 22 ต.ค. 2569 (Live API)
@@ -2697,7 +2697,11 @@
       let styleStr = 'vertical-align: top; ';
       if (col.width) styleStr += `width:${col.width}; `;
       if (col.minWidth) styleStr += `min-width:${col.minWidth}; `;
+      if (col.maxWidth) styleStr += `max-width:${col.maxWidth}; `;
       if (col.align) styleStr += `text-align:${col.align}; `;
+      if (col.id === 'id') {
+        styleStr += 'width: 38px !important; min-width: 35px !important; max-width: 42px !important; padding-left: 2px !important; padding-right: 2px !important; text-align: center !important; ';
+      }
 
       let justifyStyle = 'align-items: flex-start; text-align: left; justify-content: flex-start;';
       let rowJustify = 'justify-content: flex-start;';
@@ -2827,7 +2831,7 @@
                 <button type="button" class="btn-th-wbs-lock ${isWbsAuth ? 'admin-unlocked' : ''}" 
                   id="btnWbsHeaderLock_${col.id}"
                   onclick="window.handleWbsEditLockToggle(event)"
-                  title="${isWbsAuth ? 'สิทธิ์ Admin ปลดล็อกแล้ว: สามารถแก้ไขได้ทุกแถว (คลิกเพื่อล็อกกลับ)' : 'ล็อกการแก้ไข: คลิกเพื่อกรอก Admin PIN ปลดล็อกทุกแถว'}">
+                  title="${isWbsAuth ? 'สิทธิ์ Admin ปลดล็อกแล้ว: สามารถแก้ไขได้ทุกแถว (คลิกเพื่อล็อกกลับ)' : 'ล็อกการแก้ไขแผนงานและหมายเหตุ: คลิกเพื่อกรอก Admin PIN ปลดล็อกทุกแถว'}">
                   <span class="lock-icon">${isWbsAuth ? '🔓' : '🔒'}</span>
                   <span class="lock-text">${isWbsAuth ? 'ปลดล็อกแล้ว' : 'ปลดล็อกแก้ไข'}</span>
                 </button>
@@ -2859,9 +2863,9 @@
                 <span class="sort-indicator" style="font-size:0.75rem; margin-left:2px; color:var(--pea-gold-400);">${sortArrow}</span>
               </div>
             </div>
-            ${col.id === 'statusSap' ? `<div class="th-sub-date-text" style="font-size: 0.70rem; color: #CBD5E1; font-weight: 500; line-height: 1.2; margin: 1px 0 3px 0; text-align: center; white-space: nowrap;" title="วันที่แก้ไขล่าสุดของไฟล์ 04 ZBUDR064: 23 ต.ค. 2569">แก้ไขล่าสุด: 23 ต.ค. 69</div>` : ''}
+            ${col.id === 'statusSap' ? `<div class="th-sub-date-text" style="font-size: 0.70rem; color: #CBD5E1; font-weight: 500; line-height: 1.2; margin: 1px 0 3px 0; text-align: center; white-space: nowrap;" title="วันที่แก้ไขล่าสุดของไฟล์ 04 ZBUDR064: 26 ต.ค. 2569">แก้ไขล่าสุด: 26 ต.ค. 69</div>` : ''}
             ${col.id === 'cn41Cost05' ? `<div class="th-sub-date-text" style="font-size: 0.70rem; color: #CBD5E1; font-weight: 500; line-height: 1.2; margin: 1px 0 3px 0; text-align: center; white-space: nowrap;" title="วันที่แก้ไขล่าสุดของไฟล์ 05 CN41: 14 ต.ค. 2569">แก้ไขล่าสุด: 14 ต.ค. 69</div>` : ''}
-            ${col.id === 'cn41ActualCost' ? `<div class="th-sub-date-text" style="font-size: 0.70rem; color: #CBD5E1; font-weight: 500; line-height: 1.2; margin: 1px 0 3px 0; text-align: center; white-space: nowrap;" title="วันที่แก้ไขล่าสุดของไฟล์ 06 CN41: 22 ต.ค. 2569">แก้ไขล่าสุด: 22 ต.ค. 69</div>` : ''}
+            ${col.id === 'cn41ActualCost' ? `<div class="th-sub-date-text" style="font-size: 0.70rem; color: #CBD5E1; font-weight: 500; line-height: 1.2; margin: 1px 0 3px 0; text-align: center; white-space: nowrap;" title="วันที่แก้ไขล่าสุดของไฟล์ 06 CN41: 26 ต.ค. 2569">แก้ไขล่าสุด: 26 ต.ค. 69</div>` : ''}
             ${headerMetricHtml}
           </div>
         </th>
@@ -2961,9 +2965,9 @@
       switch (col.id) {
         case 'id':
           cellsHtml += `
-            <td style="text-align: center; vertical-align: middle;">
-              <span class="wbs-summary-badge" title="${posBadgeTitle}">
-                ${posIcon} รวม/เฉลี่ย
+            <td style="text-align: center; vertical-align: middle; width: 38px !important; min-width: 35px !important; max-width: 42px !important; padding-left: 2px !important; padding-right: 2px !important;">
+              <span class="wbs-summary-badge-compact" title="${posBadgeTitle}" style="font-size:0.75rem; color:var(--pea-gold-400); font-weight:700;">
+                ${posIcon}
               </span>
             </td>`;
           break;
@@ -3182,7 +3186,7 @@
       const isWbsAuth = (typeof window.isWbsEditAuthenticated === 'function')
         ? window.isWbsEditAuthenticated()
         : (sessionStorage.getItem('auc_wbs_edit_authenticated') === 'true');
-      const editBtnIcon = isWbsAuth ? '✏️' : '🔒';
+      const editBtnIcon = isWbsAuth ? '<span class="pencil-icon">✏️</span>' : '<span class="lock-icon">🔒</span>';
       const editBtnClass = isWbsAuth ? 'btn-wbs-inline-edit' : 'btn-wbs-inline-edit is-locked';
       const editBtnTitle = isWbsAuth
         ? 'คลิกเพื่อแก้ไขแผนปิดงาน / หมายเหตุ (Google Sheet)'
@@ -3209,7 +3213,7 @@
         activeCols.forEach(col => {
           switch (col.id) {
             case 'id':
-              rowHtml += `<td style="text-align: center; color: var(--text-dim); font-size: 0.85rem;">${rowNo}</td>`;
+              rowHtml += `<td style="text-align: center; color: var(--text-dim); font-size: 0.85rem; width: 38px !important; min-width: 35px !important; max-width: 42px !important; padding-left: 2px !important; padding-right: 2px !important;">${rowNo}</td>`;
               break;
             case 'wbs':
               rowHtml += `<td><span class="wbs-code-val" onclick="window.copyWbsCode('${safeWbsAttr}')" title="กดเพื่อคัดลอกรหัส WBS" style="cursor:pointer;">${wbsCode}</span></td>`;
@@ -3236,7 +3240,7 @@
               rowHtml += `<td style="text-align: center;"><span style="font-size: 0.8rem; color: var(--pea-purple-300);">${escapeHtml(item.type || '-')}</span></td>`;
               break;
             case 'description':
-              rowHtml += `<td><div style="font-size: 0.85rem; color: var(--text-main); font-weight: 500; min-width: 220px; line-height: 1.35;" title="${escapeHtml(item.description)}">${escapeHtml(item.description || '-')}</div></td>`;
+              rowHtml += `<td><div style="font-size: 0.85rem; color: var(--text-main); font-weight: 500; min-width: 140px; max-width: 220px; line-height: 1.35; word-break: break-word;" title="${escapeHtml(item.description)}">${escapeHtml(item.description || '-')}</div></td>`;
               break;
             case 'statusSap': {
               const sapVal = item.statusSap || formatSapStatusShort(item.status);
@@ -3342,7 +3346,7 @@
               </td>`;
               break;
             }
-            // File 06 Columns (CN41 มูลค่า AUC ล่าสุด 22 ต.ค. 69)
+            // File 06 Columns (CN41 มูลค่า AUC ล่าสุด 26 ต.ค. 69)
             case 'cn41ActualCost':
               rowHtml += `<td style="text-align: right; font-family: var(--font-mono, monospace); font-size: 0.85rem; font-weight: 700; color: #38BDF8;" title="มูลค่า AUC ล่าสุด (ไฟล์ 06): ${formatMoney(item.cn41ActualCost)} บาท">${formatMoney(item.cn41ActualCost)}</td>`;
               break;
@@ -3388,18 +3392,12 @@
                 rowHtml += `<td style="text-align: center; background: rgba(220, 38, 38, 0.28) !important; border-top: 1px solid rgba(239, 68, 68, 0.4); border-bottom: 1px solid rgba(239, 68, 68, 0.4); border-left: 2px solid #EF4444;">
                   <div class="wbs-cell-edit-wrap is-center">
                     <span class="badge-plan-not-found" style="background: #DC2626; color: #FFFFFF; font-weight: 700; font-size: 0.72rem; padding: 2px 7px; border-radius: 4px; box-shadow: 0 0 8px rgba(220, 38, 38, 0.45); white-space: nowrap;" title="ไม่พบเลขที่ WBS นี้ใน Google Sheet (ยึดตาม Google Sheet เท่านั้น)">❌ ไม่พบใน Google Sheet</span>
-                    <button type="button" class="${editBtnClass}" onclick="window.openWbsEditNoteModal('${safeWbsAttr}')" title="${editBtnTitle}">
-                      ${editBtnIcon}
-                    </button>
                   </div>
                 </td>`;
               } else {
                 rowHtml += `<td style="text-align: center;">
                   <div class="wbs-cell-edit-wrap is-center">
-                    ${pVal ? `<span class="badge-plan-close" title="${escapeHtml(pVal)}">📅 ${escapeHtml(pVal)}</span>` : `<span style="color: var(--text-dim); font-size: 0.8rem;">-</span>`}
-                    <button type="button" class="${editBtnClass}" onclick="window.openWbsEditNoteModal('${safeWbsAttr}')" title="${editBtnTitle}">
-                      ${editBtnIcon}
-                    </button>
+                    ${pVal ? `<span class="badge-plan-close" title="${escapeHtml(pVal)}" style="cursor: pointer;" onclick="window.openWbsEditNoteModal('${safeWbsAttr}')">📅 ${escapeHtml(pVal)}</span>` : `<span style="color: var(--text-dim); font-size: 0.8rem;">-</span>`}
                   </div>
                 </td>`;
               }
@@ -5872,21 +5870,21 @@
       }
     });
 
-    // Toolbar lock button fallback if present
+    // Toolbar lock button on top-right (ไว้บนขวา และเหลืออันเดียว)
     const btnLock = document.getElementById('btnToggleWbsEditLock');
     if (btnLock) {
       if (isWbsAuth) {
         btnLock.classList.add('admin-unlocked');
         btnLock.innerHTML = `
-          <span style="font-size:0.9rem;">🔓</span>
-          <span>ปลดล็อกแก้ไขแล้ว (Admin)</span>
+          <span class="lock-icon" style="font-size:0.88rem;">🔓</span>
+          <span class="lock-text">ปลดล็อคแล้ว (Admin)</span>
         `;
         btnLock.title = 'สิทธิ์ Admin ปลดล็อกแล้ว: สามารถแก้ไขได้ทุกแถว (คลิกเพื่อล็อกกลับ)';
       } else {
         btnLock.classList.remove('admin-unlocked');
         btnLock.innerHTML = `
-          <span style="font-size:0.9rem;">🔒</span>
-          <span>ล็อกการแก้ไข</span>
+          <span class="lock-icon" style="font-size:0.88rem;">🔒</span>
+          <span class="lock-text">ล็อคเอกสารปิดงาน</span>
         `;
         btnLock.title = 'ล็อกการแก้ไขแผนงานและหมายเหตุ: คลิกเพื่อกรอก Admin PIN ปลดล็อกทุกแถว';
       }
@@ -5897,11 +5895,11 @@
     editBtns.forEach(btn => {
       if (isWbsAuth) {
         btn.classList.remove('is-locked');
-        btn.innerHTML = '✏️';
+        btn.innerHTML = '<span class="pencil-icon">✏️</span>';
         btn.title = 'คลิกเพื่อแก้ไขแผนปิดงาน / หมายเหตุ (Google Sheet)';
       } else {
         btn.classList.add('is-locked');
-        btn.innerHTML = '🔒';
+        btn.innerHTML = '<span class="lock-icon">🔒</span>';
         btn.title = 'เฉพาะผู้ดูแลระบบ: คลิกเพื่อกรอกรหัส Admin PIN ปลดล็อกการแก้ไขทุกแถว';
       }
     });

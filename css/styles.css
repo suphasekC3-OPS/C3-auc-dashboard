@@ -11020,8 +11020,8 @@ body.has-fullscreen-table {
 .wbs-note-cell {
   font-size: 0.825rem;
   color: var(--text-muted);
-  min-width: 200px;
-  max-width: 320px;
+  min-width: 120px;
+  max-width: 260px;
   line-height: 1.35;
   white-space: normal;
   word-break: break-word;
@@ -17065,24 +17065,43 @@ body.theme-light .bar-sap-date-plain:hover {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  width: 17px;
+  height: 17px;
+  min-width: 17px;
+  min-height: 17px;
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.18);
   color: var(--pea-gold-400, #FBBF24);
-  border-radius: 6px;
-  padding: 2px 6px;
-  font-size: 0.78rem;
+  border-radius: 4px;
+  padding: 0;
   cursor: pointer;
-  line-height: 1.2;
+  line-height: 1;
   transition: all 0.15s ease-in-out;
   opacity: 0.8;
   flex-shrink: 0;
+  margin-left: 4px;
+}
+.btn-wbs-inline-edit .pencil-icon {
+  font-size: 0.58rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transform: scale(0.82);
+}
+.btn-wbs-inline-edit .lock-icon {
+  font-size: 0.58rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 .btn-wbs-inline-edit:hover {
   opacity: 1;
-  background: rgba(251, 191, 36, 0.2);
-  border-color: rgba(251, 191, 36, 0.5);
-  transform: scale(1.08);
-  box-shadow: 0 2px 8px rgba(251, 191, 36, 0.3);
+  background: rgba(251, 191, 36, 0.22);
+  border-color: rgba(251, 191, 36, 0.55);
+  transform: scale(1.12);
+  box-shadow: 0 0 8px rgba(251, 191, 36, 0.35);
 }
 
 .wbs-cell-edit-wrap {
@@ -17440,19 +17459,29 @@ body.theme-light .wbs-pct-breakdown-tag {
   box-shadow: 0 0 10px rgba(16, 185, 129, 0.3) !important;
 }
 
-/* WBS Edit Lock Button in Toolbar */
+/* WBS Edit Lock Button in Toolbar (ไว้บนขวา และเหลืออันเดียว) */
 .btn-wbs-lock {
-  border-color: rgba(255, 184, 28, 0.45) !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42rem;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.80rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 184, 28, 0.45) !important;
   color: var(--pea-gold-400) !important;
   background: rgba(255, 184, 28, 0.08) !important;
+  font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
+  transition: all 0.2s ease;
+  line-height: 1.2;
 }
 
 .btn-wbs-lock:hover {
   background: rgba(255, 184, 28, 0.18) !important;
   border-color: var(--pea-gold-400) !important;
   box-shadow: 0 0 10px rgba(255, 184, 28, 0.25);
+  transform: translateY(-1px);
 }
 
 .btn-wbs-lock.admin-unlocked {
@@ -17464,6 +17493,7 @@ body.theme-light .wbs-pct-breakdown-tag {
 .btn-wbs-lock.admin-unlocked:hover {
   border-color: rgba(16, 185, 129, 0.8) !important;
   box-shadow: 0 0 12px rgba(16, 185, 129, 0.35) !important;
+  transform: translateY(-1px);
 }
 
 /* Light Theme support */
@@ -17577,3 +17607,209 @@ body.theme-light .wbs-pct-breakdown-tag {
   border-color: rgba(5, 150, 105, 0.85);
   color: #044E39;
 }
+
+/* ==========================================================================
+   Executive Overview Cards (เมนูภาพรวมผู้บริหาร - ปรับสีขอบการ์ดตามรูป 13)
+   ========================================================================== */
+#tab-dashboard .executive-donut-kpi-card,
+#tab-dashboard .top-criteria-chart-card,
+#tab-dashboard .unified-projection-office-card,
+#tab-dashboard .content-card {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(34, 9, 52, 0.96) 0%, rgba(18, 4, 30, 0.98) 100%) !important;
+  border: 1.5px solid rgba(255, 184, 28, 0.42) !important;
+  border-radius: var(--radius-lg, 16px) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), 0 0 20px rgba(104, 44, 145, 0.25) !important;
+}
+
+#tab-dashboard .executive-donut-kpi-card::before,
+#tab-dashboard .top-criteria-chart-card::before,
+#tab-dashboard .unified-projection-office-card::before,
+#tab-dashboard .content-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #FFB81C 0%, #10B981 50%, #38BDF8 100%);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Left Sidebar Card Specific Rainbow Gradient (ตามการ์ดซ้ายรูป 13: ทอง -> เขียว -> ชมพู) */
+#tab-dashboard .executive-donut-kpi-card::before {
+  background: linear-gradient(90deg, #FFB81C 0%, #10B981 50%, #EC4899 100%) !important;
+}
+
+/* แถบเลือกด้านบนฝั่งซ้าย (#topSelectionStrip) ปรับขอบทองให้เข้าชุดกัน */
+#tab-dashboard .top-selection-strip {
+  position: relative;
+  overflow: hidden;
+  background: rgba(20, 5, 35, 0.65) !important;
+  border: 1.5px solid rgba(255, 184, 28, 0.42) !important;
+  border-left: 4px solid #FFB81C !important;
+  border-radius: 12px !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35) !important;
+}
+
+#tab-dashboard .top-selection-strip::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2.5px;
+  background: linear-gradient(90deg, #FFB81C 0%, #10B981 50%, #EC4899 100%);
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Fullscreen Mode Overrides (ไม่ให้ขอบหรือแถบสีแสดงในโหมดเต็มจอ) */
+#tab-dashboard .content-card.is-fullscreen,
+#tab-dashboard .top-criteria-chart-card.is-fullscreen,
+#tab-dashboard .unified-projection-office-card.is-fullscreen {
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+#tab-dashboard .content-card.is-fullscreen::before,
+#tab-dashboard .top-criteria-chart-card.is-fullscreen::before,
+#tab-dashboard .unified-projection-office-card.is-fullscreen::before {
+  display: none !important;
+}
+
+/* ป้องกัน inner card ใน projection section */
+#next3mProjectionSection .content-card {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+#next3mProjectionSection .content-card::before {
+  display: none !important;
+}
+
+/* Light Theme Support */
+[data-theme="light"] #tab-dashboard .executive-donut-kpi-card,
+[data-theme="light"] #tab-dashboard .top-criteria-chart-card,
+[data-theme="light"] #tab-dashboard .unified-projection-office-card,
+[data-theme="light"] #tab-dashboard .content-card {
+  background: #FFFFFF !important;
+  border: 1.5px solid rgba(217, 119, 6, 0.4) !important;
+  box-shadow: 0 8px 24px rgba(217, 119, 6, 0.12) !important;
+}
+
+[data-theme="light"] #tab-dashboard .top-selection-strip {
+  background: #FFFFFF !important;
+  border: 1.5px solid rgba(217, 119, 6, 0.4) !important;
+  border-left: 4px solid #D97706 !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* ==========================================================================
+   WBS DATA TABLE: COMPACT & FULLSCREEN FITTING (แสดงครบทั้ง 10 คอลัมน์ ไม่ล้นขอบ)
+   ========================================================================== */
+
+#wbsDataTable {
+  width: 100% !important;
+  table-layout: auto !important;
+}
+
+/* ปรับ Padding หัวตารางและแถวข้อมูลให้กระชับ ไม่ดันล้นจอ */
+.wbs-table-scroll-wrapper .data-table th,
+.wbs-table-scroll-wrapper .data-table thead tr.wbs-header-row th {
+  padding: 0.52rem 0.45rem !important;
+  font-size: 0.81rem !important;
+}
+
+.wbs-table-scroll-wrapper .data-table td {
+  padding: 0.48rem 0.45rem !important;
+  font-size: 0.835rem !important;
+}
+
+/* คอลัมน์ 'ที่' (id column) - ลดขนาดกะทัดรัด ล็อคความกว้าง 38px */
+#wbsDataTable th[data-col-id="id"],
+#wbsDataTable td:first-child,
+#wbsDataTable th:first-child {
+  width: 38px !important;
+  min-width: 35px !important;
+  max-width: 42px !important;
+  padding-left: 2px !important;
+  padding-right: 2px !important;
+  text-align: center !important;
+  overflow: hidden;
+}
+
+#wbsDataTable th[data-col-id="id"] .th-content-wrapper {
+  align-items: center !important;
+  text-align: center !important;
+  padding: 0 !important;
+  min-height: 48px;
+}
+
+#wbsDataTable th[data-col-id="id"] .th-top-row {
+  justify-content: center !important;
+}
+
+#wbsDataTable th[data-col-id="id"] .th-label-group {
+  gap: 1px !important;
+  font-size: 0.78rem !important;
+}
+
+#wbsDataTable th[data-col-id="id"] .th-drag-handle {
+  font-size: 0.70rem !important;
+  margin-right: 1px !important;
+}
+
+/* ปิด pseudo-element ::after ของ sort-active เพื่อไม่ให้มีลูกศรซ้ำซ้อนด้านล่าง */
+#wbsDataTable th.sort-active::after,
+.wbs-table-scroll-wrapper .data-table th.sort-active::after,
+.wbs-header-row th.sort-active::after {
+  display: none !important;
+  content: '' !important;
+}
+
+/* ปรับขนาด Badge และตัวเลขใน Header ให้กระชับ สวยงาม สมส่วน */
+.wbs-table-scroll-wrapper .th-header-gold-pill {
+  padding: 1px 5px !important;
+  font-size: 0.72rem !important;
+}
+
+.wbs-table-scroll-wrapper .th-header-type-badge {
+  font-size: 0.65rem !important;
+  padding: 0px 4px !important;
+}
+
+.wbs-table-scroll-wrapper .th-header-gold-val,
+.wbs-table-scroll-wrapper .th-header-cyan-val {
+  font-size: 0.78rem !important;
+}
+
+.wbs-table-scroll-wrapper .th-header-gold-pct {
+  font-size: 0.78rem !important;
+}
+
+.wbs-table-scroll-wrapper .th-sap-dropdown-btn {
+  padding: 1.5px 5px !important;
+  font-size: 0.72rem !important;
+}
+
+.wbs-table-scroll-wrapper .btn-th-wbs-lock {
+  padding: 1.5px 5px !important;
+  font-size: 0.72rem !important;
+}
+
+/* กระชับ Badge ในแถวข้อมูล */
+.badge-sap-short {
+  padding: 2px 5px !important;
+  font-size: 0.74rem !important;
+}
+
+.badge-office-pill {
+  padding: 2px 6px !important;
+  font-size: 0.78rem !important;
+}
+
+

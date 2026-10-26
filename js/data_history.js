@@ -95,10 +95,10 @@
       groupNo: '04',
       name: '04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx',
       category: 'SAP ZBUDR064 & Costs',
-      importDate: '2026-10-23 08:28:31',
-      importDateTh: '23 ต.ค. 2569, 08:28 น.',
-      lastModifiedTh: '23 ต.ค. 2569, 08:28 น.',
-      sizeText: '731.7 KB',
+      importDate: '2026-10-26 14:15:00',
+      importDateTh: '26 ต.ค. 2569, 14:15 น.',
+      lastModifiedTh: '26 ต.ค. 2569, 13:48 น. (ไฟล์ล่าสุด)',
+      sizeText: '732.0 KB',
       recordCount: 2083,
       status: 'active',
       statusText: 'ผสานข้อมูลสำเร็จ',
@@ -140,7 +140,7 @@
       columns: [
         'cn41Cost05 (ต้นทุนจริง วันเริ่มบัญชี 14 ต.ค. 69)',
         'cn41CostInc (มูลค่าAUCที่เพิ่มขึ้น = ไฟล์ 06 - ไฟล์ 05)',
-        'cn41ActualCost (ต้นทุนจริง ไฟล์ 06 ล่าสุด 22 ต.ค. 69)'
+        'cn41ActualCost (ต้นทุนจริง ไฟล์ 06 ล่าสุด 26 ต.ค. 69)'
       ],
       sampleProvider: () => (window.AUC_WBS_REMAINING_DATA || []).slice(0, 5).map(r => ({
         'WBS': r.wbs,
@@ -153,12 +153,12 @@
     {
       id: 'src_06',
       groupNo: '06',
-      name: '06 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 22 ตค 69.xlsx',
+      name: '06 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 26 ตค 69.xlsx',
       category: 'SAP CN41 AUC Values (Latest)',
-      importDate: '2026-10-24 18:42:42',
-      importDateTh: '24 ต.ค. 2569, 18:42 น.',
-      lastModifiedTh: '22 ต.ค. 2569 (ไฟล์ล่าสุด)',
-      sizeText: '336.2 KB',
+      importDate: '2026-10-26 14:15:00',
+      importDateTh: '26 ต.ค. 2569, 14:15 น.',
+      lastModifiedTh: '26 ต.ค. 2569, 14:05 น. (ไฟล์ล่าสุด)',
+      sizeText: '337.8 KB',
       recordCount: 2083,
       status: 'active',
       statusText: 'ผสานข้อมูลสำเร็จ',
@@ -166,7 +166,7 @@
       storageVar: 'window.AUC_WBS_REMAINING_DATA.cn41ActualCost',
       icon: '📑',
       badgeColor: '#F59E0B',
-      description: 'รายงาน SAP CN41 ระบุต้นทุนจริงและมูลค่า AUC สะสม (บาท) ของแต่ละโครงการ สำหรับวิเคราะห์มูลค่าสินทรัพย์ระหว่างก่อสร้าง ล่าสุด 22 ต.ค. 69',
+      description: 'รายงาน SAP CN41 ระบุต้นทุนจริงและมูลค่า AUC สะสม (บาท) ของแต่ละโครงการ สำหรับวิเคราะห์มูลค่าสินทรัพย์ระหว่างก่อสร้าง ล่าสุด 26 ต.ค. 69',
       columns: [
         'cn41ActualCost (มูลค่า AUC บาท)', 'cn41ObjDesc (ออบเจคโครงการ)', 'cn41Level (ระดับ)',
         'cn41Currency (สกุลเงิน THB)', 'cn41Row (ลำดับแถว)'
@@ -351,8 +351,8 @@
       title: 'ฐานข้อมูลรวมงาน WBS คงเหลือ (Merged WBS Database)',
       role: 'จัดเก็บข้อมูลหลักงาน WBS (ไฟล์ 03 + 04 + 05 + Google Sheet)',
       recordsCount: '2,083 รายการ (41 คอลัมน์)',
-      fileSize: '2.32 MB',
-      updatedAt: '23 ต.ค. 2569, 09:58 น.',
+      fileSize: '2.40 MB',
+      updatedAt: '26 ต.ค. 2569, 14:15 น.',
       status: '100% ฐานข้อมูลอัปเดตล่าสุด',
       variable: 'window.AUC_WBS_REMAINING_DATA'
     },
@@ -432,6 +432,198 @@
    * System Pre-defined Audit & Modification Log Entries
    */
   const BASE_AUDIT_LOGS = [
+    {
+      id: 'log_000_revert_wbs_lock_button_to_col_headers',
+      timestamp: '2026-10-26 16:35:00',
+      timestampTh: '26 ต.ค. 2569, 16:35 น.',
+      type: 'EDIT',
+      typeBadge: 'ยกเลิกคำสั่งย้ายปุ่มล็อก & คืนค่าปุ่มใต้หัวตาราง',
+      badgeClass: 'badge-type-edit',
+      title: 'ยกเลิกคำสั่งก่อนหน้า: นำปุ่มล็อกออกจากมุมบนขวา และคืนค่าปุ่มปลดล็อกแก้ไขไว้ใต้หัวตารางคอลัมน์แผนปิดงานและหมายเหตุตามเดิม',
+      targetSubject: 'ปุ่มล็อกการแก้ไขเอกสารปิดงาน WBS (#btnToggleWbsEditLock และปุ่ม .btn-th-wbs-lock ใต้หัวคอลัมน์ planClose, note)',
+      storageFile: 'index.html, js/wbs.js, css/styles.css, js/data_history.js',
+      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน "ยกเลิกคำสังก่อน": 1) นำปุ่ม #btnToggleWbsEditLock ออกจากแถบเครื่องมือมุมบนขวาของตาราง WBS 2) คืนค่าปุ่มปลดล็อกแก้ไข (.btn-th-wbs-lock) กลับมาไว้ใต้ชื่อหัวคอลัมน์ "แผนปิดงาน (G-SHEET)" และ "หมายเหตุ (G-SHEET)" ทั้ง 2 จุดตามเดิม 3) ซิงค์สถานะการแสดงผลและระบบปลดล็อก Admin PIN ของทั้ง 2 ปุ่มใต้หัวตารางให้ทำงานได้อย่างถูกต้องแม่นยำ',
+      details: '1) ใน index.html: นำปุ่ม #btnToggleWbsEditLock ออกจาก .wbs-table-toolbar-actions และอัปเดต Cache Buster เป็น ?v=20261026_1635 2) ใน js/wbs.js: เพิ่ม case "planClose" และ case "note" ใน renderWbsTableHead() คืนค่าปุ่ม .btn-th-wbs-lock กลับมาทั้งสองคอลัมน์ 3) ใน css/styles.css: คงสไตล์ของ .btn-th-wbs-lock และ .btn-th-wbs-lock.admin-unlocked รองรับ Dark/Light theme สมบูรณ์แบบ 4) ซิงค์ไฟล์ไปยังโฟลเดอร์ปลายทางและบันทึกประวัติลงใน BASE_AUDIT_LOGS ตามข้อบังคับ',
+      sourceFile: 'คำสั่งผู้ใช้งาน (ยกเลิกคำสังก่อน)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง (คืนค่าตำแหน่งปุ่มปลดล็อกแก้ไขเอกสารปิดงานไว้ใต้หัวตารางตามการตั้งค่าเดิมของผู้ใช้งาน)'
+    },
+    {
+      id: 'log_000_wbs_lock_button_moved_to_top_right_single',
+      timestamp: '2026-10-26 16:30:00',
+      timestampTh: '26 ต.ค. 2569, 16:30 น.',
+      type: 'EDIT',
+      typeBadge: 'ย้ายปุ่มล็อคเอกสารปิดงานไว้บนขวา',
+      badgeClass: 'badge-type-edit',
+      title: 'ย้ายปุ่มล็อคเอกสารปิดงานไปไว้มุมบนขวา และปรับให้เหลือเพียงปุ่มเดียวในตาราง WBS',
+      targetSubject: 'ปุ่มล็อค/ปลดล็อคการแก้ไขเอกสารปิดงาน (#btnToggleWbsEditLock บนแถบเครื่องมือบนขวา และนำปุ่มใต้หัวตารางออก)',
+      storageFile: 'index.html, js/wbs.js, css/styles.css, js/data_history.js',
+      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน "ล็อคเอกสารปิดงาน ไว้บนขวา และเหลืออันเดียว" (ภาพวาดกากบาทสีแดงบนหัวคอลัมน์แผนปิดงาน และวงกลมสีแดงพร้อมลูกศรชี้ขึ้นมุมบนขวา): 1) ตัดปุ่มปลดล็อกแก้ไขใต้ชื่อหัวคอลัมน์ "แผนปิดงาน (G-SHEET)" และ "หมายเหตุ (G-SHEET)" ออกทั้งหมด ทำให้หัวตารางโปร่งโล่ง สะอาดตา 2) รวมศูนย์ปุ่มล็อกการแก้ไขเอกสารปิดงานไว้เพียงจุดเดียวบนมุมบนขวาของแถบเครื่องมือตาราง WBS (#btnToggleWbsEditLock) ข้างปุ่มขยายเต็มจออย่างสวยงาม 3) ตั้งชื่อปุ่มเป็น "🔒 ล็อคเอกสารปิดงาน" (และ "🔓 ปลดล็อคแล้ว (Admin)" เมื่อยืนยัน PIN ผ่าน) สไตล์พรีเมียมขอบทอง 4) ซิงค์สถานะการล็อกและการปลดล็อกให้ควบคุมการแก้ไขทุกแถวในตารางได้อย่างสมบูรณ์แบบ',
+      details: '1) ใน index.html: เพิ่มปุ่ม #btnToggleWbsEditLock ลงใน .wbs-table-toolbar-actions มุมบนขวาถัดจากปุ่มขยายเต็มหน้าจอ 2) ใน js/wbs.js: นำ case "planClose" และ case "note" ออกจากการสร้าง headerMetricHtml ใน renderWbsTableHead() 3) ใน js/wbs.js: ปรับปรุง updateWbsEditLockUI() ให้อัปเดตข้อความปุ่มบนขวาเป็น "🔒 ล็อคเอกสารปิดงาน" และ "🔓 ปลดล็อคแล้ว (Admin)" 4) ใน css/styles.css: ปรับปรุงสไตล์ .btn-wbs-lock ให้มี padding 0.35rem 0.75rem, border-radius 8px, font-size 0.80rem พอดีสมส่วนกับปุ่มแถบเครื่องมือด้านบน 5) ใน index.html: อัปเดต Cache Buster เป็น ?v=20261026_1630 6) บันทึกประวัติลงใน BASE_AUDIT_LOGS',
+      sourceFile: 'คำสั่งผู้ใช้งาน (ล็อคเอกสารปิดงาน ไว้บนขวา และเหลืออันเดียว พร้อมรูปภาพกากบาทและลูกศรชี้ขึ้นบนขวา)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง (จัดระเบียบหัวตาราง WBS ให้สะอาดตา และวางปุ่มควบคุมการล็อกในตำแหน่งบนขวาที่เข้าถึงง่ายและชัดเจน)'
+    },
+    {
+      id: 'log_000_achieve_target_text_styled_matching_title_image',
+      timestamp: '2026-10-26 16:20:00',
+      timestampTh: '26 ต.ค. 2569, 16:20 น.',
+      type: 'EDIT',
+      typeBadge: 'ปรับลักษณะสี/แบบอักษรบรรลุเป้าหมายตามรูป',
+      badgeClass: 'badge-type-edit',
+      title: 'ปรับข้อความ "บรรลุเป้าหมาย" ให้มีลักษณะ สี และแบบอักษรตรงตามรูปภาพหัวข้อเกณฑ์วัด 100%',
+      targetSubject: 'ข้อความ "บรรลุเป้าหมาย" เหนือแท่งกราฟที่ผ่านเกณฑ์ ธ.ค. 69 (#criteriaComparisonChart ใน js/chart.js)',
+      storageFile: 'js/chart.js, index.html, js/data_history.js',
+      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน "บรรลุเป้าหมาย ลักษณะ สี/แบบอักษร/ ตามรูป" (ภาพข้อความหัวข้อเกณฑ์วัด): 1) กำหนดแบบอักษรเป็นฟอนต์ "Prompt" น้ำหนัก 800 (ExtraBold) เหมือนกับหัวข้อเกณฑ์วัด 2) ปรับสีตัวอักษรเป็นโทนสีทอง PEA Luxury Gold แบบ Linear Gradient 135 องศา ตามหัวข้อเป๊ะ (#FFF3B3 0% -> #FFD25A 38% -> #FFB81C 72% -> #F59E0B 100%) 3) นำเส้นขอบดำเข้มแบบหนาออกทั้งหมด และใช้เงาเรืองแสงสีทองนุ่มนวลแบบ drop-shadow(0 2px 8px rgba(255, 184, 28, 0.45)) ตามสไตล์ของรูปภาพ 4) นำเครื่องหมายถูก (✓) ด้านหน้าออก ให้แสดงเฉพาะข้อความ "บรรลุเป้าหมาย" จัดกึ่งกลางตรงใต้ฐานมงกุฎทองคำ 👑 อย่างสง่างามลงตัว',
+      details: '1) ใน js/chart.js: เปลี่ยน achieveText เป็น "บรรลุเป้าหมาย", กำหนด ctx.font = "800 ${fSize}px \'Prompt\', \'Sarabun\', sans-serif", คำนวณ Linear Gradient 135 องศาด้วย 4 สีตรงตาม CSS ของ #criteriaComparisonTitle (.criteria-title-full), วาดเงา drop-shadow สีทองนุ่มนวล rgba(255, 184, 28, 0.45) blur 8px offsetY 2px ตามด้วยการวาดแกนตัวหนังสือคมชัดระดับพิกเซล 2) ใน index.html: อัปเดต Cache Buster เป็น ?v=20261026_1620 3) บันทึกประวัติลงใน BASE_AUDIT_LOGS',
+      sourceFile: 'คำสั่งผู้ใช้งาน (บรรลุเป้าหมาย ลักษณะ สี/แบบอักษร/ ตามรูป พร้อมรูปภาพหัวข้อเกณฑ์วัด)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง (ปรับปรุงข้อความบรรลุเป้าหมายให้มีสไตล์ สี และแบบอักษรกลมกลืนเป็นเอกภาพระดับพรีเมียมตรงตามรูป)'
+    },
+    {
+      id: 'log_000_wbs_pencil_compact_single_button_per_row',
+      timestamp: '2026-10-26 16:15:00',
+      timestampTh: '26 ต.ค. 2569, 16:15 น.',
+      type: 'EDIT',
+      typeBadge: 'ปรับแต่งปุ่มดินสอแก้ไขแถว WBS',
+      badgeClass: 'badge-type-edit',
+      title: 'ลดขนาดรูปดินสอ และปรับให้เหลือปุ่มแก้ไขเพียงอันเดียวต่อแถวในตาราง WBS',
+      targetSubject: 'ปุ่มดินสอแก้ไขแผนปิดงาน/หมายเหตุในตาราง WBS (#wbsDataTable: คอลัมน์ แผนปิดงาน planClose และ หมายเหตุ note ใน js/wbs.js และ css/styles.css)',
+      storageFile: 'js/wbs.js, css/styles.css, index.html, js/data_history.js',
+      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน "ลดขนาดรูปดินสอ ให้เหลือคงเดียว" (รูปภาพวงกลมสีแดงรอบรูปดินสอ 2 อันในคอลัมน์แผนปิดงานและหมายเหตุ): 1) ตัดปุ่มดินสอในคอลัมน์ "แผนปิดงาน (G-SHEET)" ออกทั้งหมด เพื่อไม่ให้มีปุ่มซ้ำซ้อน 2) คงเหลือปุ่มดินสอแก้ไขไว้เพียงจุดเดียวต่อแถว คือที่คอลัมน์ "หมายเหตุ (G-SHEET)" ท้ายแถวอย่างสมบูรณ์แบบ 3) ปรับลดขนาดกล่องปุ่มดินสอลงจากเดิม 26x24px เหลือขนาดกะทัดรัด 17x17px มน 4px 4) ปรับย่อขนาดรูปไอคอนดินสอ ✏️ ลงเหลือ 0.58rem (scale 0.82) ให้แลดูประณีต มินิมอล สบายตา และประหยัดพื้นที่คอลัมน์ได้อย่างลงตัว 5) เพิ่มความสะดวกโดยสามารถคลิกที่ป้ายวันที่แผนปิดงาน 📅 ได้โดยตรงเพื่อเปิดหน้าต่างแก้ไขเช่นเดียวกัน',
+      details: '1) ใน js/wbs.js: ใน renderWbsTable case "planClose" นำปุ่ม <button class="${editBtnClass}"> ออกทั้งหมด โดยคงเหลือเฉพาะป้ายวันที่แผนปิดงาน พร้อมเพิ่ม cursor: pointer สำหรับเปิดหน้าต่างแก้ไขได้โดยตรง, ใน case "note" คงปุ่มแก้ไขไว้เพียงอันเดียว 2) ใน js/wbs.js: ครอบไอคอน ✏️ และ 🔒 ใน <span class="pencil-icon"> และ <span class="lock-icon"> เพื่อควบคุมขนาดได้อย่างแม่นยำ 3) ใน css/styles.css: ปรับปรุง .btn-wbs-inline-edit ให้มีขนาด 17x17px (เดิมไม่ล็อคขนาด มี padding หนา), border-radius 4px, และเพิ่มคลาส .pencil-icon กำหนด font-size: 0.58rem และ transform: scale(0.82) 4) ใน index.html: อัปเดต Cache Buster เป็น ?v=20261026_1615 5) บันทึกประวัติลงใน BASE_AUDIT_LOGS',
+      sourceFile: 'คำสั่งผู้ใช้งาน (ลดขนาดรูปดินสอ ให้เหลือคงเดียว พร้อมรูปภาพวงกลมสีแดง)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง (จัดระเบียบตาราง WBS ให้สะอาดตา ลดความซ้ำซ้อนของปุ่มแก้ไข และทำให้คอลัมน์แผนปิดงานกะทัดรัดขึ้น)'
+    },
+    {
+      id: 'log_000_achieve_target_text_bright_radiant_gold_crystal_sharp',
+      timestamp: '2026-10-26 16:05:00',
+      timestampTh: '26 ต.ค. 2569, 16:05 น.',
+      type: 'EDIT',
+      typeBadge: 'ปรับแต่งข้อความบรรลุเป้าหมาย',
+      badgeClass: 'badge-type-edit',
+      title: 'ปรับข้อความบรรลุเป้าหมายบนกราฟเกณฑ์วัด: เพิ่มขนาดอักษร คมชัดระดับพิกเซล อ่านง่ายไม่มั่ว และเปลี่ยนเป็นสีเหลืองทองอร่ามแจ่มๆ',
+      targetSubject: 'ข้อความและป้าย "✓ บรรลุเป้าหมาย" เหนือแท่งกราฟ 8 เกณฑ์วัด (criteriaComparisonChart ใน js/chart.js)',
+      storageFile: 'js/chart.js, index.html, js/data_history.js',
+      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน "บรรบลุเป้าหมาย เพิ่มขนาดอักษร และให้อ่านง่ายไม่มั่วแบบนี้ และเปลี่ยนเป็นสีเหลืองทองอร่ามแจ่มๆ": 1) ขยายขนาดตัวอักษร "✓ บรรลุเป้าหมาย" ขึ้นเป็น 12.5px (ตัวหนา 800) เด่นชัดเต็มตา 2) แก้ไขปัญหาตัวอักษรเบลอมัวจากการใช้ shadowBlur ขนาดใหญ่ โดยเปลี่ยนมาใช้เทคนิค Crisp Dark Outline (เส้นขอบสีดำเข้มคมกริบ 3.2px) ล้อมรอบทุกตัวอักษรและสระภาษาไทย ทำให้อ่านง่าย คมชัด 100% ไม่มัว 3) ปรับเปลี่ยนสีตัวอักษรเป็นสีเหลืองทองอร่ามแจ่มๆ ด้วย Luxury Radiant Gold 4-stop Linear Gradient (#FFFFFF -> #FFF77A -> #FFD700 -> #FF9E0D) พร้อมออร่าสีทองเปล่งประกายนุ่มนวลรอบนอก และไฮไลต์แกนอักษรชั้นบนสุด เข้าชุดกับมงกุฎทองคำ 👑 อย่างลงตัวสง่างาม',
+      details: '1) ใน js/chart.js: ขยาย fSize เริ่มต้นเป็น 12.5px (เดิม 8.8-9.8px) และรองรับ maxTextW กว้างขึ้น, ปรับ achieveBadgeH เป็น 18px 2) ใช้ ctx.strokeText() ด้วยสีดำเข้ม rgba(8, 12, 22, 0.95) ความหนา 3.2px เพื่อตัดขอบตัวหนังสือให้คมชัดสูง 3) ใช้ ctx.createLinearGradient() 4 โทนสีทองหรูหรา (#FFFFFF, #FFF77A, #FFD700, #FF9E0D) พร้อมออร่าทอง shadowBlur 3.5px 4) วาดซ้ำด้วยแกนอักษรทองสว่างปิด shadowBlur เพื่อความคมชัดระดับพิกเซล 5) ใน index.html: อัปเดต Cache Buster ของ chart.js และ data_history.js เป็น ?v=20261026_1605 6) บันทึกประวัติลงใน BASE_AUDIT_LOGS',
+      sourceFile: 'คำสั่งผู้ใช้งาน (บรรบลุเป้าหมาย เพิ่มขนาดอักษร และให้อ่านง่ายไม่มั่วแบบนี้ และเปลี่ยนเป็นสีเหลืองทองอร่ามแจ่มๆ)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง (ยกระดับความคมชัดของข้อความบรรลุเป้าหมายให้อ่านง่าย 100% ตัวใหญ่ชัดเจน และสีเหลืองทองอร่ามงดงาม)'
+    },
+    {
+      id: 'log_000_wbs_col_id_rename_to_thi_and_compact_10cols_fitting',
+      timestamp: '2026-10-26 15:50:00',
+      timestampTh: '26 ต.ค. 2569, 15:50 น.',
+      type: 'EDIT',
+      typeBadge: 'เปลี่ยนชื่อคอลัมน์เป็น ที่ & ปรับเต็มจอ 10 คอลัมน์',
+      badgeClass: 'badge-type-edit',
+      title: 'เปลี่ยนชื่อคอลัมน์ ลำดับ เป็น "ที่" และปรับลดขนาดความกว้างให้แสดงผลเต็มจอครบทั้ง 10 คอลัมน์โดยไม่ถูกตัดขอบ',
+      targetSubject: 'ตารางข้อมูล WBS (#wbsDataTable ใน js/wbs.js และ css/styles.css)',
+      storageFile: 'js/wbs.js, css/styles.css, index.html, js/data_history.js',
+      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน "ลดขนาดคอลัม ลำดับ และปรับให้เห็นเต็มจอทั้ง 10 คอลัม" และ "เปลี่ยน ลำดับ เป็น ที่": 1) เปลี่ยนชื่อหัวคอลัมน์จาก "ลำดับ" เป็น "ที่" เพื่อความกระชับ สวยงาม และตรงเป้าหมาย 2) ลดความกว้างคอลัมน์ "ที่" ลงเหลือ 38px (เดิม 55px-120px) พร้อม padding กะทัดรัด 2px พอดีกับตัวเลขลำดับ 3) ปรับปรุงความกว้างขั้นต่ำ (minWidth) ของทั้ง 10 คอลัมน์เริ่มต้นให้สมส่วนลงตัว ไม่เบียด ไม่ดันล้นจอ 4) ปรับ padding ของเซลล์ในตาราง WBS ให้กระชับ (0.52rem 0.45rem) 5) ปิด pseudo-element ::after ของ th.sort-active ที่แสดงผลลูกศรซ้ำซ้อนใต้ชื่อคอลัมน์ 6) ตรวจสอบและปรับปรุงให้สามารถมองเห็นครบทั้ง 10 คอลัมน์บนหน้าจอมาตรฐานได้อย่างสมบูรณ์แบบโดยไม่ต้องเลื่อนสไลด์แนวนอน',
+      details: '1) ใน js/wbs.js: แก้ไข WBS_COL_DEFS ให้คอลัมน์ id มี label: "ที่", width: "38px", minWidth: "35px", maxWidth: "42px", ปรับ minWidth ของคอลัมน์ wbs (160px), office (120px), description (155px), statusSap (100px), cn41ActualCost (122px), pctMatWithdraw (78px), pctExpenseWithdraw (78px), planClose (115px), note (135px), ปรับ header styleStr และ data row cells ให้ล็อคความกว้างคอลัมน์ "ที่" 38px 2) ใน css/styles.css: ปรับปรุง .wbs-note-cell ให้ min-width: 120px, เพิ่ม CSS Rules สำหรับ #wbsDataTable ปรับ padding เซลล์ th/td ให้กระชับ, ซ่อน ::after ของ sort-active, และกำหนดความกว้างคอลัมน์ที่อย่างแม่นยำ 3) ใน index.html: อัปเดต Version Cache Buster เป็น ?v=20261026_1550 4) บันทึกประวัติลงใน BASE_AUDIT_LOGS',
+      sourceFile: 'คำสั่งผู้ใช้งาน (ลดขนาดคอลัม ลำดับ และปรับให้เห็นเต็มจอทั้ง 10 คอลัม / เปลี่ยน ลำดับ เป็น ที่)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง (เพิ่มพื้นที่การแสดงผลข้อมูล ทำให้ผู้ใช้งานมองเห็นตาราง WBS ครบทั้ง 10 คอลัมน์สำคัญได้ในมุมมองเดียว)'
+    },
+    {
+      id: 'log_000_achieve_target_text_glowing_green_noborder',
+      timestamp: '2026-10-26 15:40:00',
+      timestampTh: '26 ต.ค. 2569, 15:40 น.',
+      type: 'EDIT',
+      typeBadge: 'ปรับแต่งข้อความบรรลุเป้าหมาย',
+      badgeClass: 'badge-type-edit',
+      title: 'ปรับข้อความบรรลุเป้าหมายบนกราฟเกณฑ์วัด: แสดงอักษรสีเขียวเรืองแสง คมชัด โดยไม่มีเส้นขอบและไม่มีพื้นหลัง',
+      targetSubject: 'ข้อความและป้ายบรรลุเป้าหมายบนแท่งกราฟ 8 เกณฑ์วัด (criteriaComparisonChart ใน js/chart.js)',
+      storageFile: 'js/chart.js, index.html, js/data_history.js',
+      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน "บรรลุเป้าหมาย ให้แสดงอักษรสีเขียวเรืองเเสง ไม่ต้องมีเส้นขอบ และพื้นหลัง": 1) นำกล่องพื้นหลังสี่เหลี่ยมมน (gradient emerald background) และเส้นขอบสีเขียวนีออน (border stroke) ออกทั้งหมด 2) แสดงเฉพาะข้อความ "✓ บรรลุเป้าหมาย" ด้วยตัวอักษรสีเขียวนีออนเรืองแสง (#00FF88) พร้อมแสงออร่าเรืองแสง (shadowBlur 9) และแกนตัวอักษรสีเขียวมรกตสว่าง (#66FFAA) อ่านง่าย คมชัด โดดเด่น สบายตา เข้ากับมงกุฎทองคำ 👑 ที่ลอยอยู่ด้านบนอย่างลงตัว',
+      details: '1) ใน js/chart.js: ในส่วนวาดป้าย Goal Achieved สำหรับแท่งที่ผ่านเป้าหมาย ธ.ค. 69 (ext.isExceedDecKpi): ตัดโค้ดการวาด achieveGrad, this.roundRect(), ctx.fill() และ ctx.stroke() ออก 2) ปรับการวาดข้อความ achieveText เป็น 2-pass Neon Green Rendering (Pass 1: สี #00FF88 พร้อม shadowBlur 9 เรืองแสงรอบตัวอักษร / Pass 2: สี #66FFAA เพื่อให้ตัวหนังสือคมชัดสูงอ่านง่าย) 3) ใน index.html: อัปเดต Version Cache Buster ของ chart.js และ data_history.js เป็น ?v=20261026_1540 4) บันทึกประวัติลงใน BASE_AUDIT_LOGS ตามข้อบังคับ',
+      sourceFile: 'คำสั่งผู้ใช้งาน (บรรลุเป้าหมาย ให้แสดงอักษรสีเขียวเรืองเเสง ไม่ต้องมีเส้นขอบ และพื้นหลัง)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง (ปรับปรุงการแสดงผลข้อความบรรลุเป้าหมายให้โปร่งโล่ง สวยงาม สบายตา ไม่ทึบตัน และคมชัด)'
+    },
+    {
+      id: 'log_000_overview_cards_border_styled_like_img13',
+      timestamp: '2026-10-26 15:20:00',
+      timestampTh: '26 ต.ค. 2569, 15:20 น.',
+      type: 'EDIT',
+      typeBadge: 'ปรับสีขอบการ์ดตามรูป 13',
+      badgeClass: 'badge-type-edit',
+      title: 'ปรับแต่งสีขอบการ์ดในเมนูภาพรวมผู้บริหาร (Overview) ให้มีขอบทองเรืองแสงและเส้นแสงนีออนหลากสีตามรูป 13',
+      targetSubject: 'การ์ดทั้งหมดในเมนูภาพรวมผู้บริหาร (#tab-dashboard: #topSelectionStrip, #executiveDonutKpiCard, #topCriteriaChartCard, #unifiedProjectionOfficeCard, .content-card)',
+      storageFile: 'css/styles.css, index.html, js/data_history.js',
+      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน "เปลี่ยนสีขอบการ์ดตามรูป 13 ในการ์ด เมนูภาพรวมผู้บริหาร": 1) ปรับสีขอบการ์ดทุกใบในหน้าภาพรวมผู้บริหารเป็นเส้นขอบสีทองเรืองแสง (border: 1.5px solid rgba(255, 184, 28, 0.42)) โค้งมน 16px พร้อมแสงเงาพรีเมียม (box-shadow 0 10px 30px) 2) เพิ่มเส้นแถบแสงนีออน Gradient 3px ที่ขอบบนของการ์ดตามรูป 13 โดยการ์ดฝั่งซ้ายใช้โทนทอง-เขียว-ชมพู (Gold-Green-Pink) และการ์ดฝั่งขวาใช้โทนทอง-เขียว-ฟ้า (Gold-Green-Cyan) 3) ปรับแถบเลือกด้านบน (#topSelectionStrip) ให้มีขอบทองและแถบแสงด้านบนเข้าชุดกันอย่างหรูหรา 4) เพิ่ม Fullscreen Override ปิดขอบอัตโนมัติเมื่อเปิดโหมดเต็มจอ',
+      details: '1) ใน css/styles.css: เพิ่มสไตล์กลุ่ม #tab-dashboard ให้ครอบคลุม .executive-donut-kpi-card, .top-criteria-chart-card, .unified-projection-office-card และ .content-card โดยกำหนด border: 1.5px solid rgba(255, 184, 28, 0.42) !important, border-radius: 16px, box-shadow: 0 10px 30px rgba(0,0,0,0.45), 0 0 20px rgba(104,44,145,0.25) และใส่ ::before เป็นเส้นแถบแสงนีออนไล่เฉด 3px ตามสไตล์ของรูป 13 (01 รูป/13.jpg) 2) กำหนดขอบทอง 1.5px และแถบเส้นแสงบน #topSelectionStrip 3) ใน index.html: ปรับ Cache Buster ของ styles.css เป็น ?v=20261026_1520 4) บันทึกประวัติลงใน BASE_AUDIT_LOGS',
+      sourceFile: 'คำสั่งผู้ใช้งาน (เปลี่ยนสีขอบการ์ดตามรูป 13 ในการ์ด เมนูภาพรวมผู้บริหาร และไฟล์ 01 รูป/13.jpg)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง (ยกระดับความสวยงาม หรูหรา พรีเมียม และสร้างเอกลักษณ์ภาพรวมแดชบอร์ดให้เป็นธีมเดียวกันทั้งระบบ)'
+    },
+    {
+      id: 'log_000_criteria_bar_pct_enlarge_18px',
+      timestamp: '2026-10-26 15:10:00',
+      timestampTh: '26 ต.ค. 2569, 15:10 น.',
+      type: 'EDIT',
+      typeBadge: 'ขยายขนาดตัวเลข % เป็น 18.5px',
+      badgeClass: 'badge-type-edit',
+      title: 'ขยายขนาดตัวเลขเปอร์เซ็นต์ (%) ด้านล่างแท่งกราฟเกณฑ์วัดเป็น 18.5px เด่นชัด ชัดเจนเต็มตา',
+      targetSubject: 'ขนาดตัวอักษรเปอร์เซ็นต์ % ที่ด้านล่างแท่งกราฟ 8 เกณฑ์วัด (criteriaComparisonChart ใน js/chart.js และ js/app.js)',
+      storageFile: 'js/chart.js, js/app.js, index.html, js/data_history.js',
+      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน "ปรับขนาดอักษร %" (เลือกขยายให้ใหญ่ขึ้นอีก 18px - 19px): ขยายขนาดตัวเลขเปอร์เซ็นต์ (%) จาก 15.5px เป็น 18.5px (Bold 800) ปรับความสูงพื้นที่เป็น 22px และขยายระยะปลอดภัยด้านล่างของเป้าหมาย KPI ด้านบนเป็น 50px เพื่อเว้นช่องว่างอย่างสมดุล ไม่ทับซ้อนกับดาวและตัวเลข ทำให้ตัวเลขอ่านง่าย โดดเด่น ชัดเจนเต็มตา',
+      details: '1) ใน js/app.js: ปรับ barValueFontSize เป็น 18.5px และ barValueHeight เป็น 22px ใน chartOptions ของ renderCriteriaComparisonBar() 2) ใน js/chart.js: ปรับ responsive font size เริ่มต้นเป็น 18.5px (สูงสุด) พร้อมระบบ Auto-scale ป้องกันการล้นขอบ, ปรับ maxAllowedBottom และ maxAllowedY ของ target badges จาก 46 เป็น 50 เพื่อเว้นระยะห่างกับดาวและตัวเลขใหม่อย่างสมบูรณ์ 3) ใน index.html: ปรับ Cache Buster เป็น ?v=20261026_1510 4) บันทึกประวัติลงใน BASE_AUDIT_LOGS',
+      sourceFile: 'คำสั่งผู้ใช้งาน (ปรับขนาดอักษร % - เลือกขยายขนาด 18px - 19px)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง (ยกระดับการมองเห็นตัวเลขเปอร์เซ็นต์ความสำเร็จให้อ่านได้ชัดเจนเต็มตา สวยงามสมส่วน)'
+    },
+    {
+      id: 'log_000_criteria_bar_pct_only_bright_gold',
+      timestamp: '2026-10-26 15:00:00',
+      timestampTh: '26 ต.ค. 2569, 15:00 น.',
+      type: 'EDIT',
+      typeBadge: 'ปรับสีอักษรทองสว่าง & ตัดชื่อเดือนคงเหลือเฉพาะ %',
+      badgeClass: 'badge-type-edit',
+      title: 'ปรับแต่งตัวเลข % บนแท่งกราฟเกณฑ์วัด: ตัดชื่อเดือนออกแสดงเฉพาะ % และปรับสีอักษรเป็นสีทองสว่างจ้า คมชัดสูง ไม่ทึบ ไม่มึนตา',
+      targetSubject: 'ตัวเลข % ความสำเร็จที่ด้านล่างแท่งกราฟ 8 เกณฑ์วัด (criteriaComparisonChart ใน js/chart.js และ js/app.js)',
+      storageFile: 'js/chart.js, js/app.js, index.html, js/data_history.js',
+      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน "ปรับสีอักษร สว่างๆไม่ดูทึบๆ มึนๆ" และ "เอาเดือน ออก คงเหลือ %อย่างเดียว": 1) ปรับ formatBarValue ให้ตัดชื่อเดือนออก แสดงเฉพาะตัวเลขเปอร์เซ็นต์ล้วน เช่น "91.38%", "76.49%" 2) ปรับสีตัวอักษรเป็นสีเหลืองทองสว่างสดใส (#FFF67A) ความสว่างสูง ปราศจากความทึบตัน 3) ปรับเงา Drop Shadow เป็นแบบคมชัด 1px (shadowBlur 1.5, shadowOffsetY 1) ตัดเงาฟุ้งมัวรอบตัวหนังสือออก ทำให้อ่านง่าย สบายตา คมกริบ ไม่มึนตา 4) ขยายขนาดตัวอักษรเป็น 15.5px เด่นชัด ชัดเจนสมบูรณ์แบบ',
+      details: '1) ใน js/app.js: ปรับ formatBarValue ให้ส่งคืนเฉพาะ ${Number(val).toFixed(2)}% หรือ "ไม่มีงาน" โดยตัดชื่อเดือน (ก.ย.) ออกตามคำสั่ง, ปรับ barValueColor เป็น #FFF67A และ barValueFontSize เป็น 15.5px 2) ใน js/chart.js: ปรับการวาดตัวเลข % และดาว KPI ให้ใช้สีสว่างสดใส ปรับความคมชัดของเงา Drop Shadow ให้คมกริบ (blur 1.5) เพื่อกำจัดอาการเงาฟุ้งมัวเบลอ 3) ใน index.html: อัปเดต Cache Buster เป็น ?v=20261026_1500 4) บันทึกประวัติลงใน BASE_AUDIT_LOGS',
+      sourceFile: 'คำสั่งผู้ใช้งาน (ปรับสีอักษร สว่างๆไม่ดูทึบๆ มึนๆ / เอาเดือน ออก คงเหลือ %อย่างเดียว)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง (เพิ่มความคมชัดและทัศนวิสัยสูงสุด ตัวเลขอ่านง่าย สบายตา ชัดเจนทุกมุมมอง)'
+    },
+    {
+      id: 'log_000_criteria_bar_gold_text_no_card_larger_font',
+      timestamp: '2026-10-26 14:48:00',
+      timestampTh: '26 ต.ค. 2569, 14:48 น.',
+      type: 'EDIT',
+      typeBadge: 'ปรับป้าย % เดือนล่าสุดเป็นอักษรทองล้วน',
+      badgeClass: 'badge-type-edit',
+      title: 'ปรับแต่ง % เดือนล่าสุดบนแท่งกราฟเกณฑ์วัด: ยกเลิกการ์ดขอบทองพื้นดำ แสดงตัวอักษรสีทองล้วน ขยายขนาดตัวอักษรใหญ่ชัดเจน',
+      targetSubject: 'ป้ายร้อยละความสำเร็จเดือนล่าสุดที่ด้านล่างแท่งกราฟ 8 เกณฑ์วัด (criteriaComparisonChart ใน js/chart.js และ js/app.js)',
+      storageFile: 'js/chart.js, js/app.js, index.html, js/data_history.js',
+      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน "%เดือนล่าสุด ไม่ต้องมีการ์ดขอบทองพื้นดำ ให้แสดงอักษร สีทองอย่างเดียว และแรับขนาดอักษรให้ใหญ่ขึ้นมองชัดเจน": 1) ยกเลิกการวาดการ์ดขอบทองพื้นดำ (No card background & border) 2) แสดงเฉพาะตัวอักษรสีทองล้วน (#FFD25A) พร้อมซอฟต์โกลว์เรืองแสงและเงา Drop-shadow คมชัดเพื่อให้อ่านง่ายบนแท่งกราฟทุกสี 3) ขยายขนาดตัวอักษรให้ใหญ่ขึ้นชัดเจน (จาก 10.5px เป็น 13.8px) 4) จัดวางดาว KPI สีทองประกายระยิบระยับไว้เหนือตัวเลข % อย่างลงตัว',
+      details: '1) ใน js/chart.js: เพิ่มการรองรับอ็อปชัน options.barValueNoCard ในการวาด Bar Value ล่างสุดทั้งในจุดเป้าหมายแบบรวม (Place 1) และจุดสำรอง (Place 2) โดยเมื่อเปิดใช้งานจะไม่วาดสี่เหลี่ยมขอบทองพื้นดำ (roundRect stroke/fill) แต่วาดตัวอักษรสีเหลืองทอง (#FFD25A) ล้วนด้วยขนาดใหญ่ขึ้น ปรับระบบขยายตามความกว้างแท่งกราฟ (สูงสุด 13.8px) พร้อมดับเบิลพาสด้วย Drop Shadow เงาดำลึก (rgba(0,0,0,0.98), blur 4, offsetY 1.2) และ Golden Luminous Glow เพื่อความคมชัดสูงสุดบนแท่งสีเขียว/แดง และจัดตำแหน่งดาวทองไว้เหนือข้อความ 2) ใน js/app.js: ปรับ chartOptions ของ renderCriteriaComparisonBar() เพิ่ม barValueNoCard: true, barValueFontSize: 13.8, barValueHeight: 18 3) ใน index.html: ปรับ Cache Buster เป็น ?v=20261026_1450 4) บันทึกประวัติลงใน BASE_AUDIT_LOGS',
+      sourceFile: 'คำสั่งผู้ใช้งาน (%เดือนล่าสุด ไม่ต้องมีการ์ดขอบทองพื้นดำ ให้แสดงอักษร สีทองอย่างเดียว และแรับขนาดอักษรให้ใหญ่ขึ้นมองชัดเจน)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง (ปรับปรุงทัศนวิสัยและความสวยงามของกราฟสรุป 8 เกณฑ์วัด ให้อ่านตัวเลขได้ชัดเจน สบายตา และดูพรีเมียม)'
+    },
+    {
+      id: 'log_000_update_wbs_data_04_06_26oct',
+      timestamp: '2026-10-26 14:15:00',
+      timestampTh: '26 ต.ค. 2569, 14:15 น.',
+      type: 'IMPORT',
+      typeBadge: 'อัปเดตไฟล์ข้อมูล 04 & 06 WBS',
+      badgeClass: 'badge-type-import',
+      title: 'อัปเดตข้อมูล WBS จากไฟล์ 04 ZBUDR064 และไฟล์ 06 CN41 ล่าสุด (วันที่ 26 ต.ค. 2569)',
+      targetSubject: 'ฐานข้อมูลงาน WBS คงเหลือ (js/data_wbs.js), สถานะ SAP ล่าสุด, มูลค่า AUC ล่าสุด และการคำนวณส่วนเพิ่ม/ลด AUC',
+      storageFile: 'js/data_wbs.js, 04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx, js/wbs.js, index.html, js/data_history.js',
+      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน "update ไฟล์ข้อมูล 04 WBS และ 06 WBS": 1) ในไฟล์ 04 ZBUDR064 คำนวณเพิ่มคอลัมน์ % เบิกพัสดุ (X) และ % เบิก คชจ. (Y) พร้อมบันทึกไฟล์ Excel ให้สมบูรณ์ 2) ผสานข้อมูลจากไฟล์ 04 ZBUDR064 และไฟล์ 06 CN41 มูลค่า AUC ล่าสุด วันที่ 26 ตค 69 เข้าสู่ js/data_wbs.js ครบ 2,083 รายการ (100% Match) 3) ตรวจพบสถานะ SAP เปลี่ยนแปลง 116 รายการ, มูลค่า AUC เปลี่ยนแปลง 22 รายการ และ % เบิกจ่ายพัสดุเปลี่ยนแปลง 51 รายการ 4) ยอดรวมมูลค่า AUC ล่าสุด (ไฟล์ 06) เท่ากับ 643,051,304.11 บาท (ลดลงสุทธิ -189,795.82 บาท จากยอดเริ่มต้น 14 ต.ค. 69) 5) ซิงค์หมายเหตุและแผนงานจาก Google Sheet Live API คงอยู่ครบถ้วน 6) ปรับปรุงป้ายวันที่แก้ไขล่าสุดใน index.html และ js/wbs.js เป็น 26 ต.ค. 69 ทุกจุด',
+      details: '1) ใน 04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx: เติมคอลัมน์ 24 (% เบิกพัสดุ) สูตร =IFERROR((M2/T2),0) และคอลัมน์ 25 (% เบิก คชจ.) สูตร =IF(V2=0,0,IFERROR(R2/V2,0)) ฟอร์แมต 0.00% 2) ใน js/data_wbs.js: รันการผสาน 4 ไฟล์ (03 Base + 04 ZBUDR064 + 05 Baseline + 06 Latest 26 ต.ค. 69) ด้วย scratch/merge_wbs_latest.ps1 สำเร็จครบ 2,083 รายการ (100% Match) โดยมีสถานะ SAP เปลี่ยนแปลง 116 งาน, มูลค่า AUC เปลี่ยนแปลง 22 งาน, % เบิกพัสดุเปลี่ยนแปลง 51 งาน 3) ยอดสะสม AUC: ไฟล์ 05 เริ่มต้น (14 ต.ค.) = 643,241,099.93 บาท, ไฟล์ 06 ล่าสุด (26 ต.ค.) = 643,051,304.11 บาท, ผลต่าง cn41CostInc รวม = -189,795.82 บาท 4) ใน index.html: อัปเดตข้อความวันที่แก้ไขล่าสุดบนหัวการ์ด WBS (wbsHeaderDatesPlain) เป็น สถานะ SAP แก้ไขล่าสุด: 26 ต.ค. 69 และ มูลค่า AUC(บาท) แก้ไขล่าสุด: 26 ต.ค. 69 5) ใน js/wbs.js: ปรับป้าย pill-file-04 และ pill-file-05 เป็นวันที่ 26 ต.ค. 2569 และอัปเดตป้ายวันที่ใต้หัวคอลัมน์ statusSap และ cn41ActualCost เป็น 26 ต.ค. 69 6) ใน js/data_history.js: อัปเดต DATA_SOURCE_CATALOG (src_04 และ src_06) และบันทึกประวัติการอัปเดตลงใน BASE_AUDIT_LOGS',
+      sourceFile: '04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx (อัปเดต 26 ต.ค. 2569 13:48 น.), 06 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 26 ตค 69.xlsx (อัปเดต 26 ต.ค. 2569 14:05 น.)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'สูง (อัปเดตฐานข้อมูลสถานะงานและมูลค่าทรัพย์สิน AUC ครบทั้งระบบ 2,083 งาน)',
+    },
     {
       id: 'log_000_criteria_bar_golden_crown_achievement',
       timestamp: '2026-10-26 11:00:00',
@@ -3267,12 +3459,12 @@
                   <div class="dh-flow-node" onclick="window.openModelViewModal('src_04', 'source')">
                     <div class="dh-node-badge" style="background:#8B5CF6;">ไฟล์ 04</div>
                     <div class="dh-node-title">ZBUDR064 (%พัสดุ/สถานะ SAP)</div>
-                    <div class="dh-node-meta">นำเข้า: 23 ต.ค. 69 • 731.7 KB</div>
+                    <div class="dh-node-meta">นำเข้า: 26 ต.ค. 69 • 732.0 KB</div>
                   </div>
                   <div class="dh-flow-node" onclick="window.openModelViewModal('src_06', 'source')">
                     <div class="dh-node-badge" style="background:#F59E0B;">ไฟล์ 06</div>
                     <div class="dh-node-title">CN41 (มูลค่า AUC บาท)</div>
-                    <div class="dh-node-meta">นำเข้า: 24 ต.ค. 69 • 336.2 KB</div>
+                    <div class="dh-node-meta">นำเข้า: 26 ต.ค. 69 • 337.8 KB</div>
                   </div>
                   <div class="dh-flow-node" onclick="window.openModelViewModal('src_sheet', 'source')">
                     <div class="dh-node-badge" style="background:#10B981;">G-Sheet</div>

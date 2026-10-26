@@ -8240,11 +8240,12 @@
       targetBadgeFullWidth: true, // ปรับความกว้างของป้ายเกณฑ์วัด % ให้ขยายเต็มแท่งกราฟตามความกว้างใหม่
       showBarValues: true,
       barValuePosition: 'bottom', // เฉพาะกราฟนี้ ปรับ % ทุกกราฟแท่ง มาไว้ล่างสุด
-      barValueTheme: 'gold', // เปลี่ยนสี % ทุกแท่งเป็นสีเหลืองทองตามคำขอ
-      barValueColor: '#FFD25A', // สีเหลืองทอง PEA Gold
-      barValueFontSize: 10.5, // ขนาดตัวเลข % สีเหลืองทอง ใหญ่ขึ้น ชัดเจน
-      barValueHeight: 17, // ความสูงป้าย % ล่างสุด
-      barValueFullWidth: true, // ปรับความกว้างของป้าย % ล่างสุดให้ขยายเต็มแท่งกราฟ (เว้นขอบ 3px) ไม่เกินกราฟ
+      barValueNoCard: true, // ไม่ต้องมีการ์ดขอบทองพื้นดำ ให้แสดงอักษรสีทองอย่างเดียว
+      barValueTheme: 'gold', // แสดงอักษรสีทองอย่างเดียวตามคำขอ
+      barValueColor: '#FFF67A', // สีเหลืองทองสว่างจ้า คมชัดสูง ไม่ทึบ ไม่มึนตา
+      barValueFontSize: 18.5, // ขยายขนาดตัวเลข % ให้ใหญ่ขึ้นอีก ชัดเจนเต็มตา (18.5px)
+      barValueHeight: 22, // ความสูงพื้นที่ตัวเลข % รองรับขนาด 18.5px ได้พอดี
+      barValueFullWidth: true,
       showBarTargetLines: false, // เอาเส้นตรงแนวนอนออกทั้งหมด (ไม่วาดเส้นประแนวนอนเป้าหมายบนแท่งกราฟ)
       showGridLines: false, // เอาเส้นตรงแนวนอนออกทั้งหมด (ไม่วาดเส้นกริดแนวนอน)
       rotateXLabels: false, // ปรับแนวนอนปกติ ตามคำสั่งผู้ใช้งาน
@@ -8255,9 +8256,8 @@
       targetLines: [], // ไม่ใช้เส้นรวมทั้งกราฟ แต่แยกอิสระในแต่ละแท่งตามเกณฑ์วัด
       formatBarValue: (val, idx) => {
         const ext = extraList[idx];
-        const mName = (ext && ext.latestMonthName) || latestMonthName;
-        if (ext && ext.isNoWork) return `${mName} ไม่มีงาน`;
-        return `${mName} ${Number(val).toFixed(2)}%`;
+        if (ext && ext.isNoWork) return 'ไม่มีงาน';
+        return `${Number(val).toFixed(2)}%`; // เอาชื่อเดือนออก คงเหลือเฉพาะ % อย่างเดียวตามคำสั่ง
       },
       showLegend: true,
       customLegend: [
