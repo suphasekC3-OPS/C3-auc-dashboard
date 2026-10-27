@@ -601,6 +601,9 @@
     // 2.2 Render Selected Items Summary Card (ต่อจากแถวสรุปสถานะ sap - ใช้ sapFiltered เพื่อให้คงรายการที่เลือกไว้ทั้งหมดแม้กรองสถานะ SAP)
     renderWbsSelectedSummaryCard(sapFiltered, currentCrit, excludedSap);
 
+    // 2.2.1 Update Floating Selection Badge on Table (มุมขวาด้านล่าง บนตารางตลอด พื้นสีฟ้า)
+    updateWbsFloatingSelection();
+
     // 2.3 Render Target Comparison & Progress Simulation Section (กราฟแนวนอน 2 ชั้น เปรียบเทียบเป้าหมาย KPI ระดับ 5)
     renderWbsTargetComparisonSection(sapFiltered, currentCrit, excludedSap);
 
@@ -1116,6 +1119,16 @@
       wbsState.selectedWbs.delete(wbs);
     }
 
+    // Real-time update row background class
+    const cb = document.querySelector(`.wbs-sap-row-cb[data-wbs="${CSS.escape(wbs)}"]`);
+    if (cb) {
+      const tr = cb.closest('tr');
+      if (tr) {
+        if (isChecked) tr.classList.add('wbs-row-checked');
+        else tr.classList.remove('wbs-row-checked');
+      }
+    }
+
     const filtered = getFilteredWbsData(false, false);
     const sapFiltered = getFilteredWbsData(false, true);
     const globalState = window.state || {};
@@ -1126,6 +1139,7 @@
     renderWbsSelectedSummaryCard(sapFiltered, currentCrit, excludedSap);
     renderWbsTargetComparisonSection(sapFiltered, currentCrit, excludedSap);
     renderWbsSapSummary(sapFiltered, wbsState.sapStatus);
+    updateWbsFloatingSelection();
 
     // Update master header checkbox state if present
     const masterCb = document.getElementById('wbsMasterHeaderCb');
@@ -1802,11 +1816,266 @@
 
     // 4. เรนเดอร์อัปเดตหน้า WBS ใหม่ โดยคงตัวกรองสถานะการ์ด SAP และหน่วยงานไว้ตามเดิม
     renderWbsTab();
+    updateWbsFloatingSelection();
 
     if (window.showToast) {
       window.showToast(`ล้างรายการที่เลือกจาก Checkbox เรียบร้อยแล้ว (${prevCount.toLocaleString('th-TH')} งาน)`, 'info');
     }
   };
+
+  /**
+   * Clear All Selections & Table Filters in This Table (ล้างตัวเลือกทั้งหมดในตารางนี้)
+   * ดำเนินการตามคำสั่งผู้ใช้งาน: วางปุ่มข้างๆ ปุ่มขยายจอ
+   * 1. ปลดเครื่องหมาย Checkbox ทุกแถวในตาราง
+   * 2. ปลด Master Checkbox หัวตาราง
+   * 3. ล้างตัวกรองสถานะ SAP ในตาราง (wbsState.tableSapStatuses)
+   * 4. ล้างตัวกรองงวดบัญชี ในตาราง (wbsState.tablePlanCloseStatuses)
+   * 5. ปิดป๊อปอัปตัวกรองในตาราง
+   * 6. รีเซ็ตหน้ากลับเป็นหน้าแรก (page 1)
+   * 7. รีเรนเดอร์ตารางและแถบข้อมูล
+   */
+  window.clearAllWbsTableSelections = function () {
+    let clearedItems = [];
+
+    // 1. ล้าง Checkbox รายแถว
+    const prevCbCount = wbsState.selectedWbs ? wbsState.selectedWbs.size : 0;
+    if (wbsState.selectedWbs && wbsState.selectedWbs.size > 0) {
+      wbsState.selectedWbs.clear();
+      clearedItems.push(`ปลด Checkbox ${prevCbCount.toLocaleString('th-TH')} รายการ`);
+    }
+
+    // 2. ปลด Master Checkbox หัวตาราง
+    const masterCb = document.getElementById('wbsMasterHeaderCb');
+    if (masterCb) masterCb.checked = false;
+
+    // 3. ปลด Checkbox ทุกแถวใน DOM
+    document.querySelectorAll('.wbs-sap-row-cb').forEach(cb => {
+      cb.checked = false;
+    });
+
+    // 4. ล้างตัวกรองสถานะ SAP ในตาราง
+    if (wbsState.tableSapStatuses && wbsState.tableSapStatuses.size > 0) {
+      wbsState.tableSapStatuses.clear();
+      clearedItems.push('ล้างตัวกรองสถานะ SAP');
+    }
+
+    // 5. ล้างตัวกรองงวดบัญชี ในตาราง
+    if (wbsState.tablePlanCloseStatuses && wbsState.tablePlanCloseStatuses.size > 0) {
+      wbsState.tablePlanCloseStatuses.clear();
+      clearedItems.push('ล้างตัวกรองงวดบัญชี');
+    }
+
+    // 6. ปิดหน้าต่าง Dropdown ถ้าเปิดอยู่
+    if (typeof window.closeWbsSapThDropdown === 'function') {
+      window.closeWbsSapThDropdown();
+    }
+    if (typeof window.closeWbsPlanCloseThDropdown === 'function') {
+      window.closeWbsPlanCloseThDropdown();
+    }
+
+    // 7. รีเซ็ตหน้ากลับเป็นหน้าแรก
+    wbsState.page = 1;
+
+    // 8. เรนเดอร์ตารางและแถบข้อมูลใหม่
+    renderWbsTab();
+    if (typeof updateWbsFloatingSelection === 'function') {
+      updateWbsFloatingSelection();
+    }
+
+    if (window.showToast) {
+      if (clearedItems.length > 0) {
+        window.showToast(`ล้างตัวเลือกทั้งหมดในตารางเรียบร้อยแล้ว (${clearedItems.join(', ')})`, 'success');
+      } else {
+        window.showToast('ล้างตัวเลือกและตัวกรองในตารางนี้เรียบร้อยแล้ว', 'info');
+      }
+    }
+  };
+
+  /**
+   * Helper: Calculate Selected Checkbox Items Summary (จำนวนงาน และมูลค่า AUC ตามไฟล์ 06)
+   */
+  function getWbsSelectedSummary() {
+    const selectedSet = wbsState.selectedWbs || new Set();
+    const allData = window.AUC_WBS_REMAINING_DATA || [];
+    let count = 0;
+    let totalAuc = 0;
+
+    if (selectedSet.size > 0 && allData.length > 0) {
+      for (let i = 0; i < allData.length; i++) {
+        const item = allData[i];
+        if (item && item.wbs && selectedSet.has(item.wbs)) {
+          count++;
+          totalAuc += (Number(item.cn41ActualCost) || 0);
+        }
+      }
+    }
+
+    const displayCount = count || selectedSet.size;
+    return { count: displayCount, totalAuc };
+  }
+
+  /**
+   * Update Floating Selection Badge on Table (มุมขวาด้านล่าง บนตารางตลอด พื้นสีฟ้า)
+   * แสดงจำนวนงาน และมูลค่า AUC ตามไฟล์ 06 สำหรับรายการที่เลือกใน Checkbox
+   */
+  function updateWbsFloatingSelection() {
+    const container = document.getElementById('wbsTableFloatingSelection');
+    if (!container) return;
+
+    const countEl = document.getElementById('wbsFloatingSelCount');
+    const aucEl = document.getElementById('wbsFloatingSelAuc');
+    const clearBtn = document.getElementById('wbsFloatingSelClearBtn');
+
+    const summary = getWbsSelectedSummary();
+    const count = summary.count;
+    const auc = summary.totalAuc;
+
+    if (countEl) countEl.textContent = count.toLocaleString('th-TH');
+    if (aucEl) aucEl.textContent = formatMoney(auc);
+
+    if (clearBtn) {
+      clearBtn.disabled = (count === 0);
+    }
+
+    if (count > 0) {
+      container.classList.add('has-selection');
+    } else {
+      container.classList.remove('has-selection');
+    }
+
+    if (!isFloatingDragInitialized) {
+      initDraggableFloatingCard();
+    }
+  }
+  window.updateWbsFloatingSelection = updateWbsFloatingSelection;
+
+  let isFloatingDragInitialized = false;
+
+  /**
+   * Initialize Draggable Floating Card (ลากแล้วย้ายตำแหน่งตามที่ต้องการได้อิสระ)
+   */
+  function initDraggableFloatingCard() {
+    const el = document.getElementById('wbsTableFloatingSelection');
+    if (!el || isFloatingDragInitialized) return;
+    isFloatingDragInitialized = true;
+
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+    let initialLeft = 0;
+    let initialTop = 0;
+    let hasMoved = false;
+
+    // Restore saved position from localStorage
+    try {
+      const saved = localStorage.getItem('AUC_WBS_FLOATING_CARD_POS_V1');
+      if (saved) {
+        const pos = JSON.parse(saved);
+        if (typeof pos.left === 'number' && typeof pos.top === 'number') {
+          const parent = el.offsetParent || el.parentElement;
+          if (parent) {
+            const maxLeft = Math.max(0, parent.clientWidth - el.offsetWidth);
+            const maxTop = Math.max(0, parent.clientHeight - el.offsetHeight);
+            const clampedLeft = Math.min(Math.max(0, pos.left), maxLeft);
+            const clampedTop = Math.min(Math.max(0, pos.top), maxTop);
+            el.style.left = `${clampedLeft}px`;
+            el.style.top = `${clampedTop}px`;
+            el.style.right = 'auto';
+            el.style.bottom = 'auto';
+          }
+        }
+      }
+    } catch (err) {}
+
+    el.addEventListener('pointerdown', (e) => {
+      // Do not drag if clicking the clear button
+      if (e.target && e.target.closest('#wbsFloatingSelClearBtn')) return;
+      if (e.button !== 0) return; // Only primary mouse button
+
+      isDragging = true;
+      hasMoved = false;
+      startX = e.clientX;
+      startY = e.clientY;
+
+      const rect = el.getBoundingClientRect();
+      const parent = el.offsetParent || el.parentElement;
+      const parentRect = parent ? parent.getBoundingClientRect() : { left: 0, top: 0 };
+
+      initialLeft = rect.left - parentRect.left;
+      initialTop = rect.top - parentRect.top;
+
+      el.classList.add('is-dragging');
+      try {
+        el.setPointerCapture(e.pointerId);
+      } catch (err) {}
+      e.preventDefault();
+    });
+
+    el.addEventListener('pointermove', (e) => {
+      if (!isDragging) return;
+
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+
+      if (Math.abs(dx) > 2 || Math.abs(dy) > 2) {
+        hasMoved = true;
+      }
+
+      const parent = el.offsetParent || el.parentElement;
+      const maxLeft = parent ? Math.max(0, parent.clientWidth - el.offsetWidth) : 1000;
+      const maxTop = parent ? Math.max(0, parent.clientHeight - el.offsetHeight) : 800;
+
+      const newLeft = Math.min(Math.max(0, initialLeft + dx), maxLeft);
+      const newTop = Math.min(Math.max(0, initialTop + dy), maxTop);
+
+      el.style.left = `${newLeft}px`;
+      el.style.top = `${newTop}px`;
+      el.style.right = 'auto';
+      el.style.bottom = 'auto';
+    });
+
+    const onPointerUp = (e) => {
+      if (!isDragging) return;
+      isDragging = false;
+      el.classList.remove('is-dragging');
+      try {
+        el.releasePointerCapture(e.pointerId);
+      } catch (err) {}
+
+      if (hasMoved) {
+        try {
+          const left = parseFloat(el.style.left) || 0;
+          const top = parseFloat(el.style.top) || 0;
+          localStorage.setItem('AUC_WBS_FLOATING_CARD_POS_V1', JSON.stringify({ left, top }));
+        } catch (err) {}
+      }
+    };
+
+    el.addEventListener('pointerup', onPointerUp);
+    el.addEventListener('pointercancel', onPointerUp);
+
+    // Double click to reset to default position
+    el.addEventListener('dblclick', (e) => {
+      if (e.target && e.target.closest('#wbsFloatingSelClearBtn')) return;
+      resetFloatingCardPosition();
+    });
+  }
+
+  function resetFloatingCardPosition() {
+    const el = document.getElementById('wbsTableFloatingSelection');
+    if (!el) return;
+    el.style.left = 'auto';
+    el.style.top = 'auto';
+    el.style.right = '16px';
+    el.style.bottom = '18px';
+    try {
+      localStorage.removeItem('AUC_WBS_FLOATING_CARD_POS_V1');
+    } catch (err) {}
+    if (window.showToast) {
+      window.showToast('รีเซ็ตตำแหน่งการ์ดสีฟ้ากลับมุมขวาล่างเรียบร้อย', 'info');
+    }
+  }
+  window.resetFloatingCardPosition = resetFloatingCardPosition;
 
   /**
    * Toggle WBS selection by specific SAP Status
@@ -2057,6 +2326,7 @@
     // Target Marker Position on Progress Bar
     const targetMarkerLeft = `${targetBarPct}%`;
     const markerAlignClass = targetBarPct < 25 ? 'label-right' : 'label-left';
+    const flagAlignClass = targetBarPct > 82 ? 'align-inward' : 'align-standard';
 
     // Selected Target Month Color Classes (แสดงสีกราฟตามเป้าหมายที่เลือก)
     const selectedMonthIndex = Math.max(0, availableMonths.findIndex(m => m.monthNum === selectedMonth.monthNum));
@@ -2092,8 +2362,10 @@
                 </div>
               </div>
               <div class="wbs-val-line">
-                <span class="wbs-val-prefix">มูลค่า:</span>
-                <span class="wbs-val-number" id="wbsKpiTotalVal">0.00 ฿</span>
+                <div class="wbs-val-main-group">
+                  <span class="wbs-val-prefix">มูลค่า:</span>
+                  <span class="wbs-val-number" id="wbsKpiTotalVal">0.00 ฿</span>
+                </div>
                 <span class="wbs-val-mb-pill" id="wbsKpiTotalValMb">(0.00 ลบ.)</span>
               </div>
               <!-- แท่งกราฟภาพรวม (ส่วนเพิ่ม/ลด สีต่างออกไป) -->
@@ -2119,8 +2391,10 @@
                 </div>
               </div>
               <div class="wbs-val-line">
-                <span class="wbs-val-prefix" style="color: #6EE7B7;">มูลค่า:</span>
-                <span class="wbs-val-number text-success" id="wbsKpiClosedVal">0.00 ฿</span>
+                <div class="wbs-val-main-group">
+                  <span class="wbs-val-prefix" style="color: #6EE7B7;">มูลค่า:</span>
+                  <span class="wbs-val-number text-success" id="wbsKpiClosedVal">0.00 ฿</span>
+                </div>
                 <span class="wbs-val-mb-pill pill-green" id="wbsKpiClosedValMb">(0.00 ลบ.)</span>
               </div>
               <!-- แท่งกราฟปิดงาน (ส่วน SAP สีต่างออกไป และส่วนที่เลือกสีฟ้า) -->
@@ -2173,7 +2447,7 @@
                     <div class="progress-fill fill-gold-stripe fill-base-part" id="wbsBarMainBaseSeg"></div>
                     <div class="fill-inc-part" id="wbsBarMainIncSeg" title="ส่วนปรับปรุงที่เพิ่มขึ้น"></div>
                     <div class="fill-inc-part fill-selected-part" id="wbsBarMainSelectedSeg" style="display: none;" title="ส่วนที่เลือกจาก Checkbox"></div>
-                    <div class="pea-ev-runner" style="display: block;" title="รถบริการเคลื่อนที่ กฟภ. (PEA EV)">
+                    <div class="pea-ev-runner" title="รถบริการเคลื่อนที่ กฟภ. (PEA EV)">
                       <div class="pea-ev-car-body">
                         <img src="assets/pea_truck_right.png" alt="รถบริการเคลื่อนที่ กฟภ." class="pea-ev-truck-img" />
                         <span class="pea-ev-beam"></span>
@@ -2205,7 +2479,7 @@
                     <div class="progress-fill fill-gold-stripe fill-base-part" id="wbsBarJobBaseSeg"></div>
                     <div class="fill-inc-part" id="wbsBarJobIncSeg" title="ส่วนปรับปรุงที่เพิ่มขึ้น"></div>
                     <div class="fill-inc-part fill-selected-part" id="wbsBarJobSelectedSeg" style="display: none;" title="ส่วนที่เลือกจาก Checkbox"></div>
-                    <div class="pea-ev-runner" style="display: block;" title="รถบริการเคลื่อนที่ กฟภ. (PEA EV)">
+                    <div class="pea-ev-runner" title="รถบริการเคลื่อนที่ กฟภ. (PEA EV)">
                       <div class="pea-ev-car-body">
                         <img src="assets/pea_truck_right.png" alt="รถบริการเคลื่อนที่ กฟภ." class="pea-ev-truck-img" />
                         <span class="pea-ev-beam"></span>
@@ -2320,11 +2594,95 @@
                     </div>
                   </div>
                   <div class="wbs-kpi-track track-progress" title="ยอดดำเนินการรวม: ${progressDisplay}">
-                    <!-- Target Line Marker (รูป 32: เส้นบอกระดับเป้าหมายสีทองเปล่งประกายเรืองแสง ปลายมนสีขาว ทุกอัน) -->
-                    <div class="target-marker-line"
+                    <!-- Target Line Marker: เสาธงและคนขับรถ กฟภ. (น้องสว่าง) ชักธงสีทองทำหน้าที่เป็นเส้นบอกระดับเป้าหมาย -->
+                    <div class="target-marker-line ${isGoalReached ? 'is-passed' : ''}"
                       style="left: ${targetMarkerLeft};"
-                      title="เส้นเป้าหมาย KPI ระดับ 5: ${targetDisplay}">
-                      <div class="target-marker-beam"></div>
+                      title="เส้นเป้าหมาย KPI ระดับ 5: ${targetDisplay} ${isGoalReached ? '(ประสบความสำเร็จแล้ว!)' : ''}">
+
+                      <!-- คนขับรถ กฟภ. (น้องสว่าง) ชักธงสีทอง ทำหน้าที่เป็นเส้นเป้าหมายแทนแท่งสีเหลืองทองเดิม -->
+                      <div class="pea-victory-hoist-wrapper ${isGoalReached ? 'is-achieved' : 'is-pending'} ${flagAlignClass}"
+                        title="${isGoalReached ? '🎉 บรรลุเป้าหมาย KPI ระดับ 5 แล้ว' : `🚩 เป้าหมาย KPI ระดับ 5 (${formatShort(targetAmount)}) - น้องสว่างกำลังชักธงทองสู่ยอดเสา`}">
+                        
+                        <!-- เสาธงสีทองพร้อมหัวยอดเสาเรืองแสง -->
+                        <div class="pea-gold-flagpole">
+                          <div class="pea-flagpole-finial">
+                            <span class="finial-orb"></span>
+                            <span class="finial-sparkle">✨</span>
+                          </div>
+                          <div class="pea-flagpole-shaft"></div>
+                          
+                          <!-- ผืนธงสีทองโบกสะบัด ชักธงขึ้นสู่ยอดเสา -->
+                          <div class="pea-gold-flag-banner">
+                            <svg class="pea-gold-flag-svg" viewBox="0 0 52 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <defs>
+                                <linearGradient id="goldFlagGradLive" x1="0%" y1="0%" x2="100%" y2="100%">
+                                  <stop offset="0%" stop-color="#FFFDF0" />
+                                  <stop offset="25%" stop-color="#FDE047" />
+                                  <stop offset="60%" stop-color="#FFB81C" />
+                                  <stop offset="88%" stop-color="#D97706" />
+                                  <stop offset="100%" stop-color="#B45309" />
+                                </linearGradient>
+                                <filter id="goldFlagShadowLive" x="-15%" y="-15%" width="130%" height="130%">
+                                  <feDropShadow dx="0" dy="1.5" stdDeviation="1.5" flood-color="#78350F" flood-opacity="0.5" />
+                                </filter>
+                              </defs>
+                              <path class="flag-cloth" d="M 1,2 C 14,5 26,-1 50,3 L 50,23 C 26,19 14,26 1,22 Z" fill="url(#goldFlagGradLive)" filter="url(#goldFlagShadowLive)" />
+                              <path d="M 15,3 C 19,10 21,18 23,23 C 19,17 15,8 15,3 Z" fill="rgba(255,255,255,0.45)" />
+                              <path d="M 31,1 C 35,9 37,17 39,22 C 35,15 31,6 31,1 Z" fill="rgba(146,64,14,0.3)" />
+                              <g transform="translate(20, 6) scale(0.75)">
+                                <polygon points="12,1 15,9 23,9 17,14 19,22 12,17 5,22 7,14 1,9 9,9" fill="#FFFBEB" stroke="#B45309" stroke-width="0.8" />
+                                <circle cx="12" cy="12" r="3.2" fill="#682C91" />
+                                <text x="12" y="14.2" font-family="'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="4" fill="#FDE047" text-anchor="middle">5</text>
+                              </g>
+                              <line x1="1" y1="2" x2="1" y2="22" stroke="#FFF" stroke-width="2" stroke-linecap="round" />
+                            </svg>
+                          </div>
+
+                          <!-- เชือกชักธงสีทอง (Hoist Rope) -->
+                          <div class="pea-flag-rope"></div>
+                        </div>
+
+                        <!-- น้องสว่าง (คนขับรถที่วิ่งของ % มูลค่าปิดงาน) -->
+                        <div class="pea-flag-driver-mascot">
+                          <svg class="pea-driver-svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                              <linearGradient id="driverSkinLive" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#FFF1E6" />
+                                <stop offset="100%" stop-color="#FCE7D6" />
+                              </linearGradient>
+                              <linearGradient id="driverHardhatLive" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#FEF08A" />
+                                <stop offset="40%" stop-color="#FACC15" />
+                                <stop offset="100%" stop-color="#CA8A04" />
+                              </linearGradient>
+                            </defs>
+                            <path d="M 17 28 Q 12 24 9 19" stroke="#D6C4B0" stroke-width="3.5" stroke-linecap="round" />
+                            <circle cx="8.5" cy="18.5" r="3.2" fill="#F97316" stroke="#262626" stroke-width="0.8" />
+                            <path d="M 16 34 C 15 28 31 28 30 34 L 31 46 C 31 47 15 47 15 46 Z" fill="#D6C4B0" stroke="#262626" stroke-width="1.1" />
+                            <path d="M 23 29 L 23 38" stroke="#78350F" stroke-width="0.9" />
+                            <path d="M 29 28 Q 38 23 41 18" stroke="#D6C4B0" stroke-width="3.5" stroke-linecap="round" />
+                            <g transform="translate(39, 13)">
+                              <circle cx="4" cy="4" r="3.8" fill="#F97316" stroke="#262626" stroke-width="0.8" />
+                              <path d="M 6 2 Q 8 0.5 9 3 Q 7.5 5.5 5 4.5" fill="#F97316" stroke="#262626" stroke-width="0.8" />
+                              <path d="M 7 4.5 Q 10 3.8 10 6 Q 8.5 7.5 5.5 6" fill="#F97316" stroke="#262626" stroke-width="0.8" />
+                              <circle cx="3" cy="3" r="1.2" fill="#FDBA74" />
+                            </g>
+                            <ellipse cx="23" cy="20" rx="10.5" ry="9.5" fill="url(#driverSkinLive)" stroke="#262626" stroke-width="1.2" />
+                            <ellipse cx="16" cy="22" rx="2" ry="1.2" fill="#FCA5A5" opacity="0.85" />
+                            <ellipse cx="30" cy="22" rx="2" ry="1.2" fill="#FCA5A5" opacity="0.85" />
+                            <path d="M 16 18 Q 18.5 20.5 21 18" fill="none" stroke="#262626" stroke-width="1.4" stroke-linecap="round" />
+                            <circle cx="27" cy="17.5" r="2.5" fill="#FFFFFF" stroke="#262626" stroke-width="1" />
+                            <circle cx="27" cy="17.5" r="1.3" fill="#1E293B" />
+                            <circle cx="26.3" cy="16.8" r="0.5" fill="#FFFFFF" />
+                            <path d="M 20.5 22 Q 23 25.5 25.5 22" fill="none" stroke="#262626" stroke-width="1.3" stroke-linecap="round" />
+                            <path d="M 12 16 C 12 6.5, 34 6.5, 34 16 Z" fill="url(#driverHardhatLive)" stroke="#262626" stroke-width="1.2" />
+                            <path d="M 10 16 Q 23 13.5 36 16 L 34.5 18.5 Q 23 16 11.5 18.5 Z" fill="#EAB308" stroke="#262626" stroke-width="1" />
+                            <ellipse cx="23" cy="11.5" rx="3.5" ry="2.4" fill="#682C91" />
+                            <text x="23" y="12.8" font-family="'Segoe UI', Roboto, sans-serif" font-weight="900" font-size="2.6" fill="#FDE047" text-anchor="middle">PEA</text>
+                          </svg>
+                        </div>
+                      </div>
+
                       <span class="target-marker-label ${markerAlignClass}">เส้นเป้าหมาย (${formatShort(targetAmount)}) ▲</span>
                     </div>
 
@@ -2543,7 +2901,7 @@
     }
     if (wbsClosedValMb) {
       if (selectedCheckboxAuc > 0) {
-        wbsClosedValMb.innerHTML = `(${(netClosedVal / 1e6).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ลบ.) <span class="val-selected-pill" style="color:#00E5FF; font-weight:800; font-size:0.75rem; text-shadow:0 0 8px rgba(0,229,255,0.7);">(+${(selectedCheckboxAuc / 1e6).toFixed(2)} ลบ.)</span>`;
+        wbsClosedValMb.innerHTML = `<span>(${(netClosedVal / 1e6).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ลบ.)</span> <span class="val-selected-pill" style="color:#00E5FF; font-weight:800; font-size:0.72rem; padding:1px 4px; background:rgba(0,229,255,0.18); border-radius:4px;">(+${(selectedCheckboxAuc / 1e6).toFixed(2)})</span>`;
       } else {
         wbsClosedValMb.textContent = `(${(netClosedVal / 1e6).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ลบ.)`;
       }
@@ -2553,7 +2911,7 @@
     }
     if (jobBadgeEl) {
       if (selectedCheckboxCount > 0) {
-        jobBadgeEl.innerHTML = `<span>งาน: <strong id="wbsKpiClosedJobs">${netClosedJobs.toLocaleString('th-TH')}</strong> งาน <span class="badge-selected-pill" style="color:#00E5FF; font-weight:800; text-shadow:0 0 8px rgba(0,229,255,0.7); font-size:0.70rem;">(+${selectedCheckboxCount.toLocaleString('th-TH')} ที่เลือก)</span></span>`;
+        jobBadgeEl.innerHTML = `<span>งาน: <strong id="wbsKpiClosedJobs">${netClosedJobs.toLocaleString('th-TH')}</strong> <span class="badge-selected-pill" style="color:#00E5FF; font-weight:800; font-size:0.72rem; padding:1px 4px; background:rgba(0,229,255,0.16); border-radius:4px;">(+${selectedCheckboxCount.toLocaleString('th-TH')})</span></span>`;
       } else {
         jobBadgeEl.innerHTML = `<span>งาน: <strong id="wbsKpiClosedJobs">${netClosedJobs.toLocaleString('th-TH')}</strong> งาน</span>`;
       }
@@ -2737,6 +3095,38 @@
           wbsBarJobSelectedSeg.style.display = 'none';
         }
       }
+    }
+
+    // 6.4 รถบริการเคลื่อนที่ กฟภ. (PEA EV Runner) วิ่งตามเกณฑ์ที่เลือก:
+    // เกณฑ์วัดข้อ 1, 2, 5 หรือทั้งหมด (ALL) ประเมินจาก % ปิดงานมูลค่า AUC -> รถวิ่งแถบบน
+    // เกณฑ์วัดข้อ 3 (3.1, 3.2, 3.3 TECO) หรือข้อ 4 (C02.2) ประเมินจาก % ปิดจำนวนงาน -> รถวิ่งแถบล่าง
+    const isJobBasedCriteria = (crit) => {
+      if (!crit || crit === 'ALL') return false;
+      const c = String(crit).replace(/\s+/g, '');
+      return c.includes('3.1') || c.includes('3.2') || c.includes('3.3') ||
+             c.includes('TECO') || c.includes('ข้อ3') || c.includes('ข้อ4') ||
+             c.includes('4') || c.includes('C02.2') || c.includes('C04');
+    };
+
+    const globalCrit = (typeof window.dashboardState !== 'undefined' && window.dashboardState.filters && window.dashboardState.filters.criteria)
+      ? window.dashboardState.filters.criteria
+      : ((typeof window.state !== 'undefined' && window.state.filters && window.state.filters.criteria)
+          ? window.state.filters.criteria
+          : (document.getElementById('filterCriteria') ? document.getElementById('filterCriteria').value : 'ALL'));
+
+    const selectedCrit = (typeof wbsState !== 'undefined' && wbsState.selectedCriteria && wbsState.selectedCriteria !== 'ALL')
+      ? wbsState.selectedCriteria
+      : globalCrit;
+
+    const isJobCrit = isJobBasedCriteria(selectedCrit);
+    const runValBar = !isJobCrit;
+    const runJobBar = isJobCrit;
+
+    if (wbsBarMainComposite) {
+      wbsBarMainComposite.classList.toggle('running', runValBar);
+    }
+    if (wbsBarJobComposite) {
+      wbsBarJobComposite.classList.toggle('running', runJobBar);
     }
 
     const unitSrc = document.getElementById('kpiAvgUnit');
@@ -3146,7 +3536,7 @@
 
     const isWbsAuth = (typeof window.isWbsEditAuthenticated === 'function')
       ? window.isWbsEditAuthenticated()
-      : (sessionStorage.getItem('auc_wbs_edit_authenticated') === 'true');
+      : false;
 
     const orderedDefs = getOrderedColDefs();
     const visibleOrdered = orderedDefs.filter(col => wbsState.visibleColumns[col.id]);
@@ -3324,6 +3714,19 @@
             break;
           }
 
+          case 'note': {
+            headerMetricHtml = `
+              <div class="th-header-metric-badge th-header-lock-badge" onclick="event.stopPropagation()">
+                <button type="button" class="btn-th-wbs-lock ${isWbsAuth ? 'admin-unlocked' : ''}" id="btnThWbsNoteLock"
+                  onclick="window.handleWbsEditLockToggle(event)"
+                  title="${isWbsAuth ? 'สิทธิ์ Admin ปลดล็อกแล้ว: สามารถแก้ไขได้ทุกแถว (คลิกเพื่อล็อกกลับ)' : 'ล็อกการแก้ไขแผนงานและหมายเหตุ: คลิกเพื่อกรอก Admin PIN ปลดล็อกทุกแถว'}">
+                  <span class="lock-icon">${isWbsAuth ? '🔓' : '🔒'}</span>
+                  <span class="lock-text">${isWbsAuth ? 'ปลดล็อกแล้ว (คลิกเพื่อล็อก)' : 'ปลดล็อกแก้ไข'}</span>
+                </button>
+              </div>`;
+            break;
+          }
+
           default:
             headerMetricHtml = '';
             break;
@@ -3345,7 +3748,7 @@
               <div class="th-label-group" onclick="window.sortWbsTable('${col.sortKey}')">
                 <span class="th-drag-handle" title="คลิกค้างแล้วลากเพื่อย้ายลำดับคอลัมน์">⠿</span>
                 <span class="th-label-text">${escapeHtml(col.label)}</span>
-                ${col.id === 'statusSap' ? `<input type="checkbox" id="wbsMasterHeaderCb" class="wbs-sap-row-cb" style="margin-left: 6px; width: 15px; height: 15px;" title="เลือก / ปลด ทั้งหมดในชุดข้อมูลที่กรองได้" onclick="event.stopPropagation()" onchange="window.toggleMasterHeaderCheckbox(this.checked)">` : ''}
+                ${col.id === 'statusSap' ? `<input type="checkbox" id="wbsMasterHeaderCb" class="wbs-sap-row-cb" style="margin-left: 6px; width: 15px; height: 15px; accent-color: #0284C7 !important;" title="เลือก / ปลด ทั้งหมดในชุดข้อมูลที่กรองได้" onclick="event.stopPropagation()" onchange="window.toggleMasterHeaderCheckbox(this.checked)">` : ''}
                 <span class="sort-indicator" style="font-size:0.75rem; margin-left:2px; color:var(--pea-gold-400);">${sortArrow}</span>
               </div>
             </div>
@@ -3672,7 +4075,7 @@
       const currentCrit = globalFilters.criteria || (document.getElementById('filterCriteria') ? document.getElementById('filterCriteria').value : 'ALL');
       const isWbsAuth = (typeof window.isWbsEditAuthenticated === 'function')
         ? window.isWbsEditAuthenticated()
-        : (sessionStorage.getItem('auc_wbs_edit_authenticated') === 'true');
+        : false;
       const editBtnIcon = isWbsAuth ? '<span class="pencil-icon">✏️</span>' : '<span class="lock-icon">🔒</span>';
       const editBtnClass = isWbsAuth ? 'btn-wbs-inline-edit' : 'btn-wbs-inline-edit is-locked';
       const editBtnTitle = isWbsAuth
@@ -3696,7 +4099,8 @@
         const engName = item.engineer || '-';
         const engInitial = engName.replace(/^(นาย|นางสาว|นาง|ว่าที่\s*ร\.ต\.|ดร\.)\s*/, '').charAt(0) || 'ช';
 
-        let rowHtml = '<tr>';
+        const isRowChecked = wbsState.selectedWbs && wbsState.selectedWbs.has(item.wbs);
+        let rowHtml = `<tr class="${isRowChecked ? 'wbs-row-checked' : ''}" data-wbs="${safeWbsAttr}">`;
         activeCols.forEach(col => {
           switch (col.id) {
             case 'id':
@@ -3738,7 +4142,7 @@
                 <div class="wbs-sap-cell-wrap">
                   <span class="badge-sap-short ${badgeClass}" title="สถานะ SAP เต็ม: ${escapeHtml(item.status || sapVal)}${isExcluded ? ` (ยกเว้นสถานะ ${escapeHtml(sapVal)} - ไม่แสดง Checkbox)` : ''}">${escapeHtml(sapVal || '-')}</span>
                   ${!isExcluded ? `
-                    <input type="checkbox" class="wbs-sap-row-cb" data-wbs="${escapeHtml(item.wbs)}" ${isChecked ? 'checked' : ''} onchange="window.toggleWbsRowCheckbox('${escapeHtml(item.wbs)}', this.checked)" title="${isChecked ? 'คลิกเพื่อยกเลิกการเลือกงานนี้' : 'คลิกเพื่อเลือกงานนี้'}">
+                    <input type="checkbox" class="wbs-sap-row-cb" style="accent-color: #0284C7 !important;" data-wbs="${escapeHtml(item.wbs)}" ${isChecked ? 'checked' : ''} onchange="window.toggleWbsRowCheckbox('${escapeHtml(item.wbs)}', this.checked)" title="${isChecked ? 'คลิกเพื่อยกเลิกการเลือกงานนี้' : 'คลิกเพื่อเลือกงานนี้'}">
                   ` : ''}
                 </div>
               </td>`;
@@ -3938,10 +4342,11 @@
 
     renderPaginationControls(totalPages, wbsState.page);
 
-    // Refresh left scrollbar position
+    // Refresh left scrollbar position & floating selection badge
     setTimeout(() => {
       if (window.updateWbsLeftScrollbar) window.updateWbsLeftScrollbar();
       if (window.updateWbsEditLockUI) window.updateWbsEditLockUI();
+      if (window.updateWbsFloatingSelection) window.updateWbsFloatingSelection();
     }, 40);
   }
 
@@ -6274,7 +6679,7 @@
     if (!wbsCode) return;
     const isWbsAuth = (typeof window.isWbsEditAuthenticated === 'function')
       ? window.isWbsEditAuthenticated()
-      : (sessionStorage.getItem('auc_wbs_edit_authenticated') === 'true');
+      : false;
 
     if (!isWbsAuth) {
       window.pendingWbsEditWbs = wbsCode;
@@ -6333,7 +6738,7 @@
     }
     const isWbsAuth = (typeof window.isWbsEditAuthenticated === 'function')
       ? window.isWbsEditAuthenticated()
-      : (sessionStorage.getItem('auc_wbs_edit_authenticated') === 'true');
+      : false;
 
     if (!isWbsAuth) {
       window.pendingWbsEditWbs = null;
@@ -6344,8 +6749,12 @@
       if (typeof window.logoutWbsEdit === 'function') {
         window.logoutWbsEdit();
       } else {
-        sessionStorage.removeItem('auc_wbs_edit_authenticated');
-        window.updateWbsEditLockUI();
+        if (typeof window.setWbsEditAuthenticated === 'function') {
+          window.setWbsEditAuthenticated(false);
+        } else {
+          sessionStorage.removeItem('auc_wbs_edit_authenticated');
+          window.updateWbsEditLockUI();
+        }
       }
     }
   };
@@ -6353,7 +6762,7 @@
   window.updateWbsEditLockUI = function () {
     const isWbsAuth = (typeof window.isWbsEditAuthenticated === 'function')
       ? window.isWbsEditAuthenticated()
-      : (sessionStorage.getItem('auc_wbs_edit_authenticated') === 'true');
+      : false;
 
     // 1. Update header lock buttons in table header (under planClose and note)
     const headerLockBtns = document.querySelectorAll('.btn-th-wbs-lock');
@@ -6785,11 +7194,18 @@
 
   // Initialize when DOM is ready (ซิงค์ Google Sheet เฉพาะเมื่อกดปุ่ม #btnSyncGoogleSheet เท่านั้น)
   function initWbsApp() {
+    // Default: แสดงปุ่มล็อค (🔒) เสมอ จนกว่าจะปลดล็อกด้วย Admin PIN
+    if (typeof window.setWbsEditAuthenticated === 'function') {
+      window.setWbsEditAuthenticated(false);
+    }
     setupWbsListeners();
     applyCachedGoogleSheetData();
     renderWbsTab();
     refreshWbsPlanCloseDropdownOptions();
     updateSyncButtonStatusUI();
+    if (typeof window.updateWbsEditLockUI === 'function') {
+      window.updateWbsEditLockUI();
+    }
   }
 
   if (document.readyState === 'loading') {

@@ -279,7 +279,8 @@ body {
 }
 
 .app-header {
-  position: static;
+  position: relative;
+  z-index: 1000;
   background: transparent;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -380,6 +381,8 @@ body {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  position: relative;
+  z-index: 1005;
 }
 
 .btn {
@@ -859,7 +862,7 @@ body {
   box-shadow: 0 6px 25px rgba(0, 0, 0, 0.48), 0 2px 8px rgba(123, 35, 181, 0.25);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  padding: 0.52rem 1.25rem;
+  padding: 0.52rem 1.5rem;
   z-index: 95;
   position: relative;
   width: 100%;
@@ -929,8 +932,10 @@ body {
     radial-gradient(ellipse 18% 65% at 90% 45%, rgba(244, 114, 182, 0.22) 0%, transparent 70%);
 }
 
-/* ตัวกรองทั้งหมดอยู่บรรทัดเดียว (ไม่ตัดขึ้นบรรทัดใหม่) */
+/* ตัวกรองทั้งหมดอยู่บรรทัดเดียว (ไม่ตัดขึ้นบรรทัดใหม่) - ความกว้างเท่ากับตัวอื่น พอดีหน้า ไม่ยื่น */
 .top-filter-inner {
+  max-width: 1720px;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   flex-wrap: nowrap;
@@ -4322,16 +4327,23 @@ body.theme-light .donut-stat-breakdown-sub {
 }
 
 /* เมื่อแถบมีความกว้าง > 0 และมีคลาส .running ให้รถวิ่งทันที */
-.progress-fill.running .pea-ev-runner {
-  display: block;
+.progress-fill.running .pea-ev-runner,
+.progress-fill-composite.running .pea-ev-runner {
+  display: block !important;
   animation: peaCarDriveAcross 3s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
 }
 
-/* ถ้าความกว้างเป็น 0% ไม่ต้องแสดงตัวรถ */
+/* ถ้าความกว้างเป็น 0% หรือไม่มีคลาส .running ไม่ต้องแสดงตัวรถ (รถวิ่งเฉพาะแถบที่ตรงตามเกณฑ์วัดที่เลือก) */
 .progress-fill[style*="width: 0%"] .pea-ev-runner,
 .progress-fill[style*="width:0%"] .pea-ev-runner,
 .progress-fill[style*="width: 0.00%"] .pea-ev-runner,
-.progress-fill[style*="width:0.00%"] .pea-ev-runner {
+.progress-fill[style*="width:0.00%"] .pea-ev-runner,
+.progress-fill-composite[style*="width: 0%"] .pea-ev-runner,
+.progress-fill-composite[style*="width:0%"] .pea-ev-runner,
+.progress-fill-composite[style*="width: 0.00%"] .pea-ev-runner,
+.progress-fill-composite[style*="width:0.00%"] .pea-ev-runner,
+.progress-fill:not(.running) .pea-ev-runner,
+.progress-fill-composite:not(.running) .pea-ev-runner {
   display: none !important;
 }
 
@@ -4463,7 +4475,9 @@ body.theme-light .donut-stat-breakdown-sub {
 
 @media (prefers-reduced-motion: reduce) {
   .progress-fill.running,
+  .progress-fill-composite.running,
   .progress-fill.running .pea-ev-runner,
+  .progress-fill-composite.running .pea-ev-runner,
   .progress-fill.running::after {
     animation: none;
   }
@@ -5233,8 +5247,49 @@ body.has-fullscreen-chart #btnReturnMainScreen:hover {
 }
 
 /* ==========================================================================
-   Table Fullscreen Mode
+   Table Fullscreen & Table Toolbar Actions
    ========================================================================== */
+.btn-wbs-clear-table-selections {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-sm, 8px);
+  background: rgba(239, 68, 68, 0.14);
+  border: 1px solid rgba(248, 113, 113, 0.45);
+  color: #F87171;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast, 0.2s ease);
+  white-space: nowrap;
+}
+
+.btn-wbs-clear-table-selections:hover {
+  background: rgba(239, 68, 68, 0.28);
+  border-color: #EF4444;
+  color: #FFFFFF;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+  transform: translateY(-1px);
+}
+
+.btn-wbs-clear-table-selections:active {
+  transform: translateY(0);
+}
+
+[data-theme="light"] .btn-wbs-clear-table-selections {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.35);
+  color: #DC2626;
+}
+
+[data-theme="light"] .btn-wbs-clear-table-selections:hover {
+  background: #DC2626;
+  border-color: #B91C1C;
+  color: #FFFFFF;
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+}
+
 .btn-wbs-fullscreen {
   display: inline-flex;
   align-items: center;
@@ -8657,6 +8712,391 @@ body.has-fullscreen-table {
 }
 [data-theme="light"] .next3m-month-card.month-4 {
   border-top: 3px solid #9333EA;
+}
+
+/* ==========================================================================
+   TARGET CARD +5% CONFIGURATION PANEL (ตำแหน่งกรอบเหลือง)
+   ========================================================================== */
+.next3m-config-panel-card {
+  position: relative;
+  border: 2.2px solid transparent;
+  border-radius: var(--radius-md, 12px);
+  background:
+    linear-gradient(135deg, rgba(24, 8, 42, 0.95), rgba(38, 12, 62, 0.92)) padding-box,
+    linear-gradient(125deg, #FF007F, #8B5CF6, #00F0FF, #00FF87, #FACC15, #FF007F) border-box;
+  background-size: 100% 100%, 300% 300%;
+  animation: neonBorderShift 8s linear infinite, neonAuraPulse 8s ease-in-out infinite;
+  padding: 0.52rem 0.65rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 16px rgba(236, 72, 153, 0.3);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.35rem;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), filter 0.3s ease;
+  overflow: hidden;
+}
+
+.next3m-config-panel-card:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5), 0 0 22px rgba(0, 240, 255, 0.6), 0 0 38px rgba(255, 0, 127, 0.35);
+}
+
+[data-theme="light"] .next3m-config-panel-card {
+  background:
+    linear-gradient(#FFFFFF, #FFFFFF) padding-box,
+    linear-gradient(125deg, #EC4899, #8B5CF6, #06B6D4, #10B981, #F59E0B, #EC4899) border-box;
+  background-size: 100% 100%, 300% 300%;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08), 0 0 14px rgba(139, 92, 246, 0.25);
+}
+
+.next3m-config-head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 0.42rem;
+}
+
+[data-theme="light"] .next3m-config-head {
+  border-bottom-color: rgba(0, 0, 0, 0.06);
+}
+
+.next3m-config-title-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.35rem;
+}
+
+.next3m-config-title {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  white-space: nowrap;
+}
+
+[data-theme="light"] .next3m-config-title {
+  color: #1F2937;
+}
+
+.next3m-config-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #FDE047;
+  background: rgba(234, 179, 8, 0.18);
+  border: 1px solid rgba(234, 179, 8, 0.4);
+  border-radius: var(--radius-sm, 4px);
+  padding: 0.1rem 0.38rem;
+  white-space: nowrap;
+}
+
+[data-theme="light"] .next3m-config-badge {
+  color: #B45309;
+  background: #FEF3C7;
+  border-color: #FDE68A;
+}
+
+.next3m-config-sub {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.3rem;
+  font-size: 0.7rem;
+  color: var(--text-dim, #94A3B8);
+  flex-wrap: wrap;
+}
+
+.next3m-config-quick-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.btn-quick-config {
+  background: transparent;
+  border: none;
+  color: #FDE047;
+  font-size: 0.68rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.15s ease;
+}
+
+.btn-quick-config:hover {
+  color: #FFFFFF;
+}
+
+[data-theme="light"] .btn-quick-config {
+  color: #B45309;
+}
+[data-theme="light"] .btn-quick-config:hover {
+  color: #1F2937;
+}
+
+.next3m-config-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+  flex: 1;
+  overflow: visible;
+  padding-right: 0;
+}
+
+.next3m-crit-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.35rem;
+  padding: 0.14rem 0.35rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-sm, 5px);
+  transition: all 0.2s ease;
+  min-height: 24px;
+  box-sizing: border-box;
+}
+
+[data-theme="light"] .next3m-crit-row {
+  background: #F9FAFB;
+  border-color: #E5E7EB;
+}
+
+.next3m-crit-row:hover {
+  background: rgba(255, 184, 28, 0.08);
+  border-color: rgba(255, 184, 28, 0.3);
+}
+
+.next3m-crit-row.is-active {
+  border-color: rgba(234, 179, 8, 0.35);
+  background: rgba(234, 179, 8, 0.07);
+}
+
+.next3m-crit-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  user-select: none;
+}
+
+.next3m-crit-checkbox {
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  accent-color: #F59E0B;
+  flex-shrink: 0;
+}
+
+.next3m-crit-info {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.next3m-crit-name {
+  font-size: 0.73rem;
+  font-weight: 600;
+  color: #E2E8F0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+[data-theme="light"] .next3m-crit-name {
+  color: #374151;
+}
+
+.badge-five-pct {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.1rem 0.36rem;
+  border-radius: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.badge-five-pct.active {
+  background: rgba(234, 179, 8, 0.22);
+  color: #FDE047;
+  border: 1px solid rgba(234, 179, 8, 0.45);
+}
+
+.badge-five-pct.inactive {
+  background: rgba(148, 163, 184, 0.12);
+  color: #94A3B8;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+}
+
+[data-theme="light"] .badge-five-pct.active {
+  background: #FEF3C7;
+  color: #B45309;
+  border-color: #FCD34D;
+}
+
+.next3m-config-foot {
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 0.42rem;
+}
+
+[data-theme="light"] .next3m-config-foot {
+  border-top-color: rgba(0, 0, 0, 0.06);
+}
+
+.btn-save-target-fivepct {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  background: linear-gradient(135deg, #FFB81C 0%, #F59E0B 100%);
+  color: #1E0832;
+  font-size: 0.78rem;
+  font-weight: 700;
+  border: none;
+  border-radius: var(--radius-sm, 6px);
+  padding: 0.42rem 0.75rem;
+  cursor: pointer;
+  box-shadow: 0 3px 12px rgba(245, 158, 11, 0.35);
+  transition: all 0.25s ease;
+}
+
+.btn-save-target-fivepct:hover {
+  background: linear-gradient(135deg, #FACC15 0%, #D97706 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 5px 16px rgba(245, 158, 11, 0.45);
+}
+
+.btn-save-target-fivepct:active {
+  transform: translateY(1px);
+}
+
+.btn-save-target-fivepct.is-saved {
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 3px 12px rgba(16, 185, 129, 0.4) !important;
+}
+
+.next3m-config-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  font-size: 0.67rem;
+  color: var(--text-dim, #94A3B8);
+  text-align: center;
+}
+
+.next3m-config-saved-at {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.32rem;
+  font-size: 0.70rem;
+  color: #CBD5E1;
+  padding: 0.20rem 0.45rem;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: var(--radius-xs, 4px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.35s ease;
+}
+
+.next3m-config-saved-at .saved-clock-icon {
+  color: #38BDF8;
+  flex-shrink: 0;
+  animation: clockPulse 3s ease-in-out infinite;
+}
+
+.next3m-config-saved-at .saved-time-highlight {
+  color: #FDE047;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.next3m-config-saved-at.just-updated {
+  background: rgba(16, 185, 129, 0.22);
+  border-color: rgba(16, 185, 129, 0.55);
+  box-shadow: 0 0 14px rgba(16, 185, 129, 0.4);
+  transform: scale(1.02);
+}
+
+.next3m-config-saved-at.just-updated .saved-clock-icon {
+  color: #10B981;
+}
+
+.next3m-config-saved-at.just-updated .saved-time-highlight {
+  color: #34D399;
+}
+
+[data-theme="light"] .next3m-config-saved-at {
+  background: #F8FAFC;
+  border-color: #E2E8F0;
+  color: #475569;
+}
+
+[data-theme="light"] .next3m-config-saved-at .saved-time-highlight {
+  color: #D97706;
+}
+
+/* Animations for Neon Gradient Border and Clock */
+@keyframes neonBorderShift {
+  0% {
+    background-position: 0 0, 0% 50%;
+  }
+  50% {
+    background-position: 0 0, 100% 50%;
+  }
+  100% {
+    background-position: 0 0, 0% 50%;
+  }
+}
+
+@keyframes neonAuraPulse {
+  0% {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45), 0 0 14px rgba(255, 0, 127, 0.42), 0 0 28px rgba(139, 92, 246, 0.22);
+  }
+  25% {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45), 0 0 16px rgba(0, 240, 255, 0.42), 0 0 30px rgba(0, 255, 135, 0.22);
+  }
+  50% {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45), 0 0 16px rgba(0, 255, 135, 0.42), 0 0 30px rgba(250, 204, 21, 0.22);
+  }
+  75% {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45), 0 0 16px rgba(250, 204, 21, 0.42), 0 0 30px rgba(255, 0, 127, 0.22);
+  }
+  100% {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45), 0 0 14px rgba(255, 0, 127, 0.42), 0 0 28px rgba(139, 92, 246, 0.22);
+  }
+}
+
+@keyframes clockPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+    filter: drop-shadow(0 0 4px #38BDF8);
+  }
 }
 
 .next3m-month-card .next3m-card-header {
@@ -12229,18 +12669,42 @@ body.has-fullscreen-table {
   gap: 8px;
 }
 
-.wbs-sap-row-cb {
+.wbs-sap-row-cb,
+#wbsMasterHeaderCb {
   width: 17px;
   height: 17px;
   cursor: pointer;
-  accent-color: #A855F7;
+  accent-color: #0284C7 !important; /* เปลี่ยนจากพื้นม่วง (#A855F7) เป็นพื้นฟ้าตามคำสั่งผู้ใช้งาน */
   border-radius: 4px;
   transition: transform 0.15s ease;
   vertical-align: middle;
 }
 
-.wbs-sap-row-cb:hover {
+.wbs-sap-row-cb:hover,
+#wbsMasterHeaderCb:hover {
   transform: scale(1.15);
+}
+
+.wbs-sap-row-cb:checked,
+#wbsMasterHeaderCb:checked {
+  accent-color: #0284C7 !important;
+}
+
+/* Checked row subtle blue highlight */
+tr.wbs-row-checked {
+  background: rgba(2, 132, 199, 0.09) !important;
+}
+
+tr.wbs-row-checked:hover {
+  background: rgba(2, 132, 199, 0.16) !important;
+}
+
+[data-theme="light"] tr.wbs-row-checked {
+  background: rgba(2, 132, 199, 0.08) !important;
+}
+
+[data-theme="light"] tr.wbs-row-checked:hover {
+  background: rgba(2, 132, 199, 0.15) !important;
 }
 
 /* Light Theme Overrides for Selected Summary Card */
@@ -12295,8 +12759,212 @@ body.has-fullscreen-table {
   color: #9333EA;
 }
 
-[data-theme="light"] .wbs-sap-row-cb {
-  accent-color: #9333EA;
+[data-theme="light"] .wbs-sap-row-cb,
+[data-theme="light"] #wbsMasterHeaderCb {
+  accent-color: #0284C7 !important;
+}
+
+/* ==========================================================================
+   WBS TABLE FLOATING SELECTION CARD (มุมขวาด้านล่าง บนตารางตลอด พื้นสีฟ้า)
+   - แสดงจำนวนงาน และมูลค่า AUC ตามไฟล์ 06 สำหรับรายการที่เลือกใน Checkbox
+   - ลอยอยู่มุมขวาล่างของตารางตลอดเวลา (Sticky / Absolute over table)
+   - พื้นสีฟ้าหรูหรา ขนาดกะทัดรัด พอดีสวยงาม
+   ========================================================================== */
+.wbs-table-floating-selection {
+  position: absolute;
+  right: 16px;
+  bottom: 18px;
+  z-index: 55;
+  pointer-events: auto;
+  user-select: none;
+  cursor: grab;
+  touch-action: none;
+  animation: fadeInFloatingSelection 0.25s ease-out;
+}
+
+.wbs-table-floating-selection.is-dragging {
+  cursor: grabbing !important;
+  z-index: 60;
+}
+
+.wbs-table-floating-selection.is-dragging .wbs-floating-sel-card {
+  cursor: grabbing !important;
+  opacity: 0.95;
+  transform: scale(1.02);
+  box-shadow: 0 12px 30px rgba(2, 132, 199, 0.65), 0 0 20px rgba(56, 189, 248, 0.55);
+  border-color: #BAE6FD;
+  transition: none !important;
+}
+
+.wbs-floating-drag-grip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.85rem;
+  letter-spacing: -1px;
+  margin-right: 2px;
+  cursor: grab;
+  user-select: none;
+  transition: color 0.15s ease;
+}
+
+.wbs-table-floating-selection:hover .wbs-floating-drag-grip {
+  color: #FFFFFF;
+}
+
+.wbs-table-floating-selection.is-dragging .wbs-floating-drag-grip {
+  cursor: grabbing !important;
+  color: #FFFFFF;
+}
+
+@keyframes fadeInFloatingSelection {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.wbs-floating-sel-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: linear-gradient(135deg, rgba(2, 132, 199, 0.94) 0%, rgba(14, 165, 233, 0.92) 50%, rgba(3, 105, 161, 0.96) 100%);
+  border: 1.5px solid rgba(186, 230, 253, 0.75);
+  border-radius: 11px;
+  padding: 6px 12px;
+  box-shadow: 0 4px 18px rgba(2, 132, 199, 0.45), 0 0 12px rgba(56, 189, 248, 0.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  min-width: 220px;
+  max-width: 270px;
+  cursor: grab;
+  transition: all 0.25s ease;
+}
+
+.wbs-table-floating-selection.has-selection .wbs-floating-sel-card {
+  border-color: #7DD3FC;
+  box-shadow: 0 6px 22px rgba(2, 132, 199, 0.55), 0 0 16px rgba(56, 189, 248, 0.5);
+  transform: translateY(-1px);
+}
+
+.wbs-floating-sel-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.wbs-floating-sel-row.top {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 4px;
+}
+
+.wbs-floating-sel-row.bottom {
+  padding-top: 1px;
+}
+
+.wbs-floating-sel-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.wbs-floating-sel-icon {
+  color: #FFFFFF;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+
+.wbs-floating-sel-label {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #F0F9FF;
+  letter-spacing: 0.2px;
+}
+
+.wbs-floating-sel-count-wrap {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 3px;
+  margin-left: auto;
+}
+
+.wbs-floating-sel-count {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+}
+
+.wbs-floating-sel-unit {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #E0F2FE;
+}
+
+.wbs-floating-sel-clear {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #FFFFFF;
+  border-radius: 6px;
+  font-size: 0.70rem;
+  font-weight: 600;
+  padding: 1px 7px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  line-height: 1.4;
+  margin-left: 4px;
+}
+
+.wbs-floating-sel-clear:hover:not(:disabled) {
+  background: #EF4444;
+  border-color: #EF4444;
+  color: #FFFFFF;
+  transform: scale(1.05);
+}
+
+.wbs-floating-sel-clear:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.wbs-floating-sel-auc-lbl {
+  font-size: 0.74rem;
+  font-weight: 500;
+  color: #E0F2FE;
+  white-space: nowrap;
+}
+
+.wbs-floating-sel-auc-wrap {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.wbs-floating-sel-auc-val {
+  font-family: var(--font-mono, 'JetBrains Mono', Consolas, monospace);
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #FEF08A; /* ตัวเลขสีทอง/เหลืองสว่าง โดดเด่นบนพื้นสีฟ้า */
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.wbs-floating-sel-currency {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: #E0F2FE;
+}
+
+/* Light Mode Overrides */
+[data-theme="light"] .wbs-floating-sel-card {
+  background: linear-gradient(135deg, #0284C7 0%, #0369A1 100%);
+  border-color: #38BDF8;
+  box-shadow: 0 4px 16px rgba(2, 132, 199, 0.38);
 }
 
 /* ==========================================================================
@@ -12318,9 +12986,9 @@ body.has-fullscreen-table {
 }
 
 .wbs-side-summary-col {
-  width: 335px;
-  min-width: 310px;
-  max-width: 345px;
+  width: 355px;
+  min-width: 330px;
+  max-width: 370px;
   flex-shrink: 0;
   display: flex;
 }
@@ -13509,77 +14177,274 @@ body.theme-light .bar-sap-date-plain:hover {
 .track-progress {
   position: relative;
   overflow: visible;
-  margin-top: 0.4rem;
+  margin-top: 0.85rem;
   margin-bottom: 2rem;
 }
 
-/* Target Line Marker (เส้นบอกระดับเป้าหมายสีทองเปล่งประกายเรืองแสง พร้อมไฟวิ่งล่างขึ้นบน สวยๆ เด่นๆ) */
+/* Target Line Marker: ยกเลิกแท่งสีเหลืองทองตามคำสั่งผู้ใช้งาน (ใช้เสาธงสีทองและน้องสว่างแทนที่แท่งเดิม) */
 .target-marker-line {
   position: absolute;
-  top: -7px;
-  bottom: -7px;
-  width: 6.5px;
-  background: linear-gradient(180deg, #FFFFFF 0%, #FFF566 18%, #FFB81C 50%, #F59E0B 82%, #FFFFFF 100%);
-  border-radius: 8px;
-  z-index: 15;
-  box-shadow: 0 0 10px rgba(255, 215, 0, 0.95), 0 0 22px rgba(245, 158, 11, 0.8), 0 0 4px #FFFFFF;
-  border-left: 1px solid #FFFFFF;
-  border-right: 1px solid rgba(0, 0, 0, 0.35);
+  top: 0;
+  bottom: 0;
+  width: 0;
+  background: transparent;
+  border-radius: 0;
+  z-index: 22;
+  box-shadow: none;
+  border: none;
   pointer-events: none;
   transform: translateX(-50%);
   transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: visible;
-  animation: targetLineAuraGlow 2.4s ease-in-out infinite;
+  animation: none;
 }
 
-@keyframes targetLineAuraGlow {
-  0%, 100% {
-    box-shadow: 0 0 10px rgba(255, 215, 0, 0.95), 0 0 22px rgba(245, 158, 11, 0.8), 0 0 4px #FFFFFF;
-  }
-  50% {
-    box-shadow: 0 0 14px rgba(255, 255, 255, 1), 0 0 28px rgba(255, 215, 0, 1), 0 0 42px rgba(245, 158, 11, 0.95);
-  }
-}
-
-/* ลำแสงไฟวิ่ง ล่างขึ้นบนเส้น สวยๆ เด่นๆ (Luminous Running Light Laser Bottom to Top) */
-.target-marker-beam {
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  overflow: visible;
-  pointer-events: none;
-}
-
-/* 1. ลำแสงเลเซอร์ไฟวิ่งพุ่งขึ้นจากล่างสู่บน (Rising Energy Laser Column) */
-.target-marker-beam::before {
-  content: '';
-  position: absolute;
-  left: -1px;
-  right: -1px;
-  height: 24px;
-  background: linear-gradient(0deg, rgba(255, 255, 255, 0) 0%, rgba(255, 215, 0, 0.4) 25%, #FFF566 65%, #FFFFFF 95%, #FFFFFF 100%);
-  border-radius: 999px;
-  box-shadow: 0 0 10px #FFFFFF, 0 0 20px #FFD700, 0 0 32px rgba(255, 184, 28, 0.95);
-  pointer-events: none;
-  z-index: 16;
-  animation: targetLineBeamAscend 1.35s cubic-bezier(0.2, 0.85, 0.25, 1) infinite;
-}
-
-/* 2. หัวประกายไฟสว่างจ้าเรืองแสงพุ่งนำร่องจากล่างสู่บน (Leading Blazing Spark & Glow Flare) */
+/* ลำแสงไฟวิ่งและแท่งเดิม: ซ่อนและยกเลิกตามคำสั่งผู้ใช้งาน */
+.target-marker-beam,
+.target-marker-beam::before,
 .target-marker-beam::after {
-  content: '';
+  display: none !important;
+}
+
+/* ==========================================================================
+   คนขับรถ กฟภ. (น้องสว่าง) ชักธงสีทอง แทนที่แท่งสีเหลืองทองเดิม ไม่บังอักษร
+   ========================================================================== */
+.pea-victory-hoist-wrapper {
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 76px;
+  height: 48px;
+  pointer-events: auto;
+  cursor: pointer;
+  z-index: 25;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.25s ease;
+}
+
+.pea-victory-hoist-wrapper:hover {
+  transform: translateX(-50%) scale(1.08);
+  filter: drop-shadow(0 0 16px rgba(255, 215, 0, 0.95));
+}
+
+/* เสาธงสีทอง ทำหน้าที่เป็นเส้นบอกระดับเป้าหมายแทนแท่งสีเหลืองทองเดิม */
+.pea-gold-flagpole {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  width: 13px;
-  height: 13px;
-  border-radius: 50%;
-  background: radial-gradient(circle, #FFFFFF 35%, #FFF566 65%, rgba(255, 215, 0, 0) 100%);
-  box-shadow: 0 0 12px #FFFFFF, 0 0 24px #FFF566, 0 0 38px rgba(255, 184, 28, 0.95);
-  pointer-events: none;
-  z-index: 17;
-  animation: targetLineSparkAscend 1.35s cubic-bezier(0.2, 0.85, 0.25, 1) infinite;
+  bottom: 0;
+  width: 4.5px;
+  height: 48px;
+  background: linear-gradient(180deg, #FFFFFF 0%, #FFF566 18%, #FFB81C 50%, #D97706 82%, #78350F 100%);
+  border-radius: 2px;
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.85), 0 0 3px #FFFFFF;
+  z-index: 2;
 }
+
+/* หัวยอดเสาธงสีทองทรงกลม (Finial) */
+.pea-flagpole-finial {
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #FFFFFF 35%, #FDE047 65%, #D97706 100%);
+  box-shadow: 0 0 8px #FFFFFF, 0 0 14px #FFD700;
+}
+
+.finial-sparkle {
+  position: absolute;
+  top: -10px;
+  right: -9px;
+  font-size: 10px;
+  animation: flagSparkleTwinkle 1.2s ease-in-out infinite alternate;
+  filter: drop-shadow(0 0 4px #FDE047);
+}
+
+/* ผืนธงสีทองโบกสะบัด ชักธงขึ้นสู่ยอดเสา (Golden Flag) - ขนาดกระชับพอดี ไม่บังอักษร */
+.pea-gold-flag-banner {
+  position: absolute;
+  left: calc(50% + 1px);
+  bottom: 15px;
+  width: 36px;
+  height: 23px;
+  transform-origin: left center;
+  animation: goldFlagFlutter 2s ease-in-out infinite;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.65));
+  transition: bottom 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* สถานะบรรลุเป้าหมาย (is-achieved): ชักธงขึ้นสู่ยอดเสาสูงสุด พร้อมสะบัดเร็วขึ้นเรืองแสงสีทอง */
+.pea-victory-hoist-wrapper.is-achieved .pea-gold-flag-banner {
+  bottom: 22px;
+  animation: goldFlagFlutterFast 1.2s ease-in-out infinite;
+  filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.85)) drop-shadow(0 2px 5px rgba(0, 0, 0, 0.65));
+}
+
+.pea-gold-flag-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+/* เชือกชักธงสีทอง */
+.pea-flag-rope {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0;
+  bottom: 0;
+  width: 1.5px;
+  background: repeating-linear-gradient(180deg, #FFFFFF 0px, #FFFFFF 2px, #D97706 2px, #D97706 4px);
+  opacity: 0.75;
+  z-index: 1;
+}
+
+/* ตัวคนขับรถ กฟภ. (น้องสว่าง) ยืนข้างเสาธงบนแถบกราฟ */
+.pea-flag-driver-mascot {
+  position: absolute;
+  right: calc(50% + 2px);
+  bottom: 0px;
+  width: 28px;
+  height: 28px;
+  z-index: 3;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.7));
+  animation: driverMascotBob 1.6s ease-in-out infinite alternate;
+  cursor: pointer;
+}
+
+.pea-victory-hoist-wrapper.is-achieved .pea-flag-driver-mascot {
+  animation: driverMascotCheer 0.7s ease-in-out infinite alternate;
+}
+
+.pea-driver-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+/* เมื่อเป้าหมายอยู่ใกล้ขอบขวา (targetBarPct > 82): พลิกให้ธงสะบัดเข้าด้านใน (ซ้าย) เพื่อไม่ล้นขอบจอ */
+.pea-victory-hoist-wrapper.align-inward .pea-gold-flag-banner {
+  left: auto;
+  right: calc(50% + 1px);
+  transform-origin: right center;
+  transform: scaleX(-1);
+  animation: goldFlagFlutterInward 2s ease-in-out infinite;
+}
+
+.pea-victory-hoist-wrapper.align-inward.is-achieved .pea-gold-flag-banner {
+  animation: goldFlagFlutterInwardFast 1.2s ease-in-out infinite;
+}
+
+.pea-victory-hoist-wrapper.align-inward .pea-flag-driver-mascot {
+  right: auto;
+  left: calc(50% + 2px);
+  transform: scaleX(-1);
+}
+
+/* เอาป้ายความสำเร็จออกตามคำสั่งผู้ใช้งาน */
+.pea-victory-badge {
+  display: none !important;
+}
+
+/* Keyframe Animations */
+@keyframes goldFlagFlutter {
+  0%, 100% {
+    transform: rotate(0deg) skewY(0deg) scaleY(1);
+  }
+  25% {
+    transform: rotate(2deg) skewY(2deg) scaleY(1.03);
+  }
+  50% {
+    transform: rotate(-1.5deg) skewY(-2deg) scaleY(0.97);
+  }
+  75% {
+    transform: rotate(2.5deg) skewY(1.5deg) scaleY(1.02);
+  }
+}
+
+@keyframes goldFlagFlutterFast {
+  0%, 100% {
+    transform: rotate(0deg) skewY(0deg) scaleY(1);
+  }
+  50% {
+    transform: rotate(4deg) skewY(3deg) scaleY(1.06);
+  }
+}
+
+@keyframes goldFlagFlutterInward {
+  0%, 100% {
+    transform: scaleX(-1) rotate(0deg) skewY(0deg) scaleY(1);
+  }
+  25% {
+    transform: scaleX(-1) rotate(2deg) skewY(2deg) scaleY(1.03);
+  }
+  50% {
+    transform: scaleX(-1) rotate(-1.5deg) skewY(-2deg) scaleY(0.97);
+  }
+  75% {
+    transform: scaleX(-1) rotate(2.5deg) skewY(1.5deg) scaleY(1.02);
+  }
+}
+
+@keyframes goldFlagFlutterInwardFast {
+  0%, 100% {
+    transform: scaleX(-1) rotate(0deg) skewY(0deg) scaleY(1);
+  }
+  50% {
+    transform: scaleX(-1) rotate(4deg) skewY(3deg) scaleY(1.06);
+  }
+}
+
+@keyframes driverMascotBob {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2.5px);
+  }
+}
+
+@keyframes driverMascotCheer {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-4px) scale(1.06);
+  }
+}
+
+@keyframes flagSparkleTwinkle {
+  0%, 100% {
+    transform: scale(0.8);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.25);
+    opacity: 1;
+  }
+}
+
+@keyframes victoryBadgePulse {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.7), 0 3px 8px rgba(0, 0, 0, 0.8);
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 1), 0 0 30px rgba(245, 158, 11, 0.9);
+    transform: translateX(-50%) scale(1.05);
+  }
+}
+
 
 @keyframes targetLineBeamAscend {
   0% {
@@ -17259,37 +18124,37 @@ body.theme-light .bar-sap-date-plain:hover {
   100% { transform: rotate(360deg); }
 }
 
-/* WBS Inline Edit Button (✏️) in Plan Close & Note Cells */
+/* WBS Inline Edit Button (🔒 Default / ✏️ Unlocked) in Plan Close & Note Cells */
 .btn-wbs-inline-edit {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 17px;
-  height: 17px;
-  min-width: 17px;
-  min-height: 17px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  color: var(--pea-gold-400, #FBBF24);
-  border-radius: 4px;
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  min-height: 20px;
+  background: rgba(16, 185, 129, 0.16);
+  border: 1px solid rgba(16, 185, 129, 0.42);
+  color: #34D399;
+  border-radius: 5px;
   padding: 0;
   cursor: pointer;
   line-height: 1;
-  transition: all 0.15s ease-in-out;
-  opacity: 0.8;
+  transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0.92;
   flex-shrink: 0;
-  margin-left: 4px;
+  margin-left: 5px;
 }
 .btn-wbs-inline-edit .pencil-icon {
-  font-size: 0.58rem;
+  font-size: 0.62rem;
   line-height: 1;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transform: scale(0.82);
+  transform: scale(0.92);
 }
 .btn-wbs-inline-edit .lock-icon {
-  font-size: 0.58rem;
+  font-size: 0.65rem;
   line-height: 1;
   display: inline-flex;
   align-items: center;
@@ -17297,10 +18162,10 @@ body.theme-light .bar-sap-date-plain:hover {
 }
 .btn-wbs-inline-edit:hover {
   opacity: 1;
-  background: rgba(251, 191, 36, 0.22);
-  border-color: rgba(251, 191, 36, 0.55);
-  transform: scale(1.12);
-  box-shadow: 0 0 8px rgba(251, 191, 36, 0.35);
+  background: rgba(16, 185, 129, 0.28);
+  border-color: rgba(16, 185, 129, 0.7);
+  transform: scale(1.15);
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.45);
 }
 
 .wbs-cell-edit-wrap {
@@ -17369,9 +18234,10 @@ body.theme-light .bar-sap-date-plain:hover {
   background: linear-gradient(135deg, rgba(255, 184, 28, 0.09) 0%, rgba(30, 9, 50, 0.65) 100%);
 }
 .wbs-metric-card-box.box-closed {
-  border-left: 3.5px solid #00FF88;
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.14) 0%, rgba(5, 46, 28, 0.65) 100%);
-  box-shadow: 0 0 16px rgba(0, 255, 136, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-left: 3.5px solid #10B981;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(30, 9, 50, 0.65) 100%);
+  box-shadow: none;
 }
 
 .wbs-box-head {
@@ -17401,19 +18267,25 @@ body.theme-light .bar-sap-date-plain:hover {
   align-items: center;
   gap: 3px;
   background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 6px;
-  padding: 1px 5px;
-  font-size: 0.68rem;
-  font-weight: 700;
+  padding: 2px 7px;
+  font-size: 0.78rem; /* เพิ่มขนาดอักษรในกรอบเหลืองตามคำสั่งผู้ใช้งาน */
+  font-weight: 750;
   color: #F8FAFC;
   white-space: nowrap;
   flex-shrink: 0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+}
+.wbs-card-metric-job-badge strong {
+  font-size: 0.82rem;
+  font-weight: 850;
+  color: #FFD25A;
 }
 .wbs-card-metric-job-badge.badge-green {
-  background: rgba(0, 255, 136, 0.16);
-  border-color: rgba(0, 255, 136, 0.55);
-  color: #D1FAE5;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.22);
+  color: #F8FAFC;
 }
 .wbs-card-metric-job-badge.badge-green strong {
   color: #00FF88;
@@ -17423,57 +18295,59 @@ body.theme-light .bar-sap-date-plain:hover {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 2px;
+  gap: 4px;
   margin: 0.10rem 0 0.35rem;
   width: 100%;
   box-sizing: border-box;
+  overflow: hidden;
 }
 .wbs-val-main-group {
   display: flex;
   align-items: baseline;
-  gap: 4px;
+  gap: 3px;
   min-width: 0;
 }
 .wbs-val-prefix {
-  font-size: 0.70rem;
-  font-weight: 700;
+  font-size: 0.60rem;
+  font-weight: 600;
   color: #94A3B8;
   white-space: nowrap;
   flex-shrink: 0;
 }
 .wbs-val-number {
   font-family: 'Outfit', -apple-system, sans-serif;
-  font-size: 0.82rem;
-  font-weight: 850;
-  letter-spacing: -0.025em;
+  font-size: 0.63rem; /* กรอบแดง ลดขนาดอักษรตามคำสั่งผู้ใช้งาน */
+  font-weight: 800;
+  letter-spacing: -0.015em;
   color: #FFB81C;
   line-height: 1.15;
   white-space: nowrap;
   flex-shrink: 0;
 }
 .wbs-val-number.text-success {
-  color: #00FF88 !important;
-  text-shadow: 0 0 12px rgba(0, 255, 136, 0.5);
+  color: #10B981 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7) !important;
 }
 .wbs-val-mb-pill {
-  font-size: 0.62rem;
-  font-weight: 750;
+  font-size: 0.76rem; /* เพิ่มขนาดอักษรในกรอบเหลืองตามคำสั่งผู้ใช้งาน */
+  font-weight: 800;
   color: #FDE047;
-  background: rgba(255, 184, 28, 0.15);
-  border: 1px solid rgba(255, 184, 28, 0.40);
-  padding: 1px 4px;
-  border-radius: 4px;
+  background: rgba(255, 184, 28, 0.18);
+  border: 1px solid rgba(255, 184, 28, 0.45);
+  padding: 2px 6px;
+  border-radius: 6px;
   white-space: nowrap;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
-  gap: 2px;
+  gap: 3px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
 }
 .wbs-val-mb-pill.pill-green {
-  color: #6EE7B7;
-  background: rgba(0, 255, 136, 0.15);
-  border-color: rgba(0, 255, 136, 0.45);
+  color: #34D399;
+  background: rgba(16, 185, 129, 0.18);
+  border-color: rgba(52, 211, 153, 0.4);
 }
 
 /* แท่งกราฟ Bar Graph สไตล์ที่วงกลม */
@@ -17747,16 +18621,38 @@ body.theme-light .wbs-pct-breakdown-tag {
   background: rgba(16, 185, 129, 0.1) !important;
 }
 
-/* Inline row button when locked */
+/* Inline row button when locked (Default state) */
 .btn-wbs-inline-edit.is-locked {
-  opacity: 0.85;
-  filter: drop-shadow(0 0 3px rgba(255, 184, 28, 0.4));
+  background: rgba(245, 158, 11, 0.14) !important;
+  border: 1px solid rgba(245, 158, 11, 0.4) !important;
+  color: #FBBF24 !important;
+  opacity: 0.88;
+  filter: drop-shadow(0 0 3px rgba(245, 158, 11, 0.35));
 }
 
 .btn-wbs-inline-edit.is-locked:hover {
   opacity: 1;
+  background: rgba(245, 158, 11, 0.28) !important;
+  border-color: rgba(245, 158, 11, 0.7) !important;
   transform: scale(1.15);
-  box-shadow: 0 0 8px rgba(255, 184, 28, 0.4);
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.45) !important;
+}
+
+[data-theme="light"] .btn-wbs-inline-edit {
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(16, 185, 129, 0.35);
+  color: #059669;
+}
+[data-theme="light"] .btn-wbs-inline-edit:hover {
+  background: rgba(16, 185, 129, 0.22);
+}
+[data-theme="light"] .btn-wbs-inline-edit.is-locked {
+  background: rgba(245, 158, 11, 0.12) !important;
+  border-color: rgba(245, 158, 11, 0.35) !important;
+  color: #D97706 !important;
+}
+[data-theme="light"] .btn-wbs-inline-edit.is-locked:hover {
+  background: rgba(245, 158, 11, 0.22) !important;
 }
 
 /* WBS Header Lock / Unlock Badge Button (วางใต้ชื่อคอลัมน์ แผนปิดงาน และ หมายเหตุ) */
@@ -18049,5 +18945,648 @@ body.theme-light .wbs-pct-breakdown-tag {
   padding: 2px 6px !important;
   font-size: 0.78rem !important;
 }
+
+/* ==========================================================================
+   PRESENTATION POINTER WIDGET & EFFECTS (ระบบพอยน์เตอร์นำเสนอ)
+   ========================================================================== */
+
+/* 1. Header Widget Button */
+.presenter-pointer-widget {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  z-index: 10020;
+}
+
+.presenter-pointer-widget.menu-active {
+  z-index: 10050;
+}
+
+.btn-pointer-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0.42rem 0.88rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 9999px;
+  color: #FFFFFF;
+  font-family: inherit;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(8px);
+  user-select: none;
+  white-space: nowrap;
+}
+
+.btn-pointer-toggle:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 184, 28, 0.5);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.btn-pointer-toggle.menu-open {
+  border-color: var(--pea-gold-400, #FFB81C);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.btn-pointer-toggle.has-active-pointer {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.25), rgba(245, 158, 11, 0.28));
+  border-color: #F59E0B;
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.45);
+  animation: pointerActiveGlow 2.5s infinite alternate;
+}
+
+@keyframes pointerActiveGlow {
+  0% { box-shadow: 0 0 10px rgba(245, 158, 11, 0.35); }
+  100% { box-shadow: 0 0 20px rgba(239, 68, 68, 0.6), 0 0 30px rgba(245, 158, 11, 0.4); }
+}
+
+.pointer-btn-icon {
+  font-size: 1.05rem;
+  line-height: 1;
+}
+
+.pointer-btn-label {
+  font-size: 0.84rem;
+}
+
+.pointer-status-pill {
+  font-size: 0.70rem;
+  font-weight: 700;
+  padding: 1.5px 7px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.16);
+  color: #F8FAFC;
+  letter-spacing: 0.2px;
+  transition: all 0.2s ease;
+}
+
+.has-active-pointer .pointer-status-pill {
+  background: #FFB81C;
+  color: #1E1035;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.pointer-chevron {
+  transition: transform 0.22s ease;
+  opacity: 0.8;
+}
+
+.btn-pointer-toggle.menu-open .pointer-chevron {
+  transform: rotate(180deg);
+}
+
+/* 2. Dropdown Menu */
+.presenter-pointer-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 335px;
+  max-width: calc(100vw - 24px);
+  background: linear-gradient(145deg, rgba(28, 16, 45, 0.98), rgba(16, 10, 28, 0.98));
+  border: 1px solid rgba(255, 184, 28, 0.35);
+  border-radius: 16px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.65), 0 0 30px rgba(168, 85, 247, 0.25);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  z-index: 10060;
+  overflow: hidden;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+.presenter-pointer-menu.show {
+  display: block;
+  z-index: 10060;
+  animation: pointerMenuPop 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes pointerMenuPop {
+  0% { opacity: 0; transform: translateY(-8px) scale(0.96); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.pointer-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.pointer-menu-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pointer-menu-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.pointer-title-icon {
+  font-size: 1rem;
+}
+
+.pointer-menu-subtitle {
+  font-size: 0.72rem;
+  color: var(--text-dim, #94A3B8);
+}
+
+.pointer-btn-close {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #CBD5E1;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  transition: all 0.15s ease;
+}
+
+.pointer-btn-close:hover {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: #EF4444;
+  color: #FFFFFF;
+}
+
+.pointer-options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 10px;
+}
+
+.pointer-option-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  color: #FFFFFF;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.16s ease;
+  font-family: inherit;
+}
+
+.pointer-option-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.18);
+  transform: translateX(3px);
+}
+
+.pointer-option-item.active {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.28), rgba(245, 158, 11, 0.22));
+  border-color: rgba(255, 184, 28, 0.65);
+  box-shadow: inset 0 0 12px rgba(255, 184, 28, 0.15), 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.pointer-opt-icon-box {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.pointer-option-item:hover .pointer-opt-icon-box {
+  border-color: rgba(255, 184, 28, 0.4);
+}
+
+.dot-preview {
+  display: inline-block;
+  line-height: 1;
+}
+
+.dot-laser-red {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #FF0055;
+  box-shadow: 0 0 8px #FF0055, 0 0 16px rgba(255, 0, 85, 0.8);
+}
+
+.dot-laser-green {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #10B981;
+  box-shadow: 0 0 8px #10B981, 0 0 16px rgba(16, 185, 129, 0.8);
+}
+
+.dot-halo-cyan {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid #00F0FF;
+  box-shadow: 0 0 8px #00F0FF;
+}
+
+.pointer-opt-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.pointer-opt-name {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.pointer-opt-desc {
+  font-size: 0.70rem;
+  color: #94A3B8;
+  line-height: 1.25;
+  margin-top: 2px;
+}
+
+.pointer-opt-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  flex-shrink: 0;
+}
+
+.pointer-opt-badge.hot {
+  background: rgba(239, 68, 68, 0.25);
+  color: #F87171;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+.pointer-opt-badge.focus {
+  background: rgba(245, 158, 11, 0.25);
+  color: #FBBF24;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+}
+
+.pointer-opt-badge.clear {
+  background: rgba(14, 165, 233, 0.25);
+  color: #38BDF8;
+  border: 1px solid rgba(14, 165, 233, 0.4);
+}
+
+.pointer-opt-badge.vip {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.35), rgba(217, 119, 6, 0.35));
+  color: #FDE047;
+  border: 1px solid rgba(253, 224, 71, 0.5);
+}
+
+.pointer-opt-badge.default {
+  background: rgba(255, 255, 255, 0.1);
+  color: #CBD5E1;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.pointer-menu-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  margin: 4px 6px;
+}
+
+.pointer-menu-footer {
+  padding: 8px 12px 10px;
+  background: rgba(0, 0, 0, 0.25);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.pointer-shortcut-tips {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.shortcut-pill {
+  font-size: 0.68rem;
+  color: #94A3B8;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.shortcut-pill kbd {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 0.65rem;
+  font-family: inherit;
+  font-weight: 700;
+  color: #F8FAFC;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* 3. On-Screen Pointer Visuals */
+.presenter-pointer-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 999999;
+  will-change: transform;
+  display: none;
+}
+
+.pointer-laser-core {
+  display: none;
+}
+
+.pointer-solid-red {
+  display: none;
+}
+
+.pointer-halo-disc {
+  display: none;
+}
+
+.pointer-arrow-svg {
+  display: none;
+}
+
+/* Solid Red Circle Point Mode (จุดกลมแดงทึบ) */
+.presenter-pointer-dot.mode-red-solid .pointer-solid-red {
+  display: block;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: #EF4444; /* สีแดงสดทึบ 100% */
+  border: 2px solid #FFFFFF; /* ขอบขาวคมชัด อ่านง่ายบนทุกพื้นหลัง */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.55);
+  transform: translate(-50%, -50%);
+}
+
+.dot-red-solid {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background-color: #EF4444;
+  border: 1.5px solid #FFFFFF;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* Red Laser Mode */
+.presenter-pointer-dot.mode-laser .pointer-laser-core {
+  display: block;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #FF0055;
+  box-shadow: 0 0 10px #FF0055, 0 0 20px #FF0055, 0 0 35px rgba(255, 0, 85, 0.85), 0 0 2px #FFFFFF;
+  transform: translate(-50%, -50%);
+  animation: laserPulse 1.4s infinite alternate;
+}
+
+@keyframes laserPulse {
+  0% { transform: translate(-50%, -50%) scale(0.95); box-shadow: 0 0 8px #FF0055, 0 0 18px #FF0055; }
+  100% { transform: translate(-50%, -50%) scale(1.15); box-shadow: 0 0 14px #FF0055, 0 0 28px #FF0055, 0 0 40px rgba(255, 0, 85, 0.9); }
+}
+
+/* Neon Green Laser Mode */
+.presenter-pointer-dot.mode-green-dot .pointer-laser-core {
+  display: block;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #00E676;
+  box-shadow: 0 0 10px #00E676, 0 0 22px #00E676, 0 0 38px rgba(0, 230, 118, 0.85), 0 0 2px #FFFFFF;
+  transform: translate(-50%, -50%);
+  animation: greenPulse 1.4s infinite alternate;
+}
+
+@keyframes greenPulse {
+  0% { transform: translate(-50%, -50%) scale(0.95); box-shadow: 0 0 8px #00E676, 0 0 18px #00E676; }
+  100% { transform: translate(-50%, -50%) scale(1.15); box-shadow: 0 0 14px #00E676, 0 0 28px #00E676, 0 0 40px rgba(0, 230, 118, 0.9); }
+}
+
+/* Cyan Halo Ring Mode */
+.presenter-pointer-dot.mode-halo .pointer-laser-core {
+  display: block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00F0FF;
+  transform: translate(-50%, -50%);
+}
+
+.presenter-pointer-dot.mode-halo .pointer-halo-disc {
+  display: block;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2.5px solid #00F0FF;
+  box-shadow: 0 0 14px #00F0FF, inset 0 0 10px rgba(0, 240, 255, 0.3);
+  transform: translate(-50%, -50%);
+  animation: presenterHaloPulse 1.6s infinite ease-in-out;
+}
+
+@keyframes presenterHaloPulse {
+  0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.8; }
+  50% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.8; }
+}
+
+/* Gold Arrow Mode */
+.presenter-pointer-dot.mode-gold-arrow .pointer-arrow-svg {
+  display: block;
+  transform: translate(-2px, -2px);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 12px rgba(251, 191, 36, 0.75));
+}
+
+/* Spotlight Mode Dot */
+.presenter-pointer-dot.mode-spotlight .pointer-laser-core {
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  box-shadow: 0 0 12px #FFFFFF;
+  transform: translate(-50%, -50%);
+}
+
+.presenter-pointer-dot.mode-spotlight .pointer-halo-disc {
+  display: block;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 1.5px dashed rgba(255, 255, 255, 0.55);
+  transform: translate(-50%, -50%);
+  animation: presenterSpin 10s linear infinite;
+}
+
+@keyframes presenterSpin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* 4. Spotlight Screen Overlay */
+.presenter-spotlight-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999990;
+  display: none;
+  background: radial-gradient(circle 125px at var(--spot-x, 50vw) var(--spot-y, 50vh), transparent 0%, rgba(10, 8, 22, 0.65) 100%);
+  transition: opacity 0.25s ease;
+}
+
+/* 5. Click Ripple Waves */
+.presenter-click-ripple {
+  position: fixed;
+  pointer-events: none;
+  z-index: 999998;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  animation: presenterClickRipple 0.52s ease-out forwards;
+}
+
+@keyframes presenterClickRipple {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 1;
+    border-width: 3px;
+  }
+  100% {
+    width: 75px;
+    height: 75px;
+    opacity: 0;
+    border-width: 1px;
+  }
+}
+
+.presenter-click-ripple.ripple-red-solid {
+  border: 2px solid #EF4444;
+  box-shadow: 0 0 14px #EF4444;
+}
+
+.presenter-click-ripple.ripple-laser {
+  border: 2px solid #FF0055;
+  box-shadow: 0 0 14px #FF0055;
+}
+
+.presenter-click-ripple.ripple-green-dot {
+  border: 2px solid #00E676;
+  box-shadow: 0 0 14px #00E676;
+}
+
+.presenter-click-ripple.ripple-halo {
+  border: 2px solid #00F0FF;
+  box-shadow: 0 0 16px #00F0FF;
+}
+
+.presenter-click-ripple.ripple-gold-arrow {
+  border: 2px solid #FFD700;
+  box-shadow: 0 0 16px #FFD700;
+}
+
+.presenter-click-ripple.ripple-spotlight {
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.9);
+}
+
+/* 6. Quick Floating Status Bar */
+.presenter-floating-bar {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999995;
+  background: rgba(18, 12, 32, 0.92);
+  border: 1px solid rgba(255, 184, 28, 0.5);
+  border-radius: 9999px;
+  padding: 6px 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(168, 85, 247, 0.3);
+  backdrop-filter: blur(12px);
+  color: #FFFFFF;
+  animation: presenterFloatIn 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes presenterFloatIn {
+  0% { transform: translate(-50%, 20px); opacity: 0; }
+  100% { transform: translate(-50%, 0); opacity: 1; }
+}
+
+.float-bar-inner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.float-bar-icon {
+  font-size: 1.1rem;
+}
+
+.float-bar-text {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #F8FAFC;
+}
+
+.btn-float-quick-toggle {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #FFFFFF;
+  border-radius: 9999px;
+  padding: 2px 10px;
+  font-size: 0.74rem;
+  font-family: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-float-quick-toggle:hover {
+  background: rgba(239, 68, 68, 0.3);
+  border-color: #EF4444;
+}
+
+/* 7. Hide System Mouse Cursor when custom pointer replaces it */
+body.pointer-mode-red-solid,
+body.pointer-mode-red-solid * {
+  cursor: none !important;
+}
+
+body.pointer-mode-laser,
+body.pointer-mode-laser * {
+  cursor: none !important;
+}
+
+body.pointer-mode-green,
+body.pointer-mode-green * {
+  cursor: none !important;
+}
+
+body.pointer-mode-gold,
+body.pointer-mode-gold * {
+  cursor: none !important;
+}
+
 
 

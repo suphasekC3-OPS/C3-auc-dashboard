@@ -8,7 +8,7 @@
   <meta name="description"
     content="ระบบสารสนเทศและแดชบอร์ดติดตามงานก่อสร้างและขึ้นทะเบียนทรัพย์สิน AUC การไฟฟ้าส่วนภูมิภาค เขต 3 (ภาคกลาง)">
   <link rel="icon" type="image/svg+xml" href="assets/pea_logo.svg">
-  <link rel="stylesheet" href="css/styles.css?v=20261027_1155">
+  <link rel="stylesheet" href="css/styles.css?v=20261027_2005">
 
 </head>
 
@@ -43,15 +43,6 @@
           <div class="header-actions">
             <!-- Live File Upload Input (Hidden) -->
             <input type="file" id="excelFileInput" accept=".xlsx,.xls,.json" style="display:none;" />
-            <button class="btn btn-outline" onclick="document.getElementById('excelFileInput').click()"
-              title="นำเข้าไฟล์ Excel / JSON (รวมถึงไฟล์ 02 KPI.xlsx)">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="17 8 12 3 7 8"></polyline>
-                <line x1="12" y1="3" x2="12" y2="15"></line>
-              </svg>
-              <span>นำเข้าข้อมูล</span>
-            </button>
 
             <button class="btn btn-gold" id="btnExportCsv" title="ดาวน์โหลดรายงานในรูปแบบ CSV / Excel">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -287,20 +278,127 @@
               </div>
             </div>
 
-            <button class="btn-icon" id="btnThemeToggle" title="สลับโหมดมืด/สว่าง">
-              <svg id="themeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                stroke-width="2">
-                <circle cx="12" cy="12" r="5"></circle>
-                <line x1="12" y1="1" x2="12" y2="3"></line>
-                <line x1="12" y1="21" x2="12" y2="23"></line>
-                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                <line x1="1" y1="12" x2="3" y2="12"></line>
-                <line x1="21" y1="12" x2="23" y2="12"></line>
-                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-              </svg>
-            </button>
+            <!-- ตัวเลือกรูปแบบ Pointer สำหรับการนำเสนอ (Presentation Pointer) -->
+            <div class="presenter-pointer-widget" id="presenterPointerWidget">
+              <button type="button" class="btn-pointer-toggle" id="btnTogglePointerMenu"
+                title="เลือกรูปแบบพอยน์เตอร์นำเสนอ (กด P สลับเร็ว)">
+                <span class="pointer-btn-icon" id="pointerBtnIcon">🖱️</span>
+                <span class="pointer-btn-label">พอยน์เตอร์</span>
+                <span class="pointer-status-pill" id="pointerStatusPill">ปกติ</span>
+                <svg class="pointer-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </button>
+
+              <!-- เมนูตัวเลือกรูปแบบ Pointer Dropdown -->
+              <div class="presenter-pointer-menu" id="presenterPointerMenu" role="menu">
+                <div class="pointer-menu-header">
+                  <div class="pointer-menu-title-wrap">
+                    <div class="pointer-menu-title">
+                      <span class="pointer-title-icon">🎯</span>
+                      <span>รูปแบบพอยน์เตอร์นำเสนอ</span>
+                    </div>
+                    <div class="pointer-menu-subtitle">เลือกสไตล์เคอร์เซอร์เพื่อดึงดูดสายตาขณะบรรยาย</div>
+                  </div>
+                  <button type="button" class="pointer-btn-close" id="btnClosePointerMenu" title="ปิดเมนู">✕</button>
+                </div>
+
+                <div class="pointer-options-list">
+                  <!-- 1. จุดแดงทึบ (Solid Red Point - วงกลมทึบแดง) -->
+                  <button type="button" class="pointer-option-item" data-mode="red-solid">
+                    <div class="pointer-opt-icon-box solid-red-box">
+                      <span class="dot-preview dot-red-solid"></span>
+                    </div>
+                    <div class="pointer-opt-info">
+                      <div class="pointer-opt-name">จุดแดงทึบ (Solid Red Point)</div>
+                      <div class="pointer-opt-desc">จุดวงกลมสีแดงทึบ คมชัด ชี้ระบุตำแหน่งชัดเจนทุกหน้าจอ</div>
+                    </div>
+                    <span class="pointer-opt-badge hot">ยอดนิยม</span>
+                  </button>
+
+                  <!-- 2. เลเซอร์แดงนีออน -->
+                  <button type="button" class="pointer-option-item" data-mode="laser">
+                    <div class="pointer-opt-icon-box laser-glow">
+                      <span class="dot-preview dot-laser-red"></span>
+                    </div>
+                    <div class="pointer-opt-info">
+                      <div class="pointer-opt-name">เลเซอร์แดงนีออน (Red Laser)</div>
+                      <div class="pointer-opt-desc">จุดเลเซอร์สีแดงสด พร้อมรัศมีนีออนเรืองแสงสะดุดตา</div>
+                    </div>
+                    <span class="pointer-opt-badge clear">เรืองแสง</span>
+                  </button>
+
+                  <!-- 3. สปอตไลท์ -->
+                  <button type="button" class="pointer-option-item" data-mode="spotlight">
+                    <div class="pointer-opt-icon-box spotlight-glow">
+                      <span class="dot-preview dot-spotlight">🔦</span>
+                    </div>
+                    <div class="pointer-opt-info">
+                      <div class="pointer-opt-name">สปอตไลท์ส่องเน้น (Spotlight Focus)</div>
+                      <div class="pointer-opt-desc">เน้นจุดที่เมาส์ชี้ ลดทอนแสงรอบข้างให้ฉากหลังมืดลง</div>
+                    </div>
+                    <span class="pointer-opt-badge focus">โฟกัส</span>
+                  </button>
+
+                  <!-- 4. วงแหวนฟ้า -->
+                  <button type="button" class="pointer-option-item" data-mode="halo">
+                    <div class="pointer-opt-icon-box halo-glow">
+                      <span class="dot-preview dot-halo-cyan"></span>
+                    </div>
+                    <div class="pointer-opt-info">
+                      <div class="pointer-opt-name">วงแหวนนีออนฟ้า (Cyan Halo)</div>
+                      <div class="pointer-opt-desc">วงแหวนคลื่นพลังงานสีฟ้า ไม่บดบังตัวอักษรหรือกราฟ</div>
+                    </div>
+                    <span class="pointer-opt-badge clear">โปร่งใส</span>
+                  </button>
+
+                  <!-- 5. เลเซอร์เขียว -->
+                  <button type="button" class="pointer-option-item" data-mode="green-dot">
+                    <div class="pointer-opt-icon-box green-glow">
+                      <span class="dot-preview dot-laser-green"></span>
+                    </div>
+                    <div class="pointer-opt-info">
+                      <div class="pointer-opt-name">เลเซอร์เขียวนีออน (Neon Green)</div>
+                      <div class="pointer-opt-desc">จุดเลเซอร์เขียวสด สว่างคมชัดพิเศษบนทุกเฉดสี</div>
+                    </div>
+                  </button>
+
+                  <!-- 6. ลูกศรทอง -->
+                  <button type="button" class="pointer-option-item" data-mode="gold-arrow">
+                    <div class="pointer-opt-icon-box gold-glow">
+                      <span class="dot-preview dot-arrow-gold">🌟</span>
+                    </div>
+                    <div class="pointer-opt-info">
+                      <div class="pointer-opt-name">ลูกศรทอง 3D (Executive Gold)</div>
+                      <div class="pointer-opt-desc">ลูกศรพรีเซนเตอร์สีทองพรีเมียม สำหรับผู้บริหาร</div>
+                    </div>
+                    <span class="pointer-opt-badge vip">VIP</span>
+                  </button>
+
+                  <div class="pointer-menu-divider"></div>
+
+                  <!-- 7. เมาส์ปกติ -->
+                  <button type="button" class="pointer-option-item active" data-mode="normal">
+                    <div class="pointer-opt-icon-box normal-box">
+                      <span class="dot-preview dot-mouse-normal">🖱️</span>
+                    </div>
+                    <div class="pointer-opt-info">
+                      <div class="pointer-opt-name">เมาส์ปกติ (Default Mouse)</div>
+                      <div class="pointer-opt-desc">คืนค่าเคอร์เซอร์เมาส์ลูกศรมาตรฐานของระบบ</div>
+                    </div>
+                    <span class="pointer-opt-badge default">ค่าเริ่มต้น</span>
+                  </button>
+                </div>
+
+                <!-- Footer with hotkey tips -->
+                <div class="pointer-menu-footer">
+                  <div class="pointer-shortcut-tips">
+                    <span class="shortcut-pill"><kbd>P</kbd> สลับเปิด/ปิดพอยน์เตอร์</span>
+                    <span class="shortcut-pill"><kbd>Esc</kbd> คืนเมาส์ปกติ</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </header>
@@ -1716,9 +1814,9 @@
                     </div>
                   </div>
 
-                  <div class="table-stats-info" style="font-size:0.84rem; margin:0 3px;">
-                    แสดงข้อมูลรายการที่ <strong id="wbsPageRange">0 - 0</strong> จากที่กรองได้ <strong
-                      id="wbsFilteredCount">0</strong> รายการ
+                  <div class="table-stats-info" style="display:none;">
+                    <span id="wbsPageRange">0 - 0</span>
+                    <span id="wbsFilteredCount">0</span>
                   </div>
                   <div style="display:flex; align-items:center; gap:0.4rem;">
                     <label style="font-size:0.8rem; color:var(--text-muted); white-space:nowrap;">แถวต่อหน้า:</label>
@@ -1731,6 +1829,16 @@
                       <option value="99999">ทั้งหมด</option>
                     </select>
                   </div>
+
+                  <!-- ปุ่มล้างตัวเลือกทั้งหมดในตารางนี้ -->
+                  <button type="button" class="btn-wbs-clear-table-selections" id="btnClearWbsTableSelections"
+                    onclick="window.clearAllWbsTableSelections()" title="ล้างตัวเลือกทั้งหมดในตารางนี้ (ปลดติ๊ก Checkbox ทุกแถว, ล้างตัวกรองสถานะ SAP และตัวกรองงวดบัญชีในตาราง)">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="3 6 5 6 21 6"></polyline>
+                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    </svg>
+                    <span>ล้างตัวเลือกทั้งหมดในตารางนี้</span>
+                  </button>
 
                   <!-- ปุ่มขยายเต็มหน้าจอ (Fullscreen Table Toggle) -->
                   <button type="button" class="btn-wbs-fullscreen" id="btnWbsTableFullscreen"
@@ -1878,6 +1986,38 @@
                     <tbody id="wbsTableBody"></tbody>
                     <tfoot id="wbsTableFoot"></tfoot>
                   </table>
+                </div>
+
+                <!-- Floating Checkbox Selection Card (มุมขวาด้านล่าง บนตารางตลอด พื้นสีฟ้า ลากย้ายตำแหน่งได้) -->
+                <div class="wbs-table-floating-selection" id="wbsTableFloatingSelection"
+                  title="คลิกและลากเพื่อย้ายตำแหน่งการ์ดนี้ได้อิสระ (ดับเบิลคลิกเพื่อรีเซ็ตกลับที่เดิม)">
+                  <div class="wbs-floating-sel-card">
+                    <div class="wbs-floating-sel-row top">
+                      <div class="wbs-floating-sel-badge">
+                        <span class="wbs-floating-drag-grip" title="คลิกและลากเพื่อย้ายตำแหน่ง">⋮⋮</span>
+                        <svg class="wbs-floating-sel-icon" width="13" height="13" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" stroke-width="2.6">
+                          <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span class="wbs-floating-sel-label">เลือกใน Checkbox:</span>
+                      </div>
+                      <div class="wbs-floating-sel-count-wrap">
+                        <strong class="wbs-floating-sel-count" id="wbsFloatingSelCount">0</strong>
+                        <span class="wbs-floating-sel-unit">งาน</span>
+                      </div>
+                      <button type="button" class="wbs-floating-sel-clear" id="wbsFloatingSelClearBtn"
+                        onclick="window.clearWbsCheckboxSelection()" title="ปลดรายการที่เลือกทั้งหมด (ล้าง Checkbox)" disabled>
+                        ล้าง
+                      </button>
+                    </div>
+                    <div class="wbs-floating-sel-row bottom">
+                      <span class="wbs-floating-sel-auc-lbl">มูลค่าตามไฟล์ 06:</span>
+                      <div class="wbs-floating-sel-auc-wrap">
+                        <strong class="wbs-floating-sel-auc-val" id="wbsFloatingSelAuc">0.00</strong>
+                        <span class="wbs-floating-sel-currency">บาท</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -2498,11 +2638,12 @@
   <script src="js/data_sep.js?v=20261022_2315"></script>
   <script src="js/kpi_matrix.js?v=20261003_0930"></script>
   <script src="js/chart.js?v=20261026_1620"></script>
-  <script src="js/data_wbs.js?v=20261027_1058"></script>
-  <script src="js/wbs.js?v=20261027_1155"></script>
-  <script src="js/data_history.js?v=20261027_1155"></script>
-  <script src="js/app.js?v=20261027_1120"></script>
+  <script src="js/data_wbs.js?v=20261027_1915"></script>
+  <script src="js/wbs.js?v=20261027_2005"></script>
+  <script src="js/data_history.js?v=20261027_2005"></script>
+  <script src="js/app.js?v=20261027_2005"></script>
   <script src="js/criteria_dropdown.js?v=20261017_2055"></script>
+  <script src="js/presentation_pointer.js?v=20261027_1435"></script>
 </body>
 
 </html>

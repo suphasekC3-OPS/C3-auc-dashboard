@@ -57,9 +57,144 @@
     timelineChartMode: 'both',
     hiddenTimelineAmountSeries: new Set(),
     next3mHBarMode: 'val',
-    next3mChartType: 'donut'
+    next3mChartType: 'donut',
+    targetFivePctConfig: null // ตั้งค่า +5% คงเหลือแยกตามเกณฑ์ 1 - 5
   };
   window.state = state;
+
+  // ==========================================================================
+  // TARGET BUFFER CONFIGURATION (+5% คงเหลือ เกณฑ์ 1.1 - 5)
+  // ==========================================================================
+  const STORAGE_FIVE_PCT_KEY = 'PEA_AUC_TARGET_FIVE_PERCENT_CONFIG_V1';
+
+  const TARGET_FIVE_PCT_ITEMS = [
+    { key: '1.1', code: 'ข้อ 1.1', name: 'ข้อ 1.1 งบ C.1 ก่อน 69', shortName: 'ข้อ 1.1 งบ C.1 ก่อน 69', type: 'val', chip: 'gold', unitLabel: '💰 มูลค่า' },
+    { key: '1.2', code: 'ข้อ 1.2', name: 'ข้อ 1.2 งบ I , P ก่อนปี 68', shortName: 'ข้อ 1.2 งบ I , P ก่อนปี 68', type: 'val', chip: 'gold', unitLabel: '💰 มูลค่า' },
+    { key: '1.3', code: 'ข้อ 1.3', name: 'ข้อ 1.3 งบ I , P ก่อนปี 69', shortName: 'ข้อ 1.3 งบ I , P ก่อนปี 69', type: 'val', chip: 'gold', unitLabel: '💰 มูลค่า' },
+    { key: '2.1', code: 'ข้อ 2.1', name: 'ข้อ 2.1 งบ C.1 ปี 69', shortName: 'ข้อ 2.1 งบ C.1 ปี 69', type: 'val', chip: 'gold', unitLabel: '💰 มูลค่า' },
+    { key: '2.2', code: 'ข้อ 2.2', name: 'ข้อ 2.2 งบ I , P ปี 69', shortName: 'ข้อ 2.2 งบ I , P ปี 69', type: 'val', chip: 'gold', unitLabel: '💰 มูลค่า' },
+    { key: '3.1', code: 'ข้อ 3.1', name: 'ข้อ 3.1 TECO D2', shortName: 'ข้อ 3.1 TECO D2', type: 'job', chip: 'pink', unitLabel: '⚡ งาน' },
+    { key: '3.2', code: 'ข้อ 3.2', name: 'ข้อ 3.2 TECO D2', shortName: 'ข้อ 3.2 TECO D2', type: 'job', chip: 'pink', unitLabel: '⚡ งาน' },
+    { key: '3.3', code: 'ข้อ 3.3', name: 'ข้อ 3.3 TECO D2', shortName: 'ข้อ 3.3 TECO D2', type: 'job', chip: 'pink', unitLabel: '⚡ งาน' },
+    { key: '4',   code: 'ข้อ 4',   name: 'ข้อ 4 งบ C02.2 ปี 69', shortName: 'ข้อ 4 งบ C02.2 ปี 69', type: 'job', chip: 'pink', unitLabel: '⚡ งาน' },
+    { key: '5',   code: 'ข้อ 5',   name: 'ข้อ5 งานบ้านและที่ดินจัดสรร', shortName: 'ข้อ5 งานบ้านและที่ดินจัดสรร', type: 'val', chip: 'gold', unitLabel: '💰 มูลค่า' }
+  ];
+  window.TARGET_FIVE_PCT_ITEMS = TARGET_FIVE_PCT_ITEMS;
+
+  function isTargetFivePctEnabled(cfg, key) {
+    if (!cfg) return true;
+    if (cfg[key] !== undefined) return Boolean(cfg[key]);
+    const grp = String(key).split('.')[0];
+    if (cfg[grp] !== undefined) return Boolean(cfg[grp]);
+    return true;
+  }
+  window.isTargetFivePctEnabled = isTargetFivePctEnabled;
+
+  function getDefaultTargetFivePctConfig() {
+    const cfg = {};
+    TARGET_FIVE_PCT_ITEMS.forEach(it => { cfg[it.key] = true; });
+    [1, 2, 3, 4, 5].forEach(c => { cfg[c] = true; });
+    return cfg;
+  }
+
+  function loadTargetFivePctConfig() {
+    const defaults = getDefaultTargetFivePctConfig();
+    try {
+      const raw = localStorage.getItem(STORAGE_FIVE_PCT_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (typeof parsed === 'object' && parsed !== null) {
+          const res = { ...defaults };
+          TARGET_FIVE_PCT_ITEMS.forEach(it => {
+            if (parsed[it.key] !== undefined) {
+              res[it.key] = Boolean(parsed[it.key]);
+            } else {
+              const grp = it.key.split('.')[0];
+              if (parsed[grp] !== undefined) {
+                res[it.key] = Boolean(parsed[grp]);
+              }
+            }
+          });
+          [1, 2, 3, 4, 5].forEach(c => {
+            if (parsed[c] !== undefined) res[c] = Boolean(parsed[c]);
+          });
+          return res;
+        }
+      }
+    } catch (e) {
+      console.warn('loadTargetFivePctConfig error:', e);
+    }
+    return defaults;
+  }
+
+  const STORAGE_FIVE_PCT_SAVED_AT_KEY = 'PEA_AUC_TARGET_FIVE_PERCENT_SAVED_AT_V1';
+
+  function formatThaiSaveTimestamp(dateObj) {
+    const d = (dateObj instanceof Date && !isNaN(dateObj)) ? dateObj : new Date();
+    const thaiMonths = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+    const day = d.getDate();
+    const month = thaiMonths[d.getMonth()];
+    const year = d.getFullYear() > 2400 ? d.getFullYear() : (d.getFullYear() + 543);
+    const hours = String(d.getHours()).padStart(2, '0');
+    const mins = String(d.getMinutes()).padStart(2, '0');
+    return `${day} ${month} ${year}, ${hours}:${mins} น.`;
+  }
+  window.formatThaiSaveTimestamp = formatThaiSaveTimestamp;
+
+  function getTargetFivePctSavedAt() {
+    try {
+      const saved = localStorage.getItem(STORAGE_FIVE_PCT_SAVED_AT_KEY);
+      if (saved && saved.trim()) return saved.trim();
+    } catch (e) {
+      console.warn('getTargetFivePctSavedAt error:', e);
+    }
+    // Default initial date/time display
+    return '27 ต.ค. 2569, 19:05 น.';
+  }
+  window.getTargetFivePctSavedAt = getTargetFivePctSavedAt;
+
+  function setTargetFivePctSavedAt(customStr) {
+    const str = customStr || formatThaiSaveTimestamp(new Date());
+    try {
+      localStorage.setItem(STORAGE_FIVE_PCT_SAVED_AT_KEY, str);
+    } catch (e) {
+      console.warn('setTargetFivePctSavedAt error:', e);
+    }
+    return str;
+  }
+  window.setTargetFivePctSavedAt = setTargetFivePctSavedAt;
+
+  function saveTargetFivePctConfig(cfg) {
+    try {
+      localStorage.setItem(STORAGE_FIVE_PCT_KEY, JSON.stringify(cfg));
+    } catch (e) {
+      console.warn('saveTargetFivePctConfig error:', e);
+    }
+  }
+
+  function getTargetFivePctConfig() {
+    if (!state.targetFivePctConfig) {
+      state.targetFivePctConfig = loadTargetFivePctConfig();
+    }
+    return state.targetFivePctConfig;
+  }
+  window.getTargetFivePctConfig = getTargetFivePctConfig;
+
+  function isCritFivePctActive(critDef, monthNum, cfg) {
+    const fivePctCfg = cfg || getTargetFivePctConfig();
+    if (!critDef) return false;
+    if (critDef.key === '3' || critDef.category === 3) {
+      const filterCrit = state.filters && state.filters.criteria;
+      if (filterCrit && filterCrit.includes('3.1')) return isTargetFivePctEnabled(fivePctCfg, '3.1');
+      if (filterCrit && filterCrit.includes('3.2')) return isTargetFivePctEnabled(fivePctCfg, '3.2');
+      if (filterCrit && filterCrit.includes('3.3')) return isTargetFivePctEnabled(fivePctCfg, '3.3');
+      if (monthNum <= 5) return isTargetFivePctEnabled(fivePctCfg, '3.1');
+      if (monthNum <= 8) return isTargetFivePctEnabled(fivePctCfg, '3.2');
+      return isTargetFivePctEnabled(fivePctCfg, '3.3');
+    }
+    return isTargetFivePctEnabled(fivePctCfg, critDef.key || critDef.category);
+  }
+  window.isCritFivePctActive = isCritFivePctActive;
 
   // Month Names (Thai)
   const MONTHS_TH = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
@@ -2437,8 +2572,16 @@
   };
 
   // WBS Table Edit Authentication State (Independent from Target Cards)
+  // Default is ALWAYS locked (false) on initial page load / refresh until unlocked with Admin PIN
+  let _wbsEditUnlockedInMemory = false;
+  try {
+    sessionStorage.removeItem('auc_wbs_edit_authenticated');
+  } catch (e) {
+    console.warn('Reset wbs edit lock error:', e);
+  }
+
   window.isWbsEditAuthenticated = function () {
-    return sessionStorage.getItem('auc_wbs_edit_authenticated') === 'true';
+    return _wbsEditUnlockedInMemory;
   };
 
   // Backwards compatibility alias
@@ -2456,6 +2599,7 @@
   };
 
   window.setWbsEditAuthenticated = function (auth) {
+    _wbsEditUnlockedInMemory = Boolean(auth);
     if (auth) {
       sessionStorage.setItem('auc_wbs_edit_authenticated', 'true');
     } else {
@@ -2705,11 +2849,163 @@
     }
   };
 
+  // ==========================================================================
+  // TARGET BUFFER CONFIGURATION CARD (แสดงในตำแหน่งกรอบเหลือง ถัดจากการ์ด 3 เดือน)
+  // ==========================================================================
+  function renderTargetFivePctConfigCard(fivePctCfg) {
+    const rowsHtml = TARGET_FIVE_PCT_ITEMS.map(item => {
+      const isAct = isTargetFivePctEnabled(fivePctCfg, item.key);
+      const safeKey = item.key.replace('.', '_');
+      return `
+        <div class="next3m-crit-row ${isAct ? 'is-active' : ''}">
+          <label class="next3m-crit-label" for="chkFivePctCrit_${safeKey}">
+            <input type="checkbox" id="chkFivePctCrit_${safeKey}" class="next3m-crit-checkbox" ${isAct ? 'checked' : ''} onchange="window.handleTargetFivePctCheckboxChange(event, '${item.key}')">
+            <div class="next3m-crit-info">
+              <span class="next3m-crit-name" title="${escapeHtml(item.name)}">${escapeHtml(item.shortName)}</span>
+              <span class="formula-chip ${item.chip}" style="font-size:0.62rem; padding:0 4px; height:16px;">${item.unitLabel}</span>
+            </div>
+          </label>
+          <span class="badge-five-pct ${isAct ? 'active' : 'inactive'}" id="statusFivePctCrit_${safeKey}">${isAct ? '+5%' : '+0%'}</span>
+        </div>
+      `;
+    }).join('');
+
+    return `
+      <div class="next3m-config-panel-card" id="next3mConfigPanelCard">
+        <div class="next3m-config-head">
+          <div class="next3m-config-title-wrap">
+            <div class="next3m-config-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="color:#FDE047;">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+              </svg>
+              <span>ตั้งค่า +5% คงเหลือ</span>
+            </div>
+            <span class="next3m-config-badge">เกณฑ์ 1.1 - 5</span>
+          </div>
+          <div class="next3m-config-sub">
+            <span>เลือกคำนวณ +5% หรือไม่บวก แต่ละเกณฑ์</span>
+            <div class="next3m-config-quick-actions">
+              <button type="button" class="btn-quick-config" onclick="window.setAllTargetFivePct(true)" title="เลือกบวก 5% ทุกเกณฑ์">เลือกทั้งหมด</button>
+              <span style="color:var(--text-dim); font-size:0.7rem;">|</span>
+              <button type="button" class="btn-quick-config" onclick="window.setAllTargetFivePct(false)" title="ไม่บวก 5% ทุกเกณฑ์">ไม่เลือก</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="next3m-config-body">
+          ${rowsHtml}
+        </div>
+
+        <div class="next3m-config-foot">
+          <button type="button" class="btn-save-target-fivepct" id="btnSaveTargetFivePct" onclick="window.saveTargetFivePctConfigFromUI()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+              <polyline points="17 21 17 13 7 13 7 21"></polyline>
+              <polyline points="7 3 7 8 15 8"></polyline>
+            </svg>
+            <span id="btnSaveTargetFivePctText">บันทึกการตั้งค่า (Save)</span>
+          </button>
+          
+          <div class="next3m-config-saved-at" id="next3mConfigSavedAt" title="วัน-เวลาที่บันทึกการตั้งค่าล่าสุด">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="saved-clock-icon">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <span>บันทึกล่าสุด: <strong class="saved-time-highlight" id="txtTargetFivePctSavedAt">${escapeHtml(getTargetFivePctSavedAt())}</strong></span>
+          </div>
+
+          <div class="next3m-config-hint">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+            <span>จำค่าที่เลือกไว้ตลอด แม้รีเฟรชหรือปิดเบราว์เซอร์</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  window.handleTargetFivePctCheckboxChange = function (evt, key) {
+    const cfg = getTargetFivePctConfig();
+    const val = Boolean(evt.target.checked);
+    cfg[key] = val;
+    const grp = String(key).split('.')[0];
+    const subItems = TARGET_FIVE_PCT_ITEMS.filter(it => it.key.startsWith(grp + '.') || it.key === grp);
+    if (subItems.length > 0) {
+      cfg[grp] = subItems.some(it => cfg[it.key] !== false);
+    }
+    state.targetFivePctConfig = cfg;
+    renderNext3MonthsProjection();
+    if (typeof window.syncWbsSideKpiCard === 'function') {
+      window.syncWbsSideKpiCard();
+    }
+  };
+
+  window.setAllTargetFivePct = function (enableAll) {
+    const cfg = getTargetFivePctConfig();
+    TARGET_FIVE_PCT_ITEMS.forEach(it => {
+      cfg[it.key] = Boolean(enableAll);
+    });
+    [1, 2, 3, 4, 5].forEach(cat => {
+      cfg[cat] = Boolean(enableAll);
+    });
+    state.targetFivePctConfig = cfg;
+    renderNext3MonthsProjection();
+    if (typeof window.syncWbsSideKpiCard === 'function') {
+      window.syncWbsSideKpiCard();
+    }
+  };
+
+  window.saveTargetFivePctConfigFromUI = function () {
+    const cfg = getTargetFivePctConfig();
+    saveTargetFivePctConfig(cfg);
+    state.targetFivePctConfig = cfg;
+
+    // Save and format latest save timestamp
+    const nowStr = setTargetFivePctSavedAt();
+
+    const btn = document.getElementById('btnSaveTargetFivePct');
+    const btnText = document.getElementById('btnSaveTargetFivePctText');
+    if (btn && btnText) {
+      btn.classList.add('is-saved');
+      btnText.textContent = '✓ บันทึกสำเร็จแล้ว';
+      setTimeout(() => {
+        btn.classList.remove('is-saved');
+        btnText.textContent = 'บันทึกการตั้งค่า (Save)';
+      }, 2200);
+    }
+
+    // Update timestamp label in UI immediately with flash animation
+    const savedAtEl = document.getElementById('txtTargetFivePctSavedAt');
+    if (savedAtEl) {
+      savedAtEl.textContent = nowStr;
+      const wrap = document.getElementById('next3mConfigSavedAt');
+      if (wrap) {
+        wrap.classList.add('just-updated');
+        setTimeout(() => wrap.classList.remove('just-updated'), 2200);
+      }
+    }
+
+    if (typeof window.showToast === 'function') {
+      window.showToast(`💾 บันทึกการตั้งค่า +5% คงเหลือเรียบร้อยแล้ว (${nowStr})`, 'success');
+    }
+    renderNext3MonthsProjection();
+    if (typeof window.syncWbsSideKpiCard === 'function') {
+      window.syncWbsSideKpiCard();
+    }
+  };
+
   function renderNext3MonthsProjection() {
     const container = document.getElementById('next3mCardsContainer');
     const tableBody = document.getElementById('next3mTableBody');
     const tableFoot = document.getElementById('next3mTableFoot');
     if (!container) return;
+
+    // Load active +5% buffer configuration
+    const fivePctCfg = getTargetFivePctConfig();
 
     // Sync cards visibility state
     container.style.display = isNext3mCardsExpanded ? '' : 'none';
@@ -2796,22 +3092,20 @@
     const activeTecoName = activeTecoRecord ? activeTecoRecord.criteria : 'ข้อ 3 TECO D2';
 
     const MASTER_CRITERIA = [
-      { name: 'ข้อ 1.1 งบ C.1 ก่อน 69', category: 1, type: 'val', label: 'เกณฑ์ 1.1 (มูลค่า)', matcher: (c) => matchCriteriaName('1.1', c) },
-      { name: 'ข้อ 1.2 งบ I , P ก่อนปี 68', category: 1, type: 'val', label: 'เกณฑ์ 1.2 (มูลค่า)', matcher: (c) => matchCriteriaName('1.2', c) },
-      { name: 'ข้อ 1.3 งบ I , P ก่อนปี 69', category: 1, type: 'val', label: 'เกณฑ์ 1.3 (มูลค่า)', matcher: (c) => matchCriteriaName('1.3', c) },
-      { name: 'ข้อ 2.1 งบ C.1 ปี 69', category: 2, type: 'val', label: 'เกณฑ์ 2.1 (มูลค่า)', matcher: (c) => matchCriteriaName('2.1', c) },
-      { name: 'ข้อ 2.2 งบ I , P ปี 69', category: 2, type: 'val', label: 'เกณฑ์ 2.2 (มูลค่า)', matcher: (c) => matchCriteriaName('2.2', c) },
-      { name: activeTecoName, category: 3, type: 'job', label: 'เกณฑ์ 3 TECO D2 (งาน)', matcher: (c) => c && (c.includes('TECO') || c.includes('3.')) },
-      { name: 'ข้อ 4 งบ C02.2 ปี 69', category: 4, type: 'job', label: 'เกณฑ์ 4 (งาน)', matcher: (c) => matchCriteriaName('4', c) || (c && c.includes('C02')) },
-      { name: 'ข้อ5 งานบ้านและที่ดินจัดสรร', category: 5, type: 'val', label: 'เกณฑ์ 5 (มูลค่า)', matcher: (c) => matchCriteriaName('5', c) || (c && c.includes('บ้าน')) }
+      { key: '1.1', name: 'ข้อ 1.1 งบ C.1 ก่อน 69', category: 1, type: 'val', label: 'เกณฑ์ 1.1 (มูลค่า)', matcher: (c) => matchCriteriaName('1.1', c) },
+      { key: '1.2', name: 'ข้อ 1.2 งบ I , P ก่อนปี 68', category: 1, type: 'val', label: 'เกณฑ์ 1.2 (มูลค่า)', matcher: (c) => matchCriteriaName('1.2', c) },
+      { key: '1.3', name: 'ข้อ 1.3 งบ I , P ก่อนปี 69', category: 1, type: 'val', label: 'เกณฑ์ 1.3 (มูลค่า)', matcher: (c) => matchCriteriaName('1.3', c) },
+      { key: '2.1', name: 'ข้อ 2.1 งบ C.1 ปี 69', category: 2, type: 'val', label: 'เกณฑ์ 2.1 (มูลค่า)', matcher: (c) => matchCriteriaName('2.1', c) },
+      { key: '2.2', name: 'ข้อ 2.2 งบ I , P ปี 69', category: 2, type: 'val', label: 'เกณฑ์ 2.2 (มูลค่า)', matcher: (c) => matchCriteriaName('2.2', c) },
+      { key: '3',   name: activeTecoName, category: 3, type: 'job', label: 'เกณฑ์ 3 TECO D2 (งาน)', matcher: (c) => c && (c.includes('TECO') || c.includes('3.')) },
+      { key: '4',   name: 'ข้อ 4 งบ C02.2 ปี 69', category: 4, type: 'job', label: 'เกณฑ์ 4 (งาน)', matcher: (c) => matchCriteriaName('4', c) || (c && c.includes('C02')) },
+      { key: '5',   name: 'ข้อ5 งานบ้านและที่ดินจัดสรร', category: 5, type: 'val', label: 'เกณฑ์ 5 (มูลค่า)', matcher: (c) => matchCriteriaName('5', c) || (c && c.includes('บ้าน')) }
     ];
 
     function getLevel5TargetRatio(critDef, mNum) {
       if (!window.KPI_MATRIX || !Array.isArray(window.KPI_MATRIX)) return null;
 
       // Special handling for TECO D2 (Category 3):
-      // In KPI_MATRIX, TECO D2 has entries 3.1 (m1-5), 3.2 (m6-8), 3.3 (m9-12).
-      // Find the active TECO row in target month mNum.
       if (critDef.category === 3 || (critDef.name && (critDef.name.includes('TECO') || critDef.name.includes('3.')))) {
         const tecoRow = window.KPI_MATRIX.find(r => r.monthNum === mNum && (r.criteria.includes('TECO') || r.criteria.includes('3.')) && r.level5 && r.level5 !== '-');
         if (tecoRow) {
@@ -2884,18 +3178,20 @@
         }
       }
 
-      // Calculations for each of the 3 upcoming months
-      // Formula เกณฑ์มูลค่า: (รวมมูลค่า AUC × % ระดับ 5) − ปิดมูลค่าล่าสุด + (5% ของคงเหลือมูลค่า AUC)
-      // Formula เกณฑ์งาน (ข้อ 3, 4): (รวมงาน AUC × % ระดับ 5) − ปิดงานล่าสุด + (5% ของคงเหลืองาน AUC)
+      // Calculations for each of the upcoming months
+      // ตรวจสอบว่าเกณฑ์นี้เลือกให้คำนวณบวก 5% ของคงเหลือหรือไม่ (+5% vs +0%)
       const monthsCalc = nextMonths.map(nm => {
+        const isCatFivePct = isCritFivePctActive(critDef, nm.monthNum);
+        const fivePctRate = isCatFivePct ? 0.05 : 0;
         const targetRatio = getLevel5TargetRatio(critDef, nm.monthNum);
         if (targetRatio === null) {
-          return { targetRatio: null, targetPctStr: '-', reqAmount: null, isAchieved: false };
+          return { targetRatio: null, targetPctStr: '-', reqAmount: null, isAchieved: false, isCatFivePct, fivePctRate, buffer: 0 };
         }
 
         const targetPctStr = `${(targetRatio * 100).toFixed(0)}%`;
         if (critDef.type === 'val') {
-          const req = (totalVal * targetRatio) - closedVal + (0.05 * remainVal);
+          const buffer = fivePctRate * remainVal;
+          const req = (totalVal * targetRatio) - closedVal + buffer;
           const positiveReq = Math.max(0, req);
           const isAchieved = req <= 0 && totalVal > 0;
           return {
@@ -2903,10 +3199,14 @@
             targetPctStr,
             reqAmount: positiveReq,
             rawReq: req,
-            isAchieved
+            isAchieved,
+            isCatFivePct,
+            fivePctRate,
+            buffer
           };
         } else {
-          const req = (totalJobs * targetRatio) - closedJobs + (0.05 * remainJobs);
+          const buffer = fivePctRate * remainJobs;
+          const req = (totalJobs * targetRatio) - closedJobs + buffer;
           const positiveReq = Math.max(0, Math.ceil(req));
           const isAchieved = req <= 0 && totalJobs > 0;
           return {
@@ -2914,7 +3214,10 @@
             targetPctStr,
             reqAmount: positiveReq,
             rawReq: req,
-            isAchieved
+            isAchieved,
+            isCatFivePct,
+            fivePctRate,
+            buffer
           };
         }
       });
@@ -2957,6 +3260,7 @@
       criteriaResults.forEach(cr => {
         if (cr.isFilteredOut) return;
         const mc = cr.monthsCalc[mIdx];
+        const isCatFivePct = isCritFivePctActive(cr.critDef, nm.monthNum);
         if (cr.critDef.type === 'val') {
           if (mc.targetRatio !== null && mc.targetRatio > 0) {
             hasValTarget = true;
@@ -2970,7 +3274,9 @@
               totalValBaseCat125 += cr.totalVal;
               closedValBaseCat125 += cr.closedVal;
               remainValBaseCat125 += cr.remainVal;
-              fivePctRemainValCat125 += (0.05 * cr.remainVal);
+              if (isCatFivePct) {
+                fivePctRemainValCat125 += (0.05 * cr.remainVal);
+              }
               targetValL5Cat125 += (cr.totalVal * mc.targetRatio);
             }
           }
@@ -2987,7 +3293,9 @@
               totalJobsBaseCat34 += cr.totalJobs;
               closedJobsBaseCat34 += cr.closedJobs;
               remainJobsBaseCat34 += cr.remainJobs;
-              fivePctRemainJobsCat34 += (0.05 * cr.remainJobs);
+              if (isCatFivePct) {
+                fivePctRemainJobsCat34 += (0.05 * cr.remainJobs);
+              }
               targetJobsL5Cat34 += (cr.totalJobs * mc.targetRatio);
             }
           }
@@ -3103,8 +3411,8 @@
       office: state.filters.office
     };
 
-    // 5. Render Month Target Cards (รวม ธ.ค.)
-    container.innerHTML = monthSummaries.map((ms, idx) => {
+    // 5. Render Month Target Cards (รวม ธ.ค.) + แผงตั้งค่า +5% คงเหลือในตำแหน่งกรอบเหลือง
+    const monthCardsHtml = monthSummaries.map((ms, idx) => {
       const nm = ms.monthInfo;
       const cardClass = `month-${idx + 1}`;
       const stepText = (nm.shortName === 'ธ.ค.' || (idx === monthSummaries.length - 1 && nm.monthIdx === 11))
@@ -3114,6 +3422,16 @@
       const valMillions = (ms.sumReqValCat125 / 1e6).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
       const valFormatted = formatCurrency(ms.sumReqValCat125);
       const jobsFormatted = formatNumber(ms.sumReqJobsCat34);
+
+      // Check active five percent status for active value criteria
+      const activeValCrits = criteriaResults.filter(cr => !cr.isFilteredOut && cr.critDef.type === 'val');
+      const hasValFivePct = activeValCrits.length > 0 && activeValCrits.some(cr => isCritFivePctActive(cr.critDef, nm.monthNum));
+      const allValFivePct = activeValCrits.length > 0 && activeValCrits.every(cr => isCritFivePctActive(cr.critDef, nm.monthNum));
+
+      // Check active five percent status for active job criteria
+      const activeJobCrits = criteriaResults.filter(cr => !cr.isFilteredOut && cr.critDef.type === 'job');
+      const hasJobFivePct = activeJobCrits.length > 0 && activeJobCrits.some(cr => isCritFivePctActive(cr.critDef, nm.monthNum));
+      const allJobFivePct = activeJobCrits.length > 0 && activeJobCrits.every(cr => isCritFivePctActive(cr.critDef, nm.monthNum));
 
       let valBlockHtml = '';
       if (hasValInSelection) {
@@ -3138,12 +3456,17 @@
           valValClass = 'gold';
         }
 
+        const valBufferTag = allValFivePct ? '(+5%)' : (!hasValFivePct ? '(ไม่บวก 5%)' : '(+5% บางเกณฑ์)');
+        const valBufferTitle = allValFivePct 
+          ? `เป้าหมายระดับ 5 (${ms.valTargetPctDisplay}) + 5% ของคงเหลือมูลค่า AUC` 
+          : (!hasValFivePct ? `เป้าหมายระดับ 5 (${ms.valTargetPctDisplay}) ไม่บวก 5% คงเหลือ` : `เป้าหมายระดับ 5 (${ms.valTargetPctDisplay}) บวก 5% บางเกณฑ์`);
+
         const targetChipHtml = isThisValNoKpi
           ? `<span class="formula-chip no-kpi" style="background:rgba(167, 139, 250, 0.15); color:#C4B5FD; border:1px solid rgba(167, 139, 250, 0.35);">ไม่มีเกณฑ์ประเมินในเดือนนี้</span>`
           : isThisValNoWork
             ? `<span class="formula-chip" style="background:rgba(148, 163, 184, 0.15); color:#94A3B8; border:1px solid rgba(148, 163, 184, 0.35);">ไม่มีงาน AUC</span>`
-            : `<span class="formula-chip gold" title="เป้าหมายระดับ 5 (${ms.valTargetPctDisplay}) + 5% ของคงเหลือมูลค่า AUC">
-                เป้า ${ms.valTargetPctDisplay} (+5%)
+            : `<span class="formula-chip gold" title="${valBufferTitle}">
+                เป้า ${ms.valTargetPctDisplay} ${valBufferTag}
               </span>`;
 
         const subTextHtml = isThisValNoKpi
@@ -3179,15 +3502,15 @@
                 <span class="s-label">คงเหลือ:</span>
                 <span class="s-val red">${formatCurrencyShort(ms.remainValBaseCat125)}</span>
               </div>
-              <div class="source-item span-full highlight" title="5% ของคงเหลือมูลค่า AUC = ${formatCurrency(ms.fivePctRemainValCat125)}">
-                <span class="s-label">+5% ของคงเหลือ:</span>
-                <span class="s-val gold">+${formatCurrencyShort(ms.fivePctRemainValCat125)}</span>
+              <div class="source-item span-full highlight" style="${hasValFivePct ? '' : 'background:rgba(255,255,255,0.03); border-color:rgba(255,255,255,0.08);'}" title="${hasValFivePct ? `5% ของคงเหลือมูลค่า AUC = ${formatCurrency(ms.fivePctRemainValCat125)}` : 'ไม่บวก 5% ของคงเหลือตามการตั้งค่า'}">
+                <span class="s-label" style="${hasValFivePct ? '' : 'color:var(--text-muted);'}">+5% ของคงเหลือ:</span>
+                <span class="s-val ${hasValFivePct ? 'gold' : 'dim'}" style="${hasValFivePct ? '' : 'color:var(--text-dim); font-size:0.75rem;'}">${hasValFivePct ? `+${formatCurrencyShort(ms.fivePctRemainValCat125)}` : '0.00 ฿ (ไม่บวก 5%)'}</span>
               </div>
             </div>
-            <div class="next3m-source-equation" title="แทนค่าสูตรละเอียด: (${formatCurrency(ms.targetValL5Cat125)} − ${formatCurrency(ms.closedValBaseCat125)}) + ${formatCurrency(ms.fivePctRemainValCat125)} = ${formatCurrency(ms.sumReqValCat125)}">
+            <div class="next3m-source-equation" title="แทนค่าสูตรละเอียด: (${formatCurrency(ms.targetValL5Cat125)} − ${formatCurrency(ms.closedValBaseCat125)})${hasValFivePct ? ` + ${formatCurrency(ms.fivePctRemainValCat125)}` : ''} = ${formatCurrency(ms.sumReqValCat125)}">
               <span class="eq-icon">📐</span>
               <span class="eq-text">
-                แทนค่า: (${formatCurrencyShort(ms.targetValL5Cat125)} − ${formatCurrencyShort(ms.closedValBaseCat125)}) + ${formatCurrencyShort(ms.fivePctRemainValCat125)} = <strong>${isValAchieved ? '0.00 ฿ (⭐ ครบเกณฑ์ระดับ 5)' : `${valMillions} ลบ.`}</strong>
+                แทนค่า: (${formatCurrencyShort(ms.targetValL5Cat125)} − ${formatCurrencyShort(ms.closedValBaseCat125)})${hasValFivePct ? ` + ${formatCurrencyShort(ms.fivePctRemainValCat125)}` : ''} = <strong>${isValAchieved ? '0.00 ฿ (⭐ ครบเกณฑ์ระดับ 5)' : `${valMillions} ลบ.`}</strong>
               </span>
             </div>
           </div>
@@ -3233,12 +3556,17 @@
           jobValClass = 'pink';
         }
 
+        const jobBufferTag = allJobFivePct ? '(+5%)' : (!hasJobFivePct ? '(ไม่บวก 5%)' : '(+5% บางเกณฑ์)');
+        const jobBufferTitle = allJobFivePct 
+          ? `เป้าหมายระดับ 5 (${ms.jobTargetPctDisplay}) + 5% ของคงเหลืองาน AUC` 
+          : (!hasJobFivePct ? `เป้าหมายระดับ 5 (${ms.jobTargetPctDisplay}) ไม่บวก 5% คงเหลือ` : `เป้าหมายระดับ 5 (${ms.jobTargetPctDisplay}) บวก 5% บางเกณฑ์`);
+
         const targetChipHtml = isThisJobNoKpi
           ? `<span class="formula-chip no-kpi" style="background:rgba(167, 139, 250, 0.15); color:#C4B5FD; border:1px solid rgba(167, 139, 250, 0.35);">ไม่มีเกณฑ์ประเมินในเดือนนี้</span>`
           : isThisJobNoWork
             ? `<span class="formula-chip" style="background:rgba(148, 163, 184, 0.15); color:#94A3B8; border:1px solid rgba(148, 163, 184, 0.35);">ไม่มีงาน AUC</span>`
-            : `<span class="formula-chip pink" title="เป้าหมายระดับ 5 (${ms.jobTargetPctDisplay}) + 5% ของคงเหลืองาน AUC">
-                เป้า ${ms.jobTargetPctDisplay} (+5%)
+            : `<span class="formula-chip pink" title="${jobBufferTitle}">
+                เป้า ${ms.jobTargetPctDisplay} ${jobBufferTag}
               </span>`;
 
         const subTextHtml = isThisJobNoKpi
@@ -3274,15 +3602,15 @@
                 <span class="s-label">คงเหลือ:</span>
                 <span class="s-val red">${formatNumber(ms.remainJobsBaseCat34)} งาน</span>
               </div>
-              <div class="source-item span-full highlight" title="5% ของคงเหลืองาน AUC = ${formatNumber(Math.ceil(ms.fivePctRemainJobsCat34))} งาน">
-                <span class="s-label">+5% ของคงเหลือ:</span>
-                <span class="s-val pink">+${formatNumber(Math.ceil(ms.fivePctRemainJobsCat34))} งาน</span>
+              <div class="source-item span-full highlight" style="${hasJobFivePct ? '' : 'background:rgba(255,255,255,0.03); border-color:rgba(255,255,255,0.08);'}" title="${hasJobFivePct ? `5% ของคงเหลืองาน AUC = ${formatNumber(Math.ceil(ms.fivePctRemainJobsCat34))} งาน` : 'ไม่บวก 5% ของคงเหลือตามการตั้งค่า'}">
+                <span class="s-label" style="${hasJobFivePct ? '' : 'color:var(--text-muted);'}">+5% ของคงเหลือ:</span>
+                <span class="s-val ${hasJobFivePct ? 'pink' : 'dim'}" style="${hasJobFivePct ? '' : 'color:var(--text-dim); font-size:0.75rem;'}">${hasJobFivePct ? `+${formatNumber(Math.ceil(ms.fivePctRemainJobsCat34))} งาน` : '0 งาน (ไม่บวก 5%)'}</span>
               </div>
             </div>
-            <div class="next3m-source-equation" title="แทนค่าสูตรละเอียด: (${formatNumber(Math.round(ms.targetJobsL5Cat34))} − ${formatNumber(ms.closedJobsBaseCat34)}) + ${formatNumber(Math.ceil(ms.fivePctRemainJobsCat34))} = ${formatNumber(ms.sumReqJobsCat34)} งาน">
+            <div class="next3m-source-equation" title="แทนค่าสูตรละเอียด: (${formatNumber(Math.round(ms.targetJobsL5Cat34))} − ${formatNumber(ms.closedJobsBaseCat34)})${hasJobFivePct ? ` + ${formatNumber(Math.ceil(ms.fivePctRemainJobsCat34))}` : ''} = ${formatNumber(ms.sumReqJobsCat34)} งาน">
               <span class="eq-icon">📐</span>
               <span class="eq-text">
-                แทนค่า: (${formatNumber(Math.round(ms.targetJobsL5Cat34))} − ${formatNumber(ms.closedJobsBaseCat34)}) + ${formatNumber(Math.ceil(ms.fivePctRemainJobsCat34))} = <strong>${isJobAchieved ? '0 งาน (⭐ ครบเกณฑ์ระดับ 5)' : `${jobsFormatted} งาน`}</strong>
+                แทนค่า: (${formatNumber(Math.round(ms.targetJobsL5Cat34))} − ${formatNumber(ms.closedJobsBaseCat34)})${hasJobFivePct ? ` + ${formatNumber(Math.ceil(ms.fivePctRemainJobsCat34))}` : ''} = <strong>${isJobAchieved ? '0 งาน (⭐ ครบเกณฑ์ระดับ 5)' : `${jobsFormatted} งาน`}</strong>
               </span>
             </div>
           </div>
@@ -3325,6 +3653,10 @@
         </div>
       `;
     }).join('');
+
+    // Append Target +5% Config Panel in position of Yellow Box (4th card)
+    const configCardHtml = renderTargetFivePctConfigCard(fivePctCfg);
+    container.innerHTML = monthCardsHtml + configCardHtml;
 
     // 6. Render Table Rows
     if (tableBody) {
@@ -3616,6 +3948,10 @@
       }
     }
 
+    // Header KPI Badge label: แสดงเฉพาะ "KPI ระดับ 5" ตามคำสั่งผู้ใช้ (ไม่ต้องแสดง (....) ใดๆ ทั้งสิ้น)
+    const singleBarKpiBadgeText = 'KPI ระดับ 5';
+    const singleBarKpiBadgeTitle = 'เป้าหมาย KPI ระดับ 5';
+
     // Common Header row inside card with View Switcher (จัดให้ได้แบบกรอบเหลือง ตาม media_1793064734255.jpg)
     const headerMetaHtml = `
       <div class="next3m-single-bar-wrap">
@@ -3628,8 +3964,9 @@
               <span id="next3mSectionTitle">เป้าหมายที่ต้องปิดงานเพิ่ม (${startMonthName} - ${endMonthName} 2569)</span>
             </div>
             <span class="badge-pea-tag" id="next3mSingleBarKpiBadge"
+              title="${singleBarKpiBadgeTitle}"
               style="background:rgba(255,184,28,0.18); color:var(--pea-gold-400); border-color:rgba(255,184,28,0.4); font-size:0.75rem; font-weight:700; padding:0.18rem 0.55rem;">
-              KPI ระดับ 5 (+5%)
+              ${singleBarKpiBadgeText}
             </span>
             <div class="next3m-active-filter-strip" style="display:inline-flex; align-items:center; gap:0.45rem; flex-wrap:wrap; font-size:0.76rem; margin:0; padding:0.18rem 0.65rem; background:rgba(20,5,35,0.45); border-radius:var(--radius-sm, 6px); border:1px solid var(--border-subtle, rgba(255,255,255,0.1)); width:fit-content;">
               <span style="color:var(--text-dim); display:inline-flex; align-items:center; gap:4px;">
@@ -3750,11 +4087,23 @@
         segLabel = `<span class="seg-mname">${cfg.ms.monthInfo.shortName}</span> <span class="seg-kpi-badge">เป้า KPI: ${cfg.kpiPct}</span> <span class="seg-amt">(${cfg.amtStr})</span>`;
       }
 
+      const activeValCrits = criteriaResults.filter(cr => !cr.isFilteredOut && cr.critDef.type === 'val');
+      const hasValFivePct = activeValCrits.length > 0 && activeValCrits.some(cr => isCritFivePctActive(cr.critDef, cfg.ms.monthInfo.monthNum));
+      const allValFivePct = activeValCrits.length > 0 && activeValCrits.every(cr => isCritFivePctActive(cr.critDef, cfg.ms.monthInfo.monthNum));
+
+      const activeJobCrits = criteriaResults.filter(cr => !cr.isFilteredOut && cr.critDef.type === 'job');
+      const hasJobFivePct = activeJobCrits.length > 0 && activeJobCrits.some(cr => isCritFivePctActive(cr.critDef, cfg.ms.monthInfo.monthNum));
+      const allJobFivePct = activeJobCrits.length > 0 && activeJobCrits.every(cr => isCritFivePctActive(cr.critDef, cfg.ms.monthInfo.monthNum));
+
+      const hoverBufferTag = isVal 
+        ? (allValFivePct ? '(+5%)' : (!hasValFivePct ? '(ไม่บวก 5%)' : '(+5% บางเกณฑ์)'))
+        : (allJobFivePct ? '(+5%)' : (!hasJobFivePct ? '(ไม่บวก 5%)' : '(+5% บางเกณฑ์)'));
+
       const hoverTitle = cfg.isNoKpi
         ? `${cfg.ms.monthInfo.fullName}: (ไม่มีเกณฑ์ประเมินในเดือนนี้)`
         : cfg.isNoWork
           ? `${cfg.ms.monthInfo.fullName}: (ไม่มีงานและมูลค่า AUC)`
-          : (cfg.isAchieved ? `${cfg.ms.monthInfo.fullName}: บรรลุเป้าหมายเกณฑ์ระดับ 5 แล้ว (${cfg.amtStr}) [เป้าหมาย KPI: ${cfg.kpiPct} (+5%)]` : `${cfg.ms.monthInfo.fullName}: ต้องปิดเพิ่ม ${cfg.amtStr} [เป้าหมาย KPI: ${cfg.kpiPct} (+5%)] คิดเป็น ${((cfg.amt / (totalRequired || 1)) * 100).toFixed(1)}% ของยอดรวม`);
+          : (cfg.isAchieved ? `${cfg.ms.monthInfo.fullName}: บรรลุเป้าหมายเกณฑ์ระดับ 5 แล้ว (${cfg.amtStr}) [เป้าหมาย KPI: ${cfg.kpiPct} ${hoverBufferTag}]` : `${cfg.ms.monthInfo.fullName}: ต้องปิดเพิ่ม ${cfg.amtStr} [เป้าหมาย KPI: ${cfg.kpiPct} ${hoverBufferTag}] คิดเป็น ${((cfg.amt / (totalRequired || 1)) * 100).toFixed(1)}% ของยอดรวม`);
 
       return `
         <div class="single-bar-segment seg-${idx + 1}" style="width: ${pctShare.toFixed(1)}%; ${(cfg.isNoKpi || cfg.isNoWork) ? 'filter: grayscale(0.8) opacity(0.5);' : ''}"
@@ -4281,13 +4630,24 @@
   // 8. CHARTS RENDERING (DASHBOARD)
   // ==========================================
   function renderDashboardCharts() {
-    renderCriteriaComparisonBar();
-    renderRadarProvincialKpi();
-    renderMonthlyTimelineChart();
-    renderMonthlyAmountTimelineChart();
-    renderOfficePercentBarChart();
-    if (typeof syncExecutiveDonutCardHeight === 'function') {
-      syncExecutiveDonutCardHeight();
+    window.__renderDashLog = [];
+    try {
+      window.__renderDashLog.push('renderCriteriaComparisonBar');
+      renderCriteriaComparisonBar();
+      window.__renderDashLog.push('renderRadarProvincialKpi');
+      renderRadarProvincialKpi();
+      window.__renderDashLog.push('renderMonthlyTimelineChart');
+      renderMonthlyTimelineChart();
+      window.__renderDashLog.push('renderMonthlyAmountTimelineChart');
+      renderMonthlyAmountTimelineChart();
+      window.__renderDashLog.push('renderOfficePercentBarChart');
+      renderOfficePercentBarChart();
+      if (typeof syncExecutiveDonutCardHeight === 'function') {
+        syncExecutiveDonutCardHeight();
+      }
+      window.__renderDashLog.push('done');
+    } catch(err) {
+      window.__renderDashErr = err.toString() + '\n' + (err.stack || '');
     }
   }
 
@@ -7900,6 +8260,7 @@
   };
 
   function renderCriteriaComparisonBar() {
+    window.renderCriteriaComparisonBar = renderCriteriaComparisonBar;
     const canvas = document.getElementById('criteriaComparisonChart');
     if (!canvas) return;
 
