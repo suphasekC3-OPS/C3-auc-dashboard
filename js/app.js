@@ -1864,6 +1864,7 @@
       if (tabId === 'tab-data-history' && window.renderDataHistoryTab) window.renderDataHistoryTab();
     }, 50);
   }
+  window.switchTab = switchTab;
 
   // ==========================================
   // 4. RENDER ALL COMPONENTS
@@ -3608,7 +3609,7 @@
       }
     }
 
-    // Common Header row inside card with View Switcher
+    // Common Header row inside card with View Switcher (จัดให้ได้แบบกรอบเหลือง ตาม media_1793064734255.jpg)
     const headerMetaHtml = `
       <div class="next3m-single-bar-wrap">
         <div class="single-bar-meta">
@@ -3623,6 +3624,19 @@
               style="background:rgba(255,184,28,0.18); color:var(--pea-gold-400); border-color:rgba(255,184,28,0.4); font-size:0.75rem; font-weight:700; padding:0.18rem 0.55rem;">
               KPI ระดับ 5 (+5%)
             </span>
+            <div class="next3m-active-filter-strip" style="display:inline-flex; align-items:center; gap:0.45rem; flex-wrap:wrap; font-size:0.76rem; margin:0; padding:0.18rem 0.65rem; background:rgba(20,5,35,0.45); border-radius:var(--radius-sm, 6px); border:1px solid var(--border-subtle, rgba(255,255,255,0.1)); width:fit-content;">
+              <span style="color:var(--text-dim); display:inline-flex; align-items:center; gap:4px;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+                </svg>
+                ตัวกรองที่เลือก:
+              </span>
+              <strong id="next3mSelectedCritName" style="color:var(--pea-gold-400);">${escapeHtml(activeCritName)}</strong>
+              <span class="badge-pea-tag" id="next3mSelectedUnitBadge" style="background:rgba(236,72,153,0.18); color:#F472B6; border-color:rgba(236,72,153,0.4); font-size:0.72rem; padding:0.12rem 0.45rem;">
+                ${escapeHtml(activeUnitLabel)}
+              </span>
+              <span id="next3mSelectedScopeText" style="color:var(--text-muted); font-size:0.74rem;">${escapeHtml(scopeText)}</span>
+            </div>
             ${isAllNoKpi ? '<span style="color:#C4B5FD; font-size:0.8rem; font-weight:600;">(ไม่มีเกณฑ์ประเมินในช่วงเดือนนี้)</span>' : (isAllNoWork ? '<span style="color:#94A3B8; font-size:0.8rem; font-weight:600;">(ไม่มีงานและมูลค่า AUC)</span>' : '')}
           </div>
           <div class="single-bar-actions" style="display:flex; align-items:center; gap:0.4rem; margin-left:auto; flex-wrap:wrap;">
@@ -3652,58 +3666,6 @@
               <span id="next3mCardsLockIcon" style="font-size:0.82rem; line-height:1;">${window.isTargetCardsAuthenticated && window.isTargetCardsAuthenticated() ? '🔓' : '🔒'}</span>
               <span id="next3mCardsToggleText">${isNext3mCardsExpanded ? 'ซ่อนการ์ดเป้าหมาย' : 'แสดงการ์ดเป้าหมาย'}</span>
             </button>
-            <button type="button" class="btn-fullscreen" onclick="toggleCardFullscreen(this)" title="${isCardFullscreen ? 'ย่อขนาดปกติ (ESC)' : 'ขยายกราฟเต็มหน้าจอ'}"
-              style="padding:0.18rem 0.55rem; font-size:0.74rem;">
-              ${isCardFullscreen ? `
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M4 14h6m0 0v6m0-6L3 21m17-7h-6m0 0v6m0-6l7 7M4 10h6m0 0V4m0 6L3 3m17 7h-6m0 0V4m0 6l7-7"></path>
-                </svg>
-                <span>ย่อขนาดปกติ</span>
-              ` : `
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
-                </svg>
-                <span>ขยายเต็มจอ</span>
-              `}
-            </button>
-          </div>
-        </div>
-
-        <!-- Row 2: Selected Filter Display Strip & Fullscreen Stats Strip (แสดงเฉพาะขยายเต็มหน้าจอ ตามตำแหน่งวงกลมแดง) -->
-        <div class="next3m-substrip-row" style="display:flex; align-items:center; gap:0.65rem; flex-wrap:wrap; margin:0.35rem 0 0.55rem 0;">
-          <div class="next3m-active-filter-strip" style="display:inline-flex; align-items:center; gap:0.45rem; flex-wrap:wrap; font-size:0.76rem; margin:0; padding:0.22rem 0.65rem; background:rgba(20,5,35,0.45); border-radius:var(--radius-sm, 6px); border:1px solid var(--border-subtle, rgba(255,255,255,0.1)); width:fit-content;">
-            <span style="color:var(--text-dim); display:inline-flex; align-items:center; gap:4px;">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
-              </svg>
-              ตัวกรองที่เลือก:
-            </span>
-            <strong id="next3mSelectedCritName" style="color:var(--pea-gold-400);">${escapeHtml(activeCritName)}</strong>
-            <span class="badge-pea-tag" id="next3mSelectedUnitBadge" style="background:rgba(236,72,153,0.18); color:#F472B6; border-color:rgba(236,72,153,0.4); font-size:0.72rem; padding:0.12rem 0.45rem;">
-              ${escapeHtml(activeUnitLabel)}
-            </span>
-            <span id="next3mSelectedScopeText" style="color:var(--text-muted); font-size:0.74rem;">${escapeHtml(scopeText)}</span>
-          </div>
-
-          <!-- Fullscreen Stats Strip (เฉพาะหน้าขยายเต็มหน้าจอ ตามตำแหน่งวงกลมแดง) -->
-          <div class="next3m-fullscreen-stats-strip" id="next3mFullscreenStatsStrip" title="สรุปภาพรวม AUC ตามตัวกรองปัจจุบัน (เฉพาะโหมดขยายเต็มหน้าจอ)">
-            <div class="fs-stat-block" title="รวมมูลค่า AUC ทั้งสิ้น: ${fsTotVal > 0 ? formatCurrency(fsTotVal) + ' / ' : ''}${formatNumber(fsTotJobs)} งาน">
-              <span class="fs-stat-dot" style="background:#FFB81C; box-shadow:0 0 6px rgba(255,184,28,0.6);"></span>
-              <span class="fs-stat-label">ภาพรวมมูลค่างาน / งาน:</span>
-              <span class="fs-stat-val" style="color:var(--pea-gold-400);">${fsTotalDisplay}</span>
-            </div>
-            <span class="fs-stat-divider">|</span>
-            <div class="fs-stat-block" title="ปิดงานแล้วล่าสุด: ${fsTotVal > 0 ? formatCurrency(fsClosedVal) + ' / ' : ''}${formatNumber(fsClosedJobs)} งาน (${isCrit3or4 ? fsJobPct : fsValPct})">
-              <span class="fs-stat-dot" style="background:#10B981; box-shadow:0 0 6px rgba(16,185,129,0.6);"></span>
-              <span class="fs-stat-label">ปิดแล้ว:</span>
-              <span class="fs-stat-val" style="color:#34D399;">${fsClosedDisplay}</span>
-            </div>
-            <span class="fs-stat-divider">|</span>
-            <div class="fs-stat-block" title="คงเหลือ: ${fsTotVal > 0 ? formatCurrency(fsRemainVal) + ' / ' : ''}${formatNumber(fsRemainJobs)} งาน">
-              <span class="fs-stat-dot" style="background:#EF4444; box-shadow:0 0 6px rgba(239,68,68,0.6);"></span>
-              <span class="fs-stat-label">คงเหลือ:</span>
-              <span class="fs-stat-val" style="color:#F87171;">${fsRemainDisplay}</span>
-            </div>
           </div>
         </div>
       </div>
@@ -9248,6 +9210,57 @@
       togglePalettePanel(false);
     }
   });
+
+  /**
+   * ==========================================
+   * RETURN TO NORMAL SCREEN (คืนหน้าจอปกติ)
+   * แสดงเฉพาะหน้าจอขยายเท่านั้น ไม่แสดงในหน้าจอหลัก
+   * เมื่อกด: ย่อขนาดออกจากโหมดเต็มจอ คืนสู่หน้าจอปกติ
+   * ==========================================
+   */
+  window.returnToNormalScreen = function () {
+    // 1. Exit fullscreen from table or any card
+    const fullTable = document.querySelector('.table-card.is-fullscreen');
+    if (fullTable) {
+      fullTable.classList.remove('is-fullscreen');
+    }
+    const fullCard = document.querySelector('.content-card.is-fullscreen');
+    if (fullCard) {
+      fullCard.classList.remove('is-fullscreen');
+    }
+    document.body.classList.remove('has-fullscreen-chart', 'has-fullscreen-table');
+
+    // 2. Reset fullscreen toggle button labels & icons
+    document.querySelectorAll('.btn-wbs-fullscreen, .btn-fullscreen').forEach(b => {
+      b.setAttribute('title', 'ขยายตารางเต็มหน้าจอ');
+      b.innerHTML = `
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+        </svg>
+        <span>ขยายเต็มจอ</span>
+      `;
+    });
+
+    // 3. Ensure responsive re-render and scrollbars update
+    setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));
+      if (window.updateWbsLeftScrollbar) window.updateWbsLeftScrollbar();
+      if (state && state.charts) {
+        Object.values(state.charts).forEach(c => {
+          if (c && typeof c.resize === 'function' && typeof c.render === 'function') {
+            c.resize();
+            c.render();
+          }
+        });
+      }
+    }, 60);
+
+    // 4. Notify user
+    if (window.showToast) {
+      window.showToast('🖥️ คืนสู่หน้าจอปกติเรียบร้อยแล้ว', 'info');
+    }
+  };
+  window.returnToMainScreen = window.returnToNormalScreen;
 
   // ==========================================
   // 16. COLOR PALETTE & BACKGROUND MANAGER

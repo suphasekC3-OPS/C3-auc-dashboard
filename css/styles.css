@@ -4774,42 +4774,145 @@ body.has-fullscreen-chart {
   color: #1F2937;
 }
 
-/* แสดงเฉพาะเวลาเปิดหน้าขยายเต็มหน้าจอ (is-fullscreen) เท่านั้น */
+/* ยกเลิกตัวกรองเดิมในหัวการ์ดหรือตารางเมื่อขยายเต็มจอ ตามคำสั่งผู้ใช้ ให้เปลี่ยนเป็นแถบตัวกรองรูป 5 เหมือนกันทั้งหมด */
+.card-header-filters,
 .content-card.is-fullscreen .card-header-filters {
+  display: none !important;
+}
+
+/* ==========================================================================
+   Unified Fullscreen Filter Bar (ตามรูป 5 - แสดงบนสุดในทุกหน้าขยายเต็มจอ)
+   ========================================================================== */
+body.has-fullscreen-chart .sticky-top-section,
+body.has-fullscreen-table .sticky-top-section {
+  position: static !important;
+  z-index: auto !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+body.has-fullscreen-chart .app-header,
+body.has-fullscreen-chart .nav-tabs-bar,
+body.has-fullscreen-table .app-header,
+body.has-fullscreen-table .nav-tabs-bar {
+  display: none !important;
+}
+
+body.has-fullscreen-chart .crit-dd-panel,
+body.has-fullscreen-table .crit-dd-panel {
+  z-index: 100010 !important;
+}
+
+body.has-fullscreen-chart #topStickyFilterBar,
+body.has-fullscreen-table #topStickyFilterBar {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100vw !important;
+  z-index: 100005 !important;
+  display: block !important;
+  margin: 0 !important;
+  padding: 0.45rem 1.25rem !important;
+  background: rgba(23, 4, 38, 0.96) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border-bottom: 1.5px solid rgba(255, 184, 28, 0.45) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.75) !important;
+}
+
+[data-theme="light"] body.has-fullscreen-chart #topStickyFilterBar,
+[data-theme="light"] body.has-fullscreen-table #topStickyFilterBar {
+  background: rgba(255, 255, 255, 0.97) !important;
+  border-bottom: 1.5px solid #D97706 !important;
+}
+
+.content-card.is-fullscreen {
+  padding-top: calc(52px + 1.25rem) !important;
+}
+
+.table-card.is-fullscreen {
+  padding-top: calc(52px + 0.85rem) !important;
+}
+
+.table-card.is-fullscreen .wbs-table-active-criteria {
+  display: none !important;
+}
+
+/* ==========================================================================
+   Return to Normal Screen Button (ปุ่มคืนหน้าจอปกติ - แสดงเฉพาะหน้าจอขยายเท่านั้น ไม่แสดงในหน้าจอหลัก)
+   ========================================================================== */
+.btn-return-main-screen,
+#btnReturnNormalScreen,
+#btnReturnMainScreen {
+  display: none !important;
+}
+
+/* แสดงเฉพาะเมื่อขยายเต็มจอเท่านั้น (FullScreen Mode Only) ในตำแหน่งกรอบสีแดง */
+body.has-fullscreen-table #btnReturnNormalScreen,
+body.has-fullscreen-table #btnReturnMainScreen,
+body.has-fullscreen-chart #btnReturnNormalScreen,
+body.has-fullscreen-chart #btnReturnMainScreen {
   display: inline-flex !important;
-  align-items: center;
-  gap: 0.5rem;
-  margin-right: 0.85rem;
-  flex-wrap: wrap;
+  position: fixed !important;
+  top: 58px !important;
+  right: 20px !important;
+  z-index: 100010 !important;
+  padding: 0.45rem 1.05rem !important;
+  font-size: 0.88rem !important;
+  font-weight: 700 !important;
+  color: #FFFFFF !important;
+  background: linear-gradient(135deg, #7E22CE 0%, #A855F7 50%, #C026D3 100%) !important;
+  border: 1.5px solid #FFD25A !important;
+  border-radius: 10px !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.65), 0 0 14px rgba(255, 210, 90, 0.45) !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  letter-spacing: 0.02em !important;
+  animation: pulseReturnGlow 2.5s infinite alternate !important;
 }
 
-.content-card.is-fullscreen .header-filter-item {
-  padding: 0.28rem 0.65rem;
-  background: rgba(38, 9, 62, 0.85);
-  border: 1.5px solid rgba(216, 180, 254, 0.4);
-  border-radius: 9px;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.4);
+body.has-fullscreen-table #btnReturnNormalScreen:hover,
+body.has-fullscreen-table #btnReturnMainScreen:hover,
+body.has-fullscreen-chart #btnReturnNormalScreen:hover,
+body.has-fullscreen-chart #btnReturnMainScreen:hover {
+  background: linear-gradient(135deg, #9333EA 0%, #C084FC 50%, #E879F9 100%) !important;
+  border-color: #FFE082 !important;
+  box-shadow: 0 6px 22px rgba(168, 85, 247, 0.7), 0 0 18px rgba(255, 210, 90, 0.6) !important;
+  transform: translateY(-2px) !important;
 }
 
-.content-card.is-fullscreen .header-filter-select {
-  font-size: 0.82rem;
-  max-width: 170px;
+@keyframes pulseReturnGlow {
+  0% {
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.65), 0 0 10px rgba(255, 210, 90, 0.3);
+  }
+  100% {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.75), 0 0 18px rgba(255, 210, 90, 0.65);
+  }
 }
 
-.content-card.is-fullscreen .header-filter-select.select-chart-month {
-  max-width: 135px;
+/* Light Theme support */
+[data-theme="light"] body.has-fullscreen-table #btnReturnNormalScreen,
+[data-theme="light"] body.has-fullscreen-table #btnReturnMainScreen,
+[data-theme="light"] body.has-fullscreen-chart #btnReturnNormalScreen,
+[data-theme="light"] body.has-fullscreen-chart #btnReturnMainScreen {
+  background: linear-gradient(135deg, #6D28D9 0%, #7C3AED 50%, #9333EA 100%) !important;
+  border: 1.5px solid #D97706 !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2), 0 0 12px rgba(217, 119, 6, 0.35) !important;
+  color: #FFFFFF !important;
 }
 
-.content-card.is-fullscreen .header-filter-select.select-chart-crit {
-  max-width: 220px;
-}
-
-.content-card.is-fullscreen .header-filter-select.select-chart-prov {
-  max-width: 145px;
-}
-
-.content-card.is-fullscreen .header-filter-select.select-chart-off {
-  max-width: 165px;
+@media (max-width: 768px) {
+  body.has-fullscreen-table #btnReturnNormalScreen,
+  body.has-fullscreen-table #btnReturnMainScreen,
+  body.has-fullscreen-chart #btnReturnNormalScreen,
+  body.has-fullscreen-chart #btnReturnMainScreen {
+    top: 54px !important;
+    right: 10px !important;
+    padding: 0.35rem 0.65rem !important;
+    font-size: 0.78rem !important;
+  }
 }
 
 /* ==========================================================================
@@ -9118,6 +9221,26 @@ body.has-fullscreen-table {
   font-size: 0.82rem;
 }
 
+.next3m-active-filter-strip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+  font-size: 0.76rem;
+  margin: 0;
+  padding: 0.22rem 0.65rem;
+  background: rgba(20, 5, 35, 0.45);
+  border-radius: var(--radius-sm, 6px);
+  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.1));
+  width: fit-content;
+}
+
+[data-theme="light"] .next3m-active-filter-strip {
+  background: rgba(241, 245, 249, 0.92) !important;
+  border-color: rgba(203, 213, 225, 0.85) !important;
+  color: #1E293B;
+}
+
 .single-bar-left-tags {
   display: inline-flex;
   align-items: center;
@@ -10096,37 +10219,13 @@ body.has-fullscreen-table {
 }
 
 /* ========================================================
-   Next 3M Fullscreen Stats Strip (แสดงเฉพาะหน้าขยายเต็มหน้าจอ ตามตำแหน่งวงกลมแดง)
+   Next 3M Fullscreen Stats Strip (ยกเลิกและปิดการแสดงผลตามคำสั่งผู้ใช้งาน)
    ======================================================== */
-.next3m-fullscreen-stats-strip {
-  display: none !important;
-}
-
+.next3m-fullscreen-stats-strip,
 .unified-projection-office-card.is-fullscreen .next3m-fullscreen-stats-strip,
 .content-card.is-fullscreen .next3m-fullscreen-stats-strip,
 .has-fullscreen-chart .unified-projection-office-card .next3m-fullscreen-stats-strip {
-  display: inline-flex !important;
-  align-items: center;
-  gap: 0.95rem;
-  font-size: 0.95rem;
-  padding: 0.38rem 1.15rem;
-  background: rgba(20, 5, 35, 0.78);
-  border-radius: var(--radius-sm, 8px);
-  border: 1px solid rgba(255, 184, 28, 0.45);
-  box-shadow: 0 0 16px rgba(255, 184, 28, 0.18);
-  color: var(--text-normal, #E2E8F0);
-  white-space: nowrap;
-  user-select: none;
-  animation: fadeIn 0.25s ease;
-}
-
-[data-theme="light"] .unified-projection-office-card.is-fullscreen .next3m-fullscreen-stats-strip,
-[data-theme="light"] .content-card.is-fullscreen .next3m-fullscreen-stats-strip,
-[data-theme="light"] .has-fullscreen-chart .unified-projection-office-card .next3m-fullscreen-stats-strip {
-  background: rgba(255, 255, 255, 0.98);
-  border-color: rgba(217, 119, 6, 0.45);
-  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.18);
-  color: #1F2937;
+  display: none !important;
 }
 
 .unified-projection-office-card.is-fullscreen .next3m-active-filter-strip,
@@ -16830,6 +16929,10 @@ body.theme-light .bar-sap-date-plain:hover {
   animation: fadeInScale 0.16s ease-out;
 }
 
+#wbsPlanCloseThDropdownPanel {
+  width: 235px;
+}
+
 .sap-dropdown-panel-header {
   display: flex;
   align-items: center;
@@ -16894,6 +16997,11 @@ body.theme-light .bar-sap-date-plain:hover {
 }
 
 .sap-dropdown-item.is-selected .badge-sap-short {
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
+  filter: brightness(1.15);
+}
+
+.sap-dropdown-item.is-selected .badge-plan-close {
   box-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
   filter: brightness(1.15);
 }

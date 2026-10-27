@@ -21,6 +21,42 @@
     { id: '06_sheet', label: 'แผนงานแล้วเสร็จ (G-Sheet)', icon: '📅' }
   ];
 
+  // LocalStorage keys for Google Sheet synchronization persistence
+  const WBS_SHEET_CACHE_KEY = 'AUC_WBS_SYNCED_SHEET_DATA_V1';
+  const WBS_SHEET_TIME_KEY = 'AUC_WBS_SYNCED_SHEET_TIME_V1';
+  const WBS_SHEET_OPTIONS_KEY = 'AUC_WBS_SYNCED_PLAN_OPTIONS_V1';
+
+  /**
+   * Helper: Format Google Sheet sync time for display in table header & top badges
+   */
+  function getGoogleSheetSyncTimeText(includeTime = true) {
+    const savedTime = localStorage.getItem(WBS_SHEET_TIME_KEY);
+    const thMonths = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+    if (savedTime && Number(savedTime) > 0) {
+      const d = new Date(Number(savedTime));
+      const day = d.getDate();
+      const mStr = thMonths[d.getMonth()];
+      const yStr = String(d.getFullYear() + 543).slice(-2);
+      const timeStr = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')} น.`;
+      return includeTime ? `ซิงค์ล่าสุด: ${day} ${mStr} ${yStr} ${timeStr}` : `ซิงค์ล่าสุด: ${day} ${mStr} ${yStr}`;
+    }
+    return includeTime ? `ซิงค์ล่าสุด: 26 ต.ค. 69 22:30 น.` : `ซิงค์ล่าสุด: 26 ต.ค. 69`;
+  }
+
+  function getGoogleSheetFullSyncTimeText() {
+    const savedTime = localStorage.getItem(WBS_SHEET_TIME_KEY);
+    const thMonths = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+    if (savedTime && Number(savedTime) > 0) {
+      const d = new Date(Number(savedTime));
+      const day = d.getDate();
+      const mStr = thMonths[d.getMonth()];
+      const yStr = d.getFullYear() + 543;
+      const timeStr = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:${String(d.getSeconds()).padStart(2, '0')} น.`;
+      return `${day} ${mStr} ${yStr} เวลา ${timeStr}`;
+    }
+    return `26 ต.ค. 2569 เวลา 22:30 น.`;
+  }
+
   // Comprehensive Column definitions (03 WBS base + 04 WBS ZBUDR064 + 05 WBS CN41 + 06 WBS CN41)
   const WBS_COL_DEFS = [
     // --- Group 1: File 03 Base Columns ---
@@ -77,7 +113,7 @@
     { id: 'cn41Row', label: 'ลำดับ CN41 (.)', width: '65px', align: 'center', sortKey: 'cn41Row', defaultVisible: false, group: '06_cn41' },
 
     // --- Group 7: Google Sheet แผนงานแล้วเสร็จ ---
-    { id: 'planClose', label: 'แผนปิดงาน (G-Sheet)', minWidth: '115px', width: '120px', align: 'center', sortKey: 'planClose', defaultVisible: true, group: '06_sheet' },
+    { id: 'planClose', label: 'แผนปิดงาน (G-Sheet)', minWidth: '125px', width: '130px', align: 'center', sortKey: 'planClose', defaultVisible: true, group: '06_sheet' },
     { id: 'note', label: 'หมายเหตุ (G-Sheet)', minWidth: '135px', align: 'left', sortKey: 'note', defaultVisible: true, group: '06_sheet' }
   ];
 
@@ -228,6 +264,7 @@
     sapStatus: 'ALL',
     selectedSapStatuses: new Set(),
     tableSapStatuses: new Set(),
+    tablePlanCloseStatuses: new Set(),
     selectedWbs: new Set(),
     selectionCriteriaKey: '',
     selectionInitialized: false,
@@ -341,7 +378,7 @@
   /**
    * Get filtered WBS records based on both Top Global Filters and In-table Filters
    */
-  function getFilteredWbsData(skipLocalOffice = false, skipLocalSap = false, skipTableSap = false) {
+  function getFilteredWbsData(skipLocalOffice = false, skipLocalSap = false, skipTableSap = false, skipTablePlanClose = false) {
     const rawData = window.AUC_WBS_REMAINING_DATA;
     if (!rawData || !Array.isArray(rawData)) return [];
 
@@ -466,6 +503,14 @@
         }
       }
 
+      // 11. Table Header Multi-select Plan Close (งวดบัญชี) Dropdown Filter (กรองเฉพาะในตาราง WBS หน้านั้นเท่านั้น)
+      if (!skipTablePlanClose && wbsState.tablePlanCloseStatuses && wbsState.tablePlanCloseStatuses.size > 0) {
+        const itemPlan = (item.planClose && item.planClose.trim()) ? item.planClose.trim() : 'EMPTY';
+        if (!wbsState.tablePlanCloseStatuses.has(itemPlan)) {
+          return false;
+        }
+      }
+
       return true;
     });
   }
@@ -520,10 +565,10 @@
       });
     }
 
-    const baseFiltered = getFilteredWbsData(true, true, true);
-    const sapFiltered = getFilteredWbsData(false, true, true);
-    const filtered = getFilteredWbsData(false, false, true);
-    const tableFiltered = getFilteredWbsData(false, false, false);
+    const baseFiltered = getFilteredWbsData(true, true, true, true);
+    const sapFiltered = getFilteredWbsData(false, true, true, true);
+    const filtered = getFilteredWbsData(false, false, true, true);
+    const tableFiltered = getFilteredWbsData(false, false, false, false);
     const sorted = sortWbsData(tableFiltered);
 
     // Get current criteria & determine excluded closed SAP status:
@@ -576,7 +621,7 @@
 
     // 7. Render Visual Charts: หากเลือกสถานะ SAP ที่การ์ด ให้กราฟแสดงเฉพาะที่เลือกในการ์ด ทุกๆ สถานะ
     const hasSapFilter = (wbsState.selectedSapStatuses && wbsState.selectedSapStatuses.size > 0) || (wbsState.sapStatus && wbsState.sapStatus !== 'ALL');
-    const chartFiltered = hasSapFilter ? getFilteredWbsData(true, false, true) : baseFiltered;
+    const chartFiltered = hasSapFilter ? getFilteredWbsData(true, false, true, true) : baseFiltered;
     renderWbsCharts(chartFiltered);
   }
 
@@ -1440,6 +1485,263 @@
     }
   };
 
+  /* ==========================================================================
+   * WBS Table Header: Multi-select Plan Close (งวดบัญชี) Dropdown Filter Functions
+   * ========================================================================== */
+
+  /**
+   * Render Plan Close (งวดบัญชี) Multi-select Dropdown List Items inside #wbsPlanCloseThDropdownList
+   */
+  function renderWbsPlanCloseThDropdownList() {
+    const listContainer = document.getElementById('wbsPlanCloseThDropdownList');
+    if (!listContainer) return;
+
+    // ดึงข้อมูลก่อนกรองงวดบัญชีในตาราง เพื่อให้ได้ทุกงวดบัญชีที่มีในชุดข้อมูลปัจจุบัน
+    const planFiltered = getFilteredWbsData(false, false, false, true);
+    if (!planFiltered || !planFiltered.length) {
+      listContainer.innerHTML = '<div style="padding:0.75rem; text-align:center; color:var(--text-muted); font-size:0.8rem;">ไม่พบข้อมูลงวดบัญชี</div>';
+      return;
+    }
+
+    const planMap = {};
+    planFiltered.forEach(item => {
+      const p = (item.planClose && item.planClose.trim()) ? item.planClose.trim() : 'EMPTY';
+      if (!planMap[p]) {
+        planMap[p] = { plan: p, count: 0 };
+      }
+      planMap[p].count++;
+    });
+
+    const planMonthRank = (plan) => {
+      if (!plan || plan === 'EMPTY') return 999;
+      if (plan.includes('ต.ค.')) return 10;
+      if (plan.includes('พ.ย.')) return 11;
+      if (plan.includes('ธ.ค.')) return 12;
+      if (plan.includes('ม.ค.')) return 1;
+      if (plan.includes('ก.พ.')) return 2;
+      if (plan.includes('มี.ค.')) return 3;
+      if (plan.includes('เม.ย.')) return 4;
+      if (plan.includes('พ.ค.')) return 5;
+      if (plan.includes('มิ.ย.')) return 6;
+      if (plan.includes('ก.ค.')) return 7;
+      if (plan.includes('ส.ค.')) return 8;
+      if (plan.includes('ก.ย.')) return 9;
+      return 100;
+    };
+
+    const sortedPlans = Object.keys(planMap).sort((a, b) => {
+      const rankA = planMonthRank(a);
+      const rankB = planMonthRank(b);
+      if (rankA !== rankB) return rankA - rankB;
+      return a.localeCompare(b, 'th');
+    });
+
+    const activeSet = wbsState.tablePlanCloseStatuses || new Set();
+    const hasFilter = activeSet.size > 0;
+
+    let itemsHtml = '';
+    sortedPlans.forEach(plan => {
+      const statInfo = planMap[plan] || { count: 0 };
+      const isChecked = activeSet.has(plan);
+      const isNullPlan = (plan === 'EMPTY');
+      const displayLabel = isNullPlan ? 'ยังไม่มีแผน' : plan;
+      const badgeStyle = isNullPlan
+        ? 'background: rgba(100, 116, 139, 0.16); color: #94A3B8; border-color: rgba(100, 116, 139, 0.35);'
+        : '';
+      const badgeIcon = isNullPlan ? '⚪' : '📅';
+
+      itemsHtml += `
+        <div class="sap-dropdown-item ${isChecked ? 'is-selected' : ''}" 
+             onclick="window.toggleWbsPlanCloseDropdownStatus('${escapeHtml(plan)}', event)"
+             title="คลิกเพื่อเลือก / ปลดงวดบัญชี ${escapeHtml(displayLabel)} (${statInfo.count.toLocaleString('th-TH')} งาน)">
+          <span class="badge-plan-close" style="${badgeStyle}">${badgeIcon} ${escapeHtml(displayLabel)}</span>
+          <span class="sap-dropdown-item-count">${statInfo.count.toLocaleString('th-TH')} งาน</span>
+        </div>
+      `;
+    });
+
+    listContainer.innerHTML = itemsHtml;
+
+    // Update count badge in header if exists
+    const badgeEl = document.getElementById('wbsPlanCloseDropdownCountBadge');
+    if (badgeEl) {
+      if (hasFilter) {
+        badgeEl.textContent = `(เลือก ${activeSet.size}/${sortedPlans.length})`;
+        badgeEl.style.color = '#38BDF8';
+      } else {
+        badgeEl.textContent = `(ทุกงวด ${sortedPlans.length})`;
+        badgeEl.style.color = 'var(--pea-gold-400)';
+      }
+    }
+
+    // Update summary text in footer
+    const summaryEl = document.getElementById('wbsPlanCloseDropdownSummaryText');
+    if (summaryEl) {
+      if (!hasFilter) {
+        const totalAll = Object.values(planMap).reduce((sum, s) => sum + s.count, 0);
+        summaryEl.textContent = `แสดงทุกงวดบัญชี (${sortedPlans.length} รายการ: ${totalAll.toLocaleString('th-TH')} งาน)`;
+      } else {
+        const totalJobs = Array.from(activeSet).reduce((sum, s) => sum + (planMap[s] ? planMap[s].count : 0), 0);
+        summaryEl.textContent = `กรอง ${activeSet.size} งวดบัญชี (${totalJobs.toLocaleString('th-TH')} งาน)`;
+      }
+    }
+  }
+
+  /**
+   * Reposition Multi-select Plan Close Dropdown directly under button
+   */
+  function repositionWbsPlanCloseDropdown() {
+    const panel = document.getElementById('wbsPlanCloseThDropdownPanel');
+    const btn = document.getElementById('btnWbsPlanCloseThDropdown');
+    if (!panel || panel.style.display === 'none' || !btn) return;
+
+    if (panel.parentNode !== document.body) {
+      document.body.appendChild(panel);
+    }
+
+    const rect = btn.getBoundingClientRect();
+    const panelWidth = 235;
+    let left = rect.left + (rect.width / 2) - (panelWidth / 2);
+    if (left + panelWidth > window.innerWidth - 12) {
+      left = window.innerWidth - panelWidth - 12;
+    }
+    if (left < 12) left = 12;
+
+    const top = rect.bottom + 4;
+
+    const listEl = document.getElementById('wbsPlanCloseThDropdownList');
+    if (listEl) {
+      const availableHeight = Math.max(120, window.innerHeight - top - 75);
+      listEl.style.maxHeight = `${Math.min(260, availableHeight)}px`;
+    }
+
+    panel.style.position = 'fixed';
+    panel.style.top = `${top}px`;
+    panel.style.left = `${left}px`;
+    panel.style.zIndex = '999999';
+  }
+
+  /**
+   * Toggle Multi-select Plan Close Dropdown Popover
+   */
+  window.toggleWbsPlanCloseThDropdown = function (evt) {
+    if (evt) evt.stopPropagation();
+    const panel = document.getElementById('wbsPlanCloseThDropdownPanel');
+    if (!panel) return;
+
+    const isVisible = panel.style.display !== 'none';
+    if (isVisible) {
+      window.closeWbsPlanCloseThDropdown();
+      return;
+    }
+
+    // Close SAP dropdown if open
+    window.closeWbsSapThDropdown();
+
+    renderWbsPlanCloseThDropdownList();
+
+    const btn = document.getElementById('btnWbsPlanCloseThDropdown') || (evt && evt.currentTarget);
+    if (btn) btn.classList.add('is-open');
+
+    panel.style.display = 'flex';
+    repositionWbsPlanCloseDropdown();
+
+    window.removeEventListener('scroll', repositionWbsPlanCloseDropdown, true);
+    window.addEventListener('scroll', repositionWbsPlanCloseDropdown, true);
+    window.removeEventListener('resize', repositionWbsPlanCloseDropdown);
+    window.addEventListener('resize', repositionWbsPlanCloseDropdown);
+  };
+
+  /**
+   * Close Multi-select Plan Close Dropdown Popover
+   */
+  window.closeWbsPlanCloseThDropdown = function () {
+    const panel = document.getElementById('wbsPlanCloseThDropdownPanel');
+    if (panel) panel.style.display = 'none';
+    const btn = document.getElementById('btnWbsPlanCloseThDropdown');
+    if (btn) btn.classList.remove('is-open');
+
+    window.removeEventListener('scroll', repositionWbsPlanCloseDropdown, true);
+    window.removeEventListener('resize', repositionWbsPlanCloseDropdown);
+  };
+
+  /**
+   * Toggle Single Plan Close Selection inside Dropdown (กรองเฉพาะในตาราง WBS เท่านั้น)
+   */
+  window.toggleWbsPlanCloseDropdownStatus = function (plan, evt) {
+    if (evt) evt.stopPropagation();
+    if (!wbsState.tablePlanCloseStatuses) {
+      wbsState.tablePlanCloseStatuses = new Set();
+    }
+
+    if (wbsState.tablePlanCloseStatuses.has(plan)) {
+      wbsState.tablePlanCloseStatuses.delete(plan);
+    } else {
+      wbsState.tablePlanCloseStatuses.add(plan);
+    }
+
+    wbsState.page = 1;
+    renderWbsTab();
+
+    const panel = document.getElementById('wbsPlanCloseThDropdownPanel');
+    if (panel && panel.style.display !== 'none') {
+      renderWbsPlanCloseThDropdownList();
+      repositionWbsPlanCloseDropdown();
+      const btn = document.getElementById('btnWbsPlanCloseThDropdown');
+      if (btn) btn.classList.add('is-open');
+    }
+  };
+
+  /**
+   * Clear WBS Table Plan Close Filter via Header Eraser Button (ยางลบ ล้างตัวกรองงวดบัญชีในตาราง)
+   */
+  window.clearWbsTablePlanCloseFilter = function (evt) {
+    if (evt) evt.stopPropagation();
+    if (wbsState.tablePlanCloseStatuses) {
+      wbsState.tablePlanCloseStatuses.clear();
+    }
+    wbsState.page = 1;
+    renderWbsTab();
+
+    window.closeWbsPlanCloseThDropdown();
+
+    if (window.showToast) {
+      window.showToast('ล้างตัวกรองงวดบัญชีในตารางเรียบร้อยแล้ว (แสดงทุกงวดบัญชี)', 'info');
+    }
+  };
+
+  /**
+   * Select All or Clear All Plan Close from Dropdown Actions (กรองเฉพาะในตาราง WBS เท่านั้น)
+   */
+  window.selectAllWbsPlanCloseDropdownStatuses = function (selectAll) {
+    if (!wbsState.tablePlanCloseStatuses) {
+      wbsState.tablePlanCloseStatuses = new Set();
+    }
+
+    if (selectAll) {
+      const planFiltered = getFilteredWbsData(false, false, false, true);
+      const distinct = new Set();
+      (planFiltered || []).forEach(item => {
+        const p = (item.planClose && item.planClose.trim()) ? item.planClose.trim() : 'EMPTY';
+        distinct.add(p);
+      });
+      wbsState.tablePlanCloseStatuses.clear();
+      distinct.forEach(p => wbsState.tablePlanCloseStatuses.add(p));
+      if (window.showToast) window.showToast(`เลือกทุกงวดบัญชีในตาราง (${distinct.size} รายการ)`, 'success');
+    } else {
+      wbsState.tablePlanCloseStatuses.clear();
+      if (window.showToast) window.showToast('ล้างการเลือกงวดบัญชี (แสดงทุกงวดบัญชีในตาราง)', 'info');
+    }
+
+    wbsState.page = 1;
+    renderWbsTab();
+
+    const panel = document.getElementById('wbsPlanCloseThDropdownPanel');
+    if (panel && panel.style.display !== 'none') {
+      renderWbsPlanCloseThDropdownList();
+    }
+  };
+
   /**
    * Clear All WBS Selection
    * ล้างทั้งสถานะการ์ด กราฟแท่ง และรายการ Checkbox ที่เลือกทั้งหมดตามคำสั่งผู้ใช้งาน
@@ -1455,7 +1757,11 @@
     if (wbsState.tableSapStatuses) {
       wbsState.tableSapStatuses.clear();
     }
+    if (wbsState.tablePlanCloseStatuses) {
+      wbsState.tablePlanCloseStatuses.clear();
+    }
     wbsState.sapStatus = 'ALL';
+    window.closeWbsPlanCloseThDropdown();
 
     // 3. ล้างการเลือกหน่วยงานจากกราฟแท่ง (คืนค่าแสดงทุกหน่วยงาน)
     wbsState.office = 'ALL';
@@ -2824,19 +3130,42 @@
             break;
           }
 
-          case 'planClose':
-          case 'note':
+          case 'planClose': {
+            const activePlanList = wbsState.tablePlanCloseStatuses ? Array.from(wbsState.tablePlanCloseStatuses) : [];
+            let labelText = 'ทุกงวดบัญชี';
+            let btnClass = 'th-sap-dropdown-btn';
+            const hasActiveFilter = activePlanList.length > 0;
+            if (activePlanList.length === 1) {
+              const singleVal = activePlanList[0];
+              labelText = singleVal === 'EMPTY' ? 'ยังไม่มีแผน' : singleVal;
+              btnClass += ' active';
+            } else if (activePlanList.length > 1) {
+              labelText = `เลือก ${activePlanList.length} งวด`;
+              btnClass += ' active';
+            }
+
             headerMetricHtml = `
-              <div class="th-header-metric-badge th-header-lock-badge" onclick="event.stopPropagation()">
-                <button type="button" class="btn-th-wbs-lock ${isWbsAuth ? 'admin-unlocked' : ''}" 
-                  id="btnWbsHeaderLock_${col.id}"
-                  onclick="window.handleWbsEditLockToggle(event)"
-                  title="${isWbsAuth ? 'สิทธิ์ Admin ปลดล็อกแล้ว: สามารถแก้ไขได้ทุกแถว (คลิกเพื่อล็อกกลับ)' : 'ล็อกการแก้ไขแผนงานและหมายเหตุ: คลิกเพื่อกรอก Admin PIN ปลดล็อกทุกแถว'}">
-                  <span class="lock-icon">${isWbsAuth ? '🔓' : '🔒'}</span>
-                  <span class="lock-text">${isWbsAuth ? 'ปลดล็อกแล้ว' : 'ปลดล็อกแก้ไข'}</span>
+              <div class="th-header-metric-badge th-header-sap-dropdown" onclick="event.stopPropagation()">
+                <button type="button" class="${btnClass}" id="btnWbsPlanCloseThDropdown" 
+                  onclick="window.toggleWbsPlanCloseThDropdown(event)" 
+                  title="คลิกเพื่อเลือกกรองงวดบัญชี เฉพาะในตารางนี้ (เลือกได้หลายงวดพร้อมกัน)">
+                  <span class="th-sap-btn-text">${escapeHtml(labelText)}</span>
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" class="th-sap-btn-arrow">
+                    <polygon points="6 9 12 15 18 9" />
+                  </svg>
+                </button>
+                <button type="button" class="btn-th-sap-eraser ${hasActiveFilter ? 'is-active' : ''}" id="btnWbsPlanCloseThEraser"
+                  onclick="window.clearWbsTablePlanCloseFilter(event)"
+                  title="ยางลบ ล้างตัวกรองงวดบัญชีในตาราง (คืนค่าแสดงทุกงวดบัญชี)">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21"></path>
+                    <path d="M22 21H7"></path>
+                    <path d="m5 11 9 9"></path>
+                  </svg>
                 </button>
               </div>`;
             break;
+          }
 
           default:
             headerMetricHtml = '';
@@ -2866,6 +3195,7 @@
             ${col.id === 'statusSap' ? `<div class="th-sub-date-text" style="font-size: 0.70rem; color: #CBD5E1; font-weight: 500; line-height: 1.2; margin: 1px 0 3px 0; text-align: center; white-space: nowrap;" title="วันที่แก้ไขล่าสุดของไฟล์ 04 ZBUDR064: 26 ต.ค. 2569">แก้ไขล่าสุด: 26 ต.ค. 69</div>` : ''}
             ${col.id === 'cn41Cost05' ? `<div class="th-sub-date-text" style="font-size: 0.70rem; color: #CBD5E1; font-weight: 500; line-height: 1.2; margin: 1px 0 3px 0; text-align: center; white-space: nowrap;" title="วันที่แก้ไขล่าสุดของไฟล์ 05 CN41: 14 ต.ค. 2569">แก้ไขล่าสุด: 14 ต.ค. 69</div>` : ''}
             ${col.id === 'cn41ActualCost' ? `<div class="th-sub-date-text" style="font-size: 0.70rem; color: #CBD5E1; font-weight: 500; line-height: 1.2; margin: 1px 0 3px 0; text-align: center; white-space: nowrap;" title="วันที่แก้ไขล่าสุดของไฟล์ 06 CN41: 26 ต.ค. 2569">แก้ไขล่าสุด: 26 ต.ค. 69</div>` : ''}
+            ${(col.id === 'planClose' || col.id === 'note') ? `<div class="th-sub-date-text wbs-th-sync-time" style="font-size: 0.70rem; color: #CBD5E1; font-weight: 500; line-height: 1.2; margin: 1px 0 3px 0; text-align: center; white-space: nowrap;" title="เวลาซิงค์ข้อมูลล่าสุดจาก Google Sheet: ${getGoogleSheetFullSyncTimeText()}">${getGoogleSheetSyncTimeText()}</div>` : ''}
             ${headerMetricHtml}
           </div>
         </th>
@@ -4877,6 +5207,14 @@
         window.closeWbsSapThDropdown();
       }
     }
+
+    const planPanel = document.getElementById('wbsPlanCloseThDropdownPanel');
+    const planBtn = document.getElementById('btnWbsPlanCloseThDropdown');
+    if (planPanel && planPanel.style.display !== 'none') {
+      if (!planPanel.contains(e.target) && (!planBtn || !planBtn.contains(e.target))) {
+        window.closeWbsPlanCloseThDropdown();
+      }
+    }
   });
 
   /**
@@ -4927,6 +5265,11 @@
         window.closeWbsSapThDropdown();
         return;
       }
+      const planPanel = document.getElementById('wbsPlanCloseThDropdownPanel');
+      if (planPanel && planPanel.style.display !== 'none') {
+        window.closeWbsPlanCloseThDropdown();
+        return;
+      }
       const panel = document.getElementById('wbsColDropdownPanel');
       if (panel && panel.style.display !== 'none') {
         panel.style.display = 'none';
@@ -4968,6 +5311,10 @@
     wbsState.planClose = 'ALL';
     wbsState.sapStatus = 'ALL';
     if (wbsState.selectedSapStatuses) wbsState.selectedSapStatuses.clear();
+    if (wbsState.tableSapStatuses) wbsState.tableSapStatuses.clear();
+    if (wbsState.tablePlanCloseStatuses) wbsState.tablePlanCloseStatuses.clear();
+    window.closeWbsSapThDropdown();
+    window.closeWbsPlanCloseThDropdown();
     wbsState.page = 1;
 
     const sInput = document.getElementById('wbsTableSearchInput');
@@ -5388,6 +5735,7 @@
 
       if (records.length > 0) {
         window.AUC_WBS_REMAINING_DATA = records;
+        applyCachedGoogleSheetData();
         renderWbsTab();
         if (window.showToast) {
           window.showToast(`🎉 โหลดไฟล์ 03 WBS สำเร็จ ${records.length.toLocaleString('th-TH')} รายการ จาก ${fileName}`, 'success');
@@ -5930,6 +6278,9 @@
     item.note = newNote;
     item.notFoundInSheet = false;
 
+    // บันทึกแถวที่แก้ไขลง LocalStorage แคชทันที
+    updateSingleWbsInCache(item.wbs, item.description, newPlan, newNote);
+
     // 2. Call Google Apps Script API in background
     try {
       const encWbs = encodeURIComponent(item.wbs || '');
@@ -5961,6 +6312,176 @@
       }
     }
   };
+
+  /**
+   * Save full Google Sheet sync data into localStorage
+   */
+  function saveGoogleSheetDataToCache(data, dataByDesc, planOptions) {
+    try {
+      const payload = {
+        data: data || {},
+        dataByDesc: dataByDesc || {}
+      };
+      localStorage.setItem(WBS_SHEET_CACHE_KEY, JSON.stringify(payload));
+      localStorage.setItem(WBS_SHEET_TIME_KEY, String(Date.now()));
+      if (Array.isArray(planOptions)) {
+        localStorage.setItem(WBS_SHEET_OPTIONS_KEY, JSON.stringify(planOptions));
+      }
+    } catch (e) {
+      console.warn('Could not save Google Sheet data to localStorage:', e);
+    }
+  }
+
+  /**
+   * Update single row edit into localStorage cache
+   */
+  function updateSingleWbsInCache(wbs, desc, newPlan, newNote) {
+    try {
+      const savedStr = localStorage.getItem(WBS_SHEET_CACHE_KEY);
+      const cache = savedStr ? JSON.parse(savedStr) : { data: {}, dataByDesc: {} };
+      if (!cache.data) cache.data = {};
+      if (!cache.dataByDesc) cache.dataByDesc = {};
+
+      const cleanWbs = (wbs || '').trim().toUpperCase();
+      const cleanDesc = (desc || '').trim().toLowerCase().replace(/\s+/g, '');
+
+      const record = {
+        wbs: wbs,
+        description: desc,
+        planClose: newPlan,
+        note: newNote,
+        inSheet: true
+      };
+
+      if (cleanWbs) cache.data[cleanWbs] = record;
+      if (cleanDesc) cache.dataByDesc[cleanDesc] = record;
+
+      localStorage.setItem(WBS_SHEET_CACHE_KEY, JSON.stringify(cache));
+      localStorage.setItem(WBS_SHEET_TIME_KEY, String(Date.now()));
+      updateSyncButtonStatusUI();
+    } catch (e) {
+      console.warn('Error updating single WBS in cache:', e);
+    }
+  }
+
+  /**
+   * Apply cached Google Sheet data from localStorage onto window.AUC_WBS_REMAINING_DATA
+   */
+  function applyCachedGoogleSheetData() {
+    try {
+      const savedStr = localStorage.getItem(WBS_SHEET_CACHE_KEY);
+      if (!savedStr) {
+        updateSyncButtonStatusUI();
+        return false;
+      }
+      const cache = JSON.parse(savedStr);
+      if (!cache || !cache.data) {
+        updateSyncButtonStatusUI();
+        return false;
+      }
+
+      const sheetMap = cache.data || {};
+      const descMap = cache.dataByDesc || {};
+      const normalizedSheetMap = {};
+      const normalizedDescMap = {};
+
+      Object.keys(sheetMap).forEach(k => {
+        normalizedSheetMap[k.trim().toUpperCase()] = sheetMap[k];
+      });
+
+      Object.keys(descMap).forEach(k => {
+        normalizedDescMap[k.trim().toLowerCase().replace(/\s+/g, '')] = descMap[k];
+      });
+
+      const allData = window.AUC_WBS_REMAINING_DATA || [];
+      let matchedCount = 0;
+
+      allData.forEach(item => {
+        const wKey = (item.wbs || '').trim().toUpperCase();
+        const dKey = (item.description || '').trim().toLowerCase().replace(/\s+/g, '');
+
+        let row = normalizedSheetMap[wKey];
+        if (!row && dKey && normalizedDescMap[dKey]) {
+          row = normalizedDescMap[dKey];
+        }
+        if (!row && dKey && dKey.length >= 8) {
+          const foundDescKey = Object.keys(normalizedDescMap).find(k => k && (k.includes(dKey) || dKey.includes(k)));
+          if (foundDescKey) {
+            row = normalizedDescMap[foundDescKey];
+          }
+        }
+
+        if (row) {
+          item.planClose = (row.planClose !== undefined && row.planClose !== null) ? String(row.planClose).trim() : '';
+          item.note = (row.note !== undefined && row.note !== null) ? String(row.note).trim() : '';
+          item.notFoundInSheet = false;
+          matchedCount++;
+        } else {
+          item.planClose = '';
+          item.note = '';
+          item.notFoundInSheet = true;
+        }
+      });
+
+      window.AUC_WBS_SYNCED_SHEET = true;
+
+      const savedOpts = localStorage.getItem(WBS_SHEET_OPTIONS_KEY);
+      if (savedOpts) {
+        try {
+          const opts = JSON.parse(savedOpts);
+          if (Array.isArray(opts) && opts.length > 0) {
+            latestGoogleSheetPlanOptions = opts;
+          }
+        } catch (e) {}
+      }
+
+      updateSyncButtonStatusUI();
+      return matchedCount > 0;
+    } catch (e) {
+      console.warn('Error applying cached Google Sheet data:', e);
+      return false;
+    }
+  }
+
+  /**
+   * Update sync button tooltip & dot status
+   */
+  function updateSyncButtonStatusUI() {
+    const btn = document.getElementById('btnSyncGoogleSheet');
+    const dot = document.getElementById('wbsSyncStatusDot');
+    const hdrText = document.getElementById('wbsHdrSheetSyncTime');
+    const syncTimeText = getGoogleSheetSyncTimeText(true);
+    const fullTimeText = getGoogleSheetFullSyncTimeText();
+    const savedTime = localStorage.getItem(WBS_SHEET_TIME_KEY);
+
+    if (savedTime) {
+      if (btn) {
+        btn.title = `ซิงค์ Google Sheet ล่าสุดเมื่อ: ${fullTimeText} (คลิกเพื่อดึงข้อมูลอัปเดตใหม่)`;
+      }
+      if (dot) {
+        dot.style.background = '#10B981';
+        dot.style.boxShadow = '0 0 6px #10B981';
+      }
+    } else {
+      if (btn) {
+        btn.title = 'กดเพื่อซิงค์แผนงานและหมายเหตุล่าสุดจาก Google Sheet ทั้ง 9 แท็บ';
+      }
+      if (dot) {
+        dot.style.background = '#94A3B8';
+        dot.style.boxShadow = 'none';
+      }
+    }
+
+    if (hdrText) {
+      hdrText.textContent = syncTimeText;
+    }
+
+    // Update any .wbs-th-sync-time in table headers
+    document.querySelectorAll('.wbs-th-sync-time').forEach(el => {
+      el.textContent = syncTimeText;
+      el.title = `เวลาซิงค์ข้อมูลล่าสุดจาก Google Sheet: ${fullTimeText}`;
+    });
+  }
 
   let isGoogleSheetSyncInProgress = false;
   let lastSyncTimestamp = 0;
@@ -6053,6 +6574,10 @@
 
         window.AUC_WBS_SYNCED_SHEET = true;
 
+        // บันทึกผลการซิงค์ลง LocalStorage แคช เพื่อให้จำค่าล่าสุดได้ตลอดไปแม้รีเฟรชหน้าจอ
+        saveGoogleSheetDataToCache(json.data, json.dataByDesc, json.planOptions);
+        updateSyncButtonStatusUI();
+
         // 🌟 Auto-refresh modal dropdown options with any newly added/modified choices from Google Sheet
         refreshWbsPlanCloseDropdownOptions();
 
@@ -6098,12 +6623,16 @@
   // Expose global functions
   window.renderWbsTab = renderWbsTab;
   window.refreshWbsPlanCloseDropdownOptions = refreshWbsPlanCloseDropdownOptions;
+  window.applyCachedGoogleSheetData = applyCachedGoogleSheetData;
+  window.updateSyncButtonStatusUI = updateSyncButtonStatusUI;
 
   // Initialize when DOM is ready (ซิงค์ Google Sheet เฉพาะเมื่อกดปุ่ม #btnSyncGoogleSheet เท่านั้น)
   function initWbsApp() {
     setupWbsListeners();
+    applyCachedGoogleSheetData();
     renderWbsTab();
     refreshWbsPlanCloseDropdownOptions();
+    updateSyncButtonStatusUI();
   }
 
   if (document.readyState === 'loading') {
