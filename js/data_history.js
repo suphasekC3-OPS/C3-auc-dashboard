@@ -95,9 +95,9 @@
       groupNo: '04',
       name: '04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx',
       category: 'SAP ZBUDR064 & Costs',
-      importDate: '2026-10-26 14:15:00',
-      importDateTh: '26 ต.ค. 2569, 14:15 น.',
-      lastModifiedTh: '26 ต.ค. 2569, 13:48 น. (ไฟล์ล่าสุด)',
+      importDate: '2026-10-27 08:06:27',
+      importDateTh: '27 ต.ค. 2569, 08:06 น.',
+      lastModifiedTh: '27 ต.ค. 2569, 08:06 น. (ไฟล์ล่าสุด)',
       sizeText: '732.0 KB',
       recordCount: 2083,
       status: 'active',
@@ -140,7 +140,7 @@
       columns: [
         'cn41Cost05 (ต้นทุนจริง วันเริ่มบัญชี 14 ต.ค. 69)',
         'cn41CostInc (มูลค่าAUCที่เพิ่มขึ้น = ไฟล์ 06 - ไฟล์ 05)',
-        'cn41ActualCost (ต้นทุนจริง ไฟล์ 06 ล่าสุด 26 ต.ค. 69)'
+        'cn41ActualCost (ต้นทุนจริง ไฟล์ 06 ล่าสุด 27 ต.ค. 69)'
       ],
       sampleProvider: () => (window.AUC_WBS_REMAINING_DATA || []).slice(0, 5).map(r => ({
         'WBS': r.wbs,
@@ -153,12 +153,12 @@
     {
       id: 'src_06',
       groupNo: '06',
-      name: '06 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 26 ตค 69.xlsx',
+      name: '06 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 27 ตค 69.xlsx',
       category: 'SAP CN41 AUC Values (Latest)',
-      importDate: '2026-10-26 14:15:00',
-      importDateTh: '26 ต.ค. 2569, 14:15 น.',
-      lastModifiedTh: '26 ต.ค. 2569, 14:05 น. (ไฟล์ล่าสุด)',
-      sizeText: '337.8 KB',
+      importDate: '2026-10-27 08:09:49',
+      importDateTh: '27 ต.ค. 2569, 08:09 น.',
+      lastModifiedTh: '27 ต.ค. 2569, 08:09 น. (ไฟล์ล่าสุด)',
+      sizeText: '338.1 KB',
       recordCount: 2083,
       status: 'active',
       statusText: 'ผสานข้อมูลสำเร็จ',
@@ -166,7 +166,7 @@
       storageVar: 'window.AUC_WBS_REMAINING_DATA.cn41ActualCost',
       icon: '📑',
       badgeColor: '#F59E0B',
-      description: 'รายงาน SAP CN41 ระบุต้นทุนจริงและมูลค่า AUC สะสม (บาท) ของแต่ละโครงการ สำหรับวิเคราะห์มูลค่าสินทรัพย์ระหว่างก่อสร้าง ล่าสุด 26 ต.ค. 69',
+      description: 'รายงาน SAP CN41 ระบุต้นทุนจริงและมูลค่า AUC สะสม (บาท) ของแต่ละโครงการ สำหรับวิเคราะห์มูลค่าสินทรัพย์ระหว่างก่อสร้าง ล่าสุด 27 ต.ค. 69',
       columns: [
         'cn41ActualCost (มูลค่า AUC บาท)', 'cn41ObjDesc (ออบเจคโครงการ)', 'cn41Level (ระดับ)',
         'cn41Currency (สกุลเงิน THB)', 'cn41Row (ลำดับแถว)'
@@ -351,8 +351,8 @@
       title: 'ฐานข้อมูลรวมงาน WBS คงเหลือ (Merged WBS Database)',
       role: 'จัดเก็บข้อมูลหลักงาน WBS (ไฟล์ 03 + 04 + 05 + Google Sheet)',
       recordsCount: '2,083 รายการ (41 คอลัมน์)',
-      fileSize: '2.40 MB',
-      updatedAt: '26 ต.ค. 2569, 14:15 น.',
+      fileSize: '2.36 MB',
+      updatedAt: '27 ต.ค. 2569, 08:09 น.',
       status: '100% ฐานข้อมูลอัปเดตล่าสุด',
       variable: 'window.AUC_WBS_REMAINING_DATA'
     },
@@ -432,6 +432,102 @@
    * System Pre-defined Audit & Modification Log Entries
    */
   const BASE_AUDIT_LOGS = [
+    {
+      id: 'log_000_wbs_checkbox_selected_cyan_display',
+      timestamp: '2026-10-27 11:55:00',
+      timestampTh: '27 ต.ค. 2569, 11:55 น.',
+      type: 'EDIT',
+      typeBadge: 'แสดงส่วนที่เลือกเป็นสีฟ้า',
+      badgeClass: 'badge-type-edit',
+      title: 'แสดงส่วนที่เลือกจาก Checkbox เป็นสีฟ้าเรืองแสงในส่วนมูลค่าปิดงานแล้ว จำนวนงาน และ % ต่างๆ บนการ์ดผู้บริหาร WBS',
+      targetSubject: 'การ์ดผลการดำเนินงานผู้บริหาร WBS ฝั่งซ้าย (#wbsExecutiveDonutKpiCard) และแท่งกราฟปิดงาน/เปอร์เซ็นต์ความก้าวหน้า',
+      storageFile: 'css/styles.css, js/wbs.js, index.html, js/data_history.js',
+      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน: "แสดง ส่วนที่เลือกเป็นสีฟ้า ดังนี้ มูลค่า/จำนวนงาน/%ต่างๆ": 1) มูลค่าปิดงาน: รวมมูลค่าที่เลือก (selectedCheckboxAuc) เข้ากับยอดปิดงานสุทธิ แสดงยอดบวกสีฟ้า (+xx.xx ลบ. ที่เลือก) และแทรกแถว "+ ที่เลือก: xx.xx ลบ." สีฟ้าสดใส พร้อมแท่งเซกเมนต์สีฟ้า (.wbs-seg-selected-closed) 2) จำนวนงาน: รวมจำนวนงานที่เลือก (selectedCheckboxCount) แสดงป้าย (+xx ที่เลือก) ใน badge สีฟ้า และ (xx งาน) ในแถวส่วนที่เลือก 3) % ต่างๆ: คำนวณส่วน % ที่เลือก (+ที่เลือก xx.xx%) ในแท็ก breakdown สีฟ้า และแทรกแท่งเซกเมนต์สีฟ้าเรืองแสงลายทาง (.fill-selected-part) ใน progress-fill-composite ทั้ง % ปิดงานมูลค่า AUC และ % ปิดจำนวนงาน',
+      details: '1) ใน css/styles.css: เพิ่มสไตล์ .wbs-seg-selected-closed, .wbs-box-sub-row.row-selected, .val-selected-pill, .badge-selected-pill, .fill-selected-part พร้อมเอฟเฟกต์ pulseCyanGlow เรืองแสงสีฟ้าสดใส (#00E5FF / #0284C7) 2) ใน js/wbs.js: ปรับปรุง renderWbsTargetComparisonSection() เพิ่ม DOM placeholder elements (#wbsClosedSegSelected, #wbsKpiSelectedClosedRow, #wbsBarMainSelectedSeg, #wbsBarJobSelectedSeg) และใน syncWbsSideKpiCard() คำนวณ selectedCheckboxCount, selectedCheckboxAuc, selectedIncPctVal, selectedIncPctJobs แล้วอัปเดตการแสดงผลมูลค่า, จำนวนงาน, แถบกราฟ และ % สุทธิแบบเรียลไทม์เมื่อมีการติ๊ก Checkbox ในตาราง WBS 3) ใน index.html: อัปเดต Version Cache Buster เป็น ?v=20261027_1155 4) บันทึกประวัติลงใน BASE_AUDIT_LOGS ตามข้อบังคับ AGENTS.md',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "แสดง ส่วนที่เลือกเป็นสีฟ้า ดังนี้ มูลค่า/จำนวนงาน/%ต่างๆ" (ภาพ media_1793074667061.jpg)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'สูง (ยกระดับการ์ด KPI ผู้บริหารฝั่งซ้ายให้ตอบสนองต่อการเลือก Checkbox แสดงมูลค่า จำนวนงาน และ % เพิ่มเติมสีฟ้าแบบไดนามิก)'
+    },
+    {
+      id: 'log_000_dynamic_target_bar_color_and_royal_blue_seg2',
+      timestamp: '2026-10-27 11:30:00',
+      timestampTh: '27 ต.ค. 2569, 11:30 น.',
+      type: 'EDIT',
+      typeBadge: 'สีกราฟเป้าหมาย & เปลี่ยนเป็นสีน้ำเงิน',
+      badgeClass: 'badge-type-edit',
+      title: 'ปรับสีกราฟบนเป้าหมาย WBS ให้เปลี่ยนสีตามเดือนเป้าหมายที่เลือก และเปลี่ยนเซกเมนต์เดือน พ.ย. เป็นสีน้ำเงิน',
+      targetSubject: 'การ์ดเปรียบเทียบเป้าหมาย KPI ระดับ 5 (#wbsTargetComparisonCard .fill-target) และเซกเมนต์เดือน พ.ย. (.seg-2, .m-seg-2)',
+      storageFile: 'css/styles.css, js/wbs.js, index.html, js/data_history.js',
+      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน 2 ข้อ: 1) "ยกเลือกสีเขี้นมิ้น ให้ใช้สีนำเงินแทน": ยกเลิกสีเขียวมิ้นต์ในเซกเมนต์เดือน พ.ย. แล้วเปลี่ยนเป็นสีน้ำเงิน (Royal / Deep Blue) ทั้งแท็บ Overview และแท็บ WBS 2) "กรอบแดง ให้แสดงสีกราฟ ตามเป้าหมายที่เลือก": ในการ์ดเปรียบเทียบเป้าหมาย KPI ระดับ 5 เมนู WBS คงเหลือ ปรับแถบแท่งกราฟบน (เป้าหมายปิดเพิ่ม: .wbs-kpi-fill.fill-target) ให้เปลี่ยนสีแบบไดนามิกตามเดือนเป้าหมายที่เลือก โดยเดือน ต.ค. เป็นสีชมพูพาสเทล, เดือน พ.ย. เป็นสีน้ำเงิน, และเดือน ธ.ค. เป็นสีฟ้าสว่าง พร้อมตัวอักษรสีขาวเงาคมชัด',
+      details: '1) ใน css/styles.css: ปรับ .single-bar-segment.seg-2, .bar-row-fill.m-2, และ .btn-wbs-kpi-month.m-seg-2 (รวมทั้ง .active) ให้ใช้สีน้ำเงิน Royal Blue (#1E40AF -> #2563EB -> #3B82F6 -> #93C5FD) พร้อม text-shadow มิดไนท์บลูคมชัด, เพิ่มคลาสสีกราฟบนเป้าหมาย .fill-target.target-seg-1 / .target-m-10 (สีชมพูพาสเทล), .fill-target.target-seg-2 / .target-m-11 (สีน้ำเงิน Royal Blue), และ .fill-target.target-seg-3 / .target-m-12 (สีฟ้า Sky Blue) พร้อมจัดสไตล์ตัวหนังสือสีขาวเรืองแสงคมชัด 2) ใน js/wbs.js: กำหนด targetMonthClass จากเดือนที่เลือกและใส่ในคลาสของ .wbs-kpi-fill.fill-target 3) ใน index.html: อัปเดต Version Cache Buster เป็น ?v=20261027_1130 4) บันทึกประวัติลงใน BASE_AUDIT_LOGS ตามข้อบังคับ AGENTS.md',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "ยกเลือกสีเขี้นมิ้น ให้ใช้สีนำเงินแทน" และ "กรอบแดง ให้แสดงสีกราฟ ตามเป้าหมายที่เลือก" (ภาพ media_1793074667061.jpg)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง (ปรับปรุงการแสดงผลสีกราฟเป้าหมายแบบไดนามิกตรงตามเดือนที่เลือก และปรับโทนสีน้ำเงินตามความต้องการผู้ใช้งาน)'
+    },
+    {
+      id: 'log_000_mint_green_and_fix_overlap_donut_card',
+      timestamp: '2026-10-27 11:18:00',
+      timestampTh: '27 ต.ค. 2569, 11:18 น.',
+      type: 'EDIT',
+      typeBadge: 'แก้สีมิ้นต์ & แก้ที่บังกัน',
+      badgeClass: 'badge-type-edit',
+      title: 'ปรับเซกเมนต์เดือน พ.ย. เป็นสีมิ้นต์สดใส และแก้ไขเลย์เอาต์การ์ดภาพรวมไม่ให้ข้อความทับซ้อนกัน',
+      targetSubject: 'การ์ดภาพรวมผู้บริหาร (#executiveDonutKpiCard) และแถบเซกเมนต์เป้าหมาย 3 เดือน (#next3mProjectionSection)',
+      storageFile: 'css/styles.css, js/app.js, index.html, js/data_history.js',
+      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน 2 ข้อ: 1) "แก้ไขที่บังกัน": ปรับแก้ปัญหาข้อความ % ปิดงานมูลค่า AUC ทับซ้อนบนตัวเลขยอดคงเหลือในการ์ด #executiveDonutKpiCard โดยปรับ exec-donut-main-row ให้ flex: 0 0 auto และ min-height: fit-content ป้องกันการบีบอัดตัวกล่องคงเหลือ, ปรับขนาดแคนวาสโดนัทเป็น 76px และจัดระยะบรรทัดให้กระชับสมดุล, ปรับปรุงฟังก์ชัน syncExecutiveDonutCardHeight() ให้คำนวณ natural height รองรับความสูงจริงเสมอไม่บีบอัดจนทับซ้อน 2) "แก้สีมิ้น สดใส": ปรับสีเซกเมนต์เป้าหมายเดือน พ.ย. เป็นสีมิ้นต์สดใส (Vibrant Fresh Mint Green: #059669-#10B981-#2DD4BF-#A7F3D0) คมชัด สดชื่น สบายตา',
+      details: '1) ใน css/styles.css: ปรับ #tab-dashboard #executiveDonutKpiCard .exec-donut-main-row.vertical-layout ให้มี flex: 0 0 auto; min-height: fit-content; จัด spacing ช่องว่างอย่างลงตัว, ปรับขนาด .exec-donut-canvas-box เป็น 76px x 76px, ปรับ font-size .exec-progress-big-val เป็น 1.20rem, ปรับ .single-bar-segment.seg-2, .bar-row-fill.m-2, และ .btn-wbs-kpi-month.m-seg-2 ให้ใช้โทนสีมิ้นต์สดใส (Vibrant Fresh Mint Green) ไล่เฉดสี #059669, #10B981, #2DD4BF ถึง #A7F3D0 2) ใน js/app.js: ใน syncExecutiveDonutCardHeight() วัด scrollHeight ของการ์ดซ้ายก่อนคำนวณ เพื่อให้ Math.max(targetH, naturalH) ป้องกันไม่ให้การ์ดถูกบังคับความสูงน้อยกว่าเนื้อหาภายใน 3) ใน index.html: อัปเดต Version Cache Buster เป็น ?v=20261027_1120 4) บันทึกประวัติลงใน BASE_AUDIT_LOGS ตามข้อบังคับ AGENTS.md',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "แก้ไขที่บังกัน" (ภาพวงแดงครอบกล่องคงเหลือ) และ "แก้สีมิ้น สดใส" (ภาพวงแดงครอบ พ.ย.)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง (แก้ไขการทับซ้อนขององค์ประกอบ UI และปรับแต่งชุดสีมิ้นต์สดใสตามคำสั่งผู้ใช้งาน)'
+    },
+    {
+      id: 'log_000_update_seg2_to_pastel_blue',
+      timestamp: '2026-10-27 11:05:00',
+      timestampTh: '27 ต.ค. 2569, 11:05 น.',
+      type: 'EDIT',
+      typeBadge: 'ปรับแต่งสีน้ำเงินพาสเทล',
+      badgeClass: 'badge-type-edit',
+      title: 'ปรับแต่งสีเซกเมนต์เป้าหมายเดือน พ.ย. เป็นสีน้ำเงินพาสเทลตามวงกลมสีแดง',
+      targetSubject: 'แถบเซกเมนต์เป้าหมาย 3 เดือน (#next3mProjectionSection) และปุ่มเลือกเดือนเป้าหมาย WBS',
+      storageFile: 'css/styles.css, index.html, js/data_history.js',
+      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน "แก้ไขสีน้ำเงิน พาสเทล" พร้อมภาพวงสีแดงครอบเซกเมนต์เป้าหมายเดือน พ.ย. (~71.7%): ปรับเปลี่ยนโทนสีจากเดิมที่เป็นสีเขียว (#047857-#34D399) ให้เป็นสีน้ำเงินพาสเทล (Soft Pastel Royal Blue: #2563EB-#BFDBFE) พร้อมจัดเฉดเงาตัวอักษรและป้ายเป้า KPI ให้อ่านง่าย คมชัด โดดเด่น สบายตา สอดรับกับเดือน ต.ค. (ชมพูพาสเทล) อย่างลงตัว',
+      details: '1) ใน css/styles.css: ปรับ .single-bar-segment.seg-2 ให้ใช้พื้นหลัง linear-gradient(135deg, #2563EB 0%, #60A5FA 45%, #BFDBFE 100%) พร้อมเงาใน inset และจัดสไตล์ตัวอักษรให้อ่านง่าย คมชัด ด้วย text-shadow สีมิดไนท์บลู, ปรับ .bar-row-fill.m-2 ให้เป็น linear-gradient(90deg, #2563EB, #93C5FD), ปรับ .btn-wbs-kpi-month.m-seg-2 และสถานะ active ให้เป็นเฉดสีน้ำเงินพาสเทลสอดคล้องกันทุกแท็บ 2) ใน index.html: อัปเดต Cache Buster ของ css/styles.css เป็น ?v=20261027_1105 3) บันทึกประวัติลงใน BASE_AUDIT_LOGS ตามข้อบังคับ AGENTS.md',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "แก้ไขสีน้ำเงิน พาสเทล" พร้อมภาพ media_1793072574666.jpg',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ (ปรับแต่งชุดสี UI ให้สวยงาม สบายตา ตรงตามความต้องการของผู้ใช้งาน)'
+    },
+    {
+      id: 'log_000_fix_wbs_sap_date_to_actual_27oct',
+      timestamp: '2026-10-27 10:55:00',
+      timestampTh: '27 ต.ค. 2569, 10:55 น.',
+      type: 'EDIT',
+      typeBadge: 'แก้ไขวันที่แสดงผล SAP',
+      badgeClass: 'badge-type-edit',
+      title: 'แก้ไขข้อความวันที่แก้ไขล่าสุดของสถานะ SAP ให้ตรงกับไฟล์ 04 จริง (27 ต.ค. 69)',
+      targetSubject: 'หัวการ์ดภาพรวม WBS (#wbsExecutiveDonutKpiCard) และหัวกราฟล่างยอดดำเนินการ',
+      storageFile: 'js/wbs.js, index.html, js/data_history.js',
+      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน "แสดงไม่ตรงวันที่แก้ไขจริง" พร้อมภาพวงสีแดง: ปรับแก้ข้อความวันที่แก้ไขล่าสุดของสถานะ SAP ในหัวการ์ดภาพรวม WBS (wbsExecutiveDonutKpiCard) จากเดิม "สถานะ SAP แก้ไขล่าสุดวันที่ 23 ต.ค. 69" เป็น "สถานะ SAP แก้ไขล่าสุดวันที่ 27 ต.ค. 69" และในหัวกราฟล่างยอดดำเนินการเป็น "สถานะ SAP แก้ไขล่าสุด: 27 ต.ค. 69" พร้อมอัปเดต Tooltip และข้อมูลนำเข้าในแท็บประวัติให้ตรงตามไฟล์ 04 ZBUDR064 ฉบับจริง',
+      details: '1) ใน js/wbs.js: แก้ไขข้อความใน #wbsKpiSapDateText จาก "สถานะ SAP แก้ไขล่าสุดวันที่ 23 ต.ค. 69" เป็น "สถานะ SAP แก้ไขล่าสุดวันที่ 27 ต.ค. 69" (พร้อม title วันที่ 27 ต.ค. 2569) และแก้ไขใน .bar-sap-date-plain เป็น "สถานะ SAP แก้ไขล่าสุด: 27 ต.ค. 69" 2) ใน index.html: อัปเดตแท็ก #dataHistoryBadge เป็น 27 ต.ค. และอัปเดต Cache Buster เป็น ?v=20261027_1058 3) ใน js/data_history.js: ปรับข้อมูลวันนำเข้าล่าสุด WBS ในการ์ดสถิติและผัง Model View เป็น 27 ต.ค. 69 พร้อมบันทึกประวัติลงใน BASE_AUDIT_LOGS ตามข้อบังคับ AGENTS.md',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "แสดงไม่ตรงวันที่แก้ไขจริง" พร้อมภาพวงสีแดง',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ'
+    },
+    {
+      id: 'log_000_update_wbs_04_06_files_27oct',
+      timestamp: '2026-10-27 10:45:00',
+      timestampTh: '27 ต.ค. 2569, 10:45 น.',
+      type: 'IMPORT',
+      typeBadge: 'นำเข้าข้อมูล 04 & 06',
+      badgeClass: 'badge-type-import',
+      title: 'อัปเดตไฟล์ข้อมูล 04 WBS ZBUDR064 และ 06 WBS CN41 ล่าสุด (วันที่ 27 ต.ค. 69) เข้าสู่ฐานข้อมูลหลัก',
+      targetSubject: 'ฐานข้อมูล WBS (js/data_wbs.js) และป้ายแสดงวันที่ไฟล์ 04 และ 06',
+      storageFile: 'js/data_wbs.js, js/wbs.js, index.html, js/data_history.js',
+      changeSummary: 'ประมวลผลอัปเดตไฟล์ 04 WBS ZBUDR064 และ 06 WBS CN41 ล่าสุด วันที่ 27 ตค 69 เข้าสู่ js/data_wbs.js ครบ 2,083 โครงการ: พบการเปลี่ยนแปลงสถานะ SAP 47 งาน (ปรับเปลี่ยนเป็น CLSD F4), มูลค่า AUC ปรับเปลี่ยน 3 งาน (มูลค่ารวมสะสม 643,058,079.45 บาท), % เบิกพัสดุ ปรับเปลี่ยน 50 งาน พร้อมคงข้อมูลหมายเหตุและแผนปิดงานจาก Google Sheet และอัปเดตป้ายวันที่เป็น 27 ต.ค. 69 ทุกจุด',
+      details: 'ดำเนินการตามคำสั่งผู้ใช้งาน "update ไฟล์ 04 WBS และ 06 WBS": 1) สำรองข้อมูล js/data_wbs.js ไปยัง js/data_wbs.bak_before_27oct.js 2) ดึงข้อมูลหมายเหตุและแผนปิดงานจาก Google Sheet Live API รวม 2,131 รายการ 3) ประมวลผลรวมข้อมูลจาก 03 WBSงานคงเหลือเดือนล่าสุด.xlsx (2,083 โครงการ), 04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx (แก้ไขล่าสุด 27 ต.ค. 69, 08:06 น.), 05 WBS CN41 วันเริ่มบัญชี 14 ตค 69 และ 06 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 27 ตค 69.xlsx (แก้ไขล่าสุด 27 ต.ค. 69, 08:09 น.) 4) คำนวณ cn41CostInc (มูลค่า AUC ที่เพิ่มขึ้น = ไฟล์ 06 ล่าสุด - ไฟล์ 05 เริ่มต้น) ยอดรวมผลต่าง -183,020.48 บาท 5) อัปเดตการแสดงผลวันที่แก้ไขล่าสุดใน js/wbs.js และ index.html เป็น "27 ต.ค. 69" 6) อัปเดตข้อมูล DATA_SOURCE_CATALOG และ SYSTEM_STORAGE_FILES ใน js/data_history.js 7) บันทึกประวัติใน BASE_AUDIT_LOGS ตามข้อบังคับ AGENTS.md',
+      sourceFile: '04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx (27 ต.ค. 69, 08:06 น.) และ 06 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 27 ตค 69.xlsx (27 ต.ค. 69, 08:09 น.)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'สูง (อัปเดตข้อมูลสถานะโครงการ SAP, เปอร์เซ็นต์เบิกจ่าย และมูลค่า AUC ล่าสุดเป็นวันที่ 27 ต.ค. 2569 อย่างสมบูรณ์แบบ)'
+    },
     {
       id: 'log_000_add_plan_close_th_dropdown_filter',
       timestamp: '2026-10-27 10:15:00',
@@ -3547,7 +3643,7 @@
           <div class="dh-stat-card">
             <div class="dh-stat-icon" style="background:rgba(139,92,246,0.15); color:#A78BFA;">📅</div>
             <div class="dh-stat-body">
-              <div class="dh-stat-val">23 ต.ค. 2569</div>
+              <div class="dh-stat-val">27 ต.ค. 2569</div>
               <div class="dh-stat-label">นำเข้าข้อมูล WBS คงเหลือล่าสุด</div>
               <div class="dh-stat-sub">2,083 รายการ WBS (ผสานไฟล์ 03, 04, 05, 06)</div>
             </div>
@@ -3635,12 +3731,12 @@
                   <div class="dh-flow-node" onclick="window.openModelViewModal('src_04', 'source')">
                     <div class="dh-node-badge" style="background:#8B5CF6;">ไฟล์ 04</div>
                     <div class="dh-node-title">ZBUDR064 (%พัสดุ/สถานะ SAP)</div>
-                    <div class="dh-node-meta">นำเข้า: 26 ต.ค. 69 • 732.0 KB</div>
+                    <div class="dh-node-meta">นำเข้า: 27 ต.ค. 69 • 732.0 KB</div>
                   </div>
                   <div class="dh-flow-node" onclick="window.openModelViewModal('src_06', 'source')">
                     <div class="dh-node-badge" style="background:#F59E0B;">ไฟล์ 06</div>
                     <div class="dh-node-title">CN41 (มูลค่า AUC บาท)</div>
-                    <div class="dh-node-meta">นำเข้า: 26 ต.ค. 69 • 337.8 KB</div>
+                    <div class="dh-node-meta">นำเข้า: 27 ต.ค. 69 • 337.8 KB</div>
                   </div>
                   <div class="dh-flow-node" onclick="window.openModelViewModal('src_sheet', 'source')">
                     <div class="dh-node-badge" style="background:#10B981;">G-Sheet</div>

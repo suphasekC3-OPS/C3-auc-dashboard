@@ -3249,8 +3249,8 @@ body.theme-light .donut-stat-breakdown-sub {
    ลงมาถึงเส้นระดับล่างสุดของการ์ดกราฟ 8 เกณฑ์วัด (#topCriteriaChartCard) และจัดสัดส่วนภายในให้สวยงามลงตัว
    ========================================================================== */
 #tab-dashboard #executiveDonutKpiCard {
-  padding: 0.45rem 0.60rem 0.50rem;
-  gap: 0.15rem;
+  padding: 0.40rem 0.60rem 0.45rem;
+  gap: 0.12rem;
   justify-content: space-between;
   box-sizing: border-box;
   overflow: hidden;
@@ -3277,19 +3277,19 @@ body.theme-light .donut-stat-breakdown-sub {
 }
 
 #tab-dashboard #executiveDonutKpiCard .exec-donut-main-row.vertical-layout {
-  flex: 1 1 auto;
+  flex: 0 0 auto;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 0.10rem;
-  margin: 0.08rem 0;
-  min-height: 0;
+  gap: 0.08rem;
+  margin: 0.04rem 0;
+  min-height: fit-content;
 }
 
 #tab-dashboard #executiveDonutKpiCard .donut-stat-col.stat-box-top,
 #tab-dashboard #executiveDonutKpiCard .donut-stat-col.stat-box-bottom {
-  padding: 0.20rem 0.45rem;
-  gap: 0.05rem;
+  padding: 0.18rem 0.45rem;
+  gap: 0.04rem;
   flex-shrink: 0;
 }
 
@@ -3304,26 +3304,26 @@ body.theme-light .donut-stat-breakdown-sub {
 }
 
 #tab-dashboard #executiveDonutKpiCard .donut-stat-val {
-  font-size: 0.94rem;
+  font-size: 0.90rem;
   line-height: 1.12;
   font-weight: 800;
 }
 
 #tab-dashboard #executiveDonutKpiCard .exec-donut-canvas-box {
-  width: 82px;
-  height: 82px;
-  margin: 0.05rem auto;
+  width: 76px;
+  height: 76px;
+  margin: 0.04rem auto;
   flex-shrink: 0;
 }
 
 #tab-dashboard #executiveDonutKpiCard .exec-donut-canvas-box canvas {
-  width: 82px !important;
-  height: 82px !important;
+  width: 76px !important;
+  height: 76px !important;
 }
 
 #tab-dashboard #executiveDonutKpiCard .exec-donut-center-content {
-  width: 54px;
-  height: 54px;
+  width: 50px;
+  height: 50px;
 }
 
 #tab-dashboard #executiveDonutKpiCard .donut-kpi-star-label {
@@ -3331,7 +3331,7 @@ body.theme-light .donut-stat-breakdown-sub {
 }
 
 #tab-dashboard #executiveDonutKpiCard .donut-kpi-score {
-  font-size: 1.20rem;
+  font-size: 1.12rem;
   font-weight: 900;
 }
 
@@ -3340,20 +3340,20 @@ body.theme-light .donut-stat-breakdown-sub {
 }
 
 #tab-dashboard #executiveDonutKpiCard .exec-dual-progress-section {
-  flex-shrink: 0;
-  margin-top: 0.22rem;
-  padding-top: 0.22rem;
-  gap: 0.30rem;
+  flex: 0 0 auto;
+  margin-top: 0.16rem;
+  padding-top: 0.16rem;
+  gap: 0.22rem;
   border-top: 1px solid rgba(216, 180, 254, 0.14);
 }
 
 #tab-dashboard #executiveDonutKpiCard .exec-progress-block {
-  gap: 0.06rem;
+  gap: 0.04rem;
 }
 
 #tab-dashboard #executiveDonutKpiCard .exec-progress-label-wrap {
-  font-size: 0.76rem;
-  gap: 0.32rem;
+  font-size: 0.74rem;
+  gap: 0.28rem;
 }
 
 #tab-dashboard #executiveDonutKpiCard .exec-progress-target-badge {
@@ -3371,8 +3371,8 @@ body.theme-light .donut-stat-breakdown-sub {
 }
 
 #tab-dashboard #executiveDonutKpiCard .exec-progress-big-val {
-  font-size: 1.22rem;
-  line-height: 1.12;
+  font-size: 1.20rem;
+  line-height: 1.1;
   font-weight: 800;
 }
 
@@ -9433,9 +9433,24 @@ body.has-fullscreen-table {
   box-shadow: 0 2px 5px rgba(40, 5, 25, 0.4);
 }
 
+/* เซกเมนต์ที่ 2: สีน้ำเงิน (Royal / Deep Blue) คมชัด สดใส สง่างาม */
 .single-bar-segment.seg-2 {
-  background: linear-gradient(135deg, #047857 0%, #10B981 45%, #34D399 100%);
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.45);
+  background: linear-gradient(135deg, #1E40AF 0%, #2563EB 35%, #3B82F6 70%, #93C5FD 100%);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.6);
+}
+
+.single-bar-segment.seg-2 .seg-mname,
+.single-bar-segment.seg-2 .seg-val,
+.single-bar-segment.seg-2 .seg-amt {
+  color: #FFFFFF;
+  text-shadow: 0 1.5px 3px rgba(15, 23, 42, 0.95), 0 0 2px rgba(0, 0, 0, 0.9);
+}
+
+.single-bar-segment.seg-2 .seg-kpi-badge {
+  background: rgba(15, 23, 42, 0.65);
+  border: 1.2px solid rgba(255, 255, 255, 0.7);
+  color: #FFFFFF;
+  box-shadow: 0 2px 5px rgba(15, 23, 42, 0.4);
 }
 
 .single-bar-segment.seg-3 {
@@ -9575,7 +9590,7 @@ body.has-fullscreen-table {
 }
 
 .bar-row-fill.m-1 { background: linear-gradient(90deg, #D97706, #FBBF24); }
-.bar-row-fill.m-2 { background: linear-gradient(90deg, #047857, #34D399); }
+.bar-row-fill.m-2 { background: linear-gradient(90deg, #1E40AF, #3B82F6, #93C5FD); }
 .bar-row-fill.m-3 { background: linear-gradient(90deg, #0284C7, #38BDF8); }
 .bar-row-fill.m-4 { background: linear-gradient(90deg, #7C3AED, #C084FC); }
 
@@ -12809,8 +12824,22 @@ body.has-fullscreen-table {
   box-shadow: 0 2px 5px rgba(40, 5, 25, 0.4);
 }
 
+/* เซกเมนต์ที่ 2 (WBS): สีน้ำเงิน (Royal / Deep Blue) */
 .btn-wbs-kpi-month.m-seg-2 .btn-wbs-kpi-inner {
-  background: linear-gradient(135deg, #047857 0%, #10B981 45%, #34D399 100%);
+  background: linear-gradient(135deg, #1E40AF 0%, #2563EB 30%, #3B82F6 68%, #93C5FD 100%);
+}
+
+.btn-wbs-kpi-month.m-seg-2 .m-title,
+.btn-wbs-kpi-month.m-seg-2 .m-amt {
+  color: #FFFFFF;
+  text-shadow: 0 1.5px 3px rgba(15, 23, 42, 0.95), 0 0 2px rgba(0, 0, 0, 0.9);
+}
+
+.btn-wbs-kpi-month.m-seg-2 .m-kpi-badge {
+  background: rgba(15, 23, 42, 0.65);
+  border: 1.2px solid rgba(255, 255, 255, 0.7);
+  color: #FFFFFF;
+  box-shadow: 0 2px 5px rgba(15, 23, 42, 0.4);
 }
 
 .btn-wbs-kpi-month.m-seg-3 .btn-wbs-kpi-inner {
@@ -12911,7 +12940,21 @@ body.has-fullscreen-table {
 }
 
 .btn-wbs-kpi-month.active.m-seg-2 .btn-wbs-kpi-inner {
-  background: linear-gradient(135deg, #065F46 0%, #059669 30%, #10B981 70%, #34D399 100%);
+  background: linear-gradient(135deg, #1E3A8A 0%, #1D4ED8 25%, #2563EB 60%, #60A5FA 100%);
+}
+
+.btn-wbs-kpi-month.active.m-seg-2 .m-title {
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.95), 0 2px 4px rgba(15, 23, 42, 0.95);
+}
+
+.btn-wbs-kpi-month.active.m-seg-2 .m-kpi-badge {
+  background: rgba(15, 23, 42, 0.78);
+  border: 1.5px solid #FFFFFF;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.4), 0 2px 6px rgba(15, 23, 42, 0.5);
+}
+
+.btn-wbs-kpi-month.active.m-seg-2 .m-amt {
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.7), 0 2px 4px rgba(15, 23, 42, 0.95);
 }
 
 .btn-wbs-kpi-month.active.m-seg-3 .btn-wbs-kpi-inner {
@@ -13398,7 +13441,7 @@ body.theme-light .bar-sap-date-plain:hover {
   display: flex;
   align-items: center;
   padding: 0 0.85rem;
-  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), background 0.35s ease, box-shadow 0.35s ease;
   min-width: 40px;
 }
 
@@ -13407,12 +13450,60 @@ body.theme-light .bar-sap-date-plain:hover {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  color: #1E062F;
+  color: #FFFFFF;
+  text-shadow: 0 1.5px 3px rgba(0, 0, 0, 0.85), 0 0 2px rgba(0, 0, 0, 0.9);
   font-weight: 800;
   font-size: 0.82rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* Dynamic Month Target Fill Colors (แสดงสีกราฟตามเป้าหมายเดือนที่เลือก ตามคำสั่งผู้ใช้งาน) */
+/* เดือนที่ 1 (ต.ค. 69): สีชมพูพาสเทลสดใส (Pink Pastel) */
+.fill-target.target-seg-1,
+.fill-target.target-m-10 {
+  background: linear-gradient(90deg, #BE185D 0%, #DB2777 25%, #EC4899 65%, #F472B6 100%);
+  box-shadow: 0 0 16px rgba(236, 72, 153, 0.55), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+}
+.fill-target.target-seg-1 .bar-inner-content,
+.fill-target.target-m-10 .bar-inner-content {
+  color: #FFFFFF;
+  text-shadow: 0 1.5px 3px rgba(80, 7, 36, 0.95), 0 0 2px rgba(0, 0, 0, 0.9);
+}
+
+/* เดือนที่ 2 (พ.ย. 69): สีน้ำเงิน (Royal / Deep Blue) */
+.fill-target.target-seg-2,
+.fill-target.target-m-11 {
+  background: linear-gradient(90deg, #1E3A8A 0%, #1E40AF 25%, #2563EB 65%, #60A5FA 100%);
+  box-shadow: 0 0 16px rgba(37, 99, 235, 0.55), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+}
+.fill-target.target-seg-2 .bar-inner-content,
+.fill-target.target-m-11 .bar-inner-content {
+  color: #FFFFFF;
+  text-shadow: 0 1.5px 3px rgba(15, 23, 42, 0.95), 0 0 2px rgba(0, 0, 0, 0.9);
+}
+
+/* เดือนที่ 3 (ธ.ค. 69): สีฟ้า/น้ำเงินสว่าง (Cyan / Sky Blue) */
+.fill-target.target-seg-3,
+.fill-target.target-m-12 {
+  background: linear-gradient(90deg, #0369A1 0%, #0284C7 25%, #06B6D4 65%, #38BDF8 100%);
+  box-shadow: 0 0 16px rgba(6, 182, 212, 0.55), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+}
+.fill-target.target-seg-3 .bar-inner-content,
+.fill-target.target-m-12 .bar-inner-content {
+  color: #FFFFFF;
+  text-shadow: 0 1.5px 3px rgba(8, 47, 73, 0.95), 0 0 2px rgba(0, 0, 0, 0.9);
+}
+
+/* เดือนที่ 4 (ม.ค. หรืออื่นๆ): สีม่วงพาสเทล (Purple / Violet) */
+.fill-target.target-seg-4 {
+  background: linear-gradient(90deg, #5B21B6 0%, #7C3AED 25%, #9333EA 65%, #C084FC 100%);
+  box-shadow: 0 0 16px rgba(147, 51, 234, 0.55), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+}
+.fill-target.target-seg-4 .bar-inner-content {
+  color: #FFFFFF;
+  text-shadow: 0 1.5px 3px rgba(46, 16, 101, 0.95), 0 0 2px rgba(0, 0, 0, 0.9);
 }
 
 .track-progress {
@@ -17413,6 +17504,13 @@ body.theme-light .bar-sap-date-plain:hover {
 .wbs-seg-inc-closed {
   background: #00FF88;
   box-shadow: 0 0 10px #00FF88;
+  transition: width 0.4s ease;
+}
+.wbs-seg-selected-closed {
+  background: repeating-linear-gradient(45deg, #0284C7, #0284C7 8px, #00E5FF 8px, #00E5FF 16px);
+  box-shadow: 0 0 12px rgba(0, 229, 255, 0.85);
+  border-left: 1.5px solid rgba(255, 255, 255, 0.9);
+  transition: width 0.4s ease;
 }
 
 .wbs-box-sub {
@@ -17434,6 +17532,11 @@ body.theme-light .bar-sap-date-plain:hover {
   align-items: center;
   width: 100%;
 }
+.wbs-box-sub-row.row-selected {
+  color: #00E5FF;
+  font-weight: 700;
+  text-shadow: 0 0 8px rgba(0, 229, 255, 0.6);
+}
 
 /* Composite Progress Bar (สำหรับ % ปิดงาน ที่มีส่วนเพิ่มสีต่างออกไป) */
 .progress-fill-composite {
@@ -17448,22 +17551,44 @@ body.theme-light .bar-sap-date-plain:hover {
   height: 100%;
   border-top-left-radius: var(--radius-full);
   border-bottom-left-radius: var(--radius-full);
-  flex: 1 1 auto;
+  flex: 0 0 auto;
+  transition: width 0.4s ease;
 }
 .progress-fill-composite .fill-inc-part {
   height: 100%;
   flex: 0 0 auto;
-  min-width: 14px;
+  min-width: 0;
   background: linear-gradient(90deg, #10B981, #00FF88);
   box-shadow: 0 0 12px #00FF88, inset 0 0 4px rgba(255, 255, 255, 0.6);
   border-left: 1.5px solid rgba(255, 255, 255, 0.9);
   border-top-right-radius: var(--radius-full);
   border-bottom-right-radius: var(--radius-full);
   animation: pulseNeonGlow 1.8s infinite alternate ease-in-out;
+  transition: width 0.4s ease;
+}
+.progress-fill-composite .fill-inc-part.has-selected-after {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+.progress-fill-composite .fill-selected-part {
+  height: 100%;
+  flex: 0 0 auto;
+  min-width: 0;
+  background: repeating-linear-gradient(45deg, #0284C7, #0284C7 8px, #00E5FF 8px, #00E5FF 16px);
+  box-shadow: 0 0 14px #00E5FF, 0 0 24px rgba(0, 229, 255, 0.65), inset 0 0 4px rgba(255, 255, 255, 0.8);
+  border-left: 1.5px solid rgba(255, 255, 255, 0.95);
+  border-top-right-radius: var(--radius-full);
+  border-bottom-right-radius: var(--radius-full);
+  animation: pulseCyanGlow 1.8s infinite alternate ease-in-out;
+  transition: width 0.4s ease;
 }
 @keyframes pulseNeonGlow {
   0% { box-shadow: 0 0 6px #00FF88; filter: brightness(1); }
   100% { box-shadow: 0 0 16px #00FF88, 0 0 24px rgba(0,255,136,0.6); filter: brightness(1.25); }
+}
+@keyframes pulseCyanGlow {
+  0% { box-shadow: 0 0 6px #00E5FF, 0 0 12px rgba(0, 229, 255, 0.4); filter: brightness(1); }
+  100% { box-shadow: 0 0 16px #00E5FF, 0 0 28px rgba(0, 229, 255, 0.8); filter: brightness(1.25); }
 }
 
 .wbs-pct-breakdown-tag {

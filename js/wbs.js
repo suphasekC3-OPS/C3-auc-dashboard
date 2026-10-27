@@ -40,7 +40,7 @@
       const timeStr = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')} น.`;
       return includeTime ? `ซิงค์ล่าสุด: ${day} ${mStr} ${yStr} ${timeStr}` : `ซิงค์ล่าสุด: ${day} ${mStr} ${yStr}`;
     }
-    return includeTime ? `ซิงค์ล่าสุด: 26 ต.ค. 69 22:30 น.` : `ซิงค์ล่าสุด: 26 ต.ค. 69`;
+    return includeTime ? `ซิงค์ล่าสุด: 27 ต.ค. 69 08:33 น.` : `ซิงค์ล่าสุด: 27 ต.ค. 69`;
   }
 
   function getGoogleSheetFullSyncTimeText() {
@@ -54,7 +54,7 @@
       const timeStr = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:${String(d.getSeconds()).padStart(2, '0')} น.`;
       return `${day} ${mStr} ${yStr} เวลา ${timeStr}`;
     }
-    return `26 ต.ค. 2569 เวลา 22:30 น.`;
+    return `27 ต.ค. 2569 เวลา 08:33 น.`;
   }
 
   // Comprehensive Column definitions (03 WBS base + 04 WBS ZBUDR064 + 05 WBS CN41 + 06 WBS CN41)
@@ -660,11 +660,11 @@
       <span class="wbs-pill pill-file pill-file-03" onclick="if(window.openDhModelModal)window.openDhModelModal('src_03')" title="วันที่/เวลา นำเข้าข้อมูล: 23 ต.ค. 2569, 08:04 น. (ไฟล์ 03 WBSงานคงเหลือเดือนล่าสุด.xlsx)">
         📋 <strong>03 WBSงานคงเหลือเดือนล่าสุด.xlsx:</strong> 23 ต.ค. 2569, 08:04 น.
       </span>
-      <span class="wbs-pill pill-file pill-file-04" onclick="if(window.openDhModelModal)window.openDhModelModal('src_04')" title="วันที่/เวลา นำเข้าข้อมูล: 26 ต.ค. 2569, 14:15 น. (ไฟล์ 04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx)">
-        ⚡ <strong>04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx:</strong> 26 ต.ค. 2569, 14:15 น.
+      <span class="wbs-pill pill-file pill-file-04" onclick="if(window.openDhModelModal)window.openDhModelModal('src_04')" title="วันที่/เวลา นำเข้าข้อมูล: 27 ต.ค. 2569, 08:06 น. (ไฟล์ 04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx)">
+        ⚡ <strong>04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx:</strong> 27 ต.ค. 2569, 08:06 น.
       </span>
-      <span class="wbs-pill pill-file pill-file-05" onclick="if(window.openDhModelModal)window.openDhModelModal('src_06')" title="วันที่/เวลา นำเข้าข้อมูล: 26 ต.ค. 2569, 14:15 น. (ไฟล์ 06 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 26 ตค 69.xlsx)">
-        📑 <strong>06 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 26 ตค 69:</strong> 26 ต.ค. 2569, 14:15 น.
+      <span class="wbs-pill pill-file pill-file-05" onclick="if(window.openDhModelModal)window.openDhModelModal('src_06')" title="วันที่/เวลา นำเข้าข้อมูล: 27 ต.ค. 2569, 08:09 น. (ไฟล์ 06 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 27 ตค 69.xlsx)">
+        📑 <strong>06 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 27 ตค 69:</strong> 27 ต.ค. 2569, 08:09 น.
       </span>
       <span class="wbs-pill pill-file pill-file-06" onclick="if(window.openDhModelModal)window.openDhModelModal('src_sheet')" title="วันที่/เวลา ซิงค์ข้อมูล: 22 ต.ค. 2569, 17:23 น. (Google Sheet แผนงานแล้วเสร็จ ออนไลน์)">
         📊 <strong>Google Sheet แผนงานแล้วเสร็จ:</strong> 22 ต.ค. 2569 (Live API)
@@ -2058,6 +2058,10 @@
     const targetMarkerLeft = `${targetBarPct}%`;
     const markerAlignClass = targetBarPct < 25 ? 'label-right' : 'label-left';
 
+    // Selected Target Month Color Classes (แสดงสีกราฟตามเป้าหมายที่เลือก)
+    const selectedMonthIndex = Math.max(0, availableMonths.findIndex(m => m.monthNum === selectedMonth.monthNum));
+    const targetMonthClass = `target-seg-${selectedMonthIndex + 1} target-m-${selectedMonth.monthNum}`;
+
     container.innerHTML = `
       <div class="wbs-comparison-unified-grid">
         <!-- Left Column: ภาพรวมมูลค่า & งาน AUC (ตามรูปที่ 15: กว้างเท่าเดิม ปรับความสูงเท่ากับการ์ดเปรียบเทียบ) -->
@@ -2072,7 +2076,7 @@
                 </div>
               </div>
               <div style="display: flex; justify-content: flex-end; margin-top: 3px;">
-                <span class="wbs-sap-date-plain-text" id="wbsKpiSapDateText" onclick="if(window.openDhModelModal)window.openDhModelModal('src_04')" title="ข้อมูลสถานะ SAP จากไฟล์ 04 ZBUDR064 แก้ไขล่าสุด: 23 ต.ค. 2569 (คลิกเพื่อดูผัง Model View)">สถานะ SAP แก้ไขล่าสุดวันที่ 23 ต.ค. 69</span>
+                <span class="wbs-sap-date-plain-text" id="wbsKpiSapDateText" onclick="if(window.openDhModelModal)window.openDhModelModal('src_04')" title="ข้อมูลสถานะ SAP จากไฟล์ 04 ZBUDR064 แก้ไขล่าสุด: 27 ต.ค. 2569 (คลิกเพื่อดูผัง Model View)">สถานะ SAP แก้ไขล่าสุดวันที่ 27 ต.ค. 69</span>
               </div>
             </div>
 
@@ -2119,15 +2123,20 @@
                 <span class="wbs-val-number text-success" id="wbsKpiClosedVal">0.00 ฿</span>
                 <span class="wbs-val-mb-pill pill-green" id="wbsKpiClosedValMb">(0.00 ลบ.)</span>
               </div>
-              <!-- แท่งกราฟปิดงาน (ส่วน SAP สีต่างออกไป) -->
-              <div class="wbs-segment-track" id="wbsClosedSegmentTrack" title="แท่งกราฟปิดงาน (ส่วน SAP สีเขียวนีออนสว่างต่างออกไป)">
+              <!-- แท่งกราฟปิดงาน (ส่วน SAP สีต่างออกไป และส่วนที่เลือกสีฟ้า) -->
+              <div class="wbs-segment-track" id="wbsClosedSegmentTrack" title="แท่งกราฟปิดงาน (SAP สีเขียว / ส่วนที่เลือกสีฟ้า)">
                 <div class="wbs-seg-bar wbs-seg-base-closed" id="wbsClosedSegBase" style="width: 95%;" title="ปิดงานเดิมก่อนรวม SAP"></div>
                 <div class="wbs-seg-bar wbs-seg-inc-closed" id="wbsClosedSegSap" style="width: 5%;" title="ปิดงานใน SAP"></div>
+                <div class="wbs-seg-bar wbs-seg-selected-closed" id="wbsClosedSegSelected" style="width: 0%; display: none;" title="ส่วนที่เลือกจาก Checkbox"></div>
               </div>
               <div class="wbs-box-sub sub-stacked">
                 <div class="wbs-box-sub-row" style="color: #00FF88;">
                   <span id="wbsKpiSapClosedDetail">+ SAP (${sapTargetStatus}): 0.00 ลบ.</span>
                   <span id="wbsKpiSapClosedJobs" style="font-weight: 700;">(0 งาน)</span>
+                </div>
+                <div class="wbs-box-sub-row row-selected" id="wbsKpiSelectedClosedRow" style="color: #00E5FF; display: none;">
+                  <span id="wbsKpiSelectedClosedDetail">+ ที่เลือก: 0.00 ลบ.</span>
+                  <span id="wbsKpiSelectedClosedJobs" style="font-weight: 700;">(0 งาน)</span>
                 </div>
                 <div class="wbs-box-sub-row">
                   <span id="wbsKpiBaseClosedDetail" style="color: #FFFFFF; font-weight: 700;">เดิม: 0.00 ลบ.</span>
@@ -2163,6 +2172,7 @@
                   <div class="progress-fill-composite" id="wbsBarMainComposite" style="width: 0%;">
                     <div class="progress-fill fill-gold-stripe fill-base-part" id="wbsBarMainBaseSeg"></div>
                     <div class="fill-inc-part" id="wbsBarMainIncSeg" title="ส่วนปรับปรุงที่เพิ่มขึ้น"></div>
+                    <div class="fill-inc-part fill-selected-part" id="wbsBarMainSelectedSeg" style="display: none;" title="ส่วนที่เลือกจาก Checkbox"></div>
                     <div class="pea-ev-runner" style="display: block;" title="รถบริการเคลื่อนที่ กฟภ. (PEA EV)">
                       <div class="pea-ev-car-body">
                         <img src="assets/pea_truck_right.png" alt="รถบริการเคลื่อนที่ กฟภ." class="pea-ev-truck-img" />
@@ -2194,6 +2204,7 @@
                   <div class="progress-fill-composite" id="wbsBarJobComposite" style="width: 0%;">
                     <div class="progress-fill fill-gold-stripe fill-base-part" id="wbsBarJobBaseSeg"></div>
                     <div class="fill-inc-part" id="wbsBarJobIncSeg" title="ส่วนปรับปรุงที่เพิ่มขึ้น"></div>
+                    <div class="fill-inc-part fill-selected-part" id="wbsBarJobSelectedSeg" style="display: none;" title="ส่วนที่เลือกจาก Checkbox"></div>
                     <div class="pea-ev-runner" style="display: block;" title="รถบริการเคลื่อนที่ กฟภ. (PEA EV)">
                       <div class="pea-ev-car-body">
                         <img src="assets/pea_truck_right.png" alt="รถบริการเคลื่อนที่ กฟภ." class="pea-ev-truck-img" />
@@ -2271,7 +2282,7 @@
                     </div>
                   </div>
                   <div class="wbs-kpi-track track-target" title="เป้าหมายปิดเพิ่มเดือน ${selectedMonth.shortName} 69: ${targetDisplay}">
-                    <div class="wbs-kpi-fill fill-target" style="width: ${targetBarPct}%;">
+                    <div class="wbs-kpi-fill fill-target ${targetMonthClass}" style="width: ${targetBarPct}%;">
                       <div class="bar-inner-content">
                         <span class="bar-inner-label">เป้าหมาย KPI ระดับ 5 (${selectedMonth.shortName} 69)</span>
                         <span class="bar-inner-val">${formatShort(targetAmount)}</span>
@@ -2286,7 +2297,7 @@
                     <div class="bar-header-left">
                       <span class="bar-tag tag-progress">⚡ กราฟล่าง (ยอดดำเนินการ)</span>
                       <span class="bar-month-pill">${selectedMonth.shortName} 69</span>
-                      <span class="bar-sap-date-plain" onclick="if(window.openDhModelModal)window.openDhModelModal('src_04')" style="cursor:pointer;" title="ข้อมูลสถานะ SAP จากไฟล์ 04 ZBUDR064 แก้ไขล่าสุด: 23 ต.ค. 2569 (คลิกเพื่อดูผัง Model View)">สถานะ SAP แก้ไขล่าสุด: 23 ต.ค. 69</span>
+                      <span class="bar-sap-date-plain" onclick="if(window.openDhModelModal)window.openDhModelModal('src_04')" style="cursor:pointer;" title="ข้อมูลสถานะ SAP จากไฟล์ 04 ZBUDR064 แก้ไขล่าสุด: 27 ต.ค. 2569 (คลิกเพื่อดูผัง Model View)">สถานะ SAP แก้ไขล่าสุด: 27 ต.ค. 69</span>
                     </div>
                     <div class="bar-header-right">
                       <!-- CLSD F4 / F2: ขนาดอักษรเท่ากับจำนวนเงิน -->
@@ -2434,29 +2445,45 @@
       }
     });
 
-    // 4. นำมารวมกันตามคำสั่งผู้ใช้งาน (การ์ดใหม่):
+    // 4. คำนวณส่วนที่เลือกจาก Checkbox (wbsState.selectedWbs)
+    let selectedCheckboxCount = 0;
+    let selectedCheckboxAuc = 0;
+    if (typeof wbsState !== 'undefined' && wbsState.selectedWbs && wbsState.selectedWbs.size > 0) {
+      filteredItems.forEach(i => {
+        if (wbsState.selectedWbs.has(i.wbs)) {
+          selectedCheckboxCount++;
+          selectedCheckboxAuc += (Number(i.cn41ActualCost) || 0);
+        }
+      });
+    }
+
+    // 5. นำมารวมกันตามคำสั่งผู้ใช้งาน (การ์ดใหม่):
     // วงกลม 1: ภาพรวมมูลค่า + มูลค่าที่เพิ่มขึ้น/ลดลง
     const netTotalVal = baseTotalVal + totalCostInc;
     const netTotalJobs = baseTotalJobs || filteredItems.length;
 
-    // วงกลม 2: ปิดงานแล้ว + SAP CLSD (ทั้งมูลค่าและจำนวนงาน)
-    const netClosedVal = baseClosedVal + clsdSapAuc;
-    const netClosedJobs = baseClosedJobs + clsdSapCount;
+    // วงกลม 2: ปิดงานแล้ว + SAP CLSD + ส่วนที่เลือก (Checkbox)
+    const netClosedVal = baseClosedVal + clsdSapAuc + selectedCheckboxAuc;
+    const netClosedJobs = baseClosedJobs + clsdSapCount + selectedCheckboxCount;
 
     // เปอร์เซ็นต์ก่อนการปรับปรุง (Base Percentage)
     const basePctVal = baseTotalVal > 0 ? (baseClosedVal / baseTotalVal) * 100 : 0;
     const basePctJobs = baseTotalJobs > 0 ? (baseClosedJobs / baseTotalJobs) * 100 : 0;
 
-    // เปอร์เซ็นต์ความสำเร็จใหม่ (Net Percentage)
+    // เปอร์เซ็นต์ส่วน SAP (SAP Increment Percentage)
+    const sapIncPctVal = netTotalVal > 0 ? (clsdSapAuc / netTotalVal) * 100 : 0;
+    const sapIncPctJobs = netTotalJobs > 0 ? (clsdSapCount / netTotalJobs) * 100 : 0;
+
+    // เปอร์เซ็นต์ส่วนที่เลือกจาก Checkbox (Selected from Checkbox Percentage)
+    const selectedIncPctVal = netTotalVal > 0 ? (selectedCheckboxAuc / netTotalVal) * 100 : 0;
+    const selectedIncPctJobs = netTotalJobs > 0 ? (selectedCheckboxCount / netTotalJobs) * 100 : 0;
+
+    // เปอร์เซ็นต์ความสำเร็จสุทธิใหม่ (Net Percentage)
     const netPctVal = netTotalVal > 0 ? (netClosedVal / netTotalVal) * 100 : 0;
     const netPctJobs = netTotalJobs > 0 ? (netClosedJobs / netTotalJobs) * 100 : 0;
 
-    // ส่วนต่างที่เพิ่มขึ้นจากการปรับปรุง (ส่วนต่าง > 0)
-    const diffPctVal = Math.max(0, netPctVal - basePctVal);
-    const diffPctJobs = Math.max(0, netPctJobs - basePctJobs);
-
-    // 5. แสดงผลในการ์ดใหม่ (#wbsExecutiveDonutKpiCard)
-    // 5.1 ส่วนภาพรวมมูลค่า (ทำแบบแท่งกราฟ มีอักษร มูลค่า / งาน และส่วนเพิ่ม/ลด สีต่างออกไป)
+    // 6. แสดงผลในการ์ดใหม่ (#wbsExecutiveDonutKpiCard)
+    // 6.1 ส่วนภาพรวมมูลค่า (ทำแบบแท่งกราฟ มีอักษร มูลค่า / งาน และส่วนเพิ่ม/ลด สีต่างออกไป)
     const wbsTotalVal = document.getElementById('wbsKpiTotalVal');
     const wbsTotalValMb = document.getElementById('wbsKpiTotalValMb');
     const wbsTotalJobs = document.getElementById('wbsKpiTotalJobsSub');
@@ -2495,26 +2522,43 @@
       totalSegInc.title = `ส่วนเพิ่ม/ลด: ${s}${totalCostInc.toLocaleString('th-TH', { minimumFractionDigits: 2 })} ฿`;
     }
 
-    // 5.2 ส่วนมูลค่าปิดงาน (ทำแบบแท่งกราฟ มีอักษร มูลค่า / งาน และส่วน SAP สีต่างออกไป)
+    // 6.2 ส่วนมูลค่าปิดงาน (แสดง ส่วนที่เลือก เป็นสีฟ้า ทั้งมูลค่าและจำนวนงาน ตามคำสั่งผู้ใช้งาน)
     const wbsClosedVal = document.getElementById('wbsKpiClosedVal');
     const wbsClosedValMb = document.getElementById('wbsKpiClosedValMb');
     const wbsClosedJobs = document.getElementById('wbsKpiClosedJobs');
+    const jobBadgeEl = document.getElementById('wbsKpiClosedJobsSubBadge');
     const wbsBaseDetail = document.getElementById('wbsKpiBaseClosedDetail');
     const wbsBaseJobs = document.getElementById('wbsKpiBaseClosedJobs');
     const wbsSapDetail = document.getElementById('wbsKpiSapClosedDetail');
     const wbsSapJobs = document.getElementById('wbsKpiSapClosedJobs');
+    const selectedClosedRow = document.getElementById('wbsKpiSelectedClosedRow');
+    const selectedClosedDetail = document.getElementById('wbsKpiSelectedClosedDetail');
+    const selectedClosedJobs = document.getElementById('wbsKpiSelectedClosedJobs');
     const closedSegBase = document.getElementById('wbsClosedSegBase');
     const closedSegSap = document.getElementById('wbsClosedSegSap');
+    const closedSegSelected = document.getElementById('wbsClosedSegSelected');
 
     if (wbsClosedVal) {
       wbsClosedVal.textContent = `${netClosedVal.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ฿`;
     }
     if (wbsClosedValMb) {
-      wbsClosedValMb.textContent = `(${(netClosedVal / 1e6).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ลบ.)`;
+      if (selectedCheckboxAuc > 0) {
+        wbsClosedValMb.innerHTML = `(${(netClosedVal / 1e6).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ลบ.) <span class="val-selected-pill" style="color:#00E5FF; font-weight:800; font-size:0.75rem; text-shadow:0 0 8px rgba(0,229,255,0.7);">(+${(selectedCheckboxAuc / 1e6).toFixed(2)} ลบ.)</span>`;
+      } else {
+        wbsClosedValMb.textContent = `(${(netClosedVal / 1e6).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ลบ.)`;
+      }
     }
     if (wbsClosedJobs) {
       wbsClosedJobs.textContent = netClosedJobs.toLocaleString('th-TH');
     }
+    if (jobBadgeEl) {
+      if (selectedCheckboxCount > 0) {
+        jobBadgeEl.innerHTML = `<span>งาน: <strong id="wbsKpiClosedJobs">${netClosedJobs.toLocaleString('th-TH')}</strong> งาน <span class="badge-selected-pill" style="color:#00E5FF; font-weight:800; text-shadow:0 0 8px rgba(0,229,255,0.7); font-size:0.70rem;">(+${selectedCheckboxCount.toLocaleString('th-TH')} ที่เลือก)</span></span>`;
+      } else {
+        jobBadgeEl.innerHTML = `<span>งาน: <strong id="wbsKpiClosedJobs">${netClosedJobs.toLocaleString('th-TH')}</strong> งาน</span>`;
+      }
+    }
+
     if (wbsBaseDetail) {
       wbsBaseDetail.innerHTML = `เดิม: <strong style="color: #FFFFFF; font-weight: 700;">${(baseClosedVal / 1e6).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ลบ.</strong>`;
       wbsBaseDetail.style.color = '#FFFFFF';
@@ -2525,61 +2569,174 @@
       wbsBaseJobs.style.color = '#FFFFFF';
       wbsBaseJobs.style.fontWeight = '700';
     }
+
     if (wbsSapDetail) {
       wbsSapDetail.innerHTML = `+ SAP (${sapTargetStatus}): <strong>${(clsdSapAuc / 1e6).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ลบ.</strong>`;
     }
     if (wbsSapJobs) {
       wbsSapJobs.textContent = `(${clsdSapCount.toLocaleString('th-TH')} งาน)`;
     }
-    if (closedSegBase && closedSegSap) {
-      closedSegBase.style.width = 'calc(100% - 28px)';
-      closedSegSap.style.width = '28px';
-      closedSegSap.title = `ปิดใน SAP (${sapTargetStatus}): ${clsdSapCount.toLocaleString('th-TH')} งาน (${(clsdSapAuc / 1e6).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ลบ.)`;
+
+    // แถวส่วนที่เลือก (สีฟ้า ตามคำสั่งผู้ใช้งาน)
+    if (selectedClosedRow) {
+      if (selectedCheckboxCount > 0) {
+        selectedClosedRow.style.display = 'flex';
+        if (selectedClosedDetail) {
+          selectedClosedDetail.innerHTML = `+ ที่เลือก: <strong style="color:#00E5FF; font-weight:800; text-shadow:0 0 8px rgba(0,229,255,0.6);">${(selectedCheckboxAuc / 1e6).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ลบ.</strong>`;
+        }
+        if (selectedClosedJobs) {
+          selectedClosedJobs.textContent = `(${selectedCheckboxCount.toLocaleString('th-TH')} งาน)`;
+          selectedClosedJobs.style.color = '#00E5FF';
+        }
+      } else {
+        selectedClosedRow.style.display = 'none';
+      }
     }
 
-    // 5.3 ส่วน % ปิดงานมูลค่า และ % ปิดจำนวนงาน (ส่วนที่เพิ่มขึ้นใช้แท่งกราฟสีต่างออกไป)
+    // แท่งกราฟย่อยในกล่องปิดงาน (เดิม, SAP, ส่วนที่เลือกสีฟ้า)
+    if (closedSegBase && netClosedVal > 0) {
+      const baseSharePct = (baseClosedVal / netClosedVal) * 100;
+      const sapSharePct = (clsdSapAuc / netClosedVal) * 100;
+      const selectedSharePct = (selectedCheckboxAuc / netClosedVal) * 100;
+
+      closedSegBase.style.width = `${baseSharePct}%`;
+
+      if (closedSegSap) {
+        if (clsdSapAuc > 0) {
+          closedSegSap.style.display = 'block';
+          closedSegSap.style.width = `${sapSharePct}%`;
+          closedSegSap.title = `ปิดใน SAP (${sapTargetStatus}): ${clsdSapCount.toLocaleString('th-TH')} งาน (${(clsdSapAuc / 1e6).toFixed(2)} ลบ.)`;
+        } else {
+          closedSegSap.style.display = 'none';
+        }
+      }
+
+      if (closedSegSelected) {
+        if (selectedCheckboxAuc > 0) {
+          closedSegSelected.style.display = 'block';
+          closedSegSelected.style.width = `${selectedSharePct}%`;
+          closedSegSelected.title = `ส่วนที่เลือก: ${selectedCheckboxCount.toLocaleString('th-TH')} งาน (${(selectedCheckboxAuc / 1e6).toFixed(2)} ลบ.)`;
+        } else {
+          closedSegSelected.style.display = 'none';
+        }
+      }
+    }
+
+    // 6.3 ส่วน % ปิดงานมูลค่า และ % ปิดจำนวนงาน (แสดง ส่วนที่เลือก เป็นสีฟ้า ตามคำสั่งผู้ใช้งาน)
     const wbsPctVal = document.getElementById('wbsKpiPctVal');
     const wbsPctValSubText = document.getElementById('wbsKpiPctValSubText');
     const wbsBarMainComposite = document.getElementById('wbsBarMainComposite');
-    const wbsBarMain = document.getElementById('wbsBarMainPctClosed');
+    const wbsBarMainBaseSeg = document.getElementById('wbsBarMainBaseSeg');
+    const wbsBarMainIncSeg = document.getElementById('wbsBarMainIncSeg');
+    const wbsBarMainSelectedSeg = document.getElementById('wbsBarMainSelectedSeg');
 
     if (wbsPctVal) {
       wbsPctVal.textContent = `${netPctVal.toFixed(2)}%`;
     }
     if (wbsPctValSubText) {
-      wbsPctValSubText.innerHTML = (typeof basePctVal === 'number' && !isNaN(basePctVal))
-        ? `เดิม ${basePctVal.toFixed(2)}%`
-        : '';
+      let subHtml = `เดิม ${basePctVal.toFixed(2)}%`;
+      if (clsdSapAuc > 0) {
+        subHtml += ` | <span style="color:#00FF88;">+SAP ${sapIncPctVal.toFixed(2)}%</span>`;
+      }
+      if (selectedCheckboxAuc > 0) {
+        subHtml += ` | <span style="color:#00E5FF; font-weight:800; text-shadow:0 0 8px rgba(0,229,255,0.7);">+ที่เลือก ${selectedIncPctVal.toFixed(2)}%</span>`;
+      }
+      wbsPctValSubText.innerHTML = subHtml;
       wbsPctValSubText.style.color = '#FFFFFF';
       wbsPctValSubText.style.fontWeight = '700';
     }
+
     if (wbsBarMainComposite) {
       wbsBarMainComposite.style.width = `${Math.min(100, Math.max(0, netPctVal))}%`;
-    }
-    if (wbsBarMain) {
-      wbsBarMain.style.width = `${Math.min(100, Math.max(0, netPctVal))}%`;
+
+      if (wbsBarMainBaseSeg) {
+        const baseShare = netPctVal > 0 ? (basePctVal / netPctVal) * 100 : 100;
+        wbsBarMainBaseSeg.style.width = `${baseShare}%`;
+      }
+
+      if (wbsBarMainIncSeg) {
+        if (clsdSapAuc > 0) {
+          const sapShare = netPctVal > 0 ? (sapIncPctVal / netPctVal) * 100 : 0;
+          wbsBarMainIncSeg.style.display = 'block';
+          wbsBarMainIncSeg.style.width = `${sapShare}%`;
+          if (selectedCheckboxAuc > 0) {
+            wbsBarMainIncSeg.classList.add('has-selected-after');
+          } else {
+            wbsBarMainIncSeg.classList.remove('has-selected-after');
+          }
+        } else {
+          wbsBarMainIncSeg.style.display = 'none';
+        }
+      }
+
+      if (wbsBarMainSelectedSeg) {
+        if (selectedCheckboxAuc > 0) {
+          const selShare = netPctVal > 0 ? (selectedIncPctVal / netPctVal) * 100 : 0;
+          wbsBarMainSelectedSeg.style.display = 'block';
+          wbsBarMainSelectedSeg.style.width = `${selShare}%`;
+          wbsBarMainSelectedSeg.title = `ส่วนที่เลือก: +${selectedIncPctVal.toFixed(2)}% (${(selectedCheckboxAuc / 1e6).toFixed(2)} ลบ.)`;
+        } else {
+          wbsBarMainSelectedSeg.style.display = 'none';
+        }
+      }
     }
 
     const wbsJobPct = document.getElementById('wbsKpiJobPctClosed');
     const wbsJobPctSubText = document.getElementById('wbsKpiJobPctSubText');
     const wbsBarJobComposite = document.getElementById('wbsBarJobComposite');
-    const wbsBarJob = document.getElementById('wbsBarJobPctClosed');
+    const wbsBarJobBaseSeg = document.getElementById('wbsBarJobBaseSeg');
+    const wbsBarJobIncSeg = document.getElementById('wbsBarJobIncSeg');
+    const wbsBarJobSelectedSeg = document.getElementById('wbsBarJobSelectedSeg');
 
     if (wbsJobPct) {
       wbsJobPct.textContent = `${netPctJobs.toFixed(2)}%`;
     }
     if (wbsJobPctSubText) {
-      wbsJobPctSubText.innerHTML = (typeof basePctJobs === 'number' && !isNaN(basePctJobs))
-        ? `เดิม ${basePctJobs.toFixed(2)}%`
-        : '';
+      let subHtml = `เดิม ${basePctJobs.toFixed(2)}%`;
+      if (clsdSapCount > 0) {
+        subHtml += ` | <span style="color:#00FF88;">+SAP ${sapIncPctJobs.toFixed(2)}%</span>`;
+      }
+      if (selectedCheckboxCount > 0) {
+        subHtml += ` | <span style="color:#00E5FF; font-weight:800; text-shadow:0 0 8px rgba(0,229,255,0.7);">+ที่เลือก ${selectedIncPctJobs.toFixed(2)}%</span>`;
+      }
+      wbsJobPctSubText.innerHTML = subHtml;
       wbsJobPctSubText.style.color = '#FFFFFF';
       wbsJobPctSubText.style.fontWeight = '700';
     }
+
     if (wbsBarJobComposite) {
       wbsBarJobComposite.style.width = `${Math.min(100, Math.max(0, netPctJobs))}%`;
-    }
-    if (wbsBarJob) {
-      wbsBarJob.style.width = `${Math.min(100, Math.max(0, netPctJobs))}%`;
+
+      if (wbsBarJobBaseSeg) {
+        const baseShare = netPctJobs > 0 ? (basePctJobs / netPctJobs) * 100 : 100;
+        wbsBarJobBaseSeg.style.width = `${baseShare}%`;
+      }
+
+      if (wbsBarJobIncSeg) {
+        if (clsdSapCount > 0) {
+          const sapShare = netPctJobs > 0 ? (sapIncPctJobs / netPctJobs) * 100 : 0;
+          wbsBarJobIncSeg.style.display = 'block';
+          wbsBarJobIncSeg.style.width = `${sapShare}%`;
+          if (selectedCheckboxCount > 0) {
+            wbsBarJobIncSeg.classList.add('has-selected-after');
+          } else {
+            wbsBarJobIncSeg.classList.remove('has-selected-after');
+          }
+        } else {
+          wbsBarJobIncSeg.style.display = 'none';
+        }
+      }
+
+      if (wbsBarJobSelectedSeg) {
+        if (selectedCheckboxCount > 0) {
+          const selShare = netPctJobs > 0 ? (selectedIncPctJobs / netPctJobs) * 100 : 0;
+          wbsBarJobSelectedSeg.style.display = 'block';
+          wbsBarJobSelectedSeg.style.width = `${selShare}%`;
+          wbsBarJobSelectedSeg.title = `ส่วนที่เลือก: +${selectedIncPctJobs.toFixed(2)}% (${selectedCheckboxCount.toLocaleString('th-TH')} งาน)`;
+        } else {
+          wbsBarJobSelectedSeg.style.display = 'none';
+        }
+      }
     }
 
     const unitSrc = document.getElementById('kpiAvgUnit');
@@ -3192,9 +3349,9 @@
                 <span class="sort-indicator" style="font-size:0.75rem; margin-left:2px; color:var(--pea-gold-400);">${sortArrow}</span>
               </div>
             </div>
-            ${col.id === 'statusSap' ? `<div class="th-sub-date-text" style="font-size: 0.70rem; color: #CBD5E1; font-weight: 500; line-height: 1.2; margin: 1px 0 3px 0; text-align: center; white-space: nowrap;" title="วันที่แก้ไขล่าสุดของไฟล์ 04 ZBUDR064: 26 ต.ค. 2569">แก้ไขล่าสุด: 26 ต.ค. 69</div>` : ''}
+            ${col.id === 'statusSap' ? `<div class="th-sub-date-text" style="font-size: 0.70rem; color: #CBD5E1; font-weight: 500; line-height: 1.2; margin: 1px 0 3px 0; text-align: center; white-space: nowrap;" title="วันที่แก้ไขล่าสุดของไฟล์ 04 ZBUDR064: 27 ต.ค. 2569">แก้ไขล่าสุด: 27 ต.ค. 69</div>` : ''}
             ${col.id === 'cn41Cost05' ? `<div class="th-sub-date-text" style="font-size: 0.70rem; color: #CBD5E1; font-weight: 500; line-height: 1.2; margin: 1px 0 3px 0; text-align: center; white-space: nowrap;" title="วันที่แก้ไขล่าสุดของไฟล์ 05 CN41: 14 ต.ค. 2569">แก้ไขล่าสุด: 14 ต.ค. 69</div>` : ''}
-            ${col.id === 'cn41ActualCost' ? `<div class="th-sub-date-text" style="font-size: 0.70rem; color: #CBD5E1; font-weight: 500; line-height: 1.2; margin: 1px 0 3px 0; text-align: center; white-space: nowrap;" title="วันที่แก้ไขล่าสุดของไฟล์ 06 CN41: 26 ต.ค. 2569">แก้ไขล่าสุด: 26 ต.ค. 69</div>` : ''}
+            ${col.id === 'cn41ActualCost' ? `<div class="th-sub-date-text" style="font-size: 0.70rem; color: #CBD5E1; font-weight: 500; line-height: 1.2; margin: 1px 0 3px 0; text-align: center; white-space: nowrap;" title="วันที่แก้ไขล่าสุดของไฟล์ 06 CN41: 27 ต.ค. 2569">แก้ไขล่าสุด: 27 ต.ค. 69</div>` : ''}
             ${(col.id === 'planClose' || col.id === 'note') ? `<div class="th-sub-date-text wbs-th-sync-time" style="font-size: 0.70rem; color: #CBD5E1; font-weight: 500; line-height: 1.2; margin: 1px 0 3px 0; text-align: center; white-space: nowrap;" title="เวลาซิงค์ข้อมูลล่าสุดจาก Google Sheet: ${getGoogleSheetFullSyncTimeText()}">${getGoogleSheetSyncTimeText()}</div>` : ''}
             ${headerMetricHtml}
           </div>
@@ -3676,7 +3833,7 @@
               </td>`;
               break;
             }
-            // File 06 Columns (CN41 มูลค่า AUC ล่าสุด 26 ต.ค. 69)
+            // File 06 Columns (CN41 มูลค่า AUC ล่าสุด 27 ต.ค. 69)
             case 'cn41ActualCost':
               rowHtml += `<td style="text-align: right; font-family: var(--font-mono, monospace); font-size: 0.85rem; font-weight: 700; color: #38BDF8;" title="มูลค่า AUC ล่าสุด (ไฟล์ 06): ${formatMoney(item.cn41ActualCost)} บาท">${formatMoney(item.cn41ActualCost)}</td>`;
               break;

@@ -2372,13 +2372,20 @@
       return;
     }
 
+    // วัดความสูงตามธรรมชาติของเนื้อหา เพื่อป้องกันการบีบอัดจนองค์ประกอบทับซ้อนกัน
+    const prevH = leftCard.style.height;
+    leftCard.style.height = 'auto';
+    const naturalH = leftCard.scrollHeight;
+    leftCard.style.height = prevH;
+
     const rightRect = rightCard.getBoundingClientRect();
     const leftRect = leftCard.getBoundingClientRect();
     const targetH = Math.round(rightRect.bottom - leftRect.top);
 
-    if (targetH > 350 && targetH < 900) {
-      leftCard.style.height = targetH + 'px';
+    const appliedH = Math.max(targetH, naturalH);
+    if (appliedH > 350 && appliedH < 1200) {
       leftCard.style.minHeight = targetH + 'px';
+      leftCard.style.height = appliedH + 'px';
     }
   }
   window.syncExecutiveDonutCardHeight = syncExecutiveDonutCardHeight;
