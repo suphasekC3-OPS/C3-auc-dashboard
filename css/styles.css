@@ -5749,15 +5749,38 @@ body.has-fullscreen-table {
 }
 
 /* ==========================================================================
-   Drilldown Modal
+   Drilldown Modal & Overlay Modals (รองรับการแสดงผลทับหน้าจอขยาย Fullscreen)
    ========================================================================== */
+.modal-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 200000 !important;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  background: rgba(0, 0, 0, 0.68);
+}
+
+#adminPinModal.modal-overlay {
+  z-index: 200010 !important;
+}
+
 .modal-backdrop {
   position: fixed;
   inset: 0;
   background: rgba(10, 2, 18, 0.78);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  z-index: 10050;
+  z-index: 200000;
   display: none;
   align-items: center;
   justify-content: center;
@@ -5829,7 +5852,7 @@ body.has-fullscreen-table {
   position: fixed;
   bottom: 1.5rem;
   right: 1.5rem;
-  z-index: 2000;
+  z-index: 200050;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -12919,16 +12942,17 @@ tr.wbs-row-checked:hover {
 .wbs-floating-sel-card {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 5px;
   background: linear-gradient(135deg, rgba(2, 132, 199, 0.94) 0%, rgba(14, 165, 233, 0.92) 50%, rgba(3, 105, 161, 0.96) 100%);
   border: 1.5px solid rgba(186, 230, 253, 0.75);
   border-radius: 11px;
-  padding: 6px 12px;
+  padding: 7px 12px;
   box-shadow: 0 4px 18px rgba(2, 132, 199, 0.45), 0 0 12px rgba(56, 189, 248, 0.35);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  min-width: 220px;
-  max-width: 270px;
+  min-width: 245px;
+  max-width: 410px;
+  width: max-content;
   cursor: grab;
   transition: all 0.25s ease;
 }
@@ -12946,13 +12970,154 @@ tr.wbs-row-checked:hover {
   gap: 8px;
 }
 
+.wbs-floating-sel-row.target-top {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+  padding-bottom: 4px;
+}
+
+.wbs-floating-target-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.wbs-floating-target-icon {
+  font-size: 0.78rem;
+  line-height: 1;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.35));
+}
+
+.wbs-floating-target-label {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #F0F9FF;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+}
+
+.wbs-floating-target-month {
+  display: inline-block;
+  padding: 0.5px 6px;
+  border-radius: 5px;
+  background: rgba(254, 240, 138, 0.24);
+  border: 1px solid rgba(254, 240, 138, 0.75);
+  color: #FEF08A;
+  font-weight: 800;
+  font-size: 0.76rem;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+}
+
+.wbs-floating-target-val-wrap {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.wbs-floating-target-val {
+  font-family: var(--font-mono, 'JetBrains Mono', Consolas, monospace);
+  font-size: 0.90rem;
+  font-weight: 800;
+  color: #FEF08A;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+}
+
+.wbs-floating-target-unit {
+  font-size: 0.73rem;
+  font-weight: 600;
+  color: #E0F2FE;
+}
+
+.wbs-floating-target-mb {
+  font-size: 0.74rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  background: rgba(220, 38, 38, 0.88);
+  border: 1px solid rgba(254, 202, 202, 0.8);
+  padding: 1px 6px;
+  border-radius: 5px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
 .wbs-floating-sel-row.top {
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   padding-bottom: 4px;
 }
 
-.wbs-floating-sel-row.bottom {
+.wbs-floating-sel-row.middle-auc {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   padding-top: 1px;
+  padding-bottom: 4px;
+}
+
+.wbs-floating-sel-row.bottom,
+.wbs-floating-sel-row.bottom-remain {
+  padding-top: 1px;
+}
+
+.wbs-floating-remain-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.wbs-floating-remain-icon {
+  font-size: 0.78rem;
+  line-height: 1;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.35));
+}
+
+.wbs-floating-remain-lbl {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #FEF08A;
+  letter-spacing: 0.2px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+  white-space: nowrap;
+}
+
+.wbs-floating-remain-val-wrap {
+  display: inline-flex;
+  align-items: center;
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.wbs-floating-remain-pill {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  padding: 1.5px 8px;
+  border-radius: 999px;
+  background: rgba(220, 38, 38, 0.92);
+  border: 1px solid rgba(254, 202, 202, 0.85);
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.35);
+}
+
+.wbs-floating-remain-pill.is-achieved {
+  background: rgba(16, 185, 129, 0.92);
+  border-color: rgba(167, 243, 208, 0.85);
+}
+
+.wbs-floating-remain-val {
+  font-family: var(--font-mono, 'JetBrains Mono', Consolas, monospace);
+  font-size: 0.86rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.wbs-floating-remain-unit {
+  font-size: 0.73rem;
+  font-weight: 700;
+  color: #FEF2F2;
+}
+
+.wbs-floating-remain-pill.is-achieved .wbs-floating-remain-unit {
+  color: #ECFDF5;
 }
 
 .wbs-floating-sel-badge {

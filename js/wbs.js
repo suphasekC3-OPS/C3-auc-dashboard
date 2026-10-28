@@ -601,11 +601,11 @@
     // 2.2 Render Selected Items Summary Card (ต่อจากแถวสรุปสถานะ sap - ใช้ sapFiltered เพื่อให้คงรายการที่เลือกไว้ทั้งหมดแม้กรองสถานะ SAP)
     renderWbsSelectedSummaryCard(sapFiltered, currentCrit, excludedSap);
 
-    // 2.2.1 Update Floating Selection Badge on Table (มุมขวาด้านล่าง บนตารางตลอด พื้นสีฟ้า)
-    updateWbsFloatingSelection();
-
     // 2.3 Render Target Comparison & Progress Simulation Section (กราฟแนวนอน 2 ชั้น เปรียบเทียบเป้าหมาย KPI ระดับ 5)
     renderWbsTargetComparisonSection(sapFiltered, currentCrit, excludedSap);
+
+    // 2.3.1 Update Floating Selection Badge on Table (มุมขวาด้านล่าง บนตารางตลอด พื้นสีฟ้า - ซิงค์ตามการ์ดรูปที่ 55)
+    updateWbsFloatingSelection();
 
     // 3. Update KPI Stat Cards
     renderWbsStatCards(filtered, rawData.length);
@@ -1130,7 +1130,7 @@
     }
 
     const filtered = getFilteredWbsData(false, false);
-    const sapFiltered = getFilteredWbsData(false, true);
+    const sapFiltered = getFilteredWbsData(false, true, true, true);
     const globalState = window.state || {};
     const globalFilters = globalState.filters || {};
     const currentCrit = globalFilters.criteria || (document.getElementById('filterCriteria') ? document.getElementById('filterCriteria').value : 'ALL');
@@ -1915,8 +1915,39 @@
   }
 
   /**
+   * Helper: Get currently selected Target Month info from KPI Simulation (ตามรูป 52 ที่กดเลือก)
+   */
+  function getWbsSelectedTargetMonthInfo() {
+    const globalState = window.state || {};
+    const globalFilters = globalState.filters || {};
+    const currentCrit = globalFilters.criteria || (document.getElementById('filterCriteria') ? document.getElementById('filterCriteria').value : 'ALL');
+
+    const targetMonths = (typeof window.getKpiSimulationTargetMonths === 'function')
+      ? window.getKpiSimulationTargetMonths(currentCrit)
+      : [];
+
+    if (!targetMonths || !targetMonths.length) return null;
+
+    const availableMonths = targetMonths.filter(m => m.hasTarget !== false);
+    if (!availableMonths.length) return null;
+
+    const selectableMonths = availableMonths.filter(m => !m.isAchieved);
+    const isCurrentValid = wbsState.kpiTargetMonth && selectableMonths.some(m => m.monthNum === wbsState.kpiTargetMonth);
+
+    if (!isCurrentValid) {
+      wbsState.kpiTargetMonth = selectableMonths.length ? selectableMonths[0].monthNum : (availableMonths[0] ? availableMonths[0].monthNum : null);
+    }
+
+    const selectedMonth = availableMonths.find(m => m.monthNum === wbsState.kpiTargetMonth) || selectableMonths[0] || availableMonths[0];
+    return selectedMonth || null;
+  }
+
+  /**
    * Update Floating Selection Badge on Table (มุมขวาด้านล่าง บนตารางตลอด พื้นสีฟ้า)
-   * แสดงจำนวนงาน และมูลค่า AUC ตามไฟล์ 06 สำหรับรายการที่เลือกใน Checkbox
+   * 1. แถวบน: แสดงเป้าหมายเดือนที่เลือก และจำนวน ลบ./งาน (นำตัวเลขบาทเต็มออกตามคำสั่งผู้ใช้งาน)
+   * 2. แถวที่ 2: แสดงจำนวนงานที่เลือกใน Checkbox + ปุ่มล้าง
+   * 3. แถวที่ 3: แสดงมูลค่าตามไฟล์ 06 ในหน่วย ลบ.
+   * 4. แถวล่างสุด: แสดง ต้องปิดอีก ... ลบ. (อ้างอิงจากยอดคงเหลือต้องปิดเพิ่มในการ์ดเปรียบเทียบ KPI)
    */
   function updateWbsFloatingSelection() {
     const container = document.getElementById('wbsTableFloatingSelection');
@@ -1924,14 +1955,134 @@
 
     const countEl = document.getElementById('wbsFloatingSelCount');
     const aucEl = document.getElementById('wbsFloatingSelAuc');
+    const aucUnitEl = document.getElementById('wbsFloatingSelAucUnit');
     const clearBtn = document.getElementById('wbsFloatingSelClearBtn');
+
+    // แถวบนสุด: เป้าหมายเดือนที่เลือก (คงเหลือเลข ลบ./งาน)
+    const targetRowEl = document.getElementById('wbsFloatingTargetRow');
+    const targetMonthEl = document.getElementById('wbsFloatingTargetMonth');
+    const targetMbEl = document.getElementById('wbsFloatingTargetMb');
+
+    // แถวล่างสุด: ต้องปิดอีก ... ลบ.
+    const remainRowEl = document.getElementById('wbsFloatingRemainRow');
+    const remainIconEl = document.getElementById('wbsFloatingRemainIcon');
+    const remainLblEl = document.getElementById('wbsFloatingRemainLbl');
+    const remainPillEl = document.getElementById('wbsFloatingRemainPill');
+    const remainValEl = document.getElementById('wbsFloatingRemainVal');
+    const remainUnitEl = document.getElementById('wbsFloatingRemainUnit');
+
+    const globalState = window.state || {};
+    const globalFilters = globalState.filters || {};
+    const currentCrit = globalFilters.criteria || (document.getElementById('filterCriteria') ? document.getElementById('filterCriteria').value : 'ALL');
+    const cStr = String(currentCrit || '').trim();
+    const isCrit4 = (cStr.includes('ข้อ 4') || cStr.includes('ข้อ4') || cStr.includes('C02.2') || cStr === 'C04');
+
+    const selectedMonth = getWbsSelectedTargetMonthInfo();
+    if (selectedMonth) {
+      if (targetRowEl) targetRowEl.style.display = 'flex';
+      if (targetMonthEl) targetMonthEl.textContent = selectedMonth.shortName || 'ต.ค.';
+      const targetAmt = Math.max(0, Number(selectedMonth.amt) || 0);
+      const isVal = selectedMonth.unit === 'val';
+
+      if (targetMbEl) {
+        if (isVal) {
+          targetMbEl.textContent = `(${selectedMonth.amtStr || `${(targetAmt / 1e6).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ลบ.`})`;
+        } else {
+          targetMbEl.textContent = `(${targetAmt.toLocaleString('th-TH')} งาน)`;
+        }
+        targetMbEl.style.display = 'inline-block';
+      }
+
+      // คำนวณยอดคงเหลือต้องปิดอีก (อ้างอิงสูตรเดียวกับการ์ดเปรียบเทียบ KPI ระดับ 5)
+      const sapFiltered = (typeof getFilteredWbsData === 'function')
+        ? (getFilteredWbsData(false, true, true, true) || [])
+        : [];
+      let clsdSapCount = 0;
+      let clsdSapAuc = 0;
+      let selectedCheckboxCount = 0;
+      let selectedCheckboxAuc = 0;
+
+      sapFiltered.forEach(item => {
+        const sap = (item.statusSap || (typeof formatSapStatusShort === 'function' ? formatSapStatusShort(item.status) : '') || '').toUpperCase().trim();
+        const itemAuc = Number(item.cn41ActualCost) || 0;
+        if (isCrit4) {
+          if (sap === 'CLSD F2' || sap.includes('F2') || sap.includes('CLSD 2')) {
+            clsdSapCount++;
+            clsdSapAuc += itemAuc;
+          }
+        } else {
+          if (sap === 'CLSD F4' || sap.includes('F4') || sap.includes('CLSD 4')) {
+            clsdSapCount++;
+            clsdSapAuc += itemAuc;
+          }
+        }
+        if (wbsState.selectedWbs && wbsState.selectedWbs.has(item.wbs)) {
+          selectedCheckboxCount++;
+          selectedCheckboxAuc += itemAuc;
+        }
+      });
+
+      const closedInSap = isVal ? clsdSapAuc : clsdSapCount;
+      const selectedFromCheckbox = isVal ? selectedCheckboxAuc : selectedCheckboxCount;
+      const currentProgress = closedInSap + selectedFromCheckbox;
+      const diff = targetAmt - currentProgress;
+      const isGoalReached = (diff <= 0);
+      const remainingAmount = Math.max(0, diff);
+      const overAmount = Math.max(0, currentProgress - targetAmt);
+
+      if (remainRowEl) remainRowEl.style.display = 'flex';
+      if (isGoalReached) {
+        const overShortVal = isVal
+          ? (overAmount / 1e6).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+          : overAmount.toLocaleString('th-TH');
+        const overShortUnit = isVal ? 'ลบ.' : 'งาน';
+        if (remainIconEl) remainIconEl.textContent = '🎉';
+        if (remainLblEl) remainLblEl.textContent = 'บรรลุเป้า (เกินเป้า):';
+        if (remainPillEl) {
+          remainPillEl.classList.remove('is-pending');
+          remainPillEl.classList.add('is-achieved');
+          remainPillEl.title = `บรรลุเป้าหมายเดือน ${selectedMonth.shortName} 69 แล้ว (เกินเป้า +${overShortVal} ${overShortUnit})`;
+        }
+        if (remainValEl) remainValEl.textContent = `+${overShortVal}`;
+        if (remainUnitEl) remainUnitEl.textContent = overShortUnit;
+      } else {
+        if (remainIconEl) remainIconEl.textContent = '⚠️';
+        if (remainLblEl) remainLblEl.textContent = 'ต้องปิดอีก:';
+        if (remainPillEl) {
+          remainPillEl.classList.remove('is-achieved');
+          remainPillEl.classList.add('is-pending');
+          remainPillEl.title = isVal
+            ? `คงเหลือต้องปิดเพิ่ม: ฿${formatMoney(remainingAmount)} (ต้องปิดอีก ${(remainingAmount / 1e6).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ลบ.)`
+            : `คงเหลือต้องปิดเพิ่ม: ${remainingAmount.toLocaleString('th-TH')} งาน`;
+        }
+        if (remainValEl) {
+          remainValEl.textContent = isVal
+            ? (remainingAmount / 1e6).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+            : remainingAmount.toLocaleString('th-TH');
+        }
+        if (remainUnitEl) {
+          remainUnitEl.textContent = isVal ? 'ลบ.' : 'งาน';
+        }
+      }
+    } else {
+      if (targetMonthEl) targetMonthEl.textContent = '-';
+      if (targetMbEl) targetMbEl.style.display = 'none';
+      if (remainRowEl) remainRowEl.style.display = 'none';
+    }
 
     const summary = getWbsSelectedSummary();
     const count = summary.count;
     const auc = summary.totalAuc;
+    const aucMbStr = (auc / 1e6).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
     if (countEl) countEl.textContent = count.toLocaleString('th-TH');
-    if (aucEl) aucEl.textContent = formatMoney(auc);
+    if (aucEl) {
+      aucEl.textContent = aucMbStr;
+      aucEl.title = `มูลค่า AUC: ${formatMoney(auc)} บาท (${aucMbStr} ลบ.)`;
+    }
+    if (aucUnitEl) {
+      aucUnitEl.textContent = 'ลบ.';
+    }
 
     if (clearBtn) {
       clearBtn.disabled = (count === 0);
@@ -2733,6 +2884,9 @@
     if (typeof window.syncWbsSideKpiCard === 'function') {
       window.syncWbsSideKpiCard();
     }
+    if (typeof updateWbsFloatingSelection === 'function') {
+      updateWbsFloatingSelection();
+    }
   }
 
   window.syncWbsSideKpiCard = function () {
@@ -3157,9 +3311,12 @@
     if (targetM && targetM.isAchieved) return; // Month already achieved, cannot select per requirement 2
 
     wbsState.kpiTargetMonth = mNum;
-    const sapFiltered = getFilteredWbsData(false, true);
+    const sapFiltered = getFilteredWbsData(false, true, true, true);
     const excludedSap = getExcludedSapForCriteria(currentCrit);
     renderWbsTargetComparisonSection(sapFiltered, currentCrit, excludedSap);
+    if (typeof updateWbsFloatingSelection === 'function') {
+      updateWbsFloatingSelection();
+    }
   };
 
   /**
@@ -5822,6 +5979,16 @@
   // Listen for Escape key to exit table fullscreen or close dropdowns
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' || e.key === 'Esc') {
+      const pinModal = document.getElementById('adminPinModal');
+      if (pinModal && pinModal.style.display !== 'none') {
+        if (typeof window.closeAdminPinModal === 'function') window.closeAdminPinModal();
+        return;
+      }
+      const editModal = document.getElementById('wbsEditNoteModal');
+      if (editModal && editModal.style.display !== 'none') {
+        if (typeof window.closeWbsEditNoteModal === 'function') window.closeWbsEditNoteModal();
+        return;
+      }
       const sapPanel = document.getElementById('wbsSapThDropdownPanel');
       if (sapPanel && sapPanel.style.display !== 'none') {
         window.closeWbsSapThDropdown();
@@ -6685,6 +6852,13 @@
       window.pendingWbsEditWbs = wbsCode;
       if (typeof window.openAdminPinModal === 'function') {
         window.openAdminPinModal('wbs');
+        const pinModal = document.getElementById('adminPinModal');
+        if (pinModal) {
+          if (pinModal.parentNode !== document.body) document.body.appendChild(pinModal);
+          pinModal.style.position = 'fixed';
+          pinModal.style.inset = '0';
+          pinModal.style.zIndex = '200010';
+        }
       }
       return;
     }
@@ -6718,6 +6892,12 @@
     }
 
     if (modal) {
+      if (modal.parentNode !== document.body) {
+        document.body.appendChild(modal);
+      }
+      modal.style.position = 'fixed';
+      modal.style.inset = '0';
+      modal.style.zIndex = '200000';
       modal.style.display = 'flex';
       setTimeout(() => {
         if (elNote) elNote.focus();
@@ -6744,6 +6924,13 @@
       window.pendingWbsEditWbs = null;
       if (typeof window.openAdminPinModal === 'function') {
         window.openAdminPinModal('wbs');
+        const pinModal = document.getElementById('adminPinModal');
+        if (pinModal) {
+          if (pinModal.parentNode !== document.body) document.body.appendChild(pinModal);
+          pinModal.style.position = 'fixed';
+          pinModal.style.inset = '0';
+          pinModal.style.zIndex = '200010';
+        }
       }
     } else {
       if (typeof window.logoutWbsEdit === 'function') {
