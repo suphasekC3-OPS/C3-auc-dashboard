@@ -220,6 +220,9 @@
       initData();
       initBarChartCriteriaDropdown();
       setupEventListeners();
+      if (typeof window.updateNavTabsLockUI === 'function') {
+        window.updateNavTabsLockUI();
+      }
       renderAll();
       if (window.renderDataHistoryTab) {
         window.renderDataHistoryTab();
@@ -1488,17 +1491,39 @@
   // ==========================================
   function setupEventListeners() {
     // Navigation Tabs
+    const LOCKED_NAV_TABS = ['tab-analytics', 'tab-warning', 'tab-data-history'];
     document.querySelectorAll('.nav-tab-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         const targetTab = btn.getAttribute('data-tab');
+        if (LOCKED_NAV_TABS.includes(targetTab) && !window.isNavTabsAuthenticated()) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.pendingNavTargetTab = targetTab;
+          window.openAdminPinModal('nav_tabs', targetTab);
+          return;
+        }
         switchTab(targetTab);
       });
     });
 
+    // Navigation Tabs Lock Button (ปุ่มล็อค 3 เมนู รหัส PIN 225588)
+    const btnNavTabsLock = document.getElementById('btnToggleNavTabsLock');
+    if (btnNavTabsLock) {
+      btnNavTabsLock.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.toggleNavTabsLock();
+      });
+    }
+
     if (window.location.hash) {
       const hashTab = window.location.hash.replace('#', '');
       if (document.getElementById(hashTab)) {
-        setTimeout(() => switchTab(hashTab), 100);
+        if (LOCKED_NAV_TABS.includes(hashTab) && !window.isNavTabsAuthenticated()) {
+          // If locked tab requested in URL hash on cold load, remain safe on dashboard
+          switchTab('tab-dashboard', true);
+        } else {
+          setTimeout(() => switchTab(hashTab), 100);
+        }
       }
     }
 
@@ -1980,7 +2005,13 @@
     }
   }
 
-  function switchTab(tabId) {
+  function switchTab(tabId, bypassAuth = false) {
+    const LOCKED_NAV_TABS = ['tab-analytics', 'tab-warning', 'tab-data-history'];
+    if (!bypassAuth && LOCKED_NAV_TABS.includes(tabId) && !window.isNavTabsAuthenticated()) {
+      window.pendingNavTargetTab = tabId;
+      window.openAdminPinModal('nav_tabs', tabId);
+      return;
+    }
     state.activeTab = tabId;
     document.querySelectorAll('.nav-tab-btn').forEach(b => {
       b.classList.toggle('active', b.getAttribute('data-tab') === tabId);
@@ -2584,6 +2615,87 @@
     return _wbsEditUnlockedInMemory;
   };
 
+  // Navigation Tabs (3 Menus) Authentication State:
+  // tab-analytics, tab-warning, tab-data-history
+  // Default is ALWAYS locked (false) on initial page load / refresh until unlocked with Admin PIN (225588)
+  const LOCKED_NAV_TABS_LIST = ['tab-analytics', 'tab-warning', 'tab-data-history'];
+  let _navTabsUnlockedInMemory = false;
+  try {
+    sessionStorage.removeItem('auc_nav_tabs_authenticated');
+  } catch (e) {
+    console.warn('Reset nav tabs lock error:', e);
+  }
+
+  window.isNavTabsAuthenticated = function () {
+    return _navTabsUnlockedInMemory;
+  };
+
+  window.setNavTabsAuthenticated = function (auth) {
+    _navTabsUnlockedInMemory = Boolean(auth);
+    if (auth) {
+      sessionStorage.setItem('auc_nav_tabs_authenticated', 'true');
+    } else {
+      sessionStorage.removeItem('auc_nav_tabs_authenticated');
+    }
+    if (typeof window.updateNavTabsLockUI === 'function') {
+      window.updateNavTabsLockUI();
+    }
+  };
+
+  window.lockNavTabs = function () {
+    window.setNavTabsAuthenticated(false);
+    if (typeof window.showToast === 'function') {
+      window.showToast('🔒 ล็อค 3 เมนูเรียบร้อยแล้ว', 'info');
+    }
+    if (state && LOCKED_NAV_TABS_LIST.includes(state.activeTab)) {
+      window.switchTab('tab-dashboard', true);
+    }
+  };
+
+  window.toggleNavTabsLock = function () {
+    if (window.isNavTabsAuthenticated()) {
+      window.lockNavTabs();
+    } else {
+      window.openAdminPinModal('nav_lock');
+    }
+  };
+
+  window.updateNavTabsLockUI = function () {
+    const isAuth = window.isNavTabsAuthenticated();
+    const btn = document.getElementById('btnToggleNavTabsLock');
+    const navBar = document.querySelector('.nav-tabs-bar');
+    if (navBar) {
+      navBar.classList.toggle('is-unlocked', isAuth);
+    }
+    if (btn) {
+      btn.classList.toggle('is-locked', !isAuth);
+      btn.classList.toggle('admin-unlocked', isAuth);
+      const icon = btn.querySelector('.nav-lock-icon');
+      const text = btn.querySelector('.nav-lock-text');
+      if (isAuth) {
+        if (icon) icon.textContent = '🔓';
+        if (text) text.textContent = 'ปลดล็อคแล้ว (Admin)';
+        btn.title = 'ปลดล็อค 3 เมนูแล้ว (คลิกเพื่อล็อคกลับ)';
+      } else {
+        if (icon) icon.textContent = '🔒';
+        if (text) text.textContent = 'ล็อค 3 เมนู';
+        btn.title = 'คลิกเพื่อปลดล็อค 3 เมนูพิเศษ (รหัส Admin PIN: 225588)';
+      }
+    }
+
+    LOCKED_NAV_TABS_LIST.forEach(tabId => {
+      const tabBtn = document.querySelector(`.nav-tab-btn[data-tab="${tabId}"]`);
+      if (tabBtn) {
+        tabBtn.classList.toggle('is-nav-locked', !isAuth);
+        tabBtn.classList.toggle('is-unlocked', isAuth);
+        const lockBadge = tabBtn.querySelector('.nav-tab-lock-badge');
+        if (lockBadge) {
+          lockBadge.style.display = isAuth ? 'none' : 'inline-flex';
+        }
+      }
+    });
+  };
+
   // Backwards compatibility alias
   window.isAdminAuthenticated = function () {
     return window.isTargetCardsAuthenticated();
@@ -2644,10 +2756,14 @@
   window.logoutAdmin = function () {
     window.logoutTargetCards();
     window.logoutWbsEdit();
+    window.lockNavTabs();
   };
 
-  window.openAdminPinModal = function (targetContext) {
+  window.openAdminPinModal = function (targetContext, extraData) {
     window.adminPinTargetContext = targetContext || 'cards';
+    if (extraData) {
+      window.adminPinExtraData = extraData;
+    }
     const modal = document.getElementById('adminPinModal');
     const input = document.getElementById('adminPinInput');
     const errorMsg = document.getElementById('adminPinErrorMsg');
@@ -2667,6 +2783,16 @@
     if (window.adminPinTargetContext === 'wbs') {
       if (subtitle) subtitle.textContent = 'ปลดล็อกการแก้ไขแผนปิดงานและหมายเหตุ WBS';
       if (desc) desc.innerHTML = 'กรุณากรอกรหัสผ่าน <strong>Admin PIN</strong> เพื่อปลดล็อกการแก้ไขแผนปิดงานและหมายเหตุในตาราง WBS ทุกแถว';
+    } else if (window.adminPinTargetContext === 'nav_tabs' || window.adminPinTargetContext === 'nav_lock') {
+      const tabNames = {
+        'tab-analytics': 'วิเคราะห์เปรียบเทียบ & Timeline',
+        'tab-warning': 'ศูนย์แจ้งเตือนจุดวิกฤต',
+        'tab-data-history': 'ประวัติการนำเข้า & แก้ไขข้อมูล'
+      };
+      const extra = extraData || window.pendingNavTargetTab;
+      const targetName = extra && tabNames[extra] ? `เมนู "${tabNames[extra]}"` : '3 เมนูพิเศษ (วิเคราะห์ & Timeline, จุดวิกฤต, ประวัติข้อมูล)';
+      if (subtitle) subtitle.textContent = `ปลดล็อกการเข้าถึง ${targetName}`;
+      if (desc) desc.innerHTML = `กรุณากรอกรหัสผ่าน <strong>Admin PIN (225588)</strong> เพื่อปลดล็อกการเข้าถึง ${targetName}`;
     } else {
       if (subtitle) subtitle.textContent = 'เข้าถึงฟังก์ชันการ์ดเป้าหมายรายเดือน';
       if (desc) desc.innerHTML = 'กรุณากรอกรหัสผ่าน <strong>Admin PIN</strong> เพื่อปลดล็อกและเปิดดูการ์ดเป้าหมายปิดงานรายเดือน';
@@ -2689,6 +2815,8 @@
     modal.style.display = 'none';
     const input = document.getElementById('adminPinInput');
     if (input) input.value = '';
+    window.pendingNavTargetTab = null;
+    window.adminPinExtraData = null;
   };
 
   window.verifyAdminPin = function () {
@@ -2721,6 +2849,19 @@
               window.openWbsEditNoteModal(targetWbs);
             }, 150);
           }
+        }
+      } else if (window.adminPinTargetContext === 'nav_tabs' || window.adminPinTargetContext === 'nav_lock') {
+        // Unlock 3 Nav Menus (Independent from WBS and Target Cards)
+        window.setNavTabsAuthenticated(true);
+        if (typeof window.showToast === 'function') {
+          window.showToast('🔓 ปลดล็อก 3 เมนูสำเร็จ! (รหัสผ่านถูกต้อง)', 'success');
+        }
+        if (window.pendingNavTargetTab) {
+          const target = window.pendingNavTargetTab;
+          window.pendingNavTargetTab = null;
+          setTimeout(() => {
+            switchTab(target, true);
+          }, 100);
         }
       } else {
         // Unlock Target Cards ONLY (Independent from WBS Edit)

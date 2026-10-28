@@ -663,8 +663,8 @@
       <span class="wbs-pill pill-file pill-file-03" onclick="if(window.openDhModelModal)window.openDhModelModal('src_03')" title="วันที่/เวลา นำเข้าข้อมูล: 23 ต.ค. 2569, 08:04 น. (ไฟล์ 03 WBSงานคงเหลือเดือนล่าสุด.xlsx)">
         📋 <strong>03 WBSงานคงเหลือเดือนล่าสุด.xlsx:</strong> 23 ต.ค. 2569, 08:04 น.
       </span>
-      <span class="wbs-pill pill-file pill-file-04" onclick="if(window.openDhModelModal)window.openDhModelModal('src_04')" title="วันที่/เวลา นำเข้าข้อมูล: 27 ต.ค. 2569, 08:06 น. (ไฟล์ 04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx)">
-        ⚡ <strong>04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx:</strong> 27 ต.ค. 2569, 08:06 น.
+      <span class="wbs-pill pill-file pill-file-04" onclick="if(window.openDhModelModal)window.openDhModelModal('src_04')" title="วันที่/เวลา นำเข้าข้อมูล: 28 ต.ค. 2569, 07:42 น. (ไฟล์ 04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx)">
+        ⚡ <strong>04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx:</strong> 28 ต.ค. 2569, 07:42 น.
       </span>
       <span class="wbs-pill pill-file pill-file-05" onclick="if(window.openDhModelModal)window.openDhModelModal('src_06')" title="วันที่/เวลา นำเข้าข้อมูล: 27 ต.ค. 2569, 08:09 น. (ไฟล์ 06 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 27 ตค 69.xlsx)">
         📑 <strong>06 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 27 ตค 69:</strong> 27 ต.ค. 2569, 08:09 น.
@@ -2346,7 +2346,7 @@
                 </div>
               </div>
               <div style="display: flex; justify-content: flex-end; margin-top: 3px;">
-                <span class="wbs-sap-date-plain-text" id="wbsKpiSapDateText" onclick="if(window.openDhModelModal)window.openDhModelModal('src_04')" title="ข้อมูลสถานะ SAP จากไฟล์ 04 ZBUDR064 แก้ไขล่าสุด: 27 ต.ค. 2569 (คลิกเพื่อดูผัง Model View)">สถานะ SAP แก้ไขล่าสุดวันที่ 27 ต.ค. 69</span>
+                <span class="wbs-sap-date-plain-text" id="wbsKpiSapDateText" onclick="if(window.openDhModelModal)window.openDhModelModal('src_04')" title="ข้อมูลสถานะ SAP จากไฟล์ 04 ZBUDR064 แก้ไขล่าสุด: 28 ต.ค. 2569 (คลิกเพื่อดูผัง Model View)">สถานะ SAP แก้ไขล่าสุดวันที่ 28 ต.ค. 69</span>
               </div>
             </div>
 
@@ -2571,7 +2571,7 @@
                     <div class="bar-header-left">
                       <span class="bar-tag tag-progress">⚡ กราฟล่าง (ยอดดำเนินการ)</span>
                       <span class="bar-month-pill">${selectedMonth.shortName} 69</span>
-                      <span class="bar-sap-date-plain" onclick="if(window.openDhModelModal)window.openDhModelModal('src_04')" style="cursor:pointer;" title="ข้อมูลสถานะ SAP จากไฟล์ 04 ZBUDR064 แก้ไขล่าสุด: 27 ต.ค. 2569 (คลิกเพื่อดูผัง Model View)">สถานะ SAP แก้ไขล่าสุด: 27 ต.ค. 69</span>
+                      <span class="bar-sap-date-plain" onclick="if(window.openDhModelModal)window.openDhModelModal('src_04')" style="cursor:pointer;" title="ข้อมูลสถานะ SAP จากไฟล์ 04 ZBUDR064 แก้ไขล่าสุด: 28 ต.ค. 2569 (คลิกเพื่อดูผัง Model View)">สถานะ SAP แก้ไขล่าสุด: 28 ต.ค. 69</span>
                     </div>
                     <div class="bar-header-right">
                       <!-- CLSD F4 / F2: ขนาดอักษรเท่ากับจำนวนเงิน -->
@@ -3752,7 +3752,7 @@
                 <span class="sort-indicator" style="font-size:0.75rem; margin-left:2px; color:var(--pea-gold-400);">${sortArrow}</span>
               </div>
             </div>
-            ${col.id === 'statusSap' ? `<div class="th-sub-date-text" style="font-size: 0.70rem; color: #CBD5E1; font-weight: 500; line-height: 1.2; margin: 1px 0 3px 0; text-align: center; white-space: nowrap;" title="วันที่แก้ไขล่าสุดของไฟล์ 04 ZBUDR064: 27 ต.ค. 2569">แก้ไขล่าสุด: 27 ต.ค. 69</div>` : ''}
+            ${col.id === 'statusSap' ? `<div class="th-sub-date-text" style="font-size: 0.70rem; color: #CBD5E1; font-weight: 500; line-height: 1.2; margin: 1px 0 3px 0; text-align: center; white-space: nowrap;" title="วันที่แก้ไขล่าสุดของไฟล์ 04 ZBUDR064: 28 ต.ค. 2569">แก้ไขล่าสุด: 28 ต.ค. 69</div>` : ''}
             ${col.id === 'cn41Cost05' ? `<div class="th-sub-date-text" style="font-size: 0.70rem; color: #CBD5E1; font-weight: 500; line-height: 1.2; margin: 1px 0 3px 0; text-align: center; white-space: nowrap;" title="วันที่แก้ไขล่าสุดของไฟล์ 05 CN41: 14 ต.ค. 2569">แก้ไขล่าสุด: 14 ต.ค. 69</div>` : ''}
             ${col.id === 'cn41ActualCost' ? `<div class="th-sub-date-text" style="font-size: 0.70rem; color: #CBD5E1; font-weight: 500; line-height: 1.2; margin: 1px 0 3px 0; text-align: center; white-space: nowrap;" title="วันที่แก้ไขล่าสุดของไฟล์ 06 CN41: 27 ต.ค. 2569">แก้ไขล่าสุด: 27 ต.ค. 69</div>` : ''}
             ${(col.id === 'planClose' || col.id === 'note') ? `<div class="th-sub-date-text wbs-th-sync-time" style="font-size: 0.70rem; color: #CBD5E1; font-weight: 500; line-height: 1.2; margin: 1px 0 3px 0; text-align: center; white-space: nowrap;" title="เวลาซิงค์ข้อมูลล่าสุดจาก Google Sheet: ${getGoogleSheetFullSyncTimeText()}">${getGoogleSheetSyncTimeText()}</div>` : ''}

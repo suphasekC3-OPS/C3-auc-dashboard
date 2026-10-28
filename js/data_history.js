@@ -95,13 +95,13 @@
       groupNo: '04',
       name: '04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx',
       category: 'SAP ZBUDR064 & Costs',
-      importDate: '2026-10-27 15:30:24',
-      importDateTh: '27 ต.ค. 2569, 15:30 น.',
-      lastModifiedTh: '27 ต.ค. 2569, 15:30 น. (ไฟล์ล่าสุด)',
-      sizeText: '749.5 KB',
+      importDate: '2026-10-28 07:42:30',
+      importDateTh: '28 ต.ค. 2569, 07:42 น.',
+      lastModifiedTh: '28 ต.ค. 2569, 07:42 น. (ไฟล์ล่าสุด)',
+      sizeText: '937.5 KB',
       recordCount: 2083,
       status: 'active',
-      statusText: 'ผสานข้อมูลสำเร็จ (ปรับปรุงรอบเย็น 15:30 น.)',
+      statusText: 'ผสานข้อมูลสำเร็จ (ปรับปรุงรอบเช้า 07:42 น.)',
       storageFile: 'js/data_wbs.js',
       storageVar: 'window.AUC_WBS_REMAINING_DATA (Joined)',
       icon: '⚡',
@@ -352,7 +352,7 @@
       role: 'จัดเก็บข้อมูลหลักงาน WBS (ไฟล์ 03 + 04 + 05 + Google Sheet)',
       recordsCount: '2,083 รายการ (41 คอลัมน์)',
       fileSize: '2.36 MB',
-      updatedAt: '27 ต.ค. 2569, 08:09 น.',
+      updatedAt: '28 ต.ค. 2569, 07:42 น.',
       status: '100% ฐานข้อมูลอัปเดตล่าสุด',
       variable: 'window.AUC_WBS_REMAINING_DATA'
     },
@@ -432,6 +432,54 @@
    * System Pre-defined Audit & Modification Log Entries
    */
   const BASE_AUDIT_LOGS = [
+    {
+      id: 'log_000_update_sap_status_date_oct28',
+      timestamp: '2026-10-28 08:00:00',
+      timestampTh: '28 ต.ค. 2569, 08:00 น.',
+      type: 'EDIT',
+      typeBadge: 'ปรับปรุงวันที่สถานะแก้ไขล่าสุด',
+      badgeClass: 'badge-type-edit',
+      title: 'ปรับปรุงวันที่สถานะ SAP แก้ไขล่าสุด ให้เป็น 28 ต.ค. 69 ทุกจุดตรงตามไฟล์จริงหลังอัปเดตไฟล์',
+      targetSubject: 'ป้ายแสดงวันที่สถานะ SAP แก้ไขล่าสุด (#wbsHeaderDatesPlain, #wbsKpiSapDateText, .bar-sap-date-plain, .th-sub-date-text, #dataHistoryBadge, DATA_SOURCE_CATALOG src_04)',
+      storageFile: 'index.html, js/wbs.js, js/data_history.js',
+      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน "ให้แก้ วันที่สถานะแก้ไขล่าสุด ด้วยทุกครั้ง หลังupdate ไฟล์": ปรับแก้ป้ายแสดงวันที่สถานะ SAP แก้ไขล่าสุด จากเดิม "27 ต.ค. 69" เป็น "28 ต.ค. 69" (อ้างอิงวันเวลาบันทึกล่าสุดของไฟล์ 04 WBS ZBUDR064 รอบ 28 ต.ค. 2569 เวลา 07:42:30 น.) ให้ครบถ้วนทุกจุดในระบบ ทั้งหัวการ์ด WBS, หัวการ์ดภาพรวม KPI, หัวกราฟล่างยอดดำเนินการ, แถบตัวกรองที่เลือก (Pills), หัวคอลัมน์ตาราง WBS (สถานะ SAP), แท็บเมนูประวัติข้อมูล (#dataHistoryBadge) และผัง Model View',
+      details: '1) ใน index.html: ปรับปรุงป้ายวันที่ใน #wbsHeaderDatesPlain คอลัมน์สถานะ SAP เป็น "แก้ไขล่าสุด: 28 ต.ค. 69" (title: 28 ต.ค. 2569), ปรับป้ายแท็บ #dataHistoryBadge เป็น "28 ต.ค.", และอัปเดต Version Cache Busters เป็น ?v=20261028_0800 2) ใน js/wbs.js: ปรับปรุงป้าย pill-file-04 เป็น 28 ต.ค. 2569, 07:42 น., ปรับปรุง #wbsKpiSapDateText เป็น "สถานะ SAP แก้ไขล่าสุดวันที่ 28 ต.ค. 69", ปรับปรุง .bar-sap-date-plain เป็น "สถานะ SAP แก้ไขล่าสุด: 28 ต.ค. 69", และปรับปรุงหัวคอลัมน์ statusSap ใน renderWbsTableHead เป็น "แก้ไขล่าสุด: 28 ต.ค. 69" 3) ใน js/data_history.js: อัปเดตข้อมูล src_04 ใน DATA_SOURCE_CATALOG (นำเข้า 28 ต.ค. 2569, 07:42 น., ขนาด 937.5 KB), อัปเดตผัง Model View Data Flow Diagram และอัปเดตเวลา SYSTEM_STORAGE_FILES ของ js/data_wbs.js พร้อมบันทึกประวัติการแก้ไขลงใน BASE_AUDIT_LOGS ตามข้อบังคับ AGENTS.md',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "ให้แก้ วันที่สถานะแก้ไขล่าสุด ด้วยทุกครั้ง หลังupdate ไฟล์"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง (ตรวจสอบและปรับปรุงป้ายแสดงวันที่สถานะ SAP ล่าสุดให้สอดคล้องกับไฟล์ข้อมูลจริง 28 ต.ค. 2569 ในทุกจุดแสดงผล)'
+    },
+    {
+      id: 'log_000_update_wbs_file_04_zbudr064_oct28_morning',
+      timestamp: '2026-10-28 07:45:00',
+      timestampTh: '28 ต.ค. 2569, 07:45 น.',
+      type: 'IMPORT',
+      typeBadge: 'อัปเดตไฟล์ 04 WBS ZBUDR064',
+      badgeClass: 'badge-type-import',
+      title: 'อัปเดตฐานข้อมูลไฟล์ 04 WBS ZBUDR064 (รอบ 28 ต.ค. 2569, 07:37:04 น.) พร้อมคำนวณ % เบิกพัสดุและ % เบิก คชจ. ผสานเข้าสู่ data_wbs.js',
+      targetSubject: 'ไฟล์ 04 WBS ZBUDR064, ฐานข้อมูล WBS คงเหลือ (js/data_wbs.js, window.AUC_WBS_REMAINING_DATA)',
+      storageFile: '04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx, js/data_wbs.js, index.html, js/data_history.js',
+      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน "update ไฟล์ 04 WBS": 1) นำเข้าและประมวลผลไฟล์ Excel ใหม่ "04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx" (ขนาด 749.4 KB, 4,590 แถวดิบ บันทึกล่าสุด 28 ต.ค. 2569 เวลา 07:37:04 น.) 2) เขียนสูตรและจัดรูปแบบเปอร์เซ็นต์อัตโนมัติในคอลัมน์ 24 (% เบิกพัสดุ: =IFERROR((M/T),0)) และคอลัมน์ 25 (% เบิก คชจ.: =IF(V=0,0,IFERROR(R/V,0))) ครบทุกแถว 3) ดำเนินการ Merge เข้ากับฐานข้อมูลงานคงเหลือหลัก 2,083 โครงการ (File 03, File 05 Baseline, File 06) ครบถ้วน 100% 4) ซิงค์และคงข้อมูลแผนปิดงาน (planClose 1,044 รายการ) และหมายเหตุหน้างาน (note 1,004 รายการ) จาก Google Sheet Live API และฐานข้อมูลเดิมครบถ้วน ไม่สูญหาย 5) ตรวจพบการเปลี่ยนแปลงสถานะ SAP จำนวน 19 โครงการ (ส่วนใหญ่เปลี่ยนเป็น CLSD F4/F2 หรือ D1) และมีการเปลี่ยนแปลง % เบิกพัสดุจำนวน 12 โครงการ 6) ส่งออกและอัปเดต js/data_wbs.js ขนาด 2.36 MB เรียบร้อยสมบูรณ์',
+      details: '1) ในไฟล์ Excel 04 WBS: เติมสูตร Excel และฟอร์แมต 0.00% ในคอลัมน์ 24 และ 25 พร้อมตรวจสอบค่าตัวอย่างถูกต้องสมบูรณ์ 2) สำรองไฟล์ js/data_wbs.bak_before_update_f4_oct28_morning.js ก่อนดำเนินการ 3) รันสคริปต์ผสานข้อมูล WBS 2,083 โครงการ โดยอัปเดตฟิลด์สถานะ SAP (status, statusSap), งบประมาณ, ค่าใช้จ่ายจริง, แผนงาน, เปอร์เซ็นต์การเบิกจ่าย (% เบิกพัสดุ, % เบิก คชจ.) จากไฟล์ 04 รอบใหม่ 4) ดึงและผสานข้อมูลแผนปิดงานและหมายเหตุจาก Google Sheet API คงไว้ครบถ้วน 5) สร้างไฟล์ js/data_wbs.js ใหม่ขนาด 2.36 MB (2,477,355 ไบต์) พร้อมใช้งาน 6) อัปเดต Cache Buster ใน index.html เป็น ?v=20261028_0745 และบันทึกประวัติการเปลี่ยนแปลงตามข้อกำหนดใน AGENTS.md',
+      sourceFile: '04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx (แก้ไขล่าสุด 28 ต.ค. 2569, 07:37:04 น., ขนาด 749.4 KB)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'สูง (อัปเดตสถานะโครงการจริงในระบบ SAP จำนวน 19 โครงการที่ปิดงาน/เปลี่ยนสถานะ และอัปเดต % เบิกจ่ายพัสดุและงบประมาณล่าสุดของ กฟก.3)'
+    },
+    {
+      id: 'log_000_nav_tabs_lock_passcode_225588',
+      timestamp: '2026-10-28 07:35:00',
+      timestampTh: '28 ต.ค. 2569, 07:35 น.',
+      type: 'CONFIG',
+      typeBadge: 'เพิ่มปุ่มล็อค 3 เมนู รหัส 225588',
+      badgeClass: 'badge-type-config',
+      title: 'เพิ่มปุ่มล็อค 3 เมนู (วิเคราะห์เปรียบเทียบ & Timeline, ศูนย์แจ้งเตือนจุดวิกฤต, ประวัติการนำเข้า & แก้ไขข้อมูล) ด้วยรหัส Admin PIN 225588',
+      targetSubject: 'แถบเมนูนำทาง Navigation Bar (#btnToggleNavTabsLock, tab-analytics, tab-warning, tab-data-history, .nav-tab-lock-badge, adminPinModal)',
+      storageFile: 'index.html, css/styles.css, js/app.js, js/data_history.js',
+      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน "เพิ่มปุ่มล็อค 3 เมนู รหัส 225588" พร้อมภาพถ่ายแถบเมนู: 1) เพิ่มปุ่มล็อค 3 เมนู (#btnToggleNavTabsLock) สไตล์พรีเมียมสีทองเรืองแสงบนแถบ Navigation Bar วางไว้ถัดจากเมนูประวัติการนำเข้า & แก้ไขข้อมูล 2) ล็อคการเข้าถึง 3 เมนูพิเศษ (วิเคราะห์เปรียบเทียบ & Timeline, ศูนย์แจ้งเตือนจุดวิกฤต, ประวัติการนำเข้า & แก้ไขข้อมูล) เป็นสถานะเริ่มต้น (Default Locked 🔒) พร้อมแสดงป้ายไอคอนแม่กุญแจทอง (.nav-tab-lock-badge) บนแท็บทั้งสาม 3) เมื่อคลิกปุ่มล็อค 3 เมนู หรือคลิกที่แท็บใดแท็บหนึ่งใน 3 เมนูนี้ ระบบจะเปิดหน้าต่างยืนยัน Admin PIN เพื่อกรอกรหัสผ่าน 225588 4) เมื่อกรอกรหัสผ่าน 225588 สำเร็จ ระบบจะปลดล็อคทั้ง 3 เมนูพร้อมกัน ปรับเปลี่ยนปุ่มเป็น "🔓 ปลดล็อคแล้ว (Admin)" สีเขียวมรกต ซ่อนป้ายแม่กุญแจ และสลับไปยังแท็บที่เลือกทันที 5) สามารถคลิกปุ่มเพื่อล็อคกลับได้ทุกเมื่อ โดยระบบจะสลับกลับไปยังหน้าภาพรวมผู้บริหาร (Overview) อัตโนมัติเพื่อความปลอดภัยสูงสุด',
+      details: '1) ใน index.html: เพิ่ม id="navTabBtnAnalytics", id="navTabBtnWarning" และป้าย <span class="nav-tab-lock-badge">🔒</span> บนปุ่มแท็บทั้ง 3 เมนู; เพิ่มปุ่มแม่กุญแจ <button class="btn-nav-tabs-lock is-locked" id="btnToggleNavTabsLock"> วางต่อท้ายเมนูประวัติการนำเข้า & แก้ไขข้อมูล; อัปเดต Cache Busters ของ data_history.js และ app.js เป็น ?v=20261028_0730 2) ใน css/styles.css: เพิ่มคลาส .btn-nav-tabs-lock สไตล์ Glassmorphism สีทองขอบเรืองแสงสำหรับสถานะล็อก (.is-locked) และสีเขียวมรกตสำหรับสถานะปลดล็อก (.admin-unlocked) รองรับทั้ง Dark Theme และ Light Theme; เพิ่มคลาส .nav-tab-lock-badge สำหรับป้ายไอคอนล็อกบนแท็บเมนู 3) ใน js/app.js: เพิ่มระบบจัดการสิทธิ์การเข้าถึง 3 เมนู (isNavTabsAuthenticated, setNavTabsAuthenticated, lockNavTabs, toggleNavTabsLock, updateNavTabsLockUI) โดยรีเซ็ตสถานะเป็นล็อก (false) เสมอทุกครั้งที่โหลดหน้าเว็บใหม่; ปรับปรุง switchTab() และ event listener ของ .nav-tab-btn ให้ดักจับการคลิกแท็บที่ล็อกและเปิดโมดัล Admin PIN (225588); ปรับปรุง openAdminPinModal() และ verifyAdminPin() รองรับบริบท "nav_tabs" และ "nav_lock" 4) บันทึกประวัติลงใน BASE_AUDIT_LOGS ตามข้อบังคับ AGENTS.md',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "เพิ่มปุ่มล็อค 3 เมนู รหัส 225588" พร้อมภาพหน้าจอแถบเมนูนำทาง 3 เมนู',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง (ยกระดับความปลอดภัยในการเข้าถึงข้อมูลเชิงลึก 3 เมนูสำคัญ โดยต้องใช้รหัส Admin PIN 225588 ในการเข้าถึง)'
+    },
     {
       id: 'log_000_wbs_clear_table_selections_button_toolbar',
       timestamp: '2026-10-27 20:00:00',
@@ -4083,7 +4131,7 @@
                   <div class="dh-flow-node" onclick="window.openModelViewModal('src_04', 'source')">
                     <div class="dh-node-badge" style="background:#8B5CF6;">ไฟล์ 04</div>
                     <div class="dh-node-title">ZBUDR064 (%พัสดุ/สถานะ SAP)</div>
-                    <div class="dh-node-meta">นำเข้า: 27 ต.ค. 69 • 732.0 KB</div>
+                    <div class="dh-node-meta">นำเข้า: 28 ต.ค. 69 • 937.5 KB</div>
                   </div>
                   <div class="dh-flow-node" onclick="window.openModelViewModal('src_06', 'source')">
                     <div class="dh-node-badge" style="background:#F59E0B;">ไฟล์ 06</div>

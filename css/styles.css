@@ -530,6 +530,93 @@ body {
 }
 
 /* ==========================================================================
+   Navigation Tabs Lock Button (ปุ่มล็อค 3 เมนู รหัส PIN 225588)
+   ========================================================================== */
+.btn-nav-tabs-lock {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.38rem 0.85rem;
+  font-family: inherit;
+  font-size: 0.80rem;
+  font-weight: 600;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 184, 28, 0.5) !important;
+  color: var(--pea-gold-400, #FBBF24) !important;
+  background: rgba(255, 184, 28, 0.10) !important;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.22s ease;
+  line-height: 1.2;
+  margin-left: 0.45rem;
+  box-shadow: 0 0 10px rgba(255, 184, 28, 0.15);
+  user-select: none;
+}
+
+.btn-nav-tabs-lock:hover {
+  background: rgba(255, 184, 28, 0.22) !important;
+  border-color: var(--pea-gold-400, #FBBF24) !important;
+  box-shadow: 0 0 14px rgba(255, 184, 28, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-nav-tabs-lock.admin-unlocked {
+  border-color: rgba(16, 185, 129, 0.55) !important;
+  background: rgba(16, 185, 129, 0.14) !important;
+  color: #34D399 !important;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.25);
+}
+
+.btn-nav-tabs-lock.admin-unlocked:hover {
+  border-color: rgba(16, 185, 129, 0.85) !important;
+  background: rgba(16, 185, 129, 0.24) !important;
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.45);
+  transform: translateY(-1px);
+}
+
+/* Light Theme Support for Lock Button */
+[data-theme="light"] .btn-nav-tabs-lock {
+  border-color: rgba(104, 44, 145, 0.45) !important;
+  color: var(--pea-purple-800, #4A154B) !important;
+  background: rgba(104, 44, 145, 0.08) !important;
+}
+
+[data-theme="light"] .btn-nav-tabs-lock.admin-unlocked {
+  border-color: rgba(5, 150, 105, 0.55) !important;
+  color: #059669 !important;
+  background: rgba(16, 185, 129, 0.12) !important;
+}
+
+/* Badges on the 3 Locked Tabs */
+.nav-tab-lock-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.68rem;
+  line-height: 1;
+  padding: 2px 5px;
+  border-radius: 6px;
+  background: rgba(245, 158, 11, 0.18);
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  color: #FBBF24;
+  margin-left: 0.25rem;
+  transition: all 0.2s ease;
+  filter: drop-shadow(0 0 4px rgba(245, 158, 11, 0.3));
+  vertical-align: middle;
+}
+
+.nav-tab-btn.is-nav-locked:hover .nav-tab-lock-badge {
+  transform: scale(1.12);
+  border-color: #F59E0B;
+}
+
+/* When the tabs are unlocked, hide the lock badge */
+.nav-tabs-bar.is-unlocked .nav-tab-lock-badge,
+.nav-tab-btn.is-unlocked .nav-tab-lock-badge {
+  display: none !important;
+}
+
+/* ==========================================================================
    Main Content Layout
    ========================================================================== */
 .main-container {
