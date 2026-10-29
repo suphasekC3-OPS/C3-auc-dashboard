@@ -2679,7 +2679,7 @@
       } else {
         if (icon) icon.textContent = '🔒';
         if (text) text.textContent = 'ล็อค 3 เมนู';
-        btn.title = 'คลิกเพื่อปลดล็อค 3 เมนูพิเศษ (รหัส Admin PIN: 225588)';
+        btn.title = 'คลิกเพื่อปลดล็อค 3 เมนูพิเศษ (ต้องใช้รหัส Admin PIN)';
       }
     }
 
@@ -2792,7 +2792,7 @@
       const extra = extraData || window.pendingNavTargetTab;
       const targetName = extra && tabNames[extra] ? `เมนู "${tabNames[extra]}"` : '3 เมนูพิเศษ (วิเคราะห์ & Timeline, จุดวิกฤต, ประวัติข้อมูล)';
       if (subtitle) subtitle.textContent = `ปลดล็อกการเข้าถึง ${targetName}`;
-      if (desc) desc.innerHTML = `กรุณากรอกรหัสผ่าน <strong>Admin PIN (225588)</strong> เพื่อปลดล็อกการเข้าถึง ${targetName}`;
+      if (desc) desc.innerHTML = `กรุณากรอกรหัสผ่าน <strong>Admin PIN</strong> เพื่อปลดล็อกการเข้าถึง ${targetName}`;
     } else {
       if (subtitle) subtitle.textContent = 'เข้าถึงฟังก์ชันการ์ดเป้าหมายรายเดือน';
       if (desc) desc.innerHTML = 'กรุณากรอกรหัสผ่าน <strong>Admin PIN</strong> เพื่อปลดล็อกและเปิดดูการ์ดเป้าหมายปิดงานรายเดือน';
