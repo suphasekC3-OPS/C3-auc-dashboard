@@ -8,7 +8,7 @@
   <meta name="description"
     content="ระบบสารสนเทศและแดชบอร์ดติดตามงานก่อสร้างและขึ้นทะเบียนทรัพย์สิน AUC การไฟฟ้าส่วนภูมิภาค เขต 3 (ภาคกลาง)">
   <link rel="icon" type="image/svg+xml" href="assets/pea_logo.svg">
-  <link rel="stylesheet" href="css/styles.css?v=20261028_1618">
+  <link rel="stylesheet" href="css/styles.css?v=20261030_0815">
 
 </head>
 
@@ -462,7 +462,7 @@
               <polyline points="12 12 12 14 14 15"></polyline>
             </svg>
             <span>ประวัติการนำเข้า & แก้ไขข้อมูล</span>
-            <span class="tab-badge" id="dataHistoryBadge" style="background:#8B5CF6; color:#fff; font-weight:700;">29 ต.ค.</span>
+            <span class="tab-badge" id="dataHistoryBadge" style="background:#8B5CF6; color:#fff; font-weight:700;">30 ต.ค.</span>
             <span class="nav-tab-lock-badge" title="เมนูนี้ถูกล็อค (ต้องใช้รหัส Admin PIN)">🔒</span>
           </button>
 
@@ -604,7 +604,11 @@
                 <circle cx="11" cy="11" r="8"></circle>
                 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
               </svg>
-              <input type="text" class="form-input" id="searchInput" placeholder="พิมพ์ชื่อ กฟฟ. หรือคำค้น..." />
+              <input type="search" class="form-input" id="searchInput" name="pea_auc_quick_search_query"
+                autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+                data-lpignore="true" data-1p-ignore="true" data-form-type="other"
+                readonly onfocus="this.removeAttribute('readonly');" onmousedown="this.removeAttribute('readonly');" ontouchstart="this.removeAttribute('readonly');"
+                placeholder="พิมพ์ชื่อ กฟฟ. หรือคำค้น..." />
             </div>
           </div>
 
@@ -2507,7 +2511,7 @@
             </div>
             <div>
               <label style="font-size:0.8rem; color:var(--text-muted); font-weight:600; margin-bottom:0.25rem; display:block;">ผู้ดำเนินการ (ชื่อ/ตำแหน่ง):</label>
-              <input type="text" id="dhInputAuthor" class="form-input" value="ผู้ใช้งานระบบ (User)" />
+              <input type="text" id="dhInputAuthor" name="dh_custom_log_author" class="form-input" autocomplete="off" placeholder="ผู้ใช้งานระบบ (User)" />
             </div>
           </div>
           <div class="modal-footer" style="display:flex; justify-content:flex-end; gap:0.5rem;">
@@ -2636,8 +2640,9 @@
               🔑 รหัสผ่าน Admin PIN:
             </label>
             <div style="position:relative; display:flex; align-items:center;">
-              <input type="password" id="adminPinInput" class="form-input" maxlength="20" placeholder="กรอกรหัสผ่าน Admin PIN"
-                autocomplete="off"
+              <input type="text" id="adminPinInput" name="pea_auc_admin_pin_code" class="form-input pin-masked" inputmode="numeric" maxlength="20" placeholder="กรอกรหัสผ่าน Admin PIN"
+                autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+                data-lpignore="true" data-1p-ignore="true" data-form-type="other"
                 onkeydown="if(event.key==='Enter') window.verifyAdminPin();"
                 style="width:100%; padding:0.65rem 2.6rem 0.65rem 0.85rem; font-size:1.05rem; letter-spacing:3px; font-weight:700; border-radius:10px; background:rgba(0,0,0,0.35); border:1.5px solid rgba(255,184,28,0.4); color:#FFFFFF;" />
               <button type="button" id="btnTogglePinVisibility" onclick="window.toggleAdminPinVisibility()"
@@ -2676,9 +2681,9 @@
   <script src="js/kpi_matrix.js?v=20261003_0930"></script>
   <script src="js/chart.js?v=20261026_1620"></script>
   <script src="js/data_wbs.js?v=20261028_0745"></script>
-  <script src="js/wbs.js?v=20261029_0752"></script>
-  <script src="js/data_history.js?v=20261029_0752"></script>
-  <script src="js/app.js?v=20261029_0752"></script>
+  <script src="js/wbs.js?v=20261030_0815"></script>
+  <script src="js/data_history.js?v=20261030_0815"></script>
+  <script src="js/app.js?v=20261030_0815"></script>
   <script src="js/criteria_dropdown.js?v=20261017_2055"></script>
   <script src="js/presentation_pointer.js?v=20261027_1435"></script>
 </body>

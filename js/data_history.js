@@ -360,9 +360,9 @@
       path: 'js/wbs.js',
       title: 'โมดูลจัดการหน้าตาราง WBS & ตัวกรอง',
       role: 'ตรรกะคำนวณตัวกรอง, ค้นหาสถานะ SAP, จัดกลุ่มสรุปผล',
-      recordsCount: '7,404 บรรทัดคำสั่ง',
-      fileSize: '316 KB',
-      updatedAt: '28 ต.ค. 2569, 16:18 น.',
+      recordsCount: '7,418 บรรทัดคำสั่ง',
+      fileSize: '317 KB',
+      updatedAt: '30 ต.ค. 2569, 08:15 น.',
       status: 'อัปเดตล่าสุดวันนี้',
       variable: 'window.renderWbsTab, getFilteredWbsData'
     },
@@ -432,6 +432,22 @@
    * System Pre-defined Audit & Modification Log Entries
    */
   const BASE_AUDIT_LOGS = [
+    {
+      id: 'log_000_fix_browser_autofill_search_wbs_zero',
+      timestamp: '2026-10-30 08:15:00',
+      timestampTh: '30 ต.ค. 2569, 08:15 น.',
+      type: 'EDIT',
+      typeBadge: 'แก้ไขป้องกัน Browser Autofill ช่องค้นหา',
+      badgeClass: 'badge-type-edit',
+      title: 'แก้ไขปัญหา Google Chrome Password Manager กรอกคำว่า "ผู้ใช้งานระบบ (User)" อัตโนมัติ (Autofill) ลงในช่องค้นหาจนทำให้งานคงเหลือ WBS = 0',
+      targetSubject: 'ช่องค้นหาด่วน (#searchInput), ช่องรหัสผ่าน Admin PIN (#adminPinInput), ช่องผู้ดำเนินการ (#dhInputAuthor)',
+      storageFile: 'index.html, css/styles.css, js/app.js, js/wbs.js, js/data_history.js',
+      changeSummary: 'ตรวจสอบสาเหตุและแก้ไขถาวรตามแจ้งจากผู้ใช้งาน: "หน้า web งานคงเหลือ WBS = 0 และขึ้นผู้ใช้งาน ต้อง refresh ถึงจะปกติ เกิดอะไรขึ้น" 1) สาเหตุ: Google Chrome Password Manager จดจำค่าเริ่มต้น value="ผู้ใช้งานระบบ (User)" ของช่อง #dhInputAuthor เป็น Username คู่กับรหัสผ่านของ #adminPinInput (type="password") เมื่อเปิดเว็บแล้วคลิกบนหน้าจอ Chrome จึง Autofill คำว่า "ผู้ใช้งานระบบ (User)" ลงในช่องค้นหา #searchInput ที่มองเห็นอยู่ ทำให้ระบบกรองคำค้นดังกล่าวจนเหลืองาน WBS = 0 2) การแก้ไขถาวร 4 ชั้น: เปลี่ยน #searchInput เป็น type="search" พร้อม readonly-until-focus และ autocomplete="off", เปลี่ยน #adminPinInput เป็น type="text" ใช้ CSS text-security: disc เพื่อไม่ให้เบราว์เซอร์ตรวจจับเป็นฟอร์มรหัสผ่าน, นำ static value ออกจาก #dhInputAuthor และเพิ่มระบบดักล้างค่า Autofill แปลกปลอมใน js/app.js และ js/wbs.js',
+      details: '1) ใน index.html: เปลี่ยน #searchInput เป็น type="search" พร้อม readonly (ปลดอัตโนมัติเมื่อ focus/mousedown/touchstart) และ autocomplete="off"; เปลี่ยน #adminPinInput เป็น type="text" คลาส .pin-masked เพื่อไม่ให้มี input[type="password"] ใน DOM ตอนโหลดหน้า; นำ static value="ผู้ใช้งานระบบ (User)" ออกจาก #dhInputAuthor 2) ใน css/styles.css: เพิ่ม #adminPinInput.pin-masked { -webkit-text-security: disc !important; } 3) ใน js/app.js และ js/wbs.js: ปรับระบบสลับแสดง/ซ่อนรหัสผ่านรองรับ .pin-masked และเพิ่มตัวกรองล้างค่า Autofill "ผู้ใช้งานระบบ (User)" ออกจากช่องค้นหาทันที 4) อัปเดต Cache Busters เป็น ?v=20261030_0815',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "หน้า web งานคงเหลือ WBS = 0 และขึ้นผู้ใช้งาน ต้อง refresh ถึงจะปกติ เกิดอะไรขึ้น"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'สูง (ป้องกันเบราว์เซอร์กรอกชื่อผู้ใช้อัตโนมัติลงในช่องค้นหาจนข้อมูลถูกกรองเหลือ 0 รายการอย่างถาวร)'
+    },
     {
       id: 'log_000_remove_admin_pin_display_all',
       timestamp: '2026-10-29 07:52:00',
@@ -4808,6 +4824,10 @@
 
   window.openDhAddLogModal = function () {
     const modalEl = document.getElementById('dhAddLogModal');
+    const authorEl = document.getElementById('dhInputAuthor');
+    if (authorEl && !authorEl.value) {
+      authorEl.value = 'ผู้ใช้งานระบบ (User)';
+    }
     if (modalEl) {
       modalEl.classList.add('show');
       modalEl.style.display = 'flex';

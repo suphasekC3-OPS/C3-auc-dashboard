@@ -1207,6 +1207,17 @@ body {
   background: transparent !important;
   color: #FFB81C !important;
   text-shadow: none !important;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.top-filter-search-box .form-input::-webkit-search-cancel-button {
+  cursor: pointer;
+}
+
+#adminPinInput.pin-masked {
+  -webkit-text-security: disc !important;
+  text-security: disc !important;
 }
 
 .top-filter-search-box .form-input::placeholder {

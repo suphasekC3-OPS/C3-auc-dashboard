@@ -1708,11 +1708,11 @@
 
     const searchInput = document.getElementById('searchInput');
     if (searchInput) {
-      let debounceTimer;
+      if (searchInput.value && searchInput.value.trim() === 'ผู้ใช้งานระบบ (User)') { searchInput.value = ''; } let debounceTimer;
       searchInput.addEventListener('input', (e) => {
         clearTimeout(debounceTimer);
         debounceTimer = setTimeout(() => {
-          state.filters.search = e.target.value;
+          if (e.target.value && (e.target.value.trim() === 'ผู้ใช้งานระบบ (User)' || (document.activeElement !== searchInput && searchInput.hasAttribute('readonly')))) { e.target.value = ''; } state.filters.search = e.target.value;
           filterData();
           renderAll();
         }, 200);
@@ -2776,7 +2776,7 @@
     if (btn) btn.textContent = '👁️';
     if (input) {
       input.value = '';
-      input.type = 'password'; // Reset to masked password on open
+      const supportsTextSecurity = ('webkitTextSecurity' in document.documentElement.style) || ('textSecurity' in document.documentElement.style); input.type = supportsTextSecurity ? 'text' : 'password'; input.classList.add('pin-masked');
       input.classList.remove('pin-input-shake');
     }
 
@@ -2814,7 +2814,7 @@
     modal.classList.remove('show');
     modal.style.display = 'none';
     const input = document.getElementById('adminPinInput');
-    if (input) input.value = '';
+    if (input) { input.value = ''; input.type = 'text'; input.classList.add('pin-masked'); }
     window.pendingNavTargetTab = null;
     window.adminPinExtraData = null;
   };
@@ -2893,14 +2893,14 @@
     const input = document.getElementById('adminPinInput');
     const btn = document.getElementById('btnTogglePinVisibility');
     if (!input) return;
-    if (input.type === 'password') {
-      input.type = 'text';
+    const isMasked = input.classList.contains('pin-masked') || input.type === 'password'; if (isMasked) {
+      input.type = 'text'; input.classList.remove('pin-masked');
       if (btn) {
         btn.textContent = '🙈';
         btn.title = 'ซ่อนรหัสผ่าน';
       }
     } else {
-      input.type = 'password';
+      const supportsTextSecurity = ('webkitTextSecurity' in document.documentElement.style) || ('textSecurity' in document.documentElement.style); input.type = supportsTextSecurity ? 'text' : 'password'; input.classList.add('pin-masked');
       if (btn) {
         btn.textContent = '👁️';
         btn.title = 'แสดงรหัสผ่าน';

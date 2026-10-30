@@ -389,7 +389,14 @@
     const topCrit = globalFilters.criteria || (document.getElementById('filterCriteria') ? document.getElementById('filterCriteria').value : 'ALL');
     const topProv = globalFilters.province || (document.getElementById('filterProvince') ? document.getElementById('filterProvince').value : 'ALL');
     const topOff = globalFilters.office || (document.getElementById('filterOffice') ? document.getElementById('filterOffice').value : 'ALL');
-    const topSearch = (globalFilters.search !== undefined ? globalFilters.search : (document.getElementById('searchInput') ? document.getElementById('searchInput').value : '')).trim().toLowerCase();
+    let rawTopSearch = (globalFilters.search !== undefined ? globalFilters.search : (document.getElementById('searchInput') ? document.getElementById('searchInput').value : '')).trim();
+    if (rawTopSearch === 'ผู้ใช้งานระบบ (User)') {
+      rawTopSearch = '';
+      if (globalFilters.search !== undefined) globalFilters.search = '';
+      const sEl = document.getElementById('searchInput');
+      if (sEl && sEl.value.trim() === 'ผู้ใช้งานระบบ (User)') sEl.value = '';
+    }
+    const topSearch = rawTopSearch.toLowerCase();
 
     // Local WBS Sub-filters
     const localSearch = (wbsState.search || '').trim().toLowerCase();
@@ -6572,7 +6579,14 @@
 
     const topSearch = document.getElementById('searchInput');
     if (topSearch) {
+      if (topSearch.value && topSearch.value.trim() === 'ผู้ใช้งานระบบ (User)') {
+        topSearch.value = '';
+      }
       topSearch.addEventListener('input', () => {
+        if (topSearch.value && (topSearch.value.trim() === 'ผู้ใช้งานระบบ (User)' || (document.activeElement !== topSearch && topSearch.hasAttribute('readonly')))) {
+          topSearch.value = '';
+          if (window.state && window.state.filters) window.state.filters.search = '';
+        }
         wbsState.page = 1;
         renderWbsTab();
       });
