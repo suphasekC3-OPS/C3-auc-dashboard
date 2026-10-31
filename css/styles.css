@@ -20979,18 +20979,48 @@ body.pointer-mode-gold * {
 .mat-hchart-val.val-orange, .mat-hchart-val .val-orange { color: #FFCCA3; }
 
 /* ช่องสำรองกราฟสีเขียว (ปริมาณคงเหลือในคลัง จากไฟล์ 08 - อนาคต) */
+/* กราฟสีเขียว ปริมาณคงเหลือในคลัง จากไฟล์ 08 (SLoc 0022 งบ I,P = เขียวเข้ม, SLoc 0021 งบ C = เขียวอ่อน) — แสดงอย่างเดียว กดเลือกไม่ได้ */
 .mat-hchart-track.track-green {
-  height: 10px;
-  background: repeating-linear-gradient(90deg, rgba(22, 163, 74, 0.10) 0 6px, transparent 6px 12px);
+  height: 11px;
+  background: rgba(22, 163, 74, 0.08);
   border-radius: 0 5px 5px 0;
+  border: 1px solid rgba(22, 163, 74, 0.22);
+  cursor: default !important;
+  user-select: text;
+}
+.mat-hchart-track.track-green .mat-hchart-bar {
+  cursor: default !important;
+  pointer-events: auto;
+}
+.mat-hchart-bar.bar-darkgreen {
+  background: #15803D !important;
+  box-shadow: 0 0 6px rgba(21, 128, 61, 0.55);
+  cursor: default !important;
+}
+.mat-hchart-bar.bar-darkgreen:hover {
+  filter: brightness(1.15);
+}
+.mat-hchart-bar.bar-lightgreen {
+  background: #4ADE80 !important;
+  box-shadow: 0 0 6px rgba(74, 222, 128, 0.55);
+  cursor: default !important;
+}
+.mat-hchart-bar.bar-lightgreen:hover {
+  filter: brightness(1.15);
 }
 .mat-hchart-bar.bar-green {
-  background: linear-gradient(90deg, #166534 0%, #16A34A 60%, #4ADE80 100%);
-  box-shadow: 0 0 8px rgba(22, 163, 74, 0.45);
+  background: #16A34A !important;
+  box-shadow: 0 0 6px rgba(22, 163, 74, 0.5);
+  cursor: default !important;
 }
-.mat-hchart-val.val-green { color: #4ADE80; }
+.mat-hchart-val.val-darkgreen, .mat-hchart-val .val-darkgreen { color: #86EFAC; font-weight: 800; cursor: default !important; }
+.mat-hchart-val.val-lightgreen, .mat-hchart-val .val-lightgreen { color: #BBF7D0; font-weight: 800; cursor: default !important; }
+.mat-hchart-val.val-green { color: #4ADE80; font-weight: 800; cursor: default !important; }
+.mat-hchart-val .val-stock-total { color: #6EE7B7; font-weight: 800; cursor: default !important; }
+.mat-hchart-val .val-stock-zero { color: rgba(255, 255, 255, 0.35); font-style: normal; font-size: 0.72rem; cursor: default !important; }
 
 /* ปุ่มล้างตัวเลือกกราฟบนหัวตาราง */
+
 .btn-clear-chart-sel {
   margin-left: 0.5rem;
   padding: 1px 8px;
@@ -21050,6 +21080,20 @@ body.pointer-mode-gold * {
 [data-theme="light"] .mat-hchart-val.val-orange,
 [data-theme="light"] .mat-hchart-val .val-orange {
   color: #D96B27;
+}
+[data-theme="light"] .mat-hchart-val.val-darkgreen,
+[data-theme="light"] .mat-hchart-val .val-darkgreen {
+  color: #15803D;
+}
+[data-theme="light"] .mat-hchart-val.val-lightgreen,
+[data-theme="light"] .mat-hchart-val .val-lightgreen {
+  color: #16A34A;
+}
+[data-theme="light"] .mat-hchart-val .val-stock-total {
+  color: #047857;
+}
+[data-theme="light"] .mat-hchart-val .val-stock-zero {
+  color: rgba(0, 0, 0, 0.35);
 }
 [data-theme="light"] .mat-hchart-row:hover {
   background: rgba(104, 44, 145, 0.07);

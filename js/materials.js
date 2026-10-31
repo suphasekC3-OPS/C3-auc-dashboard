@@ -1,4 +1,4 @@
-/**
+﻿/**
  * PEA AUC Dashboard - Materials Pending Withdrawal Module (เมนู "รายการพัสดุ")
  * เชื่อมข้อมูล 3 แหล่งแบบ Relational Join:
  *   1) ไฟล์ 03 WBSงานคงเหลือเดือนล่าสุด.xlsx (คอลัมน์ WBS เป็นตัวอ้างอิงหลักและตัวกรองเกณฑ์วัด/พื้นที่/กฟฟ.)
@@ -205,10 +205,7 @@
     if (val === null || val === undefined || val === '') return '0';
     const num = Number(val);
     if (isNaN(num)) return escapeHtml(val);
-    if (Math.abs(num - Math.round(num)) < 0.0005) {
-      return Math.round(num).toLocaleString('th-TH');
-    }
-    return num.toLocaleString('th-TH', { minimumFractionDigits: 0, maximumFractionDigits: 3 });
+    return Math.round(num).toLocaleString('th-TH');
   }
 
   function formatSapStatusShort(status) {
@@ -691,7 +688,8 @@
               <button type="button" class="mat-budget-pill pill-red in-both" onclick="window.setMatChartBudgetFilter('IP')" title="คลิกเพื่อเลือกแสดงเฉพาะ งบ I, P (สีแดง)"><i class="lg-dot lg-red"></i> ค้างเบิก งบ I, P (สีแดง)</button>
               <button type="button" class="mat-budget-pill pill-orange in-both" onclick="window.setMatChartBudgetFilter('C')" title="คลิกเพื่อเลือกแสดงเฉพาะ งบ C (สีส้มพาสเทล)"><i class="lg-dot lg-orange"></i> ค้างเบิก งบ C (สีส้มพาสเทล)</button>
             </div>
-            <span class="mat-hchart-lg lg-stock"><i class="lg-dot lg-green"></i>ปริมาณคงเหลือในคลัง Stc.0022 งบ I,P <em>(รอนำเข้าไฟล์ 08)</em></span>
+            <span class="mat-hchart-lg" title="เนเธเธฅเน 08 เธเธฅเธฑเธ SLoc 0022 เธเธฃเธดเธกเธฒเธ“เธเธเน€เธซเธฅเธทเธญเธเธเธเธฅเธฑเธเธเธ I,P (เธชเธตเธเธฃเธฒเธเน€เธเธตเธขเธงเน€เธเนเธก)"><i class="lg-dot" style="background:#15803D; box-shadow:0 0 6px rgba(21,128,61,0.8);"></i> <span style="color:#86EFAC;">เธเธเน€เธซเธฅเธทเธญ SLoc 0022 เธเธ I,P (เน€เธเธตเธขเธงเน€เธเนเธก)</span></span>
+            <span class="mat-hchart-lg" title="เนเธเธฅเน 08 เธเธฅเธฑเธ SLoc 0021 เธเธฃเธดเธกเธฒเธ“เธเธเน€เธซเธฅเธทเธญเธเธเธเธฅเธฑเธเธเธ C (เธชเธตเธเธฃเธฒเธเน€เธเธตเธขเธงเธญเนเธญเธ)"><i class="lg-dot" style="background:#4ADE80; box-shadow:0 0 6px rgba(74,222,128,0.8);"></i> <span style="color:#BBF7D0;">เธเธเน€เธซเธฅเธทเธญ SLoc 0021 เธเธ C (เน€เธเธตเธขเธงเธญเนเธญเธ)</span></span>
           </div>
         </div>
         <div class="mat-hchart-scroll" id="matHChartScroll">
@@ -1631,12 +1629,68 @@
    */
   const MAT_CHART_MAX_ROWS = 500;
 
+  // Fast Stock lookup cache from File 08 (MB52)
+  function getMat08StockMap() {
+    if (window._mat08StockMap) return window._mat08StockMap;
+    const stock = window.AUC_MAT08_STOCK;
+    if (!stock || !Array.isArray(stock.entries)) return null;
+
+    const byCodePlant = new Map();
+    const byDescPlant = new Map();
+
+    for (let i = 0; i < stock.entries.length; i++) {
+      const e = stock.entries[i];
+      const code = String(e[0] || '').trim();
+      const desc = String(e[1] || '').trim();
+      const plnt = String(e[2] || '').trim().toUpperCase();
+      const unit = String(e[3] || '').trim();
+      const stockC = Number(e[4]) || 0;
+      const stockIp = Number(e[5]) || 0;
+
+      const obj = { code, desc, plant: plnt, unit, stockC, stockIp };
+      if (code && plnt) byCodePlant.set(code + '|' + plnt, obj);
+      if (desc && plnt) byDescPlant.set(desc + '|' + plnt, obj);
+    }
+
+    window._mat08StockMap = { byCodePlant, byDescPlant };
+    return window._mat08StockMap;
+  }
+
+  // Fast Stock lookup cache from File 08 (MB52)
+  function getMat08StockMap() {
+    if (window._mat08StockMap) return window._mat08StockMap;
+    const stock = window.AUC_MAT08_STOCK;
+    if (!stock || !Array.isArray(stock.entries)) return null;
+
+    const byCodePlant = new Map();
+    const byDescPlant = new Map();
+
+    for (let i = 0; i < stock.entries.length; i++) {
+      const e = stock.entries[i];
+      const code = String(e[0] || '').trim();
+      const desc = String(e[1] || '').trim();
+      const plnt = String(e[2] || '').trim().toUpperCase();
+      const unit = String(e[3] || '').trim();
+      const stockC = Number(e[4]) || 0;
+      const stockIp = Number(e[5]) || 0;
+
+      const obj = { code, desc, plant: plnt, unit, stockC, stockIp };
+      if (code && plnt) byCodePlant.set(code + '|' + plnt, obj);
+      if (desc && plnt) byDescPlant.set(desc + '|' + plnt, obj);
+    }
+
+    window._mat08StockMap = { byCodePlant, byDescPlant };
+    return window._mat08StockMap;
+  }
+
   function renderMatRemainChart() {
     const body = document.getElementById('matHChartBody');
     const scroll = document.getElementById('matHChartScroll');
     const subEl = document.getElementById('matHChartSub');
     const legendEl = document.getElementById('matHChartLegendContainer');
     if (!body) return;
+
+    const prevTop = scroll ? scroll.scrollTop : 0;
 
     const rows = getFilteredMaterialRows(false, true);
     const agg = new Map();
@@ -1653,7 +1707,17 @@
 
       let item = agg.get(key);
       if (!item) {
-        item = { name: key, remIp: 0, remC: 0, remTotal: 0 };
+        item = {
+          name: key,
+          remIp: 0,
+          remC: 0,
+          remTotal: 0,
+          matCodes: new Set(),
+          plants: new Set(),
+          stockIp: 0,
+          stockC: 0,
+          stockTotal: 0
+        };
         agg.set(key, item);
       }
 
@@ -1667,6 +1731,38 @@
         hasAnyIp = true;
       }
       item.remTotal += rem;
+
+      if (r.matCode) item.matCodes.add(String(r.matCode).trim());
+      if (r.plant) item.plants.add(String(r.plant).trim().toUpperCase());
+    }
+
+    // คำนวณปริมาณคงคลังจากไฟล์ 08 ตามรหัสพัสดุและโรงงาน/Plant ของแถวที่ถูกกรอง
+    // (ข้อ 3: หากเลือกตัวกรองแล้ว ปริมาณคงคลังกราฟสีเขียว ต้องแสดงโรงงาน/plant เดียวกับปริมาณคงค้าง ไม่ใช่แสดงทุกโรงงาน)
+    const stockMaps = getMat08StockMap();
+    if (stockMaps) {
+      for (const item of agg.values()) {
+        let sIp = 0;
+        let sC = 0;
+        item.plants.forEach(pl => {
+          item.matCodes.forEach(code => {
+            const s = stockMaps.byCodePlant.get(code + '|' + pl);
+            if (s) {
+              sIp += s.stockIp;
+              sC += s.stockC;
+            }
+          });
+          if (item.matCodes.size === 0) {
+            const sD = stockMaps.byDescPlant.get(item.name + '|' + pl);
+            if (sD) {
+              sIp += sD.stockIp;
+              sC += sD.stockC;
+            }
+          }
+        });
+        item.stockIp = sIp;
+        item.stockC = sC;
+        item.stockTotal = sIp + sC;
+      }
     }
 
     // ตรวจสอบ effectiveBudget
@@ -1680,7 +1776,7 @@
       lockedByCriteria = true;
     }
 
-    // อัปเดต Legend และปุ่มเลือกงบ (ในส่วนที่วงสีเหลือง ให้แสดงว่าเลือกอันไหนอยู่)
+    // อัปเดต Legend และปุ่มเลือกงบ
     if (legendEl) {
       const activeBudget = (matState.chartSelBudget && matState.chartSelBudget !== 'ALL')
         ? matState.chartSelBudget
@@ -1709,7 +1805,8 @@
         `<i class="lg-dot lg-orange"></i> ค้างเบิก งบ C (สีส้มพาสเทล) ${tagC}` +
         '</button>' +
         '</div>' +
-        '<span class="mat-hchart-lg lg-stock"><i class="lg-dot lg-green"></i>ปริมาณคงเหลือในคลัง Stc.0022 งบ I,P <em>(รอนำเข้าไฟล์ 08)</em></span>';
+        `<span class="mat-hchart-lg${isIp ? ' active-stock-lg' : (isC ? ' dimmed-stock-lg' : '')}" title="ไฟล์ 08 คลัง SLoc 0022 ปริมาณคงเหลือคงคลังงบ I,P (สีกราฟเขียวเข้ม — แสดงอย่างเดียว)"><i class="lg-dot" style="background:#15803D; box-shadow:0 0 6px rgba(21,128,61,0.8);"></i> <span style="color:#86EFAC;">คงเหลือ SLoc 0022 งบ I,P (เขียวเข้ม)</span></span>` +
+        `<span class="mat-hchart-lg${isC ? ' active-stock-lg' : (isIp ? ' dimmed-stock-lg' : '')}" title="ไฟล์ 08 คลัง SLoc 0021 ปริมาณคงเหลือคงคลังงบ C (สีกราฟเขียวอ่อน — แสดงอย่างเดียว)"><i class="lg-dot" style="background:#4ADE80; box-shadow:0 0 6px rgba(74,222,128,0.8);"></i> <span style="color:#BBF7D0;">คงเหลือ SLoc 0021 งบ C (เขียวอ่อน)</span></span>`;
     }
 
     // กรองและเรียงลำดับรายการตาม effectiveBudget
@@ -1730,9 +1827,19 @@
 
     const total = list.length;
     const shown = list.length > MAT_CHART_MAX_ROWS ? list.slice(0, MAT_CHART_MAX_ROWS) : list;
-    const maxVal = shown.length
-      ? (effectiveBudget === 'IP' ? shown[0].remIp : (effectiveBudget === 'C' ? shown[0].remC : shown[0].remTotal))
-      : 0;
+    
+    // คำนวณ maxVal โดยคิดทั้งยอดค้างเบิกและยอดคงเหลือในคลัง เพื่อให้แท่งกราฟทั้งสองชุดใช้สเกลเดียวกัน
+    let maxVal = 0;
+    for (let i = 0; i < shown.length; i++) {
+      const it = shown[i];
+      if (effectiveBudget === 'IP') {
+        maxVal = Math.max(maxVal, it.remIp, it.stockIp);
+      } else if (effectiveBudget === 'C') {
+        maxVal = Math.max(maxVal, it.remC, it.stockC);
+      } else {
+        maxVal = Math.max(maxVal, it.remTotal, it.stockTotal);
+      }
+    }
 
     const sumRemTotal = list.reduce((s, x) => s + x.remTotal, 0);
     const sumRemIp = list.reduce((s, x) => s + x.remIp, 0);
@@ -1767,19 +1874,17 @@
       return;
     }
 
-    const prevTop = scroll ? scroll.scrollTop : 0;
     const html = [];
     for (let i = 0; i < shown.length; i++) {
       const it = shown[i];
-      const isRowSel = (sel && sel === it.name);
-      const safeAttr = escapeHtml(it.name).replace(/'/g, '&#39;');
+      const isRowSel = (sel === it.name || sel === it.code);
+      const safeAttr = escapeHtml(it.name);
 
       const hasIp = it.remIp > 0.0005;
       const hasC = it.remC > 0.0005;
 
       const isRedActive = isRowSel && (selBudget === 'IP');
       const isOrangeActive = isRowSel && (selBudget === 'C');
-      const isNameActive = isRowSel && (selBudget === 'ALL');
 
       const isRedDimmed = isRowSel && (selBudget === 'C');
       const isOrangeDimmed = isRowSel && (selBudget === 'IP');
@@ -1788,18 +1893,42 @@
       let valHtml = '';
       let titleTip = `${safeAttr}`;
 
+      let stockBarHtml = '';
+      let stockValHtml = '';
+      const plantListStr = it.plants.size > 0 ? Array.from(it.plants).join(', ') : '-';
+
       if (effectiveBudget === 'IP') {
         const w = (maxVal > 0) ? Math.max(0.6, (it.remIp / maxVal) * 100) : 0;
         const targetCls = isRowSel && (selBudget === 'IP' || selBudget === 'ALL') ? ' active-target' : '';
         barHtml = `<div class="mat-hchart-bar bar-red${targetCls}" style="width:${w.toFixed(2)}%;" onclick="window.selectMatChartItemWithBudget('${safeAttr}', 'IP', event)" title="คลิกเพื่อเลือกเฉพาะ งบ I, P (สีแดง) สำหรับพัสดุนี้: ${formatQty(it.remIp)}"></div>`;
         valHtml = `<span class="val-red">${formatQty(it.remIp)}</span>`;
         titleTip += ` — ค้างเบิก งบ I, P: ${formatQty(it.remIp)}`;
+
+        // สีกราฟเขียวเข้ม สำหรับ SLoc 0022 งบ I,P (แสดงอย่างเดียว กดเลือกไม่ได้)
+        if (it.stockIp > 0.0005) {
+          const wS = Math.min(100, Math.max(0.6, (it.stockIp / maxVal) * 100));
+          stockBarHtml = `<div class="mat-hchart-bar bar-darkgreen" style="width:${wS.toFixed(2)}%;" onclick="event.stopPropagation()" title="คงเหลือในคลัง SLoc 0022 งบ I, P: ${formatQty(it.stockIp)} (โรงงาน: ${plantListStr}) — แสดงอย่างเดียว"></div>`;
+          stockValHtml = `<span class="val-darkgreen" title="คงเหลือในคลัง SLoc 0022 งบ I, P (โรงงาน: ${plantListStr})">${formatQty(it.stockIp)}</span>`;
+        } else {
+          stockBarHtml = `<div class="mat-hchart-bar bar-zero" style="width:0%;" onclick="event.stopPropagation()"></div>`;
+          stockValHtml = `<span class="val-stock-zero" title="คงเหลือในคลัง SLoc 0022 งบ I, P = 0 (โรงงาน: ${plantListStr})">0</span>`;
+        }
       } else if (effectiveBudget === 'C') {
         const w = (maxVal > 0) ? Math.max(0.6, (it.remC / maxVal) * 100) : 0;
         const targetCls = isRowSel && (selBudget === 'C' || selBudget === 'ALL') ? ' active-target' : '';
         barHtml = `<div class="mat-hchart-bar bar-orange${targetCls}" style="width:${w.toFixed(2)}%;" onclick="window.selectMatChartItemWithBudget('${safeAttr}', 'C', event)" title="คลิกเพื่อเลือกเฉพาะ งบ C (สีส้มพาสเทล) สำหรับพัสดุนี้: ${formatQty(it.remC)}"></div>`;
         valHtml = `<span class="val-orange">${formatQty(it.remC)}</span>`;
         titleTip += ` — ค้างเบิก งบ C: ${formatQty(it.remC)} (ส้มพาสเทล)`;
+
+        // สีกราฟเขียวอ่อน สำหรับ SLoc 0021 งบ C (แสดงอย่างเดียว กดเลือกไม่ได้)
+        if (it.stockC > 0.0005) {
+          const wS = Math.min(100, Math.max(0.6, (it.stockC / maxVal) * 100));
+          stockBarHtml = `<div class="mat-hchart-bar bar-lightgreen" style="width:${wS.toFixed(2)}%;" onclick="event.stopPropagation()" title="คงเหลือในคลัง SLoc 0021 งบ C: ${formatQty(it.stockC)} (โรงงาน: ${plantListStr}) — แสดงอย่างเดียว"></div>`;
+          stockValHtml = `<span class="val-lightgreen" title="คงเหลือในคลัง SLoc 0021 งบ C (โรงงาน: ${plantListStr})">${formatQty(it.stockC)}</span>`;
+        } else {
+          stockBarHtml = `<div class="mat-hchart-bar bar-zero" style="width:0%;" onclick="event.stopPropagation()"></div>`;
+          stockValHtml = `<span class="val-stock-zero" title="คงเหลือในคลัง SLoc 0021 งบ C = 0 (โรงงาน: ${plantListStr})">0</span>`;
+        }
       } else {
         // ทั้ง 2 งบ: แดงขึ้นก่อน (งบ I, P) แล้วตามด้วยส้มพาสเทล (งบ C)
         const wIp = (maxVal > 0 && hasIp) ? (it.remIp / maxVal) * 100 : 0;
@@ -1828,9 +1957,36 @@
           valHtml = `<span class="val-orange">${formatQty(it.remC)}</span>`;
           titleTip += ` — ค้างเบิก งบ C: ${formatQty(it.remC)} (ส้มพาสเทล)`;
         }
+
+        // กราฟคงคลัง: เขียวเข้ม SLoc 0022 (งบ I,P) + เขียวอ่อน SLoc 0021 (งบ C) (แสดงอย่างเดียว กดเลือกไม่ได้)
+        const hasStockIp = it.stockIp > 0.0005;
+        const hasStockC = it.stockC > 0.0005;
+
+        if (hasStockIp && hasStockC) {
+          const wSIp = (maxVal > 0) ? Math.max(0.4, (it.stockIp / maxVal) * 100) : 0;
+          const wSC = (maxVal > 0) ? Math.max(0.4, (it.stockC / maxVal) * 100) : 0;
+          stockBarHtml = `<div class="mat-hchart-bar bar-darkgreen bar-seg-first" style="width:${wSIp.toFixed(2)}%;" onclick="event.stopPropagation()" title="คงเหลือในคลัง SLoc 0022 งบ I, P: ${formatQty(it.stockIp)} (โรงงาน: ${plantListStr}) — แสดงอย่างเดียว"></div>` +
+                         `<div class="mat-hchart-bar bar-lightgreen bar-seg-last" style="width:${wSC.toFixed(2)}%;" onclick="event.stopPropagation()" title="คงเหลือในคลัง SLoc 0021 งบ C: ${formatQty(it.stockC)} (โรงงาน: ${plantListStr}) — แสดงอย่างเดียว"></div>`;
+          stockValHtml = `<span class="val-darkgreen" title="คงเหลือ SLoc 0022 งบ I, P">${formatQty(it.stockIp)}</span>` +
+                         `<span style="opacity:0.6; margin:0 3px; font-weight:700;">+</span>` +
+                         `<span class="val-lightgreen" title="คงเหลือ SLoc 0021 งบ C">${formatQty(it.stockC)}</span>` +
+                         `<span class="val-stock-total" style="font-size:0.7rem; font-weight:700; margin-left:4px;">(รวม ${formatQty(it.stockTotal)})</span>`;
+        } else if (hasStockIp) {
+          const wS = Math.min(100, Math.max(0.6, (it.stockIp / maxVal) * 100));
+          stockBarHtml = `<div class="mat-hchart-bar bar-darkgreen" style="width:${wS.toFixed(2)}%;" onclick="event.stopPropagation()" title="คงเหลือในคลัง SLoc 0022 งบ I, P: ${formatQty(it.stockIp)} (โรงงาน: ${plantListStr}) — แสดงอย่างเดียว"></div>`;
+          stockValHtml = `<span class="val-darkgreen">${formatQty(it.stockIp)}</span>`;
+        } else if (hasStockC) {
+          const wS = Math.min(100, Math.max(0.6, (it.stockC / maxVal) * 100));
+          stockBarHtml = `<div class="mat-hchart-bar bar-lightgreen" style="width:${wS.toFixed(2)}%;" onclick="event.stopPropagation()" title="คงเหลือในคลัง SLoc 0021 งบ C: ${formatQty(it.stockC)} (โรงงาน: ${plantListStr}) — แสดงอย่างเดียว"></div>`;
+          stockValHtml = `<span class="val-lightgreen">${formatQty(it.stockC)}</span>`;
+        } else {
+          stockBarHtml = `<div class="mat-hchart-bar bar-zero" style="width:0%;" onclick="event.stopPropagation()"></div>`;
+          stockValHtml = `<span class="val-stock-zero" title="คงเหลือในคลัง = 0 (โรงงาน: ${plantListStr}) — แสดงอย่างเดียว">0</span>`;
+        }
       }
 
-      titleTip += ' (คลิกชื่อพัสดุเพื่อเลือกทุกงบ หรือคลิกแท่งสีแดง/ส้ม เพื่อเลือกเฉพาะงบนั้น)';
+      titleTip += ` [คงคลัง: รวม ${formatQty(it.stockTotal)} (งบ I,P: ${formatQty(it.stockIp)}, งบ C: ${formatQty(it.stockC)}) — โรงงาน: ${plantListStr}]`;
+      titleTip += ' (คลิกชื่อพัสดุเพื่อเลือกทุกงบ หรือคลิกแท่งสีแดง/ส้ม เพื่อเลือกเฉพาะงบนั้น • แถบสีเขียวแสดงยอดคงคลังเท่านั้น ไม่สามารถกดเลือกได้)';
 
       const isNameSelected = isRowSel && (selBudget === 'ALL');
       const nameCheck = isNameSelected ? ' <span class="mat-hchart-name-check">✓</span>' : '';
@@ -1841,8 +1997,8 @@
         `<div class="mat-hchart-rank">${i + 1}</div>` +
         `<div class="${nameCls}" onclick="window.selectMatChartItemWithBudget('${safeAttr}', 'ALL', event)" title="คลิกเพื่อเลือกพัสดุนี้: ${safeAttr} (แสดงทุกงบ)">${escapeHtml(it.name)}${nameCheck}</div>` +
         `<div class="mat-hchart-bars">` +
-        `<div class="mat-hchart-track">${barHtml}<span class="mat-hchart-val">${valHtml}</span></div>` +
-        `<div class="mat-hchart-track track-green" data-stock-slot="${safeAttr}"><span class="mat-hchart-val val-green-ph"></span></div>` +
+        `<div class="mat-hchart-track" title="ปริมาณค้างเบิก">${barHtml}<span class="mat-hchart-val">${valHtml}</span></div>` +
+        `<div class="mat-hchart-track track-green" data-stock-slot="${safeAttr}" onclick="event.stopPropagation()" title="ปริมาณคงเหลือในคลัง (ไฟล์ 08: โรงงาน ${plantListStr}) — แสดงอย่างเดียว">${stockBarHtml}<span class="mat-hchart-val">${stockValHtml}</span></div>` +
         `</div>` +
         `</div>`
       );
@@ -2262,4 +2418,3 @@
     setTimeout(updateMaterialsNavBadge, 120);
   }
 })();
-
