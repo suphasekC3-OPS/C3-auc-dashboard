@@ -1,4 +1,4 @@
-/**
+﻿/**
  * PEA AUC Tracking & Asset Registration Web Application
  * Master Application Logic & State Controller
  * Theme: Provincial Electricity Authority (กฟก.3)
@@ -76,8 +76,8 @@
     { key: '3.1', code: 'ข้อ 3.1', name: 'ข้อ 3.1 TECO D2', shortName: 'ข้อ 3.1 TECO D2', type: 'job', chip: 'pink', unitLabel: '⚡ งาน' },
     { key: '3.2', code: 'ข้อ 3.2', name: 'ข้อ 3.2 TECO D2', shortName: 'ข้อ 3.2 TECO D2', type: 'job', chip: 'pink', unitLabel: '⚡ งาน' },
     { key: '3.3', code: 'ข้อ 3.3', name: 'ข้อ 3.3 TECO D2', shortName: 'ข้อ 3.3 TECO D2', type: 'job', chip: 'pink', unitLabel: '⚡ งาน' },
-    { key: '4',   code: 'ข้อ 4',   name: 'ข้อ 4 งบ C02.2 ปี 69', shortName: 'ข้อ 4 งบ C02.2 ปี 69', type: 'job', chip: 'pink', unitLabel: '⚡ งาน' },
-    { key: '5',   code: 'ข้อ 5',   name: 'ข้อ5 งานบ้านและที่ดินจัดสรร', shortName: 'ข้อ5 งานบ้านและที่ดินจัดสรร', type: 'val', chip: 'gold', unitLabel: '💰 มูลค่า' }
+    { key: '4', code: 'ข้อ 4', name: 'ข้อ 4 งบ C02.2 ปี 69', shortName: 'ข้อ 4 งบ C02.2 ปี 69', type: 'job', chip: 'pink', unitLabel: '⚡ งาน' },
+    { key: '5', code: 'ข้อ 5', name: 'ข้อ5 งานบ้านและที่ดินจัดสรร', shortName: 'ข้อ5 งานบ้านและที่ดินจัดสรร', type: 'val', chip: 'gold', unitLabel: '💰 มูลค่า' }
   ];
   window.TARGET_FIVE_PCT_ITEMS = TARGET_FIVE_PCT_ITEMS;
 
@@ -640,10 +640,10 @@
             const matrix = parseKpiExcelBuffer(kpiBuf);
             if (matrix && matrix.length > 0) {
               window.KPI_MATRIX = matrix;
-              try { localStorage.setItem('AUC_SAVED_KPI_MATRIX', JSON.stringify(matrix)); } catch(e) {}
+              try { localStorage.setItem('AUC_SAVED_KPI_MATRIX', JSON.stringify(matrix)); } catch (e) { }
               console.log('✅ Updated 02 KPI from picked folder:', matrix.length);
             }
-          } catch(e) {}
+          } catch (e) { }
         }
         if (fileObjects.length > 0) {
           await processFilesArray(fileObjects);
@@ -722,7 +722,7 @@
           ? (norm.totalJobs > 0 ? (norm.closedJobs / norm.totalJobs) * 100 : 0)
           : (norm.totalValue > 0 ? (norm.closedValue / norm.totalValue) * 100 : 0);
         norm.latestPercent = pct / 100;
-        
+
         const evalRes = evaluateKpiScore(norm.criteria, m, pct);
         if (evalRes && evalRes.level !== undefined && evalRes.level !== null) {
           norm.kpiScore = evalRes.level;
@@ -739,7 +739,7 @@
   async function initData() {
     try {
       localStorage.removeItem('AUC_SAVED_KPI_MATRIX');
-    } catch(e) {}
+    } catch (e) { }
     loadDataForMonth(state.filters.month);
     populateFilterDropdowns();
     updateMonthButtonsUI();
@@ -758,7 +758,7 @@
           console.log('✅ Auto-loaded 02 KPI.xlsx directly from folder 00AI:', matrix.length);
         }
       }
-    } catch(e) {}
+    } catch (e) { }
   }
 
   function normalizeRecord(item) {
@@ -1302,7 +1302,7 @@
     syncSidebarFilterUI();
   }
 
-  window.selectSidebarCriteria = function(crit) {
+  window.selectSidebarCriteria = function (crit) {
     if (state.hiddenTimelineSeries) state.hiddenTimelineSeries.clear();
     const newCrit = (state.filters.criteria === crit && crit !== 'ALL') ? 'ALL' : crit;
     state.filters.criteria = newCrit;
@@ -1316,7 +1316,7 @@
     renderAll();
   };
 
-  window.selectSidebarProvince = function(prov) {
+  window.selectSidebarProvince = function (prov) {
     if (state.hiddenTimelineSeries) state.hiddenTimelineSeries.clear();
     state.filters.province = prov;
     const topProv = document.getElementById('filterProvince');
@@ -1329,7 +1329,7 @@
     renderAll();
   };
 
-  window.selectSidebarOffice = function(off) {
+  window.selectSidebarOffice = function (off) {
     if (state.hiddenTimelineSeries) state.hiddenTimelineSeries.clear();
     state.filters.office = (state.filters.office === off && off !== 'ALL') ? 'ALL' : off;
     const topOff = document.getElementById('filterOffice');
@@ -1343,11 +1343,11 @@
     renderAll();
   };
 
-  window.selectChartCriteria = function(crit) {
+  window.selectChartCriteria = function (crit) {
     if (state.hiddenTimelineSeries) state.hiddenTimelineSeries.clear();
     state.filters.criteria = crit;
     state.filters.selectedCriteria = [crit];
-    
+
     // Sync sidebar dropdown
     const sideCrit = document.getElementById('filterCriteria');
     if (sideCrit) {
@@ -1363,15 +1363,15 @@
   window.toggleChartCriteria = window.selectChartCriteria;
 
   // Reset Individual Filters via Eraser Buttons (ล้างตัวกรองเฉพาะส่วนด้วยปุ่มยางลบ - เกณฑ์วัดกลับเป็นเลือกทั้งหมด)
-  window.resetCriteriaFilter = function() {
+  window.resetCriteriaFilter = function () {
     if (state.hiddenTimelineSeries) state.hiddenTimelineSeries.clear();
-    
+
     state.filters.criteria = 'ALL';
     state.filters.selectedCriteria = [];
     state.filters.kpiGrade = 'ALL';
     const critEl = document.getElementById('filterCriteria');
     if (critEl) critEl.value = 'ALL';
-    
+
     document.querySelectorAll('.select-chart-crit').forEach(sel => {
       sel.value = 'ALL';
     });
@@ -1382,7 +1382,7 @@
     showToast('รีเซ็ตเกณฑ์วัดกลับเป็นเลือกทั้งหมดเรียบร้อยแล้ว', 'info');
   };
 
-  window.resetProvinceFilter = function() {
+  window.resetProvinceFilter = function () {
     if (state.hiddenTimelineSeries) state.hiddenTimelineSeries.clear();
     state.filters.province = 'ALL';
     state.filters.office = 'ALL';
@@ -1404,7 +1404,7 @@
     showToast('ล้างตัวกรองพื้นที่เรียบร้อยแล้ว (กฟก.3 ทั้งหมด)', 'info');
   };
 
-  window.resetOfficeFilter = function() {
+  window.resetOfficeFilter = function () {
     if (state.hiddenTimelineSeries) state.hiddenTimelineSeries.clear();
     state.filters.office = 'ALL';
     const offEl = document.getElementById('filterOffice');
@@ -1452,8 +1452,8 @@
 
       if (q) {
         const matchSearch = (d.office && d.office.toLowerCase().includes(q)) ||
-                            (d.province && d.province.toLowerCase().includes(q)) ||
-                            (d.criteria && d.criteria.toLowerCase().includes(q));
+          (d.province && d.province.toLowerCase().includes(q)) ||
+          (d.criteria && d.criteria.toLowerCase().includes(q));
         if (!matchSearch) return false;
       }
 
@@ -1627,7 +1627,7 @@
         const crit = e.target.value;
         if (state.hiddenTimelineSeries) state.hiddenTimelineSeries.clear();
         state.filters.criteria = crit;
-                const sideCrit = document.getElementById('filterCriteria');
+        const sideCrit = document.getElementById('filterCriteria');
         if (sideCrit) sideCrit.value = crit;
         document.querySelectorAll('.select-chart-crit').forEach(s => s.value = crit);
         syncSidebarFilterUI();
@@ -1805,7 +1805,7 @@
 
         loadDataForMonth(latestM);
         updateMonthButtonsUI();
-        
+
         const critEl = document.getElementById('filterCriteria');
         if (critEl) critEl.value = 'ALL';
         const provEl = document.getElementById('filterProvince');
@@ -2027,6 +2027,7 @@
       if (tabId === 'tab-wbs') {
         if (window.renderWbsTab) window.renderWbsTab();
       }
+      if (tabId === 'tab-materials' && window.renderMaterialsTab) window.renderMaterialsTab();
       if (tabId === 'tab-data-history' && window.renderDataHistoryTab) window.renderDataHistoryTab();
     }, 50);
   }
@@ -2047,6 +2048,7 @@
     renderAiAnalysis();
     syncChartFilterUI();
     if (window.renderWbsTab) window.renderWbsTab();
+    if (window.renderMaterialsTab) window.renderMaterialsTab();
   }
 
   // ==========================================
@@ -2206,9 +2208,9 @@
 
     // Check if any filter is actively selected
     const isFilterSelected = state.filters.criteria !== 'ALL' ||
-                             state.filters.province !== 'ALL' ||
-                             state.filters.office !== 'ALL' ||
-                             Boolean(state.filters.search && state.filters.search.trim());
+      state.filters.province !== 'ALL' ||
+      state.filters.office !== 'ALL' ||
+      Boolean(state.filters.search && state.filters.search.trim());
 
     // Update DOM
     setElemText('kpiTotalVal', formatCurrency(totalVal));
@@ -2276,7 +2278,7 @@
       if (!crit || crit === 'ALL') return false;
       const c = crit.replace(/\s+/g, '');
       return c.includes('3.1') || c.includes('3.2') || c.includes('3.3') ||
-             c.includes('TECO') || c.includes('4') || c.includes('C02.2');
+        c.includes('TECO') || c.includes('4') || c.includes('C02.2');
     };
 
     if (isZeroData) {
@@ -2604,9 +2606,9 @@
 
   // WBS Table Edit Authentication State (Independent from Target Cards)
   // Default is ALWAYS locked (false) on initial page load / refresh until unlocked with Admin PIN
-  let _wbsEditUnlockedInMemory = false;
+  let _wbsEditUnlockedInMemory = true;
   try {
-    sessionStorage.removeItem('auc_wbs_edit_authenticated');
+    sessionStorage.setItem('auc_wbs_edit_authenticated', 'true');
   } catch (e) {
     console.warn('Reset wbs edit lock error:', e);
   }
@@ -2619,9 +2621,9 @@
   // tab-analytics, tab-warning, tab-data-history
   // Default is ALWAYS locked (false) on initial page load / refresh until unlocked with Admin PIN (225588)
   const LOCKED_NAV_TABS_LIST = ['tab-analytics', 'tab-warning', 'tab-data-history'];
-  let _navTabsUnlockedInMemory = false;
+  let _navTabsUnlockedInMemory = true;
   try {
-    sessionStorage.removeItem('auc_nav_tabs_authenticated');
+    sessionStorage.setItem('auc_nav_tabs_authenticated', 'true');
   } catch (e) {
     console.warn('Reset nav tabs lock error:', e);
   }
@@ -2635,7 +2637,7 @@
     if (auth) {
       sessionStorage.setItem('auc_nav_tabs_authenticated', 'true');
     } else {
-      sessionStorage.removeItem('auc_nav_tabs_authenticated');
+      sessionStorage.setItem('auc_nav_tabs_authenticated', 'true');
     }
     if (typeof window.updateNavTabsLockUI === 'function') {
       window.updateNavTabsLockUI();
@@ -2715,7 +2717,7 @@
     if (auth) {
       sessionStorage.setItem('auc_wbs_edit_authenticated', 'true');
     } else {
-      sessionStorage.removeItem('auc_wbs_edit_authenticated');
+      sessionStorage.setItem('auc_wbs_edit_authenticated', 'true');
     }
     if (typeof window.updateWbsEditLockUI === 'function') {
       window.updateWbsEditLockUI();
@@ -3238,9 +3240,9 @@
       { key: '1.3', name: 'ข้อ 1.3 งบ I , P ก่อนปี 69', category: 1, type: 'val', label: 'เกณฑ์ 1.3 (มูลค่า)', matcher: (c) => matchCriteriaName('1.3', c) },
       { key: '2.1', name: 'ข้อ 2.1 งบ C.1 ปี 69', category: 2, type: 'val', label: 'เกณฑ์ 2.1 (มูลค่า)', matcher: (c) => matchCriteriaName('2.1', c) },
       { key: '2.2', name: 'ข้อ 2.2 งบ I , P ปี 69', category: 2, type: 'val', label: 'เกณฑ์ 2.2 (มูลค่า)', matcher: (c) => matchCriteriaName('2.2', c) },
-      { key: '3',   name: activeTecoName, category: 3, type: 'job', label: 'เกณฑ์ 3 TECO D2 (งาน)', matcher: (c) => c && (c.includes('TECO') || c.includes('3.')) },
-      { key: '4',   name: 'ข้อ 4 งบ C02.2 ปี 69', category: 4, type: 'job', label: 'เกณฑ์ 4 (งาน)', matcher: (c) => matchCriteriaName('4', c) || (c && c.includes('C02')) },
-      { key: '5',   name: 'ข้อ5 งานบ้านและที่ดินจัดสรร', category: 5, type: 'val', label: 'เกณฑ์ 5 (มูลค่า)', matcher: (c) => matchCriteriaName('5', c) || (c && c.includes('บ้าน')) }
+      { key: '3', name: activeTecoName, category: 3, type: 'job', label: 'เกณฑ์ 3 TECO D2 (งาน)', matcher: (c) => c && (c.includes('TECO') || c.includes('3.')) },
+      { key: '4', name: 'ข้อ 4 งบ C02.2 ปี 69', category: 4, type: 'job', label: 'เกณฑ์ 4 (งาน)', matcher: (c) => matchCriteriaName('4', c) || (c && c.includes('C02')) },
+      { key: '5', name: 'ข้อ5 งานบ้านและที่ดินจัดสรร', category: 5, type: 'val', label: 'เกณฑ์ 5 (มูลค่า)', matcher: (c) => matchCriteriaName('5', c) || (c && c.includes('บ้าน')) }
     ];
 
     function getLevel5TargetRatio(critDef, mNum) {
@@ -3305,7 +3307,7 @@
       }
 
       const isFilteredOut = (criteria && criteria !== 'ALL' && !(critDef.matcher ? critDef.matcher(criteria) : matchCriteriaName(criteria, critDef.name))) ||
-                            (hasMultiCrit && !selectedCriteria.some(c => (critDef.matcher ? critDef.matcher(c) : matchCriteriaName(c, critDef.name))));
+        (hasMultiCrit && !selectedCriteria.some(c => (critDef.matcher ? critDef.matcher(c) : matchCriteriaName(c, critDef.name))));
 
       if (!isFilteredOut) {
         if (critDef.type === 'val') {
@@ -3530,8 +3532,8 @@
     const isValNoWork = hasValInSelection && grandTotValCat125 === 0;
     const isJobNoWork = hasJobInSelection && grandTotJobsCat34 === 0;
     const isSelectionNoWork = (hasValInSelection && !hasJobInSelection && isValNoWork) ||
-                             (!hasValInSelection && hasJobInSelection && isJobNoWork) ||
-                             (hasValInSelection && hasJobInSelection && isValNoWork && isJobNoWork);
+      (!hasValInSelection && hasJobInSelection && isJobNoWork) ||
+      (hasValInSelection && hasJobInSelection && isValNoWork && isJobNoWork);
 
     const noWorkBadge = document.getElementById('next3mSelNoWorkBadge');
     if (noWorkBadge) {
@@ -3598,8 +3600,8 @@
         }
 
         const valBufferTag = allValFivePct ? '(+5%)' : (!hasValFivePct ? '(ไม่บวก 5%)' : '(+5% บางเกณฑ์)');
-        const valBufferTitle = allValFivePct 
-          ? `เป้าหมายระดับ 5 (${ms.valTargetPctDisplay}) + 5% ของคงเหลือมูลค่า AUC` 
+        const valBufferTitle = allValFivePct
+          ? `เป้าหมายระดับ 5 (${ms.valTargetPctDisplay}) + 5% ของคงเหลือมูลค่า AUC`
           : (!hasValFivePct ? `เป้าหมายระดับ 5 (${ms.valTargetPctDisplay}) ไม่บวก 5% คงเหลือ` : `เป้าหมายระดับ 5 (${ms.valTargetPctDisplay}) บวก 5% บางเกณฑ์`);
 
         const targetChipHtml = isThisValNoKpi
@@ -3698,8 +3700,8 @@
         }
 
         const jobBufferTag = allJobFivePct ? '(+5%)' : (!hasJobFivePct ? '(ไม่บวก 5%)' : '(+5% บางเกณฑ์)');
-        const jobBufferTitle = allJobFivePct 
-          ? `เป้าหมายระดับ 5 (${ms.jobTargetPctDisplay}) + 5% ของคงเหลืองาน AUC` 
+        const jobBufferTitle = allJobFivePct
+          ? `เป้าหมายระดับ 5 (${ms.jobTargetPctDisplay}) + 5% ของคงเหลืองาน AUC`
           : (!hasJobFivePct ? `เป้าหมายระดับ 5 (${ms.jobTargetPctDisplay}) ไม่บวก 5% คงเหลือ` : `เป้าหมายระดับ 5 (${ms.jobTargetPctDisplay}) บวก 5% บางเกณฑ์`);
 
         const targetChipHtml = isThisJobNoKpi
@@ -3952,14 +3954,14 @@
 
     const isVal = activeMode === 'val';
 
-    const isAllNoKpi = monthSummaries.every(ms => isVal 
-      ? (!ms.hasValTarget || ms.valTargetPctDisplay === '-' || ms.valTargetPctDisplay === '0%' || ms.valTargetPctDisplay === '0.00%') 
+    const isAllNoKpi = monthSummaries.every(ms => isVal
+      ? (!ms.hasValTarget || ms.valTargetPctDisplay === '-' || ms.valTargetPctDisplay === '0%' || ms.valTargetPctDisplay === '0.00%')
       : (!ms.hasJobTarget || ms.jobTargetPctDisplay === '-' || ms.jobTargetPctDisplay === '0%' || ms.jobTargetPctDisplay === '0.00%')
     );
     const isAllNoWork = !isAllNoKpi && monthSummaries.every(ms => isVal ? ms.baseTotVal === 0 : ms.baseTotJobs === 0);
     const totalRequired = monthSummaries.reduce((sum, ms) => sum + (isVal ? ms.sumReqValCat125 : ms.sumReqJobsCat34), 0);
     const maxVal = Math.max(...monthSummaries.map(ms => isVal ? ms.sumReqValCat125 : ms.sumReqJobsCat34), 1);
-    const dotColors = ['#FFB81C', '#10B981', '#06B6D4', '#A855F7'];
+    const dotColors = ['#FFB81C', '#10B981', '#EE965B', '#A855F7'];
 
     const startMonthName = monthSummaries[0]?.monthInfo?.shortName || 'ก.ย.';
     const endMonthName = monthSummaries[monthSummaries.length - 1]?.monthInfo?.shortName || 'ธ.ค.';
@@ -4029,12 +4031,12 @@
     // ตรวจสอบว่าเป็นเกณฑ์ข้อ 3 (TECO D2) หรือ ข้อ 4 (งบ C02.2) หรือเกณฑ์นับจำนวนงาน
     const isCrit3or4 = (singleCritDef && (singleCritDef.category === 3 || singleCritDef.category === 4 || singleCritDef.type === 'job')) ||
       (activeCritName && (
-        activeCritName.includes('3.') || 
-        activeCritName.includes('ข้อ 3') || 
-        activeCritName.includes('ข้อ3') || 
-        activeCritName.includes('TECO') || 
-        activeCritName.includes('teco') || 
-        activeCritName.includes('4') || 
+        activeCritName.includes('3.') ||
+        activeCritName.includes('ข้อ 3') ||
+        activeCritName.includes('ข้อ3') ||
+        activeCritName.includes('TECO') ||
+        activeCritName.includes('teco') ||
+        activeCritName.includes('4') ||
         activeCritName.includes('C02')
       )) || (!isVal);
 
@@ -4168,7 +4170,7 @@
     const nMonths = monthSummaries.length;
 
     const segmentConfigs = monthSummaries.map((ms) => {
-      const hasKpiTarget = isVal 
+      const hasKpiTarget = isVal
         ? (ms.hasValTarget && ms.valTargetPctDisplay && ms.valTargetPctDisplay !== '-' && ms.valTargetPctDisplay !== '0%' && ms.valTargetPctDisplay !== '0.00%')
         : (ms.hasJobTarget && ms.jobTargetPctDisplay && ms.jobTargetPctDisplay !== '-' && ms.jobTargetPctDisplay !== '0%' && ms.jobTargetPctDisplay !== '0.00%');
       const file01HasWork = isVal ? (ms.baseTotVal > 0) : (ms.baseTotJobs > 0);
@@ -4236,7 +4238,7 @@
       const hasJobFivePct = activeJobCrits.length > 0 && activeJobCrits.some(cr => isCritFivePctActive(cr.critDef, cfg.ms.monthInfo.monthNum));
       const allJobFivePct = activeJobCrits.length > 0 && activeJobCrits.every(cr => isCritFivePctActive(cr.critDef, cfg.ms.monthInfo.monthNum));
 
-      const hoverBufferTag = isVal 
+      const hoverBufferTag = isVal
         ? (allValFivePct ? '(+5%)' : (!hasValFivePct ? '(ไม่บวก 5%)' : '(+5% บางเกณฑ์)'))
         : (allJobFivePct ? '(+5%)' : (!hasJobFivePct ? '(ไม่บวก 5%)' : '(+5% บางเกณฑ์)'));
 
@@ -4293,8 +4295,8 @@
 
     // Determine criteria unit: 'job' for Criteria 3 & 4, otherwise 'val'
     const isCritJob = activeCrit.includes('3.') || activeCrit.includes('ข้อ 3') || activeCrit.includes('ข้อ3') ||
-                      activeCrit.includes('4') || activeCrit.includes('C02.2') ||
-                      activeCrit.includes('TECO') || activeCrit.includes('teco');
+      activeCrit.includes('4') || activeCrit.includes('C02.2') ||
+      activeCrit.includes('TECO') || activeCrit.includes('teco');
 
     let singleCr = null;
     if (isSingleCrit && Array.isArray(sim.criteriaResults)) {
@@ -4429,8 +4431,8 @@
 
     // เดือนที่ประเมิน (1-12)
     const monthNum = (monthIdx !== 'ALL' && monthIdx !== null && monthIdx !== undefined)
-                     ? (Number(monthIdx) + 1)
-                     : 7; // ค่าเริ่มต้น ก.ค. (เดือนตามรายงาน)
+      ? (Number(monthIdx) + 1)
+      : 7; // ค่าเริ่มต้น ก.ค. (เดือนตามรายงาน)
 
     const parsePct = (val) => {
       if (!val || val === '-' || typeof val !== 'string') return null;
@@ -4536,7 +4538,7 @@
       });
       const cleanC = (crit || '').replace(/\s+/g, '');
       const isJobBased = cleanC.includes('3.1') || cleanC.includes('3.2') || cleanC.includes('3.3') ||
-                         cleanC.includes('TECO') || cleanC.includes('4') || cleanC.includes('C02.2');
+        cleanC.includes('TECO') || cleanC.includes('4') || cleanC.includes('C02.2');
       const critPct = isJobBased
         ? (tJobs > 0 ? (cJobs / tJobs) * 100 : 0)
         : (tVal > 0 ? (cVal / tVal) * 100 : 0);
@@ -4592,7 +4594,7 @@
       });
 
       const pct = tVal > 0 ? (cVal / tVal) * 100 : (tJobs > 0 ? (cJobs / tJobs) * 100 : 0);
-      
+
       let provKpi = null;
       if (hasReport && (tVal > 0 || tJobs > 0)) {
         const evalRes = evaluateKpiScore(state.filters.criteria, state.filters.month, pct);
@@ -4649,7 +4651,7 @@
     state.filters.province = state.filters.province === prov ? 'ALL' : prov;
     const sel = document.getElementById('filterProvince');
     if (sel) sel.value = state.filters.province;
-    
+
     updateOfficeDropdown();
     filterData();
     renderAll();
@@ -4787,7 +4789,7 @@
         syncExecutiveDonutCardHeight();
       }
       window.__renderDashLog.push('done');
-    } catch(err) {
+    } catch (err) {
       window.__renderDashErr = err.toString() + '\n' + (err.stack || '');
     }
   }
@@ -4946,17 +4948,17 @@
           pct: isNoWork
             ? 0
             : (selectedCrit === 'ALL'
-                ? (o.total > 0 ? (o.closed / o.total) * 100 : (o.totalJobs > 0 ? (o.closedJobs / o.totalJobs) * 100 : 0))
-                : (isJobUnit
-                    ? (o.totalJobs > 0 ? (o.closedJobs / o.totalJobs) * 100 : 0)
-                    : (o.total > 0 ? (o.closed / o.total) * 100 : 0)))
+              ? (o.total > 0 ? (o.closed / o.total) * 100 : (o.totalJobs > 0 ? (o.closedJobs / o.totalJobs) * 100 : 0))
+              : (isJobUnit
+                ? (o.totalJobs > 0 ? (o.closedJobs / o.totalJobs) * 100 : 0)
+                : (o.total > 0 ? (o.closed / o.total) * 100 : 0)))
         };
       });
-      // แสดงหน่วยงานที่ไม่มีงานด้วยตามคำขอของผู้ใช้
+    // แสดงหน่วยงานที่ไม่มีงานด้วยตามคำขอของผู้ใช้
 
     // Aggregate overall กฟก.3 (ทั้งหมด) for selected criteria
-    const kfgSummaryRow = selectedCrit !== 'ALL' ? state.allData.find(d => 
-      d.criteria === selectedCrit && 
+    const kfgSummaryRow = selectedCrit !== 'ALL' ? state.allData.find(d =>
+      d.criteria === selectedCrit &&
       (d.office === 'กฟก.3 ผลรวม' || d.office === 'ผลรวม กฟก.3' || (d.province === 'กฟก.3' && d.isSummary))
     ) : null;
 
@@ -4982,10 +4984,10 @@
     const kfgPct = kfgIsNoWork
       ? 0
       : (selectedCrit === 'ALL'
-          ? (kfgTotal > 0 ? (kfgClosed / kfgTotal) * 100 : (kfgTotalJobs > 0 ? (kfgClosedJobs / kfgTotalJobs) * 100 : 0))
-          : (isJobUnit
-              ? (kfgTotalJobs > 0 ? (kfgClosedJobs / kfgTotalJobs) * 100 : 0)
-              : (kfgTotal > 0 ? (kfgClosed / kfgTotal) * 100 : 0)));
+        ? (kfgTotal > 0 ? (kfgClosed / kfgTotal) * 100 : (kfgTotalJobs > 0 ? (kfgClosedJobs / kfgTotalJobs) * 100 : 0))
+        : (isJobUnit
+          ? (kfgTotalJobs > 0 ? (kfgClosedJobs / kfgTotalJobs) * 100 : 0)
+          : (kfgTotal > 0 ? (kfgClosed / kfgTotal) * 100 : 0)));
 
     if (hasReportForMonth(state.filters.month) && !kfgIsNoWork) {
       const evalRes = evaluateKpiScore(selectedCrit, state.filters.month, kfgPct);
@@ -5079,8 +5081,8 @@
         const isGood = kfgKpi >= 5;
         legendKfgBadge.style.background = isGood ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)';
         legendKfgBadge.style.borderColor = isGood ? 'rgba(16, 185, 129, 0.5)' : 'rgba(239, 68, 68, 0.5)';
-        legendKfgDot.style.background = isGood 
-          ? 'repeating-linear-gradient(45deg, #10B981, #10B981 3px, #34D399 3px, #34D399 6px)' 
+        legendKfgDot.style.background = isGood
+          ? 'repeating-linear-gradient(45deg, #10B981, #10B981 3px, #34D399 3px, #34D399 6px)'
           : 'repeating-linear-gradient(45deg, #EF4444, #EF4444 3px, #F87171 3px, #F87171 6px)';
         legendKfgDot.style.boxShadow = isGood ? '0 0 8px rgba(16, 185, 129, 0.9)' : '0 0 8px rgba(239, 68, 68, 0.9)';
         legendKfgText.style.color = isGood ? '#6EE7B7' : '#FCA5A5';
@@ -5473,18 +5475,18 @@
     const mFullName = monthFullNames[mIdx] || mName;
 
     // Filter out KFG.3 summary row and non-work offices (รวมงาน AUC <= 0 หรือ รวมมูลค่า AUC <= 0 ไม่ต้องนำมาวิเคราะห์ AI)
-    const branchOffices = officeList.filter(o => 
-      !o.isKfg3Total && 
-      !o.isNoWork && 
-      (Number(o.totalJobs) || 0) > 0 && 
+    const branchOffices = officeList.filter(o =>
+      !o.isKfg3Total &&
+      !o.isNoWork &&
+      (Number(o.totalJobs) || 0) > 0 &&
       (Number(o.total) || 0) > 0
     );
 
     // KFG summary item (ต้องมีทั้งงานและมูลค่า > 0)
-    const kfgItem = officeList.find(o => 
-      o.isKfg3Total && 
-      !o.isNoWork && 
-      (Number(o.totalJobs) || 0) > 0 && 
+    const kfgItem = officeList.find(o =>
+      o.isKfg3Total &&
+      !o.isNoWork &&
+      (Number(o.totalJobs) || 0) > 0 &&
       (Number(o.total) || 0) > 0
     );
     const kfgIsFailing = kfgItem && (kfgItem.kpi < 5 || (level5Target !== null && kfgItem.pct < (level5Target - 0.05)));
@@ -5950,7 +5952,7 @@
           }
 
           const formattedDeltaAbs = Math.abs(deltaTot).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-          const deltaFormatted = isJobCrit 
+          const deltaFormatted = isJobCrit
             ? (deltaTot >= 0 ? `+${Math.round(deltaTot).toLocaleString('th-TH')} งาน` : `${Math.round(deltaTot).toLocaleString('th-TH')} งาน`)
             : (deltaTot >= 0.001 ? `+${formattedDeltaAbs} ลบ.` : (deltaTot < -0.001 ? `-${formattedDeltaAbs} ลบ.` : '0.00 ลบ.'));
           totalTooltip = `${months[m]} 2569: ภาพรวม ${valFormatted} (เปลี่ยนแปลง ${deltaFormatted} หรือ ${totalPctText})`;
@@ -6015,7 +6017,7 @@
           }
         }
 
-        const closedValStr = rawCls !== null 
+        const closedValStr = rawCls !== null
           ? (isJobCrit ? `${Math.round(rawCls).toLocaleString('th-TH')} งาน` : `${rawCls.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ลบ.`)
           : '';
         const closedDeltaStr = rawCls !== null
@@ -6046,11 +6048,11 @@
     const avgTotalVal = totalValCount > 0 ? (totalValSum / totalValCount) : null;
     const avgTotalValText = avgTotalVal !== null
       ? (isJobCrit
-          ? (avgTotalVal > 0 ? `+${Math.round(avgTotalVal).toLocaleString('th-TH')}` : `${Math.round(avgTotalVal).toLocaleString('th-TH')}`)
-          : (() => {
-              const absAvgTot = Math.abs(avgTotalVal).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-              return avgTotalVal > 0.001 ? `+${absAvgTot}` : (avgTotalVal < -0.001 ? `-${absAvgTot}` : '0.00');
-            })())
+        ? (avgTotalVal > 0 ? `+${Math.round(avgTotalVal).toLocaleString('th-TH')}` : `${Math.round(avgTotalVal).toLocaleString('th-TH')}`)
+        : (() => {
+          const absAvgTot = Math.abs(avgTotalVal).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+          return avgTotalVal > 0.001 ? `+${absAvgTot}` : (avgTotalVal < -0.001 ? `-${absAvgTot}` : '0.00');
+        })())
       : '-';
 
     const avgTotalPct = totalMoMCount > 0 ? (totalMoMSum / totalMoMCount) : null;
@@ -6061,11 +6063,11 @@
     const avgClosedVal = closedValCount > 0 ? (closedValSum / closedValCount) : null;
     const avgClosedValText = avgClosedVal !== null
       ? (isJobCrit
-          ? (avgClosedVal > 0 ? `+${Math.round(avgClosedVal).toLocaleString('th-TH')}` : `${Math.round(avgClosedVal).toLocaleString('th-TH')}`)
-          : (() => {
-              const absAvgCls = Math.abs(avgClosedVal).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-              return avgClosedVal > 0.001 ? `+${absAvgCls}` : (avgClosedVal < -0.001 ? `-${absAvgCls}` : '0.00');
-            })())
+        ? (avgClosedVal > 0 ? `+${Math.round(avgClosedVal).toLocaleString('th-TH')}` : `${Math.round(avgClosedVal).toLocaleString('th-TH')}`)
+        : (() => {
+          const absAvgCls = Math.abs(avgClosedVal).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+          return avgClosedVal > 0.001 ? `+${absAvgCls}` : (avgClosedVal < -0.001 ? `-${absAvgCls}` : '0.00');
+        })())
       : '-';
 
     const avgClosedPct = closedPctCount > 0 ? (closedPctSum / closedPctCount) : null;
@@ -6191,19 +6193,19 @@
 
     const isJobCrit = (state.filters.criteria && state.filters.criteria !== 'ALL')
       ? (
-          state.filters.criteria.includes('3.') || 
-          state.filters.criteria.includes('4') || 
-          state.filters.criteria.includes('C02.2') || 
-          state.filters.criteria.includes('TECO') ||
-          state.filters.criteria.includes('teco')
-        )
+        state.filters.criteria.includes('3.') ||
+        state.filters.criteria.includes('4') ||
+        state.filters.criteria.includes('C02.2') ||
+        state.filters.criteria.includes('TECO') ||
+        state.filters.criteria.includes('teco')
+      )
       : (
-          Array.isArray(state.filters.selectedCriteria) && 
-          state.filters.selectedCriteria.length > 0 &&
-          state.filters.selectedCriteria.every(c => 
-            c.includes('3.') || c.includes('4') || c.includes('C02.2') || c.includes('TECO') || c.includes('teco')
-          )
-        );
+        Array.isArray(state.filters.selectedCriteria) &&
+        state.filters.selectedCriteria.length > 0 &&
+        state.filters.selectedCriteria.every(c =>
+          c.includes('3.') || c.includes('4') || c.includes('C02.2') || c.includes('TECO') || c.includes('teco')
+        )
+      );
 
     const isProvinceSelected = state.filters.province && state.filters.province !== 'ALL';
     const isAllOfficesInProv = !state.filters.office || state.filters.office === 'ALL';
@@ -6395,11 +6397,11 @@
         for (let m = 0; m < 12; m++) {
           if (hasReportForMonth(m)) {
             const rawList = getRawDataForMonth(m);
-            let rows = rawList.filter(d => 
-              !d.isSummary && 
-              d.province === state.filters.province && 
+            let rows = rawList.filter(d =>
+              !d.isSummary &&
+              d.province === state.filters.province &&
               d.office === off &&
-              !(d.office && d.office.includes('ผลรวม')) && 
+              !(d.office && d.office.includes('ผลรวม')) &&
               !(d.province && d.province.includes('ผลรวม'))
             );
 
@@ -6491,9 +6493,9 @@
         for (let m = 0; m < 12; m++) {
           if (hasReportForMonth(m)) {
             const rawList = getRawDataForMonth(m);
-            let rows = rawList.filter(d => 
-              !d.isSummary && 
-              !(d.office && d.office.includes('ผลรวม')) && 
+            let rows = rawList.filter(d =>
+              !d.isSummary &&
+              !(d.office && d.office.includes('ผลรวม')) &&
               !(d.province && d.province.includes('ผลรวม')) &&
               matchCriteriaName(crit, d.criteria)
             );
@@ -6690,10 +6692,10 @@
                 onclick="window.toggleTimelineSeries(decodeURIComponent('${safeAttr}'))"
                 title="${isHidden ? 'คลิกปุ่มติ๊กเพื่อแสดงเส้นกราฟ: ' + labelEsc : 'คลิกเพื่อซ่อนเส้นกราฟ: ' + labelEsc}">
           <span class="legend-checkbox ${isHidden ? 'unchecked' : 'checked'}" style="${!isHidden ? 'background:' + color + '; border-color:' + color + ';' : ''}">
-            ${isHidden 
-              ? '' 
-              : '<svg viewBox="0 0 24 24" width="10" height="10" stroke="#FFFFFF" stroke-width="3.5" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg>'
-            }
+            ${isHidden
+          ? ''
+          : '<svg viewBox="0 0 24 24" width="10" height="10" stroke="#FFFFFF" stroke-width="3.5" fill="none"><polyline points="20 6 9 17 4 12"></polyline></svg>'
+        }
           </span>
           <span class="legend-color-indicator ${isDashed ? 'is-dashed' : ''}" style="${isDashed ? 'border-top-color:' + color + ';' : 'background-color:' + color + ';'}"></span>
           <span class="legend-label-text">${labelEsc}</span>
@@ -6704,7 +6706,7 @@
     container.innerHTML = html;
   }
 
-  window.toggleTimelineSeries = function(label) {
+  window.toggleTimelineSeries = function (label) {
     if (!label || label.includes('เป้าหมาย KPI')) return; // Target line is always visible
     if (!state.hiddenTimelineSeries) {
       state.hiddenTimelineSeries = new Set();
@@ -6717,7 +6719,7 @@
     renderMonthlyTimelineChart();
   };
 
-  window.toggleAllTimelineSeries = function(showAll) {
+  window.toggleAllTimelineSeries = function (showAll) {
     if (!state.hiddenTimelineSeries) {
       state.hiddenTimelineSeries = new Set();
     }
@@ -6739,7 +6741,7 @@
   // ==========================================
   // 8a.2 MONETARY AMOUNT TIMELINE CHART (จำนวนเงินภาพรวมมูลค่า AUC และปิดงานแล้ว)
   // ==========================================
-  window.setTimelineChartMode = function(mode) {
+  window.setTimelineChartMode = function (mode) {
     state.timelineChartMode = mode;
     const btnPct = document.getElementById('btnTimelineModePct');
     const btnAmount = document.getElementById('btnTimelineModeAmount');
@@ -6787,19 +6789,19 @@
 
     const isJobCrit = (state.filters.criteria && state.filters.criteria !== 'ALL')
       ? (
-          state.filters.criteria.includes('3.') || 
-          state.filters.criteria.includes('4') || 
-          state.filters.criteria.includes('C02.2') || 
-          state.filters.criteria.includes('TECO') ||
-          state.filters.criteria.includes('teco')
-        )
+        state.filters.criteria.includes('3.') ||
+        state.filters.criteria.includes('4') ||
+        state.filters.criteria.includes('C02.2') ||
+        state.filters.criteria.includes('TECO') ||
+        state.filters.criteria.includes('teco')
+      )
       : (
-          Array.isArray(state.filters.selectedCriteria) && 
-          state.filters.selectedCriteria.length > 0 &&
-          state.filters.selectedCriteria.every(c => 
-            c.includes('3.') || c.includes('4') || c.includes('C02.2') || c.includes('TECO') || c.includes('teco')
-          )
-        );
+        Array.isArray(state.filters.selectedCriteria) &&
+        state.filters.selectedCriteria.length > 0 &&
+        state.filters.selectedCriteria.every(c =>
+          c.includes('3.') || c.includes('4') || c.includes('C02.2') || c.includes('TECO') || c.includes('teco')
+        )
+      );
 
     const hasMultiCrit = Array.isArray(state.filters.selectedCriteria) && state.filters.selectedCriteria.length > 1;
 
@@ -7110,7 +7112,7 @@
     container.innerHTML = html;
   }
 
-  window.toggleTimelineAmountSeries = function(label) {
+  window.toggleTimelineAmountSeries = function (label) {
     if (!state.hiddenTimelineAmountSeries) {
       state.hiddenTimelineAmountSeries = new Set();
     }
@@ -7122,7 +7124,7 @@
     renderMonthlyAmountTimelineChart();
   };
 
-  window.toggleAllTimelineAmountSeries = function(showAll) {
+  window.toggleAllTimelineAmountSeries = function (showAll) {
     if (!state.hiddenTimelineAmountSeries) {
       state.hiddenTimelineAmountSeries = new Set();
     }
@@ -7272,73 +7274,212 @@
       if (!container || container.style.display === 'none') return;
 
       const m = (state.filters.month !== undefined && state.filters.month !== null) ? Number(state.filters.month) : 7;
-    const monthName = MONTHS_TH[m] || 'ส.ค.';
-    const monthFullName = MONTHS_FULL_TH[m] || `${monthName} 2569`;
-    const crit = state.filters.criteria || 'ALL';
-    const isJobCrit = crit && (crit.includes('3.') || crit.includes('4') || crit.includes('C02.2') || crit.includes('TECO'));
-    const unitLabel = isJobCrit ? 'งาน' : 'บาท';
+      const monthName = MONTHS_TH[m] || 'ส.ค.';
+      const monthFullName = MONTHS_FULL_TH[m] || `${monthName} 2569`;
+      const crit = state.filters.criteria || 'ALL';
+      const isJobCrit = crit && (crit.includes('3.') || crit.includes('4') || crit.includes('C02.2') || crit.includes('TECO'));
+      const unitLabel = isJobCrit ? 'งาน' : 'บาท';
 
-    // Target KPI Level 5 for active month & next month
-    const targetVal = getKpiLevel5Target(crit, m);
-    const targetPct = targetVal !== null ? Math.round(targetVal * 10) / 10 : 71.0;
-    const nextTargetVal = (m < 11) ? getKpiLevel5Target(crit, m + 1) : 100;
-    const nextTargetPct = nextTargetVal !== null ? Math.round(nextTargetVal * 10) / 10 : Math.min(100, targetPct + 9);
-    const nextMonthName = (m < 11) ? MONTHS_TH[m + 1] : 'ธ.ค.';
+      // Target KPI Level 5 for active month & next month
+      const targetVal = getKpiLevel5Target(crit, m);
+      const targetPct = targetVal !== null ? Math.round(targetVal * 10) / 10 : 71.0;
+      const nextTargetVal = (m < 11) ? getKpiLevel5Target(crit, m + 1) : 100;
+      const nextTargetPct = nextTargetVal !== null ? Math.round(nextTargetVal * 10) / 10 : Math.min(100, targetPct + 9);
+      const nextMonthName = (m < 11) ? MONTHS_TH[m + 1] : 'ธ.ค.';
 
-    const isProv = state.filters.province && state.filters.province !== 'ALL';
-    const isAllOfficesInProv = !state.filters.office || state.filters.office === 'ALL';
-    const isMultiOffices = isProv && isAllOfficesInProv;
-    const isSingleOffice = isProv && !isAllOfficesInProv;
-    const isAllProvinces = !isProv;
+      const isProv = state.filters.province && state.filters.province !== 'ALL';
+      const isAllOfficesInProv = !state.filters.office || state.filters.office === 'ALL';
+      const isMultiOffices = isProv && isAllOfficesInProv;
+      const isSingleOffice = isProv && !isAllOfficesInProv;
+      const isAllProvinces = !isProv;
 
-    let items = [];
-    let scopeTitle = '';
+      let items = [];
+      let scopeTitle = '';
 
-    if (isMultiOffices) {
-      scopeTitle = `จังหวัด${state.filters.province}`;
+      if (isMultiOffices) {
+        scopeTitle = `จังหวัด${state.filters.province}`;
 
-      const officeSet = new Set();
-      for (let mon = 0; mon <= 7; mon++) {
-        if (hasReportForMonth(mon)) {
-          const list = getRawDataForMonth(mon);
-          list.forEach(d => {
+        const officeSet = new Set();
+        for (let mon = 0; mon <= 7; mon++) {
+          if (hasReportForMonth(mon)) {
+            const list = getRawDataForMonth(mon);
+            list.forEach(d => {
+              if (d.province === state.filters.province && d.office && !d.office.includes('ผลรวม')) {
+                officeSet.add(d.office);
+              }
+            });
+          }
+        }
+        if (officeSet.size === 0) {
+          state.allData.forEach(d => {
             if (d.province === state.filters.province && d.office && !d.office.includes('ผลรวม')) {
               officeSet.add(d.office);
             }
           });
         }
-      }
-      if (officeSet.size === 0) {
-        state.allData.forEach(d => {
-          if (d.province === state.filters.province && d.office && !d.office.includes('ผลรวม')) {
-            officeSet.add(d.office);
+
+        let offices = Array.from(officeSet).sort((a, b) => a.localeCompare(b, 'th'));
+        if (state.filters.search) {
+          const q = state.filters.search.toLowerCase();
+          offices = offices.filter(o => o.toLowerCase().includes(q));
+        }
+
+        offices.forEach(off => {
+          let totVal = 0, clsVal = 0, remVal = 0;
+          let totJob = 0, clsJob = 0, remJob = 0;
+
+          if (hasReportForMonth(m)) {
+            const rawList = getRawDataForMonth(m);
+            let rows = rawList.filter(d =>
+              !d.isSummary &&
+              d.province === state.filters.province &&
+              d.office === off &&
+              !(d.office && d.office.includes('ผลรวม')) &&
+              !(d.province && d.province.includes('ผลรวม'))
+            );
+            if (crit && crit !== 'ALL') {
+              rows = rows.filter(d => matchCriteriaName(crit, d.criteria));
+            }
+
+            rows.forEach(d => {
+              totVal += Number(d.totalValue) || 0;
+              clsVal += Number(d.closedValue) || 0;
+              remVal += Number(d.remainingValue) || 0;
+              totJob += Number(d.totalJobs) || 0;
+              clsJob += Number(d.closedJobs) || 0;
+              remJob += Number(d.remainingJobs) || 0;
+            });
           }
+
+          let pct = isJobCrit
+            ? (totJob > 0 ? (clsJob / totJob) * 100 : 0)
+            : (totVal > 0 ? (clsVal / totVal) * 100 : 0);
+          pct = Math.round(pct * 10) / 10;
+
+          // Previous month growth (velocity)
+          let momGrowth = null;
+          if (m > 0 && hasReportForMonth(m - 1)) {
+            let prevTotVal = 0, prevClsVal = 0, prevTotJob = 0, prevClsJob = 0;
+            const prevRaw = getRawDataForMonth(m - 1);
+            let prevRows = prevRaw.filter(d =>
+              !d.isSummary &&
+              d.province === state.filters.province &&
+              d.office === off &&
+              !(d.office && d.office.includes('ผลรวม')) &&
+              !(d.province && d.province.includes('ผลรวม'))
+            );
+            if (crit && crit !== 'ALL') {
+              prevRows = prevRows.filter(d => matchCriteriaName(crit, d.criteria));
+            }
+            prevRows.forEach(d => {
+              prevTotVal += Number(d.totalValue) || 0;
+              prevClsVal += Number(d.closedValue) || 0;
+              prevTotJob += Number(d.totalJobs) || 0;
+              prevClsJob += Number(d.closedJobs) || 0;
+            });
+            const prevPct = isJobCrit
+              ? (prevTotJob > 0 ? (prevClsJob / prevTotJob) * 100 : 0)
+              : (prevTotVal > 0 ? (prevClsVal / prevTotVal) * 100 : 0);
+            momGrowth = Math.round((pct - prevPct) * 10) / 10;
+          }
+
+          const gap = Math.round((pct - targetPct) * 10) / 10;
+          let status = 'good';
+          if (pct >= 99.9) {
+            status = 'completed100';
+          } else if (pct < targetPct) {
+            status = 'critical';
+          } else if (gap <= 3.0) {
+            status = 'borderline';
+          }
+
+          items.push({
+            name: off,
+            pct: pct,
+            gap: gap,
+            status: status,
+            momGrowth: momGrowth,
+            totalVal: totVal,
+            closedVal: clsVal,
+            remainVal: remVal,
+            totalJobs: totJob,
+            closedJobs: clsJob,
+            remainJobs: remJob
+          });
         });
-      }
 
-      let offices = Array.from(officeSet).sort((a, b) => a.localeCompare(b, 'th'));
-      if (state.filters.search) {
-        const q = state.filters.search.toLowerCase();
-        offices = offices.filter(o => o.toLowerCase().includes(q));
-      }
+      } else if (isAllProvinces) {
+        scopeTitle = 'ภาพรวมทุกจังหวัดในเขต กฟก.3';
+        const provList = ['นครปฐม', 'ราชบุรี', 'กาญจนบุรี', 'สุพรรณบุรี', 'กอง/กฟก.3'];
 
-      offices.forEach(off => {
+        provList.forEach(prov => {
+          let totVal = 0, clsVal = 0, remVal = 0;
+          let totJob = 0, clsJob = 0, remJob = 0;
+
+          if (hasReportForMonth(m)) {
+            const rawList = getRawDataForMonth(m);
+            let rows = rawList.filter(d =>
+              !d.isSummary &&
+              d.province === prov &&
+              !(d.office && d.office.includes('ผลรวม')) &&
+              !(d.province && d.province.includes('ผลรวม'))
+            );
+            if (crit && crit !== 'ALL') {
+              rows = rows.filter(d => matchCriteriaName(crit, d.criteria));
+            }
+            rows.forEach(d => {
+              totVal += Number(d.totalValue) || 0;
+              clsVal += Number(d.closedValue) || 0;
+              remVal += Number(d.remainingValue) || 0;
+              totJob += Number(d.totalJobs) || 0;
+              clsJob += Number(d.closedJobs) || 0;
+              remJob += Number(d.remainingJobs) || 0;
+            });
+          }
+
+          let pct = isJobCrit
+            ? (totJob > 0 ? (clsJob / totJob) * 100 : 0)
+            : (totVal > 0 ? (clsVal / totVal) * 100 : 0);
+          pct = Math.round(pct * 10) / 10;
+
+          const gap = Math.round((pct - targetPct) * 10) / 10;
+          let status = pct >= 99.9 ? 'completed100' : (pct >= targetPct ? (gap <= 3.0 ? 'borderline' : 'good') : 'critical');
+
+          items.push({
+            name: prov === 'กอง/กฟก.3' ? 'กองใน กฟก.3' : `จ.${prov}`,
+            rawName: prov,
+            pct: pct,
+            gap: gap,
+            status: status,
+            momGrowth: null,
+            totalVal: totVal,
+            closedVal: clsVal,
+            remainVal: remVal,
+            totalJobs: totJob,
+            closedJobs: clsJob,
+            remainJobs: remJob
+          });
+        });
+
+      } else {
+        // Single Office
+        const off = state.filters.office;
+        scopeTitle = off;
+
         let totVal = 0, clsVal = 0, remVal = 0;
         let totJob = 0, clsJob = 0, remJob = 0;
 
         if (hasReportForMonth(m)) {
           const rawList = getRawDataForMonth(m);
-          let rows = rawList.filter(d => 
-            !d.isSummary && 
-            d.province === state.filters.province && 
+          let rows = rawList.filter(d =>
+            !d.isSummary &&
+            d.province === state.filters.province &&
             d.office === off &&
-            !(d.office && d.office.includes('ผลรวม')) && 
-            !(d.province && d.province.includes('ผลรวม'))
+            !(d.office && d.office.includes('ผลรวม'))
           );
           if (crit && crit !== 'ALL') {
             rows = rows.filter(d => matchCriteriaName(crit, d.criteria));
           }
-
           rows.forEach(d => {
             totVal += Number(d.totalValue) || 0;
             clsVal += Number(d.closedValue) || 0;
@@ -7349,94 +7490,8 @@
           });
         }
 
-        let pct = isJobCrit 
-          ? (totJob > 0 ? (clsJob / totJob) * 100 : 0) 
-          : (totVal > 0 ? (clsVal / totVal) * 100 : 0);
-        pct = Math.round(pct * 10) / 10;
-
-        // Previous month growth (velocity)
-        let momGrowth = null;
-        if (m > 0 && hasReportForMonth(m - 1)) {
-          let prevTotVal = 0, prevClsVal = 0, prevTotJob = 0, prevClsJob = 0;
-          const prevRaw = getRawDataForMonth(m - 1);
-          let prevRows = prevRaw.filter(d => 
-            !d.isSummary && 
-            d.province === state.filters.province && 
-            d.office === off &&
-            !(d.office && d.office.includes('ผลรวม')) && 
-            !(d.province && d.province.includes('ผลรวม'))
-          );
-          if (crit && crit !== 'ALL') {
-            prevRows = prevRows.filter(d => matchCriteriaName(crit, d.criteria));
-          }
-          prevRows.forEach(d => {
-            prevTotVal += Number(d.totalValue) || 0;
-            prevClsVal += Number(d.closedValue) || 0;
-            prevTotJob += Number(d.totalJobs) || 0;
-            prevClsJob += Number(d.closedJobs) || 0;
-          });
-          const prevPct = isJobCrit
-            ? (prevTotJob > 0 ? (prevClsJob / prevTotJob) * 100 : 0)
-            : (prevTotVal > 0 ? (prevClsVal / prevTotVal) * 100 : 0);
-          momGrowth = Math.round((pct - prevPct) * 10) / 10;
-        }
-
-        const gap = Math.round((pct - targetPct) * 10) / 10;
-        let status = 'good';
-        if (pct >= 99.9) {
-          status = 'completed100';
-        } else if (pct < targetPct) {
-          status = 'critical';
-        } else if (gap <= 3.0) {
-          status = 'borderline';
-        }
-
-        items.push({
-          name: off,
-          pct: pct,
-          gap: gap,
-          status: status,
-          momGrowth: momGrowth,
-          totalVal: totVal,
-          closedVal: clsVal,
-          remainVal: remVal,
-          totalJobs: totJob,
-          closedJobs: clsJob,
-          remainJobs: remJob
-        });
-      });
-
-    } else if (isAllProvinces) {
-      scopeTitle = 'ภาพรวมทุกจังหวัดในเขต กฟก.3';
-      const provList = ['นครปฐม', 'ราชบุรี', 'กาญจนบุรี', 'สุพรรณบุรี', 'กอง/กฟก.3'];
-
-      provList.forEach(prov => {
-        let totVal = 0, clsVal = 0, remVal = 0;
-        let totJob = 0, clsJob = 0, remJob = 0;
-
-        if (hasReportForMonth(m)) {
-          const rawList = getRawDataForMonth(m);
-          let rows = rawList.filter(d => 
-            !d.isSummary && 
-            d.province === prov &&
-            !(d.office && d.office.includes('ผลรวม')) && 
-            !(d.province && d.province.includes('ผลรวม'))
-          );
-          if (crit && crit !== 'ALL') {
-            rows = rows.filter(d => matchCriteriaName(crit, d.criteria));
-          }
-          rows.forEach(d => {
-            totVal += Number(d.totalValue) || 0;
-            clsVal += Number(d.closedValue) || 0;
-            remVal += Number(d.remainingValue) || 0;
-            totJob += Number(d.totalJobs) || 0;
-            clsJob += Number(d.closedJobs) || 0;
-            remJob += Number(d.remainingJobs) || 0;
-          });
-        }
-
-        let pct = isJobCrit 
-          ? (totJob > 0 ? (clsJob / totJob) * 100 : 0) 
+        let pct = isJobCrit
+          ? (totJob > 0 ? (clsJob / totJob) * 100 : 0)
           : (totVal > 0 ? (clsVal / totVal) * 100 : 0);
         pct = Math.round(pct * 10) / 10;
 
@@ -7444,8 +7499,7 @@
         let status = pct >= 99.9 ? 'completed100' : (pct >= targetPct ? (gap <= 3.0 ? 'borderline' : 'good') : 'critical');
 
         items.push({
-          name: prov === 'กอง/กฟก.3' ? 'กองใน กฟก.3' : `จ.${prov}`,
-          rawName: prov,
+          name: off,
           pct: pct,
           gap: gap,
           status: status,
@@ -7457,137 +7511,85 @@
           closedJobs: clsJob,
           remainJobs: remJob
         });
-      });
-
-    } else {
-      // Single Office
-      const off = state.filters.office;
-      scopeTitle = off;
-
-      let totVal = 0, clsVal = 0, remVal = 0;
-      let totJob = 0, clsJob = 0, remJob = 0;
-
-      if (hasReportForMonth(m)) {
-        const rawList = getRawDataForMonth(m);
-        let rows = rawList.filter(d => 
-          !d.isSummary && 
-          d.province === state.filters.province && 
-          d.office === off &&
-          !(d.office && d.office.includes('ผลรวม'))
-        );
-        if (crit && crit !== 'ALL') {
-          rows = rows.filter(d => matchCriteriaName(crit, d.criteria));
-        }
-        rows.forEach(d => {
-          totVal += Number(d.totalValue) || 0;
-          clsVal += Number(d.closedValue) || 0;
-          remVal += Number(d.remainingValue) || 0;
-          totJob += Number(d.totalJobs) || 0;
-          clsJob += Number(d.closedJobs) || 0;
-          remJob += Number(d.remainingJobs) || 0;
-        });
       }
 
-      let pct = isJobCrit 
-        ? (totJob > 0 ? (clsJob / totJob) * 100 : 0) 
-        : (totVal > 0 ? (clsVal / totVal) * 100 : 0);
-      pct = Math.round(pct * 10) / 10;
+      // Sort items descending by percentage
+      items.sort((a, b) => b.pct - a.pct);
 
-      const gap = Math.round((pct - targetPct) * 10) / 10;
-      let status = pct >= 99.9 ? 'completed100' : (pct >= targetPct ? (gap <= 3.0 ? 'borderline' : 'good') : 'critical');
-
-      items.push({
-        name: off,
-        pct: pct,
-        gap: gap,
-        status: status,
-        momGrowth: null,
-        totalVal: totVal,
-        closedVal: clsVal,
-        remainVal: remVal,
-        totalJobs: totJob,
-        closedJobs: clsJob,
-        remainJobs: remJob
+      const totalCount = items.length;
+      let sumTotVal = 0, sumClsVal = 0, sumRemVal = 0;
+      let sumTotJob = 0, sumClsJob = 0, sumRemJob = 0;
+      items.forEach(i => {
+        sumTotVal += i.totalVal;
+        sumClsVal += i.closedVal;
+        sumRemVal += i.remainVal;
+        sumTotJob += i.totalJobs;
+        sumClsJob += i.closedJobs;
+        sumRemJob += i.remainJobs;
       });
-    }
 
-    // Sort items descending by percentage
-    items.sort((a, b) => b.pct - a.pct);
+      const overallPct = isJobCrit
+        ? (sumTotJob > 0 ? Math.round((sumClsJob / sumTotJob) * 1000) / 10 : 0)
+        : (sumTotVal > 0 ? Math.round((sumClsVal / sumTotVal) * 1000) / 10 : 0);
 
-    const totalCount = items.length;
-    let sumTotVal = 0, sumClsVal = 0, sumRemVal = 0;
-    let sumTotJob = 0, sumClsJob = 0, sumRemJob = 0;
-    items.forEach(i => {
-      sumTotVal += i.totalVal;
-      sumClsVal += i.closedVal;
-      sumRemVal += i.remainVal;
-      sumTotJob += i.totalJobs;
-      sumClsJob += i.closedJobs;
-      sumRemJob += i.remainJobs;
-    });
+      const overallGap = Math.round((overallPct - targetPct) * 10) / 10;
 
-    const overallPct = isJobCrit
-      ? (sumTotJob > 0 ? Math.round((sumClsJob / sumTotJob) * 1000) / 10 : 0)
-      : (sumTotVal > 0 ? Math.round((sumClsVal / sumTotVal) * 1000) / 10 : 0);
+      const completed100List = items.filter(i => i.status === 'completed100');
+      const goodList = items.filter(i => i.status === 'good');
+      const borderlineList = items.filter(i => i.status === 'borderline');
+      const criticalList = items.filter(i => i.status === 'critical');
+      const passedList = items.filter(i => i.pct >= targetPct);
+      const passRate = totalCount > 0 ? Math.round((passedList.length / totalCount) * 1000) / 10 : 0;
 
-    const overallGap = Math.round((overallPct - targetPct) * 10) / 10;
+      const topItem = items[0] || null;
+      const lowestItem = items[items.length - 1] || null;
+      const biggestBacklogItem = [...items].sort((a, b) => b.remainVal - a.remainVal)[0] || null;
+      const fastestGrowthItem = [...items].filter(i => i.momGrowth !== null && i.momGrowth > 0).sort((a, b) => b.momGrowth - a.momGrowth)[0] || null;
 
-    const completed100List = items.filter(i => i.status === 'completed100');
-    const goodList = items.filter(i => i.status === 'good');
-    const borderlineList = items.filter(i => i.status === 'borderline');
-    const criticalList = items.filter(i => i.status === 'critical');
-    const passedList = items.filter(i => i.pct >= targetPct);
-    const passRate = totalCount > 0 ? Math.round((passedList.length / totalCount) * 1000) / 10 : 0;
+      // Active Tab State
+      const activeTab = state.aiActiveTab || 'summary';
+      const isCollapsedClass = state.aiCollapsed ? 'is-collapsed' : '';
 
-    const topItem = items[0] || null;
-    const lowestItem = items[items.length - 1] || null;
-    const biggestBacklogItem = [...items].sort((a,b) => b.remainVal - a.remainVal)[0] || null;
-    const fastestGrowthItem = [...items].filter(i => i.momGrowth !== null && i.momGrowth > 0).sort((a,b) => b.momGrowth - a.momGrowth)[0] || null;
+      // Build Formatted Narrative Text for Copy & Speech
+      let copyText = `📊 ผลการวิเคราะห์และข้อเสนอแนะโดย AI (กฟก.3)\n`;
+      copyText += `📍 ขอบเขต: ${scopeTitle} | เดือน: ${monthFullName}\n`;
+      copyText += `🎯 เกณฑ์วัด: ${crit}\n`;
+      copyText += `📈 เป้าหมาย KPI ระดับ 5: ${targetPct}% | ผลงานจริงสะสม: ${overallPct}% (${overallGap >= 0 ? `+${overallGap}% เหนือเป้าหมาย` : `${overallGap}% ต่ำกว่าเป้าหมาย`})\n`;
+      copyText += `✅ ผ่านเกณฑ์: ${passedList.length}/${totalCount} หน่วยงาน (${passRate}%)\n\n`;
 
-    // Active Tab State
-    const activeTab = state.aiActiveTab || 'summary';
-    const isCollapsedClass = state.aiCollapsed ? 'is-collapsed' : '';
+      copyText += `💡 บทสรุปผู้บริหาร:\n`;
+      copyText += `1. ภาพรวมการปิดงาน AUC สะสมอยู่ที่ ${overallPct}% ${overallGap >= 0 ? `สูงกว่าเป้าหมายเดือน ${monthName} (${targetPct}%) อยู่ +${overallGap}%` : `ต่ำกว่าเป้าหมายเดือน ${monthName} (${targetPct}%) อยู่ ${overallGap}%`}\n`;
+      if (completed100List.length > 0) {
+        copyText += `2. ผลงานยอดเยี่ยม 100%: ปิดงานสำเร็จครบตามเป้าหมายทั้งปีแล้ว ${completed100List.length} แห่ง ได้แก่ ${completed100List.map(i => i.name).join(', ')}\n`;
+      }
+      if (criticalList.length > 0) {
+        copyText += `3. จุดที่ต้องเร่งรัดด่วน: มี ${criticalList.length} แห่งที่ต่ำกว่าเกณฑ์ KPI ได้แก่ ${criticalList.map(i => `${i.name} (${i.pct}%)`).join(', ')} โดยเฉพาะ ${lowestItem ? lowestItem.name : ''} ยอดคงเหลือ ${lowestItem ? formatCurrencyShort(lowestItem.remainVal) : ''}\n`;
+      }
+      if (borderlineList.length > 0) {
+        copyText += `4. กลุ่มเฝ้าระวัง: ${borderlineList.map(i => `${i.name} (${i.pct}%)`).join(', ')} เกาะเส้นพอดี ต้องเตรียมรองรับเป้าหมายเดือน ${nextMonthName} (${nextTargetPct}%)\n`;
+      }
 
-    // Build Formatted Narrative Text for Copy & Speech
-    let copyText = `📊 ผลการวิเคราะห์และข้อเสนอแนะโดย AI (กฟก.3)\n`;
-    copyText += `📍 ขอบเขต: ${scopeTitle} | เดือน: ${monthFullName}\n`;
-    copyText += `🎯 เกณฑ์วัด: ${crit}\n`;
-    copyText += `📈 เป้าหมาย KPI ระดับ 5: ${targetPct}% | ผลงานจริงสะสม: ${overallPct}% (${overallGap >= 0 ? `+${overallGap}% เหนือเป้าหมาย` : `${overallGap}% ต่ำกว่าเป้าหมาย`})\n`;
-    copyText += `✅ ผ่านเกณฑ์: ${passedList.length}/${totalCount} หน่วยงาน (${passRate}%)\n\n`;
+      copyText += `\n🎯 ข้อเสนอแนะเร่งรัด:\n`;
+      copyText += `• โฟกัส ${biggestBacklogItem ? biggestBacklogItem.name : (lowestItem ? lowestItem.name : 'หน่วยงานคงค้าง')} เร่งรัดออกเอกสารตรวจรับ TECO ในระบบ SAP ทันที\n`;
+      copyText += `• เตรียมผลงานล่วงหน้าสำหรับเดือน ${nextMonthName} (${nextTargetPct}%)\n`;
+      copyText += `• บูรณาการตัดจ่ายสินทรัพย์ AUC เข้าสินทรัพย์ถาวรเพื่อปิด WBS ให้สมบูรณ์`;
 
-    copyText += `💡 บทสรุปผู้บริหาร:\n`;
-    copyText += `1. ภาพรวมการปิดงาน AUC สะสมอยู่ที่ ${overallPct}% ${overallGap >= 0 ? `สูงกว่าเป้าหมายเดือน ${monthName} (${targetPct}%) อยู่ +${overallGap}%` : `ต่ำกว่าเป้าหมายเดือน ${monthName} (${targetPct}%) อยู่ ${overallGap}%`}\n`;
-    if (completed100List.length > 0) {
-      copyText += `2. ผลงานยอดเยี่ยม 100%: ปิดงานสำเร็จครบตามเป้าหมายทั้งปีแล้ว ${completed100List.length} แห่ง ได้แก่ ${completed100List.map(i => i.name).join(', ')}\n`;
-    }
-    if (criticalList.length > 0) {
-      copyText += `3. จุดที่ต้องเร่งรัดด่วน: มี ${criticalList.length} แห่งที่ต่ำกว่าเกณฑ์ KPI ได้แก่ ${criticalList.map(i => `${i.name} (${i.pct}%)`).join(', ')} โดยเฉพาะ ${lowestItem ? lowestItem.name : ''} ยอดคงเหลือ ${lowestItem ? formatCurrencyShort(lowestItem.remainVal) : ''}\n`;
-    }
-    if (borderlineList.length > 0) {
-      copyText += `4. กลุ่มเฝ้าระวัง: ${borderlineList.map(i => `${i.name} (${i.pct}%)`).join(', ')} เกาะเส้นพอดี ต้องเตรียมรองรับเป้าหมายเดือน ${nextMonthName} (${nextTargetPct}%)\n`;
-    }
+      lastGeneratedAiTextForCopy = copyText;
 
-    copyText += `\n🎯 ข้อเสนอแนะเร่งรัด:\n`;
-    copyText += `• โฟกัส ${biggestBacklogItem ? biggestBacklogItem.name : (lowestItem ? lowestItem.name : 'หน่วยงานคงค้าง')} เร่งรัดออกเอกสารตรวจรับ TECO ในระบบ SAP ทันที\n`;
-    copyText += `• เตรียมผลงานล่วงหน้าสำหรับเดือน ${nextMonthName} (${nextTargetPct}%)\n`;
-    copyText += `• บูรณาการตัดจ่ายสินทรัพย์ AUC เข้าสินทรัพย์ถาวรเพื่อปิด WBS ให้สมบูรณ์`;
+      // Speech text (clean Thai words)
+      let speechText = `รายงานสรุปผลการวิเคราะห์โดย เอไอ ประจำเดือน ${monthFullName} ในพื้นที่ ${scopeTitle}. `;
+      speechText += `ผลการปิดงานสะสมเฉลี่ยอยู่ที่ ร้อยละ ${overallPct} ซึ่ง${overallGap >= 0 ? `สูงกว่าเป้าหมาย เคพีไอ ระดับห้า อยู่ ร้อยละ ${overallGap}` : `ยังต่ำกว่าเป้าหมาย เคพีไอ อยู่ ร้อยละ ${Math.abs(overallGap)}`}. `;
+      if (completed100List.length > 0) {
+        speechText += `มีหน่วยงานที่ปิดงานสำเร็จครบหนึ่งร้อยเปอร์เซ็นต์แล้ว ${completed100List.length} แห่ง ได้แก่ ${completed100List.map(i => i.name).join(' และ ')}. `;
+      }
+      if (criticalList.length > 0) {
+        speechText += `จุดที่ต้องเร่งรัดเป็นพิเศษ ได้แก่ ${lowestItem ? lowestItem.name : ''} ซึ่งมีผลงาน ร้อยละ ${lowestItem ? lowestItem.pct : 0} ต่ำกว่าเป้าหมาย. `;
+      }
+      speechText += `ข้อเสนอแนะ คือ เร่งตรวจรับงานในระบบ แซป และส่งมอบบัญชีขึ้นทะเบียนทรัพย์สินโดยเร็ว.`;
+      lastGeneratedAiTextForSpeech = speechText;
 
-    lastGeneratedAiTextForCopy = copyText;
-
-    // Speech text (clean Thai words)
-    let speechText = `รายงานสรุปผลการวิเคราะห์โดย เอไอ ประจำเดือน ${monthFullName} ในพื้นที่ ${scopeTitle}. `;
-    speechText += `ผลการปิดงานสะสมเฉลี่ยอยู่ที่ ร้อยละ ${overallPct} ซึ่ง${overallGap >= 0 ? `สูงกว่าเป้าหมาย เคพีไอ ระดับห้า อยู่ ร้อยละ ${overallGap}` : `ยังต่ำกว่าเป้าหมาย เคพีไอ อยู่ ร้อยละ ${Math.abs(overallGap)}`}. `;
-    if (completed100List.length > 0) {
-      speechText += `มีหน่วยงานที่ปิดงานสำเร็จครบหนึ่งร้อยเปอร์เซ็นต์แล้ว ${completed100List.length} แห่ง ได้แก่ ${completed100List.map(i => i.name).join(' และ ')}. `;
-    }
-    if (criticalList.length > 0) {
-      speechText += `จุดที่ต้องเร่งรัดเป็นพิเศษ ได้แก่ ${lowestItem ? lowestItem.name : ''} ซึ่งมีผลงาน ร้อยละ ${lowestItem ? lowestItem.pct : 0} ต่ำกว่าเป้าหมาย. `;
-    }
-    speechText += `ข้อเสนอแนะ คือ เร่งตรวจรับงานในระบบ แซป และส่งมอบบัญชีขึ้นทะเบียนทรัพย์สินโดยเร็ว.`;
-    lastGeneratedAiTextForSpeech = speechText;
-
-    // Build HTML Panel
-    let html = `
+      // Build HTML Panel
+      let html = `
       <div class="ai-panel-header">
         <div class="ai-panel-title-group">
           <div class="ai-icon-badge" title="ขับเคลื่อนด้วยโมเดลวิเคราะห์อัจฉริยะ PEA AI Engine">
@@ -7966,8 +7968,8 @@
       </div>
     `;
 
-    container.className = `ai-analysis-panel ${isCollapsedClass}`;
-    container.innerHTML = html;
+      container.className = `ai-analysis-panel ${isCollapsedClass}`;
+      container.innerHTML = html;
     } catch (err) {
       console.error('Error rendering AI Analysis:', err);
     }
@@ -8107,7 +8109,7 @@
     resize() {
       if (!this.canvas || !this.canvas.parentElement) return;
       const rect = this.canvas.parentElement.getBoundingClientRect();
-      this.dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      this.dpr = Math.min(window.devicePixelRatio || 1, 2);
       this.width = rect.width || 400;
       this.height = rect.height || 280;
       this.canvas.width = Math.floor(this.width * this.dpr);
@@ -8136,7 +8138,8 @@
         return;
       }
 
-      const padTop = (chart.options && chart.options.padding && chart.options.padding.top) || 62;
+      this.legendBottomY = chart.legendBottomY || 22;
+      const padTop = (chart.options && chart.options.padding && chart.options.padding.top) || 64;
       this.targets = qualifying.map((b, idx) => {
         const achieveBadgeH = b.achieveBadgeH || 16.5;
         const achieveBadgeY = (b.achieveBadgeY !== undefined)
@@ -8154,6 +8157,10 @@
           achieveBadgeY: Math.max(2, achieveBadgeY),
           achieveBadgeW: achieveBadgeW,
           achieveBadgeH: achieveBadgeH,
+          achieveTextW: b.achieveTextW || Math.min(82, Math.max(58, b.barW * 0.85)),
+          achieveFontSize: b.achieveFontSize || 17.5,
+          achieveCenterX: b.achieveCenterX || b.centerX,
+          groupW: b.groupW || (b.barW + 22),
           crownSize: crownSize,
           label: b.label,
           val: b.value,
@@ -8213,159 +8220,149 @@
       }
     },
 
-    drawGoldenCrown(ctx, cx, cy, size, tNow) {
+    drawDiamondGemSparkle(ctx, x, y, baseSize, alpha, scale, rot, gem) {
+      if (alpha <= 0.04) return;
       ctx.save();
+      ctx.translate(x, y);
+      const rOuter = baseSize * scale;
 
-      // แอนิเมชันลอยนุ่มนวลสง่างาม (Gentle Majestic Floating)
-      const floatY = Math.sin(tNow * 0.0035) * 1.0;
-      ctx.translate(cx, cy + floatY);
-
-      const W = size; // ความกว้างมงกุฎ
-      const H = size * 0.65; // ความสูงมงกุฎ
-      const halfW = W / 2;
-
-      // 1. ออร่าสีทองเปล่งประกายนุ่มนวลรอบมงกุฎ (Soft Golden Aura)
-      const aura = ctx.createRadialGradient(0, -H * 0.55, 1, 0, -H * 0.55, W * 0.75);
-      aura.addColorStop(0, 'rgba(255, 215, 0, 0.40)');
-      aura.addColorStop(0.55, 'rgba(251, 191, 36, 0.12)');
-      aura.addColorStop(1, 'rgba(251, 191, 36, 0)');
-      ctx.fillStyle = aura;
+      // 1. ออร่าสีอัญมณีนุ่มนวลขนาดจิ๋ว (Miniature Jewel Aura)
+      ctx.globalAlpha = Math.min(1, alpha * 0.62);
+      const rHalo = Math.max(1.5, rOuter * 1.45);
+      const halo = ctx.createRadialGradient(0, 0, 0.2, 0, 0, rHalo);
+      halo.addColorStop(0, gem.glow);
+      halo.addColorStop(0.55, gem.glowSoft || 'rgba(255, 255, 255, 0.08)');
+      halo.addColorStop(1, 'rgba(255, 255, 255, 0)');
+      ctx.fillStyle = halo;
       ctx.beginPath();
-      ctx.arc(0, -H * 0.55, W * 0.75, 0, Math.PI * 2);
+      ctx.arc(0, 0, rHalo, 0, Math.PI * 2);
       ctx.fill();
 
-      // 2. ซับในกำมะหยี่สีม่วงรอยัลด้านหลัง (Inner Royal Velvet Arch)
+      ctx.rotate(rot);
+
+      // 2. แฉกประกายเพชรรอง 4 ทิศทแยง (4 Diagonal Colored Gem Rays)
+      ctx.globalAlpha = Math.min(1, alpha * 0.85);
+      ctx.fillStyle = gem.color;
+      const rDiag = rOuter * 0.54;
+      const wDiag = rOuter * 0.13;
       ctx.beginPath();
-      ctx.moveTo(-halfW * 0.8, -H * 0.22);
-      ctx.quadraticCurveTo(0, -H * 0.82, halfW * 0.8, -H * 0.22);
-      ctx.closePath();
-      ctx.fillStyle = 'rgba(76, 29, 149, 0.5)';
-      ctx.fill();
-
-      // 3. ตัวเรือนมงกุฎทองคำ 5 ยอด (5-Peak Majestic Golden Crown)
-      ctx.beginPath();
-      ctx.moveTo(-halfW * 0.95, -H * 0.20);
-      ctx.lineTo(-halfW * 0.98, -H * 0.72); // ยอดปีกซ้าย (Peak 1)
-      ctx.lineTo(-halfW * 0.58, -H * 0.42); // ร่อง 1
-      ctx.lineTo(-halfW * 0.38, -H * 0.88); // ยอดกลางซ้าย (Peak 2)
-      ctx.lineTo(-halfW * 0.12, -H * 0.48); // ร่อง 2
-      ctx.lineTo(0, -H * 1.05);             // ยอดกลางสูงสุด (Center Peak 3)
-      ctx.lineTo(halfW * 0.12, -H * 0.48);  // ร่อง 3
-      ctx.lineTo(halfW * 0.38, -H * 0.88);  // ยอดกลางขวา (Peak 4)
-      ctx.lineTo(halfW * 0.58, -H * 0.42);  // ร่อง 4
-      ctx.lineTo(halfW * 0.98, -H * 0.72);  // ยอดปีกขวา (Peak 5)
-      ctx.lineTo(halfW * 0.95, -H * 0.20);
-      ctx.quadraticCurveTo(0, -H * 0.12, -halfW * 0.95, -H * 0.20);
-      ctx.closePath();
-
-      // ไล่เฉดสีทองคำเปลว 3D เงาวาว (Luminous 3D Metallic Gold)
-      const goldGrad = ctx.createLinearGradient(-halfW, -H, halfW, 0);
-      goldGrad.addColorStop(0, '#F59E0B');
-      goldGrad.addColorStop(0.22, '#FDE047');
-      goldGrad.addColorStop(0.48, '#FFFBEB');
-      goldGrad.addColorStop(0.72, '#FBBF24');
-      goldGrad.addColorStop(1, '#D97706');
-      ctx.fillStyle = goldGrad;
-      ctx.fill();
-
-      // เส้นขอบทองคำเรืองแสง
-      ctx.strokeStyle = '#FEF08A';
-      ctx.lineWidth = 0.9;
-      ctx.shadowColor = 'rgba(255, 215, 0, 0.75)';
-      ctx.shadowBlur = 3;
-      ctx.stroke();
-      ctx.shadowBlur = 0;
-
-      // 4. แถบคาดฐานมงกุฎ (Crown Base Headband)
-      const rimH = H * 0.24;
-      const rimY = -rimH - 0.5;
-      const rimW = halfW * 1.88;
-      ctx.beginPath();
-      this.roundRect(ctx, -rimW / 2, rimY, rimW, rimH, 2.2);
-      const rimGrad = ctx.createLinearGradient(-halfW, rimY, halfW, rimY);
-      rimGrad.addColorStop(0, '#B45309');
-      rimGrad.addColorStop(0.25, '#FDE047');
-      rimGrad.addColorStop(0.5, '#FFFFFF');
-      rimGrad.addColorStop(0.75, '#FBBF24');
-      rimGrad.addColorStop(1, '#92400E');
-      ctx.fillStyle = rimGrad;
-      ctx.fill();
-      ctx.strokeStyle = '#FEF08A';
-      ctx.lineWidth = 0.75;
-      ctx.stroke();
-
-      // 5. อัญมณี 3 เม็ดประดับฐานมงกุฎ (Royal Gems on Base)
-      const gemY = rimY + rimH * 0.5;
-      // มรกตแห่งความสำเร็จ (Emerald of Achievement) ตรงกลาง
-      ctx.beginPath();
-      ctx.arc(0, gemY, 1.35, 0, Math.PI * 2);
-      ctx.fillStyle = '#00FF88';
-      ctx.fill();
-      ctx.strokeStyle = '#FFFFFF';
-      ctx.lineWidth = 0.6;
-      ctx.stroke();
-
-      // ทับทิมสยาม (Ruby) ซ้าย
-      ctx.beginPath();
-      ctx.arc(-halfW * 0.52, gemY, 1.1, 0, Math.PI * 2);
-      ctx.fillStyle = '#FF2D55';
-      ctx.fill();
-
-      // ไพลินน้ำงาม (Sapphire) ขวา
-      ctx.beginPath();
-      ctx.arc(halfW * 0.52, gemY, 1.1, 0, Math.PI * 2);
-      ctx.fillStyle = '#38BDF8';
-      ctx.fill();
-
-      // 6. ไข่มุกทองคำประดับบนยอดมงกุฎทั้ง 5 ยอด (Golden Pearls on Peaks)
-      const pearls = [
-        { x: -halfW * 0.98, y: -H * 0.72, r: 1.2 },
-        { x: -halfW * 0.38, y: -H * 0.88, r: 1.4 },
-        { x: 0,             y: -H * 1.05, r: 1.85, isCenter: true },
-        { x: halfW * 0.38,  y: -H * 0.88, r: 1.4 },
-        { x: halfW * 0.98,  y: -H * 0.72, r: 1.2 }
-      ];
-
-      pearls.forEach(p => {
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = p.isCenter ? '#FFFFFF' : '#FEF08A';
-        ctx.fill();
-        ctx.strokeStyle = '#B45309';
-        ctx.lineWidth = 0.55;
-        ctx.stroke();
-      });
-
-      // 7. ประกายดาววิบวับ ระยิบระยับ (Animated Sparkle Stars)
-      const star1Alpha = 0.35 + 0.65 * Math.sin(tNow * 0.007);
-      this.drawSparkleStar(ctx, 0, -H * 1.05, 2.2, star1Alpha, '#FFFFFF');
-
-      const star2Alpha = 0.25 + 0.75 * Math.cos(tNow * 0.0055 + 1.2);
-      this.drawSparkleStar(ctx, halfW * 0.65, -H * 0.6, 1.6, star2Alpha, '#FEF08A');
-
-      ctx.restore();
-    },
-
-    drawSparkleStar(ctx, x, y, size, alpha, color = '#FFFFFF') {
-      ctx.save();
-      ctx.globalAlpha = Math.max(0, Math.min(1, alpha));
-      ctx.fillStyle = color;
-      ctx.shadowColor = color;
-      ctx.shadowBlur = 3;
-      ctx.beginPath();
-      const rOuter = size;
-      const rInner = size * 0.24;
-      for (let pt = 0; pt < 8; pt++) {
-        const r = (pt % 2 === 0) ? rOuter : rInner;
-        const a = (pt * Math.PI) / 4;
-        const px = x + Math.cos(a) * r;
-        const py = y + Math.sin(a) * r;
-        if (pt === 0) ctx.moveTo(px, py);
+      for (let i = 0; i < 8; i++) {
+        const r = (i % 2 === 0) ? rDiag : wDiag;
+        const a = (i * Math.PI) / 4 + Math.PI / 4;
+        const px = Math.cos(a) * r;
+        const py = Math.sin(a) * r;
+        if (i === 0) ctx.moveTo(px, py);
         else ctx.lineTo(px, py);
       }
       ctx.closePath();
       ctx.fill();
+
+      // 3. แฉกประกายเพชรหลัก 4 แฉกเรียวแหลมคมชัด (4 Razor-Sharp Primary Diamond Rays)
+      ctx.globalAlpha = Math.min(1, alpha);
+      ctx.fillStyle = gem.facet;
+      ctx.shadowColor = gem.color;
+      ctx.shadowBlur = 2.8;
+      const wMain = rOuter * 0.15;
+      ctx.beginPath();
+      for (let i = 0; i < 8; i++) {
+        const r = (i % 2 === 0) ? rOuter : wMain;
+        const a = (i * Math.PI) / 4;
+        const px = Math.cos(a) * r;
+        const py = Math.sin(a) * r;
+        if (i === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.closePath();
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      // 4. เหลี่ยมเพชรเจียระไนตรงกลางสีอัญมณีสดใส (Faceted Diamond Rhombus Core)
+      const rGem = Math.max(0.75, rOuter * 0.34);
+      ctx.fillStyle = gem.color;
+      ctx.beginPath();
+      ctx.moveTo(0, -rGem);
+      ctx.lineTo(rGem * 0.85, 0);
+      ctx.lineTo(0, rGem);
+      ctx.lineTo(-rGem * 0.85, 0);
+      ctx.closePath();
+      ctx.fill();
+
+      // 5. จุดสะท้อนแสงขาวบริสุทธิ์กึ่งกลางเพชร (Pinpoint Brilliant White Specular Flash)
+      if (alpha > 0.28) {
+        ctx.globalAlpha = Math.min(1, (alpha - 0.15) * 1.15);
+        ctx.fillStyle = '#FFFFFF';
+        ctx.beginPath();
+        ctx.arc(0, 0, Math.max(0.5, rOuter * 0.17), 0, Math.PI * 2);
+        ctx.fill();
+      }
+
       ctx.restore();
+    },
+
+    drawAchieveDiamondSparkles(ctx, t, tNow) {
+      const cx = t.achieveCenterX || t.centerX;
+      const badgeH = t.achieveBadgeH || 23;
+      const badgeY = (t.achieveBadgeY !== undefined) ? t.achieveBadgeY : Math.max(24, t.topY - badgeH - 7);
+      const cy = badgeY + badgeH / 2;
+      const halfTW = Math.max(30, (t.achieveTextW || 92) / 2);
+      const halfTH = Math.max(6.2, (t.achieveFontSize || 17.5) * 0.50);
+
+      // จำกัดขอบเขตแนวนอนไม่ให้ประกายเพชรด้านข้างชนหรือซ้อนทับกับแท่งข้างเคียงเด็ดขาด
+      const halfGroupLimit = Math.max(halfTW + 2.5, ((t.groupW || (t.barW + 22)) / 2) - 3.5);
+      const wingOuterX = Math.min(halfTW + 6.5, halfGroupLimit);
+      const wingInnerX = Math.min(halfTW + 4.0, Math.max(halfTW + 2.2, halfGroupLimit - 1.5));
+
+      const GEMS = {
+        cyan:     { color: '#00F0FF', facet: '#CFFAFE', glow: 'rgba(0, 240, 255, 0.65)',   glowSoft: 'rgba(0, 240, 255, 0.14)' },
+        pink:     { color: '#FF5EC4', facet: '#FCE7F3', glow: 'rgba(255, 94, 196, 0.65)',  glowSoft: 'rgba(255, 94, 196, 0.14)' },
+        emerald:  { color: '#00FF9D', facet: '#D1FAE5', glow: 'rgba(0, 255, 157, 0.62)',   glowSoft: 'rgba(0, 255, 157, 0.13)' },
+        amethyst: { color: '#C084FC', facet: '#F3E8FF', glow: 'rgba(192, 132, 252, 0.65)', glowSoft: 'rgba(192, 132, 252, 0.14)' },
+        gold:     { color: '#FDE047', facet: '#FEF9C3', glow: 'rgba(253, 224, 71, 0.65)',  glowSoft: 'rgba(253, 224, 71, 0.14)' },
+        sapphire: { color: '#60A5FA', facet: '#DBEAFE', glow: 'rgba(96, 165, 250, 0.65)',  glowSoft: 'rgba(96, 165, 250, 0.14)' },
+        rose:     { color: '#FB7185', facet: '#FFE4E6', glow: 'rgba(251, 113, 133, 0.62)', glowSoft: 'rgba(251, 113, 133, 0.13)' },
+        diamond:  { color: '#E0F2FE', facet: '#FFFFFF', glow: 'rgba(255, 255, 255, 0.72)', glowSoft: 'rgba(186, 230, 253, 0.16)' }
+      };
+
+      // ตำแหน่งประกายเพชรจิ๋ว 14 จุด ล้อมรอบกรอบนอกของข้อความ 'บรรลุเป้าหมาย' แบบไม่ทับตัวอักษรและไม่ชนแท่งข้างเคียง
+      const sparkles = [
+        { ox: -wingOuterX, oy: -0.6,          size: 3.4, speed: 0.0058, phase: 0.2, gem: GEMS.cyan },
+        { ox:  wingOuterX, oy: -0.5,          size: 3.4, speed: 0.0063, phase: 2.1, gem: GEMS.pink },
+        { ox: -wingInnerX, oy: -halfTH - 1.8, size: 2.5, speed: 0.0074, phase: 4.0, gem: GEMS.emerald },
+        { ox:  wingInnerX, oy: -halfTH - 1.8, size: 2.6, speed: 0.0069, phase: 1.1, gem: GEMS.amethyst },
+        { ox: -wingInnerX, oy:  halfTH + 1.8, size: 2.4, speed: 0.0052, phase: 3.3, gem: GEMS.gold },
+        { ox:  wingInnerX, oy:  halfTH + 1.8, size: 2.5, speed: 0.0079, phase: 5.2, gem: GEMS.sapphire },
+        { ox: -halfTW * 0.66, oy: -halfTH - 2.8, size: 2.5, speed: 0.0083, phase: 1.7, gem: GEMS.diamond },
+        { ox: -halfTW * 0.24, oy: -halfTH - 3.6, size: 2.3, speed: 0.0066, phase: 3.6, gem: GEMS.gold },
+        { ox:  halfTW * 0.26, oy: -halfTH - 3.4, size: 2.4, speed: 0.0077, phase: 0.5, gem: GEMS.cyan },
+        { ox:  halfTW * 0.68, oy: -halfTH - 2.8, size: 2.5, speed: 0.0056, phase: 4.6, gem: GEMS.rose },
+        { ox: -halfTW * 0.68, oy:  halfTH + 2.4, size: 2.3, speed: 0.0067, phase: 2.8, gem: GEMS.amethyst },
+        { ox: -halfTW * 0.20, oy:  halfTH + 2.7, size: 2.2, speed: 0.0086, phase: 0.8, gem: GEMS.diamond },
+        { ox:  halfTW * 0.24, oy:  halfTH + 2.6, size: 2.3, speed: 0.0072, phase: 5.7, gem: GEMS.emerald },
+        { ox:  halfTW * 0.70, oy:  halfTH + 2.4, size: 2.2, speed: 0.0054, phase: 1.4, gem: GEMS.pink }
+      ];
+
+      for (let i = 0; i < sparkles.length; i++) {
+        const s = sparkles[i];
+        const rawWave = 0.5 + 0.5 * Math.sin(tNow * s.speed + s.phase);
+        const shimmer = 0.5 + 0.5 * Math.cos(tNow * (s.speed * 1.85) + s.phase * 1.7);
+        const flash = Math.pow(rawWave, 2.15) * (0.78 + 0.22 * shimmer);
+        const alpha = 0.10 + 0.90 * flash;
+        const scale = 0.52 + 0.62 * flash;
+        const rot = Math.sin(tNow * 0.0024 + s.phase) * 0.22;
+        const driftX = Math.sin(tNow * 0.0021 + s.phase) * 0.40;
+        const driftY = Math.cos(tNow * 0.0025 + s.phase) * 0.35;
+
+        this.drawDiamondGemSparkle(
+          ctx,
+          cx + s.ox + driftX,
+          cy + s.oy + driftY,
+          s.size,
+          alpha,
+          scale,
+          rot,
+          s.gem
+        );
+      }
     },
 
     render(now) {
@@ -8375,25 +8372,14 @@
 
       if (!this.targets || !this.targets.length) return;
 
-      // ล็อค Safe Ceiling เพื่อป้องกันไม่ให้มงกุฎหรือประกายเลยขึ้นไปทับแถบกำกับ (Legend) ด้านบน
-      const safeCeilingY = 22;
+      const safeCeilingY = Math.max(18, this.legendBottomY || 22);
       ctx.save();
       ctx.beginPath();
       ctx.rect(0, safeCeilingY, this.width, Math.max(0, this.height - safeCeilingY));
       ctx.clip();
 
-      // วาดมงกุฎทองคำแสดงความสำเร็จ บนแต่ละแท่งที่บรรลุเป้าหมาย
       this.targets.forEach(t => {
-        const centerX = t.centerX;
-        const badgeY = (t.achieveBadgeY !== undefined) ? t.achieveBadgeY : Math.max(18, t.topY - 22.5);
-        const crownSize = t.crownSize || Math.max(16, Math.min(22, t.barW * 0.32));
-
-        // วางตำแหน่งฐานมงกุฎ อยู่เหนือป้าย "✓ บรรลุเป้าหมาย" ตรงกลางพอดี
-        const crownBaseX = centerX;
-        const crownBaseY = badgeY - 1.5;
-
-        // วาดมงกุฎทองคำสง่างาม แสดงความสำเร็จ 👑
-        this.drawGoldenCrown(ctx, crownBaseX, crownBaseY, crownSize, now + t.staggerOffset);
+        this.drawAchieveDiamondSparkles(ctx, t, now + t.staggerOffset);
       });
 
       ctx.restore();
@@ -8696,7 +8682,7 @@
       showTooltip: false, // เอา Tooltip ออก ไม่ต้องแสดงตามคำสั่งผู้ใช้งาน (เอาที่วงกลมออก ไม่ต้องแสดง)
       barRatio: 0.88, // สัดส่วนความกว้างแท่งกราฟ เพิ่มให้แท่งกราฟกว้าง เต็มตา สมส่วน
       maxBarWidth: 120, // ขยายความกว้างแท่งสูงสุดจาก 80 เป็น 120px ให้กว้างสวยงามสมส่วน
-      padding: { top: 62, right: 20, bottom: 58, left: 62 },
+      padding: { top: 64, right: 20, bottom: 58, left: 62 },
       formatY: (v) => `${Number(v).toFixed(2)}%`,
       yLabelAlign: 'right', // จัดชิดขวาของแกน Y เว้นระยะห่างจากเส้นกราฟอย่างสมดุล ไม่ชิดหรือทับกราฟ
       yLabelRightGap: 8, // เว้นระยะห่างจากขอบกราฟ 8px
@@ -8738,7 +8724,7 @@
         { label: 'เป้าถัดไป-สิ้นปี (ผ่านเกณฑ์)', color: '#00FF88' },
         { label: 'เป้าถัดไป-สิ้นปี (ต้องเร่งรัด)', color: '#FF2D55' },
         { label: '★ ผ่านเกณฑ์สะสม (1 ดาว/เดือน)', color: '#FFD25A' },
-        { label: '👑 บรรลุเป้าหมาย ธ.ค. (สิ้นปี 69)', color: '#FFD700' }
+        { label: 'บรรลุเป้าหมาย ธ.ค. (สิ้นปี 69)', color: '#FFD700' }
       ],
       onClick: (item) => {
         if (item && item.extra && item.extra.fullTitle && typeof window.selectSidebarCriteria === 'function') {
@@ -9042,8 +9028,8 @@
           </td>
           <td style="text-align:right; font-variant-numeric:tabular-nums;">
             ${isNoWork
-              ? '<span class="badge-pea-tag" style="background:rgba(255,255,255,0.06); color:var(--text-muted); border:1px solid rgba(255,255,255,0.12); font-weight:600;">ไม่มีงาน</span>'
-              : (isJob ? formatNumber(d.totalJobs) + ' งาน' : formatCurrency(d.totalValue))}
+          ? '<span class="badge-pea-tag" style="background:rgba(255,255,255,0.06); color:var(--text-muted); border:1px solid rgba(255,255,255,0.12); font-weight:600;">ไม่มีงาน</span>'
+          : (isJob ? formatNumber(d.totalJobs) + ' งาน' : formatCurrency(d.totalValue))}
           </td>
           <td style="text-align:right; font-variant-numeric:tabular-nums; color:var(--pea-gold-400); font-weight:600;">
             ${isNoWork ? '<span style="color:var(--text-dim);">-</span>' : (isJob ? formatNumber(d.closedJobs) + ' งาน' : formatCurrency(d.closedValue))}
@@ -9053,22 +9039,22 @@
           </td>
           <td>
             ${isNoWork
-              ? `<div style="display:flex; align-items:center; justify-content:center;">
+          ? `<div style="display:flex; align-items:center; justify-content:center;">
                    <span class="badge-pea-tag" style="background:rgba(255,255,255,0.06); color:var(--text-muted); border:1px solid rgba(255,255,255,0.12); padding:0.2rem 0.65rem; border-radius:12px; font-size:0.75rem; font-weight:700;">ไม่มีงาน</span>
                  </div>`
-              : `<div style="display:flex; align-items:center; gap:8px;">
+          : `<div style="display:flex; align-items:center; gap:8px;">
                    <div class="progress-track" style="flex:1; margin:0; min-width:60px;">
                      <div class="progress-fill ${pct >= 100 ? 'fill-success' : (pct >= 60 ? 'fill-warning' : 'fill-danger')}" style="width:${Math.min(100, pct)}%"></div>
                    </div>
                    <span style="font-size:0.775rem; font-weight:600; min-width:48px; text-align:right;">${pct.toFixed(2)}%</span>
                  </div>`
-            }
+        }
           </td>
           <td style="text-align:center;">
             ${isNoWork
-              ? '<span class="kpi-score-badge kpi-score-neutral" title="ไม่มีงาน ไม่นำมาคิดคะแนน">-</span>'
-              : `<span class="kpi-score-badge ${d.kpiScore > 0 ? 'kpi-score-' + kpiScoreRound : 'kpi-score-neutral'}">${d.kpiScore > 0 ? '★ ' + d.kpiScore : '-'}</span>`
-            }
+          ? '<span class="kpi-score-badge kpi-score-neutral" title="ไม่มีงาน ไม่นำมาคิดคะแนน">-</span>'
+          : `<span class="kpi-score-badge ${d.kpiScore > 0 ? 'kpi-score-' + kpiScoreRound : 'kpi-score-neutral'}">${d.kpiScore > 0 ? '★ ' + d.kpiScore : '-'}</span>`
+        }
           </td>
           <td style="text-align:center;">
             <button class="btn btn-outline" style="padding:0.3rem 0.65rem; font-size:0.75rem;" onclick="window.openDrilldownModal(${d.id})">
@@ -9244,8 +9230,8 @@
     if (!container) return;
 
     // Find critical records (KPI <= 2 or large remaining balance, exclude offices with no work)
-    const criticals = state.allData.filter(d => 
-      !d.isSummary && 
+    const criticals = state.allData.filter(d =>
+      !d.isSummary &&
       (Number(d.totalValue) > 0 || Number(d.totalJobs) > 0) &&
       (d.kpiScore <= 2 || d.remainingValue > 8000000)
     );
@@ -9383,7 +9369,7 @@
         const matrix = parseKpiExcelBuffer(buf);
         if (matrix && matrix.length > 0) {
           window.KPI_MATRIX = matrix;
-          try { localStorage.setItem('AUC_SAVED_KPI_MATRIX', JSON.stringify(matrix)); } catch (e) {}
+          try { localStorage.setItem('AUC_SAVED_KPI_MATRIX', JSON.stringify(matrix)); } catch (e) { }
           loadDataForMonth(state.filters.month);
           filterData();
           renderAll();
@@ -9409,7 +9395,7 @@
             const matrix = parseKpiExcelBuffer(buf);
             if (matrix && matrix.length > 0) {
               window.KPI_MATRIX = matrix;
-              try { localStorage.setItem('AUC_SAVED_KPI_MATRIX', JSON.stringify(matrix)); } catch (e) {}
+              try { localStorage.setItem('AUC_SAVED_KPI_MATRIX', JSON.stringify(matrix)); } catch (e) { }
               loadDataForMonth(state.filters.month);
               filterData();
               renderAll();
@@ -9460,7 +9446,7 @@
               window.KPI_MATRIX = kpiMatrix;
               try {
                 localStorage.setItem('AUC_SAVED_KPI_MATRIX', JSON.stringify(kpiMatrix));
-              } catch (e) {}
+              } catch (e) { }
               loadDataForMonth(state.filters.month);
               filterData();
               renderAll();
@@ -9945,7 +9931,7 @@
 
     try {
       localStorage.setItem('pea_auc_bg_settings', JSON.stringify(state.bgSettings));
-    } catch (e) {}
+    } catch (e) { }
   }
 
   function applyChartColors(newColors, save = true) {
@@ -9998,8 +9984,8 @@
       const preset = CHART_PALETTES.find(p => p.id === pid);
       if (preset) {
         const match = preset.closed.toLowerCase() === state.chartColors.closed.toLowerCase() &&
-                      preset.total.toLowerCase() === state.chartColors.total.toLowerCase() &&
-                      preset.remaining.toLowerCase() === state.chartColors.remaining.toLowerCase();
+          preset.total.toLowerCase() === state.chartColors.total.toLowerCase() &&
+          preset.remaining.toLowerCase() === state.chartColors.remaining.toLowerCase();
         card.classList.toggle('active', match);
       }
     });
@@ -10007,7 +9993,7 @@
     if (save) {
       try {
         localStorage.setItem('pea_auc_chart_colors', JSON.stringify(state.chartColors));
-      } catch (e) {}
+      } catch (e) { }
     }
 
     // Refresh charts
@@ -10076,7 +10062,7 @@
     if (!container) return;
     container.innerHTML = CHART_PALETTES.map(p => {
       const isAct = p.closed.toLowerCase() === state.chartColors.closed.toLowerCase() &&
-                    p.total.toLowerCase() === state.chartColors.total.toLowerCase();
+        p.total.toLowerCase() === state.chartColors.total.toLowerCase();
       return `
         <div class="chart-theme-card ${isAct ? 'active' : ''}" data-theme-id="${p.id}" title="${p.name}">
           <div class="chart-theme-name">${p.name}</div>
@@ -10118,7 +10104,7 @@
           state.bgSettings = parsed;
         }
       }
-    } catch (e) {}
+    } catch (e) { }
 
     try {
       const savedColors = localStorage.getItem('pea_auc_chart_colors');
@@ -10128,7 +10114,7 @@
           state.chartColors = { ...DEFAULT_CHART_COLORS, ...parsed };
         }
       }
-    } catch (e) {}
+    } catch (e) { }
 
     // 2. Initial application of theme tokens & chart colors
     applyBgSettings(state.bgSettings);

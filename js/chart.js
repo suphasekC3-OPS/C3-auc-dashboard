@@ -132,6 +132,33 @@ class PeaChart {
     const defaultRightPad = height < 70 ? 8 : 12;
     const pad = Object.assign({ top: defaultTopPad, right: defaultRightPad, bottom: defaultBottomPad, left: defaultLeftPad }, options.padding || {});
 
+    // คำนวณขอบล่างของแถบ Legend ล่วงหน้า เพื่อป้องกันไม่ให้ป้าย "บรรลุเป้าหมาย" ขนาดใหญ่ซ้อนทับกับ Legend แม้จอแคบลง
+    let legendBottomY = 0;
+    if (options.showLegend) {
+      const legItems = (options.customLegend && options.customLegend.length) ? options.customLegend : datasets;
+      let lx = pad.left;
+      let ly = 14;
+      ctx.save();
+      ctx.font = '500 11px Prompt, sans-serif';
+      legItems.forEach((dsItem) => {
+        const tw = ctx.measureText(dsItem.label || '').width;
+        const iw = 16 + tw + 16;
+        if (lx + iw > width - pad.right && lx > pad.left) {
+          lx = pad.left;
+          ly += 18;
+        }
+        lx += iw;
+      });
+      ctx.restore();
+      legendBottomY = ly + 8;
+    }
+    this.legendBottomY = legendBottomY;
+
+    const anyExceedDecKpi = datasets.some(ds => Array.isArray(ds.extra) && ds.extra.some(e => e && e.isExceedDecKpi && !e.isNoWork));
+    if (anyExceedDecKpi && height > 120) {
+      pad.top = Math.max(pad.top, legendBottomY + 38);
+    }
+
     const plotW = width - pad.left - pad.right;
     const plotH = height - pad.top - pad.bottom;
 
@@ -224,6 +251,7 @@ class PeaChart {
           y: y,
           barW: currentBarW,
           barH: barH,
+          groupW: groupW,
           centerX: currentX + currentBarW / 2,
           topY: y,
           color: color,
@@ -437,8 +465,8 @@ class PeaChart {
                   curr.badgeY += currShift;
                 }
               }
-              // หากมีป้าย ✓ บรรลุเป้าหมาย อยู่บนหัวแท่ง: ล็อคไม่ให้เป้าหมายในแท่งดันขึ้นไปเกิน pad.top เด็ดขาด (เริ่มที่ pad.top + 3 เสมอ)
-              const minAllowedY = hasAchieveBadge ? (pad.top + 3) : ((val >= 100 || y <= pad.top + 6) ? (pad.top - 20) : (pad.top + 2));
+              // หากมีป้าย บรรลุเป้าหมาย อยู่บนหัวแท่ง: ล็อคไม่ให้ป้าย KPI ในแท่งดันขึ้นไปเหนือขอบบนของแท่งกราฟ (y + 4) เด็ดขาด เพื่อป้องกันการซ้อนทับกัน
+              const minAllowedY = hasAchieveBadge ? Math.max(pad.top + 4, y + 4) : ((val >= 100 || y <= pad.top + 6) ? (pad.top - 20) : (pad.top + 2));
               const maxAllowedY = isBottomKpi ? (pad.top + plotH - 50) : (pad.top + plotH - badgeH - 2);
               if (barItems.length > 0) {
                 if (barItems[0].badgeY < minAllowedY) barItems[0].badgeY = minAllowedY;
@@ -463,6 +491,17 @@ class PeaChart {
                 const maxPos = barItems[i + 1].badgeY - minGap - barItems[i].h;
                 if (barItems[i].badgeY > maxPos) {
                   barItems[i].badgeY = maxPos;
+                }
+              }
+            }
+            // ป้องกันป้าย KPI บนสุดลอยขึ้นไปซ้อนทับข้อความ "บรรลุเป้าหมาย" บนหัวแท่ง
+            if (hasAchieveBadge && barItems.length > 0) {
+              const strictTopFloor = Math.max(pad.top + 3, y + 3);
+              if (barItems[0].badgeY < strictTopFloor) {
+                barItems[0].badgeY = strictTopFloor;
+                for (let i = 1; i < barItems.length; i++) {
+                  const minPos = barItems[i - 1].badgeY + barItems[i - 1].h + minGap;
+                  if (barItems[i].badgeY < minPos) barItems[i].badgeY = minPos;
                 }
               }
             }
@@ -906,19 +945,48 @@ class PeaChart {
           ctx.restore();
         }
 
-        // Draw "✓ บรรลุเป้าหมาย" (Goal Achieved) text if bar exceeds December KPI target
-        // (ตามคำสั่งผู้ใช้งาน: บรรลุเป้าหมาย เพิ่มขนาดอักษร และให้อ่านง่ายไม่มั่วแบบนี้ และเปลี่ยนเป็นสีเหลืองทองอร่ามแจ่มๆ)
+        // Draw "บรรลุเป้าหมาย" (Goal Achieved) text if bar exceeds December KPI target
+        // (เอามงกุฎออก เพิ่มขนาดอักษร บรรลุเป้าหมาย ให้เด่นชัด และล็อคระยะห่างไม่ให้ซ้อนทับกันทั้งแนวนอนและแนวตั้ง)
         if (ext && ext.isExceedDecKpi && !isNoWork && height > 25) {
           const badgeInset = options.badgeInset !== undefined ? options.badgeInset : (currentBarW < 40 ? 4 : 6);
           const achieveBadgeW = Math.max(24, currentBarW - badgeInset);
-          const achieveBadgeH = 18;
+
+          ctx.save();
+          ctx.setLineDash([]);
+
+          // เพิ่มขนาดอักษร "บรรลุเป้าหมาย" ให้ใหญ่คมชัดสมดุลกับตัวเลข % ด้านล่าง และจำกัดความกว้างตาม groupW ไม่ให้ซ้อนทับแท่งข้างเคียงเด็ดขาด
+          const achieveText = 'บรรลุเป้าหมาย';
+          let fSize = currentBarW < 45 ? 13.0 : (currentBarW < 65 ? 15.2 : (currentBarW < 90 ? 17.0 : 18.5));
+          ctx.font = `800 ${fSize}px 'Prompt', 'Sarabun', sans-serif`;
+          let textW = ctx.measureText(achieveText).width;
+          // เว้นช่องว่างแนวนอนระหว่างแท่งอย่างน้อย 20px เสมอ (รวมพื้นที่ประกายเพชรด้านข้างแล้วไม่ชนกัน 100%)
+          const safeHorizontalLimit = Math.max(36, groupW - 20);
+          const maxTextW = Math.min(safeHorizontalLimit, Math.max(currentBarW + 18, 86));
+          if (textW > maxTextW) {
+            fSize = Math.max(10.0, fSize * (maxTextW / textW));
+            ctx.font = `800 ${fSize}px 'Prompt', 'Sarabun', sans-serif`;
+            textW = ctx.measureText(achieveText).width;
+          }
+
+          const achieveBadgeH = Math.max(20, Math.ceil(fSize * 1.32));
           const achieveBadgeX = currentX + (currentBarW - achieveBadgeW) / 2;
 
-          // Position sitting right on top of the bar (or in top padding headroom if bar is at ceiling)
+          // เว้นระยะห่างเหนือยอดแท่งกราฟ 7px ไม่ซ้อนทับขอบแท่งหรือป้าย KPI และไม่ซ้อนทับแถบ Legend ด้านบน
+          const minTopClearY = (this.legendBottomY ? (this.legendBottomY + 5) : 24);
           let achieveBadgeY = (val >= 100 || y <= pad.top + 6)
-            ? (pad.top - achieveBadgeH - 5)
-            : (y - achieveBadgeH - 5);
-          if (achieveBadgeY < 2) achieveBadgeY = 2;
+            ? (pad.top - achieveBadgeH - 7)
+            : (y - achieveBadgeH - 7);
+          if (achieveBadgeY < minTopClearY) achieveBadgeY = minTopClearY;
+
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          let textCenterX = currentX + currentBarW / 2;
+          const minCenterX = pad.left + textW / 2 + 6;
+          const maxCenterX = width - pad.right - textW / 2 - 6;
+          if (maxCenterX >= minCenterX) {
+            textCenterX = Math.max(minCenterX, Math.min(maxCenterX, textCenterX));
+          }
+          const textCenterY = achieveBadgeY + achieveBadgeH / 2;
 
           const curBarObj = this.renderedBars && this.renderedBars.find(b => b.gIdx === gIdx && b.dIdx === dIdx);
           if (curBarObj) {
@@ -926,27 +994,10 @@ class PeaChart {
             curBarObj.achieveBadgeY = achieveBadgeY;
             curBarObj.achieveBadgeW = achieveBadgeW;
             curBarObj.achieveBadgeH = achieveBadgeH;
+            curBarObj.achieveTextW = textW;
+            curBarObj.achieveFontSize = fSize;
+            curBarObj.achieveCenterX = textCenterX;
           }
-
-          ctx.save();
-          ctx.setLineDash([]);
-
-          // สไตล์ สี และแบบอักษร ตามรูปหัวข้อเกณฑ์วัด (Prompt 800, Linear Gradient #FFF3B3 -> #FFD25A -> #FFB81C -> #F59E0B, Drop-shadow 0 2px 8px rgba(255,184,28,0.35))
-          const achieveText = 'บรรลุเป้าหมาย';
-          let fSize = currentBarW < 45 ? 11 : (currentBarW < 65 ? 12.5 : 13.8);
-          ctx.font = `800 ${fSize}px 'Prompt', 'Sarabun', sans-serif`;
-          let textW = ctx.measureText(achieveText).width;
-          const maxTextW = Math.max(currentBarW + 18, 115);
-          if (textW > maxTextW) {
-            fSize = Math.max(10.5, fSize * (maxTextW / textW));
-            ctx.font = `800 ${fSize}px 'Prompt', 'Sarabun', sans-serif`;
-            textW = ctx.measureText(achieveText).width;
-          }
-
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          const textCenterX = currentX + currentBarW / 2;
-          const textCenterY = achieveBadgeY + achieveBadgeH / 2;
 
           // ไล่เฉดสีทองหรูหรา 135 องศา ตามรูป (CSS: linear-gradient(135deg, #FFF3B3 0%, #FFD25A 38%, #FFB81C 72%, #F59E0B 100%))
           const x0 = textCenterX - textW * 0.45;

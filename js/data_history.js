@@ -95,13 +95,13 @@
       groupNo: '04',
       name: '04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx',
       category: 'SAP ZBUDR064 & Costs',
-      importDate: '2026-10-28 07:42:30',
-      importDateTh: '28 ต.ค. 2569, 07:42 น.',
-      lastModifiedTh: '28 ต.ค. 2569, 07:42 น. (ไฟล์ล่าสุด)',
-      sizeText: '937.5 KB',
+      importDate: '2026-10-27 08:06:27',
+      importDateTh: '27 ต.ค. 2569, 08:06 น.',
+      lastModifiedTh: '27 ต.ค. 2569, 08:06 น. (ไฟล์ล่าสุด)',
+      sizeText: '732.0 KB',
       recordCount: 2083,
       status: 'active',
-      statusText: 'ผสานข้อมูลสำเร็จ (ปรับปรุงรอบเช้า 07:42 น.)',
+      statusText: 'ผสานข้อมูลสำเร็จ',
       storageFile: 'js/data_wbs.js',
       storageVar: 'window.AUC_WBS_REMAINING_DATA (Joined)',
       icon: '⚡',
@@ -177,6 +177,64 @@
         'ออบเจค CN41': r.cn41ObjDesc || '-',
         'สกุลเงิน': r.cn41Currency || 'THB'
       }))
+    },
+    {
+      id: 'src_07',
+      groupNo: '07',
+      name: '07 พัสดุค้างเบิก CN52N.xlsx',
+      category: 'SAP CN52N Pending Materials',
+      importDate: '2026-10-30 07:57:27',
+      importDateTh: '30 ต.ค. 2569, 07:57 น.',
+      lastModifiedTh: '30 ต.ค. 2569, 07:57 น. (ไฟล์ล่าสุด)',
+      sizeText: '5.67 MB',
+      recordCount: 68211,
+      status: 'active',
+      statusText: 'เชื่อม WBS ไฟล์ 03 & 04 สำเร็จ 100%',
+      storageFile: 'js/data_materials_07.js',
+      storageVar: 'window.AUC_MAT07_COMPACT',
+      icon: '📦',
+      badgeColor: '#0EA5E9',
+      description: 'รายงานพัสดุค้างเบิก SAP CN52N ทั้งหมด เฉพาะ Mvt 281 ทั้งหมด 68,211 รายการ (1,577 งาน WBS, 566 รหัสวัสดุ) เชื่อมกับไฟล์ 03 ผ่านคอลัมน์ องค์ประกอบ WBS และเชื่อมไฟล์ 04 ผ่านคอลัมน์ ข้อกำหนดโครงการ /WBS แสดงในเมนู รายการพัสดุ',
+      rulesHtml: `<div style="background:rgba(15,23,42,0.85); border:1px solid rgba(14,165,233,0.35); border-radius:8px; padding:0.65rem 0.85rem; font-size:0.8rem; line-height:1.5;">
+  <div style="font-weight:700; color:#38BDF8; margin-bottom:0.45rem; display:flex; align-items:center; gap:0.35rem;">
+    <span>📋 เงื่อนไขสรุปการประมวลผล (แสดง / ไม่แสดง ข้อมูลในระบบ):</span>
+  </div>
+  <div style="display:flex; flex-direction:column; gap:0.45rem;">
+    <div style="display:flex; align-items:flex-start; gap:0.45rem; background:rgba(16,185,129,0.12); padding:0.45rem 0.65rem; border-radius:6px; border-left:3px solid #10B981;">
+      <span style="color:#10B981; font-weight:800; font-size:0.85rem; flex-shrink:0;">✅ แสดง:</span>
+      <div style="color:#E2E8F0;">
+        <span style="color:#6EE7B7; font-weight:700;">• รหัสพัสดุเฉพาะหมวด 1*</span> (อุปกรณ์หลักระบบจำหน่าย/สายส่ง/หม้อแปลง 530 รหัส)<br>
+        <span style="color:#6EE7B7; font-weight:700;">• เฉพาะ Movement Type 281</span> (เบิกจ่ายพัสดุเข้าโครงการ WBS ก่อสร้าง)<br>
+        <span style="color:#6EE7B7; font-weight:700;">• เชื่อมโยง WBS คงเหลือไฟล์ 03</span> (และผูกงบประมาณโครงการไฟล์ 04 ZBUDR064)<br>
+        <span style="color:#6EE7B7; font-weight:700;">• ปริมาณค้างเบิก:</span> คำนวณจาก (ต้องการ − เบิกจ่าย − คลัง) หากติดลบคิดเป็น 0
+      </div>
+    </div>
+    <div style="display:flex; align-items:flex-start; gap:0.45rem; background:rgba(239,68,68,0.12); padding:0.45rem 0.65rem; border-radius:6px; border-left:3px solid #EF4444;">
+      <span style="color:#EF4444; font-weight:800; font-size:0.85rem; flex-shrink:0;">❌ ไม่แสดง:</span>
+      <div style="color:#E2E8F0;">
+        <span style="color:#FCA5A5; font-weight:700;">• ไม่แสดงรหัสหมวดอื่นที่ไม่ใช่ 1*</span> (ตัดรหัสหมวด 2*, 9* ออก)<br>
+        <span style="color:#FCA5A5; font-weight:700;">• ไม่แสดง Movement Type อื่น</span> (เช่น Mvt 581 คืนพัสดุเข้าโครงการ หรือ Mvt อื่น)<br>
+        <span style="color:#FCA5A5; font-weight:700;">• ไม่แสดงพัสดุของงาน WBS ที่ปิดงานแล้ว</span> หรือไม่อยู่ใน 2,083 โครงการคงเหลือของไฟล์ 03
+      </div>
+    </div>
+  </div>
+</div>`,
+      columns: [
+        'วัสดุ (รหัสพัสดุ)', 'องค์ประกอบ WBS', 'โครงข่าย', 'ข้อความวัสดุ', 'โรงงาน', 'จุดขนส/คลง',
+        'Mvt.type', 'การสำรอง', 'สถานะ', 'UnE', 'ปริมาณที่ต้องการ', 'ปริมาณการเบิกจ่าย', 'วันต้องการ', 'ราคา/สกุลเงินในปท.'
+      ],
+      sampleProvider: () => {
+        const c = window.AUC_MAT07_COMPACT;
+        if (!c || !c.d || !c.r) return [];
+        return c.r.slice(0, 5).map(t => ({
+          'องค์ประกอบ WBS': c.d.w[t[0]],
+          'วัสดุ': c.d.m[t[1]],
+          'ข้อความวัสดุ': c.d.md[t[2]],
+          'ต้องการ': t[10],
+          'เบิกจ่าย': t[11],
+          'ราคา (บาท)': Number(t[13] || 0).toLocaleString('th-TH', { minimumFractionDigits: 2 })
+        }));
+      }
     },
     {
       id: 'src_sheet',
@@ -352,7 +410,7 @@
       role: 'จัดเก็บข้อมูลหลักงาน WBS (ไฟล์ 03 + 04 + 05 + Google Sheet)',
       recordsCount: '2,083 รายการ (41 คอลัมน์)',
       fileSize: '2.36 MB',
-      updatedAt: '28 ต.ค. 2569, 07:42 น.',
+      updatedAt: '27 ต.ค. 2569, 08:09 น.',
       status: '100% ฐานข้อมูลอัปเดตล่าสุด',
       variable: 'window.AUC_WBS_REMAINING_DATA'
     },
@@ -360,11 +418,31 @@
       path: 'js/wbs.js',
       title: 'โมดูลจัดการหน้าตาราง WBS & ตัวกรอง',
       role: 'ตรรกะคำนวณตัวกรอง, ค้นหาสถานะ SAP, จัดกลุ่มสรุปผล',
-      recordsCount: '7,418 บรรทัดคำสั่ง',
-      fileSize: '317 KB',
-      updatedAt: '30 ต.ค. 2569, 08:15 น.',
+      recordsCount: '4,055 บรรทัดคำสั่ง',
+      fileSize: '184 KB',
+      updatedAt: '17 ต.ค. 2569, 08:15 น.',
       status: 'อัปเดตล่าสุดวันนี้',
       variable: 'window.renderWbsTab, getFilteredWbsData'
+    },
+    {
+      path: 'js/data_materials_07.js',
+      title: 'ฐานข้อมูลรายการพัสดุค้างเบิก CN52N (ไฟล์ 07)',
+      role: 'จัดเก็บข้อมูลพัสดุค้างเบิกแบบบีบอัด Dictionary (เฉพาะ Mvt 281, รหัสพัสดุ 1*, เชื่อม WBS ไฟล์ 03 และ 04)',
+      recordsCount: '68,211 รายการ (เฉพาะ Mvt 281, 14 คอลัมน์)',
+      fileSize: '3.15 MB',
+      updatedAt: '30 ต.ค. 2569, 13:57 น.',
+      status: '100% ฐานข้อมูลอัปเดตล่าสุด',
+      variable: 'window.AUC_MAT07_COMPACT'
+    },
+    {
+      path: 'js/materials.js',
+      title: 'โมดูลจัดการเมนู "รายการพัสดุ" & เมนูเลือกคอลัมน์ (03 / 04 / 07)',
+      role: 'เชื่อม WBS ไฟล์ 03 -> 07 (องค์ประกอบ WBS) & 04 (ข้อกำหนดโครงการ /WBS), ตัวกรอง, เลือกคอลัมน์ 49 คอลัมน์, ส่งออก CSV',
+      recordsCount: '49 คอลัมน์เลือกแสดงได้',
+      fileSize: '38 KB',
+      updatedAt: '30 ต.ค. 2569, 14:05 น.',
+      status: 'อัปเดตล่าสุดวันนี้',
+      variable: 'window.renderMaterialsTab'
     },
     {
       path: 'js/data_sep.js',
@@ -433,6 +511,917 @@
    */
   const BASE_AUDIT_LOGS = [
     {
+      id: 'log_000_history_encoding_utf8_restoration',
+      timestamp: '2026-10-31 21:55:00',
+      timestampTh: '31 ต.ค. 2569, 21:55 น.',
+      type: 'EDIT',
+      typeBadge: 'แก้ไขฟื้นฟูภาษาไทยในประวัติ',
+      badgeClass: 'badge-type-edit',
+      title: 'แก้ไขและฟื้นฟูการเข้ารหัสตัวอักษรภาษาไทย (UTF-8 Restoration) ในระบบประวัติการแก้ไขข้อมูล แก้ปัญหาภาษาต่างดาว (Mojibake) ให้อ่านออกถูกต้องสมบูรณ์',
+      targetSubject: 'เมนูประวัติการนำเข้าและแก้ไขข้อมูล (BASE_AUDIT_LOGS ใน js/data_history.js)',
+      storageFile: 'js/data_history.js, index.html',
+      changeSummary: 'แก้ไขข้อความประวัติการแก้ไขข้อมูลรายการล่าสุดที่ตัวอักษรภาษาไทยกลายเป็นอักขระผิดเพี้ยน (Mojibake) ให้กลับมาเป็นภาษาไทยที่คมชัดและถูกต้อง 100% พร้อมตรวจสอบระบบเข้ารหัส UTF-8 ทั้งไฟล์ไม่ให้มีภาษาต่างดาวหลงเหลือ',
+      details: '1) ฟื้นฟูข้อความภาษาไทยในประวัติการแก้ไขข้อมูล 3 รายการล่าสุด (log_000_materials_chart_remove_full_row_border, log_000_materials_chart_interactive_hover_and_budget_select, log_000_materials_scope_buttons_3rows_behind_reset) กลับเป็นภาษาไทยแท้ที่ถูกต้อง 2) ตรวจสอบการเข้ารหัส UTF-8 ทั้งไฟล์ data_history.js พบค่าภาษาต่างดาวเป็น 0 จุด 3) ปรับปรุง Cache Busters ของ js/data_history.js ใน index.html เป็น ?v=20261031_2155 เพื่อให้เบราว์เซอร์โหลดไฟล์ที่ถูกต้องทันที',
+      sourceFile: 'คำสั่งผู้ใช้งาน: แก้ไข ประวัติภาษาอ่านไม่ออก อีกแล้ว / แก้ไขให้หาย',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง'
+    },
+    {
+      id: 'log_000_materials_chart_remove_full_row_border',
+      timestamp: '2026-10-31 21:42:00',
+      timestampTh: '31 ต.ค. 2569, 21:42 น.',
+      type: 'EDIT',
+      typeBadge: 'เอากรอบทั้งบรรทัดกราฟออก',
+      badgeClass: 'badge-type-edit',
+      title: 'นำกรอบและเส้นขอบสีทองที่ล้อมรอบทั้งบรรทัดของแถวกราฟที่ถูกเลือกออก ให้คงเหลือเฉพาะการเน้นแท่งกราฟหรือชื่อพัสดุที่เลือก',
+      targetSubject: 'เมนูรายการพัสดุ (กราฟแนวนอน .mat-hchart-row.selected)',
+      storageFile: 'css/styles.css, js/materials.js, index.html, js/data_history.js',
+      changeSummary: 'ยกเลิกกรอบเส้นขอบสีทอง (border) และเงาเรืองแสง (box-shadow) ที่ครอบคลุมทั้งแถวกราฟ เพื่อให้หน้าตากราฟแนวนอนสะอาดตา โดยแท่งกราฟหรือชื่อพัสดุที่ถูกเลือกยังคงแสดงความโดดเด่นอย่างชัดเจน',
+      details: '1) ใน css/styles.css: ปรับ .mat-hchart-row.selected ให้ border: none !important; box-shadow: none !important; background: transparent !important; ทั้ง Dark และ Light Theme 2) ใน js/materials.js: ปรับการแสดงผลชื่อพัสดุ เมื่อเลือกแท่งงบประมาณสีแดงหรือส้ม ให้ชื่อพัสดุแสดงเป็นตัวหนังสือสีขาวสว่าง (.row-active-text) โดยไม่ต้องมีกรอบกล่องทองล้อมรอบชื่อ เว้นแต่คลิกที่ชื่อพัสดุโดยตรง 3) อัปเดต Cache Busters ใน index.html เป็น ?v=20261031_2142',
+      sourceFile: 'คำสั่งผู้ใช้งาน: ให้เอากรอบทั้งบรรทัด ออก (ภาพ media_1793457428465_633080dc.jpg)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ'
+    },
+    {
+      id: 'log_000_materials_chart_interactive_hover_and_budget_select',
+      timestamp: '2026-10-31 21:30:00',
+      timestampTh: '31 ต.ค. 2569, 21:30 น.',
+      type: 'EDIT',
+      typeBadge: 'เลือกกราฟแยกตามงบและโฮเวอร์เด่น',
+      badgeClass: 'badge-type-edit',
+      title: 'ปรับปรุงการเลือกกราฟแนวนอนพัสดุ: โฮเวอร์ชื่อ/แท่งแดง/ส้มให้แสดงตัวเด่นขึ้นมา และคลิกเลือกแท่งสีแดงหรือส้มเพื่อกรองตารางตามงบนั้นทันที',
+      targetSubject: 'เมนูรายการพัสดุ (กราฟแนวนอน #matHChartBody และการกรองตารางตามแท่งกราฟ)',
+      storageFile: 'js/materials.js, css/styles.css, index.html, js/data_history.js',
+      changeSummary: 'เพิ่มเอฟเฟกต์โฮเวอร์เรืองแสงให้ชื่อพัสดุ แท่งกราฟสีแดง (งบ I, P) และแท่งกราฟสีส้ม (งบ C) แสดงตัวเด่นขึ้นมา พร้อมรองรับการคลิกเลือกแท่งสีแดงเพื่อกรองตารางเฉพาะงบ I, P หรือคลิกแท่งสีส้มเพื่อกรองตารางเฉพาะงบ C หรือคลิกชื่อพัสดุเพื่อกรองทุกงบ',
+      details: '1) ใน js/materials.js: เพิ่มฟังก์ชัน window.selectMatChartItemWithBudget(name, budget, e) รองรับการเลือกพัสดุคู่กับประเภทงบประมาณ (\'IP\', \'C\', \'ALL\') พร้อมระบบ Toggle ซ้ำเพื่อยกเลิก 2) เพิ่มสถานะ matState.chartSelBudget ในการกรองแถวตารางพัสดุ getFilteredMaterialRows() ให้กรองรหัส WBS ขึ้นต้นด้วย I/P หรือ C ตรงตามแท่งกราฟที่คลิก 100% 3) แสดงสถานะแท่งกราฟที่ถูกเลือกด้วยคลาส .active-target (กรอบนีออนเรืองแสง) และหรี่แท่งที่ไม่ถูกเลือกด้วย .bar-dimmed พร้อมเครื่องหมาย ✓ ที่ชื่อพัสดุ 4) ใน css/styles.css: เพิ่มเอฟเฟกต์ :hover ขยายแท่งกราฟ scaleY(1.38) และเรืองแสงเงาแสงสดใสทั้งสีแดงและส้มพาสเทล และชื่อพัสดุสีทองสว่าง 5) เพิ่มปุ่ม #matClearChartSelBtn บนหัวตารางเพื่อความสะดวกในการปลดตัวกรองกราฟ 6) อัปเดต Cache Busters ใน index.html เป็น ?v=20261031_2130',
+      sourceFile: 'คำสั่งผู้ใช้งาน: แก้ไขการเลือกกราฟ หากนำเม้าไปชี้ ชื่อพัสดุ/กราฟสีแดงหรือส้ม ให้แสดงตัวเด่นขึ้นมา และเลือกแล้ว ทั้งชื่อพัสดุ/ กราฟสีแดงหหรือเหลือง ตารางจะเปลี่ยนตามที่เลือก (ภาพ media_1793455956856_13477f29.jpg)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'สูง'
+    },
+    {
+      id: 'log_000_materials_scope_buttons_3rows_behind_reset',
+      timestamp: '2026-10-31 21:18:00',
+      timestampTh: '31 ต.ค. 2569, 21:18 น.',
+      type: 'EDIT',
+      typeBadge: 'ปรับเลย์เอาต์ปุ่มสถิติ 3 บรรทัด',
+      badgeClass: 'badge-type-edit',
+      title: 'ย้ายปุ่มสรุปจำนวนงาน WBS/พัสดุ ไปไว้ด้านหลังปุ่มล้างตัวกรอง จัดวางเป็น 3 บรรทัดแคบกะทัดรัดพอดี',
+      targetSubject: 'เมนูรายการพัสดุ (แถบตัวกรองด้านบน #matSubFilterBar และปุ่ม #matToolbarWbsStats)',
+      storageFile: 'js/materials.js, css/styles.css, index.html, js/data_history.js',
+      changeSummary: 'ย้ายกลุ่มปุ่มสรุปสถิติจำนวนงาน WBS (รวม...งาน, พัสดุ...งาน, ไม่พบพัสดุ...งาน) จากด้านหน้าไปไว้ด้านหลังปุ่มล้างตัวกรอง จัดเรียงแนวตั้งเป็น 3 บรรทัดแคบพอดี เพิ่มพื้นที่แนวนอนให้ Dropdown ตัวกรอง WBS, วัสดุ และ SAP',
+      details: '1) ใน js/materials.js: ย้ายองค์ประกอบ #matToolbarWbsStats จากด้านหน้าตัวกรอง WBS ไปไว้ด้านหลังปุ่มล้างตัวกรอง (ต่อจาก #matSubFilterCount) 2) ปรับแต่งโครงสร้างปุ่มภายใน #matToolbarWbsStats ให้มีคลาส .scope-btn-label, .scope-btn-val, .scope-btn-extra และ .scope-btn-check 3) ใน css/styles.css: เพิ่มคลาส .mat-sf-wbs-stats-3rows จัดเลย์เอาต์แบบ flex-direction: column จำนวน 3 บรรทัด ขนาดกะทัดรัด (ความกว้าง min 154px, ความสูงบรรทัดละ ~19px) 4) รักษาฟังก์ชันคลิกกรองงานตามสถานะมี/ไม่มีพัสดุและเอฟเฟกต์สีเน้นตามเดิม 5) อัปเดต Cache Busters ใน index.html เป็น ?v=20261031_2118',
+      sourceFile: 'คำสั่งผู้ใช้งาน: แสดงไว้ด้านหลัง ล้างตัวกรองแสดงเป็น 3 บรรทัด แคบๆพอดี (ภาพ media_1793455670252_c103eaf9.jpg)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง'
+    },
+    {
+      id: 'log_000_materials_sync_chart_budget_to_table',
+      timestamp: '2026-10-31 21:08:00',
+      timestampTh: '31 ต.ค. 2569, 21:08 น.',
+      type: 'EDIT',
+      typeBadge: 'เชื่อมโยงงบกราฟกับตาราง',
+      badgeClass: 'badge-type-edit',
+      title: 'เชื่อมโยงตัวกรองงบประมาณจากกราฟแนวนอนสู่ตารางรายการพัสดุและตัวเลขสรุปทั้งหมด',
+      targetSubject: 'เมนูรายการพัสดุ (ฟังก์ชัน getFilteredMaterialRows และตาราง #matTableBody)',
+      storageFile: 'js/materials.js, js/data_history.js, index.html',
+      changeSummary: 'แก้ไขให้ตารางพัสดุกรองข้อมูลตามงบที่เลือกในกราฟ (งบ C หรือ งบ I, P) โดยตรง แก้ปัญหา WBS งบ I หลุดเข้ามาในตารางเมื่อเลือกงบ C และทำให้ยอดรวมค้างเบิกตรงกัน 100%',
+      details: '1) ใน js/materials.js (ฟังก์ชัน getFilteredMaterialRows): เพิ่มเงื่อนไขกรองรหัส WBS ตาม matState.chartBudgetFilter (\'C\' กรองเฉพาะ WBS ขึ้นต้นด้วย C, \'IP\' กรองเฉพาะ I และ P) และเพิ่ม chartBudgetFilter ลงใน cacheKey 2) ใน setMatChartBudgetFilter: เพิ่มการล้าง cacheKey รีเซ็ตหน้าเป็น 1 และเรียก renderMaterialsTab() เพื่อให้ตาราง ยอดรวมคอลัมน์ และการ์ด KPI สรุป อัปเดตยอดตรงกับกราฟทันที 3) เพิ่มป้ายแสดงงบที่เลือกใน matTableActiveCriteriaVal 4) อัปเดต Cache Busters ใน index.html เป็น ?v=20261031_2108',
+      sourceFile: 'คำสั่งผู้ใช้งาน: ตรวจสอบทำไม ในกราฟ กับตาราง ไม่ตรงกัน เลือกงบ C ในกราฟ แต่ตาราง มี I มาด้วย ให้แก้ไขตารางอ้างอิง ที่เลือกตามกราฟ (ภาพ media_1793455293232_241440be.jpg)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'สูง'
+    },
+    {
+      id: 'log_000_materials_move_scope_buttons_to_top_filter_bar',
+      timestamp: '2026-10-31 20:58:00',
+      timestampTh: '31 ต.ค. 2569, 20:58 น.',
+      type: 'EDIT',
+      typeBadge: 'ย้ายปุ่มสถิติขึ้นบนตัวกรอง',
+      badgeClass: 'badge-type-edit',
+      title: 'ย้ายกลุ่มปุ่มสรุปจำนวนงาน WBS/พัสดุ ขึ้นไปไว้บนแถบตัวกรองด้านบน พร้อมปรับดีไซน์สีปุ่มใหม่ให้สวยงามหรูหรา',
+      targetSubject: 'เมนูรายการพัสดุ (แถบตัวกรองด้านบน #matSubFilterBar และหัวตารางพัสดุ #matTableCard)',
+      storageFile: 'js/materials.js, css/styles.css, js/data_history.js, index.html',
+      changeSummary: 'ย้ายปุ่ม \'รวม X งาน\', \'พัสดุ X งาน\', \'ไม่พบพัสดุ Y งาน\' จากหัวตารางด้านล่างขึ้นไปไว้บนแถบตัวกรองด้านบน (#matSubFilterBar) และปรับแต่งสีปุ่มเป็นไล่เฉดทองหรูหรา, เขียวมรกต และส้มแดงเด่นชัด',
+      details: '1) ใน js/materials.js: ย้ายองค์ประกอบ #matToolbarWbsStats จาก wbs-table-toolbar-left ในหัวตารางขึ้นไปวางต่อจากหัวข้อ \'🔎 ตัวกรองรายการพัสดุ\' ใน #matSubFilterBar 2) ปรับโครงสร้าง HTML และคลาสของปุ่มเป็น .mat-scope-btn (.btn-scope-all, .btn-scope-hasmat, .btn-scope-nomat) พร้อมป้ายเช็คถูก ✓ 3) ใน css/styles.css: ดีไซน์สีปุ่มใหม่แบบไล่เฉดสีนูนมิติระดับพรีเมียม (ทอง Royal PEA Gold, เขียว Radiant Emerald, ส้มแดง Sunset Coral Alert) พร้อมแสงเงาและโหมดสว่าง 4) อัปเดต Cache Busters ใน index.html เป็น ?v=20261031_2058',
+      sourceFile: 'คำสั่งผู้ใช้งาน: ย้ายไปด้านบนตัวกรอง แก้ไขสีปุ่มให้สวยงามกว่านี้ (ภาพ media_1793453624655_e4eeed16.jpg)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง'
+    },
+    {
+      id: 'log_000_materials_chart_flat_colors_and_clean_budget_legend',
+      timestamp: '2026-10-31 20:49:00',
+      timestampTh: '31 ต.ค. 2569, 20:49 น.',
+      type: 'EDIT',
+      typeBadge: 'ปรับกราฟสีเดี่ยวและปุ่มเลือกงบ',
+      badgeClass: 'badge-type-edit',
+      title: 'ปรับกราฟแท่งค้างเบิกเป็นสีเดี่ยวไม่ไล่เฉด และปรับปุ่มแสดงสถานะงบที่เลือกให้กระชับตามคำสั่ง',
+      targetSubject: 'เมนูรายการพัสดุ (กราฟแนวนอนปริมาณค้างเบิก #matHChartCard)',
+      storageFile: 'css/styles.css, js/materials.js, js/data_history.js, index.html',
+      changeSummary: 'ปรับแท่งกราฟทั้ง 2 งบเป็นสีเดี่ยว (Solid Flat Color) ไม่ไล่เฉดสี, เพิ่มป้ายแสดงสถานะงบที่กำลังเลือก (✓ เลือกอยู่) และนำปุ่ม \'ทั้ง 2 งบ\' ออกตามสั่ง',
+      details: '1) ใน css/styles.css: ปรับ .mat-hchart-bar.bar-red เป็นสีแดงทึบ #EF4444 และ .mat-hchart-bar.bar-orange เป็นสีส้มพาสเทล #FFAF75 ไม่ใช้ linear-gradient ตามคำสั่ง 2) ใน js/materials.js: นำปุ่ม \'🌐 ทั้ง 2 งบ\' ออก เหลือปุ่ม งบ I, P และ งบ C ซึ่งแสดงป้ายไฮไลท์ ✓ เลือกอยู่ อย่างชัดเจน และสามารถคลิกซ้ำที่ปุ่มเพื่อกลับสู่การแสดงผลทั้ง 2 งบได้ 3) อัปเดต Cache Busters ใน index.html เป็น ?v=20261031_2049',
+      sourceFile: 'คำสั่งผู้ใช้งาน: กราฟสีทั้ง 2 แัน ไม่ต้องไล่เฉดสี / วงเหลืองให้ แสดงว่าเลือกอันไหนอยู่ / เอาออก (ภาพ media_1793454489278_c11204d8.jpg)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง'
+    },
+    {
+      id: 'log_000_materials_chart_pastel_orange',
+      timestamp: '2026-10-31 20:41:00',
+      timestampTh: '31 ต.ค. 2569, 20:41 น.',
+      type: 'EDIT',
+      typeBadge: 'ปรับโทนสีส้มพาสเทล',
+      badgeClass: 'badge-type-edit',
+      title: 'ปรับแต่งสีกราฟแท่งงบ C เป็นสีส้มพาสเทลอ่อน (Soft Pastel Orange)',
+      targetSubject: 'เมนูรายการพัสดุ (กราฟแนวนอนปริมาณค้างเบิก #matHChartCard)',
+      storageFile: 'css/styles.css, js/materials.js, js/data_history.js, index.html',
+      changeSummary: 'ปรับโทนสีแท่งกราฟงบ C, จุดกำกับสีกราฟ (Legend) และตัวเลขปริมาณค้างเบิก เป็นสีส้มพาสเทลละมุนตา (#FA9E5C -> #FFB885 -> #FFD6B3)',
+      details: '1) ใน css/styles.css: ปรับ .mat-hchart-bar.bar-orange เป็นไล่เฉดส้มพาสเทลอ่อนละมุนตา linear-gradient(90deg, #FA9E5C 0%, #FFB885 60%, #FFD6B3 100%) พร้อมปรับแสงเงา box-shadow 2) ปรับจุดกำกับสีกราฟ .lg-orange เป็น #FFAF75 และปรับตัวเลขค้างเบิก .val-orange เป็น #FFCCA3 (Dark) / #D96B27 (Light) 3) ใน js/materials.js: ปรับข้อความ Legend เป็น \'ค้างเบิก งบ C (สีส้มพาสเทล)\' และ Tooltip 4) อัปเดต Cache Busters ใน index.html เป็น ?v=20261031_2041',
+      sourceFile: 'คำสั่งผู้ใช้งาน: แก้ไขสีส้มแบบพาสเทล อ่อนๆ',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ'
+    },
+    {
+      id: 'log_000_materials_chart_dual_budget_colors',
+      timestamp: '2026-10-31 20:40:00',
+      timestampTh: '31 ต.ค. 2569, 20:40 น.',
+      type: 'EDIT',
+      typeBadge: 'แยกสีกราฟค้างเบิกตามงบ',
+      badgeClass: 'badge-type-edit',
+      title: 'ปรับสีกราฟปริมาณค้างเบิกแยกตามงบ C (ส้ม) และงบ I, P (แดง) พร้อมแสดงแท่งรวมแบบแยกสี',
+      targetSubject: 'เมนูรายการพัสดุ (กราฟแนวนอนปริมาณค้างเบิก #matHChartCard)',
+      storageFile: 'js/materials.js, css/styles.css, js/data_history.js, index.html',
+      changeSummary: 'กำหนดให้ WBS ขึ้นต้นด้วย C ใช้แท่งกราฟสีส้ม, ขึ้นต้นด้วย I, P ใช้แท่งกราฟสีแดง และหากเลือกแสดงทั้งหมดให้รวมแท่งกราฟโดยแสดงสีแดงขึ้นก่อนตามด้วยสีส้มในแท่งเดียวกัน',
+      details: '1) ใน js/materials.js (ฟังก์ชัน renderMatRemainChart): จัดกลุ่มปริมาณค้างเบิกแยกตามรหัส WBS ขึ้นต้นด้วย C (remC) และ I, P (remIp) โดยหากพัสดุมีทั้งสองงบ จะแสดงแท่งแดงก่อนแล้วต่อด้วยแท่งส้มในแท่งเดียวกัน พร้อมแสดงตัวเลขแยกสี <span class="val-red">X</span> + <span class="val-orange">Y</span> (รวม Z) 2) ปรับคำอธิบายสีกราฟ (Legend) เพิ่มจุดสีส้มสำหรับค้างเบิก งบ C 3) ใน css/styles.css: เพิ่มสไตล์ .mat-hchart-bar.bar-orange, .bar-seg-first, .bar-seg-last, .lg-orange, .val-orange และรองรับ Dark/Light theme 4) อัปเดต Cache Busters ใน index.html เป็น ?v=20261031_2041',
+      sourceFile: 'คำสั่งผู้ใช้งาน: แก้ไขเฉพาะกราฟนี้เท่านั้น ให้สีกราฟปริมาณค้างเบิกแสดงแตกต่างกันระหว่าง 2 งบ (C = ส้ม, I,P = แดง, แสดงทั้งหมดรวมกันแดงขึ้นก่อนตามด้วยส้ม) (ภาพ media_1793451470677_9a9bc9de.jpg)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง'
+    },
+    {
+      id: 'log_000_materials_remove_03_from_scope_pill',
+      timestamp: '2026-10-31 20:28:00',
+      timestampTh: '31 ต.ค. 2569, 20:28 น.',
+      type: 'EDIT',
+      typeBadge: 'ตัดข้อความ 03 ออก',
+      badgeClass: 'badge-type-edit',
+      title: 'นำข้อความ "03" ออกจากป้ายแสดงสถานะเกณฑ์วัดตารางพัสดุ',
+      targetSubject: 'เมนูรายการพัสดุ (ป้ายเกณฑ์วัด #matTableActiveCriteriaVal)',
+      storageFile: 'js/materials.js, js/data_history.js, index.html',
+      changeSummary: 'แก้ไขข้อความในป้ายเกณฑ์วัดจาก "X งาน / Y งาน 03 • Z รายการพัสดุ" เป็น "X งาน / Y งาน • Z รายการพัสดุ" ตามคำสั่งผู้ใช้งาน',
+      details: '1) ใน js/materials.js (ฟังก์ชัน renderMaterialsTab): ปรับ rowsExtra ใน critValEl โดยตัดคำว่า "03" ออก เหลือเพียง "/ Y งาน" 2) อัปเดต Cache Busters ใน index.html เป็น ?v=20261031_2028',
+      sourceFile: 'คำสั่งผู้ใช้งาน: 03 เอาออก (ภาพ media_1793451264351_58b5522a.jpg)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ'
+    },
+    {
+      id: 'log_000_materials_rename_no_mat_pill',
+      timestamp: '2026-10-31 20:25:00',
+      timestampTh: '31 ต.ค. 2569, 20:25 น.',
+      type: 'EDIT',
+      typeBadge: 'ปรับข้อความปุ่มสถานะพัสดุ',
+      badgeClass: 'badge-type-edit',
+      title: 'เปลี่ยนข้อความปุ่มตัวกรองและสรุปสถานะพัสดุจาก "ไม่มีพัสดุ" เป็น "ไม่พบพัสดุ"',
+      targetSubject: 'เมนูรายการพัสดุ (ปุ่มตัวกรองสถานะพัสดุในแถบเครื่องมือ #matTableCard และสรุปใต้ WBS)',
+      storageFile: 'js/materials.js, js/data_history.js, index.html',
+      changeSummary: 'แก้ไขข้อความแสดงผลบนปุ่มตัวกรองสถานะพัสดุจาก "⚠️ ไม่มีพัสดุ" เป็น "⚠️ ไม่พบพัสดุ" ตามคำสั่งผู้ใช้งาน พร้อมปรับปรุง Tooltip และข้อความสรุปใต้หัวคอลัมน์ WBS ให้สอดคล้องกัน',
+      details: '1) ใน js/materials.js (ฟังก์ชัน renderMaterialsTab): แก้ไขข้อความปุ่มตัวกรองย่อยจาก "⚠️ ไม่มีพัสดุ" เป็น "⚠️ ไม่พบพัสดุ" 2) แก้ไขข้อความสรุปใน elWbsSub จาก "ไม่มีพัสดุ" เป็น "ไม่พบพัสดุ" 3) อัปเดต Cache Busters ใน index.html เป็น ?v=20261031_2028',
+      sourceFile: 'คำสั่งผู้ใช้งาน: แก้ไข เป็น ไม่พบพัสดุ (ภาพ media_1793451222480_89eed271.jpg)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ'
+    },
+    {
+      id: 'log_000_restore_data_history_and_fix_mojibake',
+      timestamp: '2026-10-31 20:22:00',
+      timestampTh: '31 ต.ค. 2569, 20:22 น.',
+      type: 'EDIT',
+      typeBadge: 'กู้คืนหน้าประวัติข้อมูล & แก้ภาษา',
+      badgeClass: 'badge-type-edit',
+      title: 'กู้คืนโค้ดส่วนแสดงผลหน้าประวัติข้อมูลและแก้ไขข้อความภาษาไทยให้อ่านออกสมบูรณ์ 100%',
+      targetSubject: 'หน้าประวัติข้อมูล & แหล่งจัดเก็บ (#tab-data-history, js/data_history.js)',
+      storageFile: 'js/data_history.js, index.html',
+      changeSummary: 'กู้คืนโครงสร้างฟังก์ชันการเรนเดอร์ทั้งหมดของหน้าประวัติข้อมูล (5,615 บรรทัด) ที่เคยถูกตัดขาดตอน พร้อมแปลงข้อความไทยที่เคยเป็นต่างดาว (Double-encoded) กลับเป็นภาษาไทย UTF-8 ที่ถูกต้องอ่านออกสมบูรณ์ครบทุกจุด',
+      details: '1) กู้คืนฟังก์ชันการทำงานทั้งหมดของโมดูล data_history.js (window.renderDataHistoryTab, ผัง Model View, ไทม์ไลน์บันทึกประวัติ, และการจัดการข้อมูล LocalStorage) 2) แก้ไขข้อความภาษาไทยที่อ่านไม่ออกด้วยการแปลงรหัส CP874 -> UTF-8 ทั้งหมด 2,232 บรรทัด 3) รวมประวัติการแก้ไขระบบล่าสุดทั้งหมด 268 รายการเข้าด้วยกันอย่างสมบูรณ์ 4) อัปเดต Version Cache Buster ใน index.html เป็น ?v=20261031_2028',
+      sourceFile: 'คำสั่งผู้ใช้งาน: หน้าประวัติข้อมูลหายหมดเลย แก้ไขด่วน และ แก้ไขภาษาด้วย อ่านไม่ออก',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'วิกฤต (กู้คืนหน้าประวัติข้อมูลและระบบ Model View ให้กลับมาใช้งานได้สมบูรณ์)'
+    },
+    {
+      id: 'log_000_materials_sort_english_desc_first',
+      timestamp: '2026-10-31 15:30:00',
+      timestampTh: '31 ต.ค. 2569, 15:30 น.',
+      type: 'EDIT',
+      typeBadge: 'ปรับเรียงลำดับตัวกรองพัสดุ',
+      badgeClass: 'badge-type-edit',
+      title: 'ปรับลำดับตัวกรองข้อความพัสดุให้รายการภาษาอังกฤษแสดงบนสุดเสมอ',
+      targetSubject: 'เมนูรายการพัสดุ (ตัวกรองข้อความพัสดุ #matFilterMatDesc, ตารางพัสดุ และกราฟแท่ง)',
+      storageFile: 'js/materials.js, js/data_history.js, index.html',
+      changeSummary: 'ปรับปรุงฟังก์ชันเปรียบเทียบข้อความพัสดุ compareMatDescEnglishFirst() ให้เรียงรายการที่เป็นภาษาอังกฤษ/ตัวเลขอารบิก (A-Z) อยู่ด้านบนสุดเสมอ แล้วตามด้วยรายการภาษาไทย (ก-ฮ) ที่ด้านล่าง',
+      details: '1) สร้างฟังก์ชัน compareMatDescEnglishFirst(a, b) ตรวจสอบอักษรเริ่มต้น โดยให้ภาษาอังกฤษ/สัญลักษณ์ภาษาอังกฤษอยู่ก่อนภาษาไทย 2) นำมาใช้ใน refreshMatSubFilterOptions() สำหรับดรอปดาวน์ #matFilterMatDesc 3) นำมาใช้ในการเรียงลำดับคอลัมน์ \"ข้อความพัสดุ\" ในตาราง และการเรียงชื่อพัสดุในกราฟแท่งแนวนอน',
+      sourceFile: 'คำสั่งผู้ใช้งาน: ตัวกรองข้อความพัสดุ ให้แก้ไขเป็น รายการภาษาอังกฤษ บนสุด',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง'
+    },
+    {
+      id: 'log_000_materials_update_wbs_label_units',
+      timestamp: '2026-10-31 15:20:00',
+      timestampTh: '31 ต.ค. 2569, 15:20 น.',
+      type: 'EDIT',
+      typeBadge: 'ปรับข้อความสรุปงาน',
+      badgeClass: 'badge-type-edit',
+      title: 'นำข้อความซ้ำออก และเปลี่ยนหน่วยนับ "รายการ" และ "WBS" เป็น "งาน"',
+      targetSubject: 'เมนูรายการพัสดุ (ป้ายเกณฑ์วัด #matTableActiveCriteriaVal และปุ่มสรุป Toolbar #matToolbarWbsStats)',
+      storageFile: 'js/materials.js, js/data_history.js, index.html',
+      changeSummary: 'นำข้อความ "• ซ้ำ N รายการ" ออกทั้งหมด พร้อมเปลี่ยนคำว่า "WBS" และ "รายการ" เป็นคำว่า "งาน" ตามคำสั่งผู้ใช้งาน',
+      details: '1) นำข้อความ "• ซ้ำ..." ออกจากป้ายเกณฑ์วัดและปุ่มสรุป Toolbar ตารางพัสดุ 2) เปลี่ยนข้อความระบุจำนวนในป้ายเกณฑ์วัดจาก "WBS" และ "รายการ 03" เป็น "งาน" เช่น "(1 งาน / 2,083 งาน 03 • 86 รายการพัสดุ)" 3) เปลี่ยนข้อความในปุ่มสรุป Toolbar จาก "(2,083 รายการ)" เป็น "(2,083 งาน)"',
+      sourceFile: 'คำสั่งผู้ใช้งาน: เอาซ้ำออก และเปลี่ยน รายการ เป็นงาน และ WBS เปลี่ยนเป็น งาน (ภาพ media_1793434542712_bd428678.jpg)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ'
+    },
+    {
+      id: 'log_000_materials_update_no_mat_text',
+      timestamp: '2026-10-31 15:18:00',
+      timestampTh: '31 ต.ค. 2569, 15:18 น.',
+      type: 'EDIT',
+      typeBadge: 'ปรับข้อความตารางพัสดุ',
+      badgeClass: 'badge-type-edit',
+      title: 'ปรับข้อความสถานะไม่มีพัสดุในตารางเป็น "ไม่มีรายการพัสดุค้างเบิก"',
+      targetSubject: 'เมนูรายการพัสดุ (เซลล์คอลัมน์ข้อความวัสดุของงานที่ไม่มีพัสดุ)',
+      storageFile: 'js/materials.js, js/data_history.js, index.html',
+      changeSummary: 'แก้ไขข้อความในคอลัมน์ข้อความวัสดุจาก "ไม่มีรายการพัสดุ" เป็น "ไม่มีรายการพัสดุค้างเบิก" ตามคำสั่งผู้ใช้งาน',
+      details: '1) แก้ไขข้อความในเซลล์คอลัมน์ข้อความวัสดุ (matDesc) สำหรับงาน WBS ที่ไม่มีรายการในไฟล์ 07 จาก "⚠️ ไม่มีรายการพัสดุ" เป็น "⚠️ ไม่มีรายการพัสดุค้างเบิก" 2) อัปเดตค่าฟิลด์ matDesc ของแถว placeholder (noMat: true) ใน ensureMaterialsHydrated() ให้ตรงกัน',
+      sourceFile: 'คำสั่งผู้ใช้งาน: ให้แก้ไข ไม่มีรายการพัสดุค้างเบิก (ภาพ media_1793434360262_d9d0c6f2.jpg)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ'
+    },
+    {
+      id: 'log_000_materials_cascading_subfilters',
+      timestamp: '2026-10-31 15:10:00',
+      timestampTh: '31 ต.ค. 2569, 15:10 น.',
+      type: 'EDIT',
+      typeBadge: 'ตัวกรองพัสดุเชื่อมโยงกัน',
+      badgeClass: 'badge-type-edit',
+      title: 'ปรับตัวกรองรายการพัสดุ (WBS และข้อความวัสดุ) ให้แสดงเฉพาะตัวเลือกที่ตรงกับเงื่อนไขที่เลือก (Cascading Sub-filters)',
+      targetSubject: 'เมนูรายการพัสดุ (Dropdown #matFilterWbs และ #matFilterMatDesc บนแถบเรืองแสง)',
+      storageFile: 'js/materials.js, js/data_history.js, index.html',
+      changeSummary: 'เมื่อเลือกงาน WBS จะกรองแสดงเฉพาะข้อความวัสดุที่อยู่ในงานนั้น และเมื่อเลือกข้อความวัสดุจะกรองแสดงเฉพาะงาน WBS ที่มีวัสดุนั้น ไม่แสดงทุกรายการตลอดเวลา',
+      details: '1) ใน refreshMatSubFilterOptions() ปรับการสร้างตัวเลือกของ Dropdown ข้อความวัสดุ (#matFilterMatDesc) ให้แสดงเฉพาะพัสดุในงาน WBS ที่เลือก (เช่น เมื่อเลือก WBS C-67-I-BLNSR.0160.02.2 จะแสดงเฉพาะ 4 รายการพัสดุของงานนั้น ไม่แสดง 530 รายการทั้งหมด) 2) ปรับการสร้างตัวเลือกของ Dropdown WBS (#matFilterWbs) ให้แสดงเฉพาะงาน WBS ที่มีวัสดุที่เลือก 3) ปรับป้ายหัวตัวเลือกเป็น "พัสดุในงานนี้ (N รายการ)" หรือ "งานที่มีพัสดุนี้ (N งาน)" ให้ชัดเจน 4) เพิ่มระบบป้องกันความขัดแย้งของตัวเลือก เมื่อสลับงาน WBS ที่ไม่มีวัสดุเดิม ระบบจะรีเซ็ตค่าพัสดุอัตโนมัติ',
+      sourceFile: 'คำสั่งผู้ใช้งาน: ตัวกรองรายการพัสดุ ให้แสดงเฉพาะรายการ ที่ขึ้นกับตัวกรองที่เลือก ไม่ต้องแสดงทุกรายการตลอดเวลา (ภาพ media_1793433111895_1b956200.jpg)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง'
+    },
+    {
+      id: 'log_000_materials_default_sort_remain_qty_desc',
+      timestamp: '2026-10-31 15:05:00',
+      timestampTh: '31 ต.ค. 2569, 15:05 น.',
+      type: 'CONFIG',
+      typeBadge: 'ตั้งค่าเรียงลำดับตาราง',
+      badgeClass: 'badge-type-config',
+      title: 'กำหนด Default เรียงลำดับตารางรายการพัสดุตามปริมาณค้างเบิกสูงสุดอยู่ด้านบนสุดเสมอ',
+      targetSubject: 'เมนูรายการพัสดุ (การเรียงลำดับตาราง #matDataTable คอลัมน์ remainQty)',
+      storageFile: 'js/materials.js, js/data_history.js, index.html',
+      changeSummary: 'ตั้งค่าเริ่มต้น (Default) ให้ตารางรายการพัสดุเรียงลำดับตามปริมาณค้างเบิกจากมากไปน้อย (descending) เสมอ',
+      details: '1) ปรับค่าเริ่มต้น matState.sortCol เป็น "remainQty" และ matState.sortAsc เป็น false เพื่อให้รายการพัสดุที่มีปริมาณค้างเบิกสูงสุดแสดงอยู่ด้านบนสุดเสมอ 2) อัปเดตส่วนหัวคอลัมน์ "ปริมาณค้างเบิก" ให้แสดงลูกศรชี้ลง (▼) แสดงสถานะเรียงลำดับจากมากไปน้อย 3) ปรับให้ฟังก์ชันรีเซ็ตและสลับคอลัมน์ตัวเลขเริ่มต้นเรียงจากมากไปน้อย',
+      sourceFile: 'คำสั่งผู้ใช้งาน: default ให้แสดงปริมาณค้างเบิกสูงสุด ด้านบนสุดเสมอ (ภาพ media_1793432765632_96a5d732.jpg)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ'
+    },
+    {
+      id: 'log_000_materials_remove_subfilter_opt_count',
+      timestamp: '2026-10-31 15:00:00',
+      timestampTh: '31 ต.ค. 2569, 15:00 น.',
+      type: 'EDIT',
+      typeBadge: 'นำป้ายสถิติตัวกรองออก',
+      badgeClass: 'badge-type-edit',
+      title: 'นำข้อความสรุปจำนวนตัวเลือก WBS และพัสดุออกจากแถบตัวกรองเรืองแสงสีม่วง',
+      targetSubject: 'เมนูรายการพัสดุ (แถบตัวกรองเรืองแสง #matSubFilterBar ส่วน #matSubFilterOptCount)',
+      storageFile: 'js/materials.js, js/data_history.js, index.html',
+      changeSummary: 'นำข้อความแสดงสถิติจำนวน "WBS N • วัสดุ N" ทางขวาสุดของแถบตัวกรองเรืองแสงสีม่วงออกตามคำสั่งผู้ใช้งาน',
+      details: '1) นำองค์ประกอบ <span id="matSubFilterOptCount"> ออกจากแถบตัวกรองเรืองแสงสีม่วง (#matSubFilterBar) เพื่อให้ส่วนท้ายของแถบมีความสะอาด เรียบร้อย และไม่แสดงข้อความสถิติที่ซ้ำซ้อน 2) ลบฟังก์ชันการอัปเดตข้อความสถิติตัวเลือกดังกล่าวใน refreshMatSubFilterOptions()',
+      sourceFile: 'คำสั่งผู้ใช้งาน: วงแดงเอาออก (ภาพ media_1793432356330_72074cbb.jpg)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ'
+    },
+    {
+      id: 'log_000_materials_sap_filter_remove_counts_and_fix_show_all',
+      timestamp: '2026-10-31 14:55:00',
+      timestampTh: '31 ต.ค. 2569, 14:55 น.',
+      type: 'EDIT',
+      typeBadge: 'ปรับปรุงตัวกรองสถานะ SAP',
+      badgeClass: 'badge-type-edit',
+      title: 'นำจำนวนตัวเลขออกจากตัวกรองสถานะ SAP และปรับให้ปุ่มแสดงทั้งหมดทำงานได้สมบูรณ์',
+      targetSubject: 'เมนูรายการพัสดุ (Dropdown ตัวกรองสถานะ SAP #matSapThDropdownPanel)',
+      storageFile: 'js/materials.js, js/data_history.js, index.html',
+      changeSummary: 'นำตัวเลขจำนวนรายการทั้งหมดและจำนวนของแต่ละสถานะ SAP ออก พร้อมปรับให้ตัวเลือก "แสดงทั้งหมด" มี Checkbox แสดงสถานะการเลือกและคลิกใช้งานได้จริง',
+      details: '1) นำตัวเลขจำนวนรวมด้านบน (เช่น 65,275) และตัวเลขจำนวนรายการด้านขวาของแต่ละสถานะ SAP (เช่น 37,944, 16,984 ฯลฯ) ออกตามคำสั่งผู้ใช้งาน 2) ปรับตัวเลือก "แสดงทั้งหมด" เป็นรายการแรกพร้อม Checkbox และไฮไลต์สีทอง เมื่ออยู่ในสถานะไม่กรองจะติ๊กถูกอัตโนมัติ 3) ปรับปรุงให้คลิกเลือก "แสดงทั้งหมด" เพื่อรีเซ็ตสถานะและแสดงผลรายการพัสดุทั้งหมดได้ทันที ทั้งจากรายการแรกและปุ่มด้านล่าง 4) เชื่อมโยงการอัปเดตป้ายปุ่มด้านบนเป็น "ทั้งหมด" หรือชื่อสถานะที่เลือกแบบ Real-time',
+      sourceFile: 'คำสั่งผู้ใช้งาน: เอาจำนวนออก และแสดงทั้งหมดให้ใช้ได้จริง (ภาพ media_1793432289560_6545a59d.jpg)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง'
+    },
+    {
+      id: 'log_000_materials_remove_clear_table_selections_btn',
+      timestamp: '2026-10-31 14:50:00',
+      timestampTh: '31 ต.ค. 2569, 14:50 น.',
+      type: 'EDIT',
+      typeBadge: 'นำปุ่มล้างตัวเลือกออก',
+      badgeClass: 'badge-type-edit',
+      title: 'นำปุ่มล้างตัวเลือกทั้งหมดในตารางนี้ออกจาก Toolbar ตารางรายการพัสดุ',
+      targetSubject: 'เมนูรายการพัสดุ (ปุ่ม #btnClearMatTableSelections บน Toolbar ตารางพัสดุ)',
+      storageFile: 'js/materials.js, js/data_history.js, index.html',
+      changeSummary: 'นำปุ่มล้างตัวเลือกทั้งหมดในตารางนี้ (#btnClearMatTableSelections) ออกจากแถบเครื่องมือของตารางรายการพัสดุตามคำสั่งผู้ใช้งาน',
+      details: '1) นำปุ่ม "ล้างตัวเลือกทั้งหมดในตารางนี้" (#btnClearMatTableSelections) ออกจากแถบเครื่องมือของตารางรายการพัสดุ เพื่อลดความซ้ำซ้อน เนื่องจากมีปุ่ม "ล้างตัวกรอง" บนแถบตัวกรองเรืองแสงสีม่วงด้านบน (#matSubFilterBar) อยู่แล้ว 2) จัดระยะห่างปุ่มแถวต่อหน้าและปุ่มขยายเต็มจอให้กระชับและสบายตายิ่งขึ้น',
+      sourceFile: 'คำสั่งผู้ใช้งาน: วงเหลืองเอาออก (ภาพ media_1793432024264_81ca6251.jpg)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ'
+    },
+    {
+      id: 'log_000_materials_show_duplicate_wbs_count',
+      timestamp: '2026-10-31 14:45:00',
+      timestampTh: '31 ต.ค. 2569, 14:45 น.',
+      type: 'EDIT',
+      typeBadge: 'แสดงจำนวนรวม WBS ซ้ำ',
+      badgeClass: 'badge-type-edit',
+      title: 'เพิ่มการแสดงผลจำนวนรวม WBS ที่ซ้ำกันในปุ่มสรุปงาน WBS ของตารางรายการพัสดุ',
+      targetSubject: 'เมนูรายการพัสดุ (ปุ่มสถิติ WBS ใน Toolbar ตารางพัสดุ #matToolbarWbsStats)',
+      storageFile: 'js/materials.js, css/styles.css, js/data_history.js, index.html',
+      changeSummary: 'แสดงจำนวนรายการ WBS ที่ซ้ำกัน (เช่น ซ้ำ 14 รายการ) เพิ่มเติมในปุ่มสรุปขอบเขตงาน WBS และป้ายเกณฑ์วัดของตารางพัสดุ',
+      details: '1) ในปุ่มสรุปขอบเขตงาน WBS (.btn-tb-scope-pill) เพิ่มการคำนวณและแสดงจำนวนรายการ WBS ที่ซ้ำกันอย่างชัดเจน เช่น "รวม 2,069 งาน (2,083 รายการ • ซ้ำ 14 รายการ)" พร้อมไฮไลต์ข้อความสีทองเรืองแสง (.pill-dup-tag) 2) เพิ่มการแสดงจำนวนรายการซ้ำในป้ายเกณฑ์วัดด้านซ้ายของตาราง (#matTableActiveCriteriaVal) เช่น "(2,069 WBS / 2,083 รายการ 03 • ซ้ำ 14 รายการ • ...)" 3) แสดงผลแบบไดนามิกตามเงื่อนไขตัวกรอง และไม่แสดงส่วนซ้ำหากไม่มี WBS ที่ซ้ำกัน 4) อัปเดต Tooltip อธิบายรายละเอียดขอบเขตงาน WBS ครบถ้วน',
+      sourceFile: 'คำสั่งผู้ใช้งาน: ให้แสดงเพิ่ม จำนวนรวม WBS ซ้ำกันด้วย',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง'
+    },
+    {
+      id: 'log_000_materials_remove_chart_selbar',
+      timestamp: '2026-10-31 14:35:00',
+      timestampTh: '31 ต.ค. 2569, 14:35 น.',
+      type: 'EDIT',
+      typeBadge: 'นำแถบกรองในกราฟออก',
+      badgeClass: 'badge-type-edit',
+      title: 'นำแถบแจ้งเตือนการเลือกวัสดุในกราฟแนวนอนออก และให้แสดงเฉพาะในตารางรายการพัสดุ',
+      targetSubject: 'เมนูรายการพัสดุ (แถบ #matHChartSelBar)',
+      storageFile: 'js/materials.js, css/styles.css, index.html',
+      changeSummary: 'นำแถบกรองสีแดงวงเหลือง (#matHChartSelBar) ออกจากการ์ดกราฟแนวนอน ให้การกรองตามวัสดุที่คลิกแสดงผลตรงที่ตารางรายการพัสดุอย่างเดียว',
+      details: '1) นำองค์ประกอบ #matHChartSelBar ออกจากการ์ดกราฟแนวนอน ไม่แสดงแถบแจ้งเตือนเกะกะสายตา 2) เมื่อคลิกแท่งกราฟแนวนอน ระบบจะไฮไลต์แท่งที่เลือกบนกราฟ และกรองตารางรายการพัสดุด้านล่างให้แสดงเฉพาะพัสดุนั้นทันที 3) เพิ่มข้อความระบุชื่อพัสดุที่เลือกในป้ายเกณฑ์วัดของตารางพัสดุ (#matTableActiveCriteriaVal) เพื่อให้ผู้ใช้ทราบเงื่อนไขการกรองบนตัวตารางโดยตรง 4) คลิกซ้ำที่แท่งเดิมเพื่อยกเลิกการเลือกได้ตามปกติ',
+      sourceFile: 'คำสั่งผู้ใช้งาน: วงเหลืองเอาออก แสดงเฉพาะที่รายการพัสดุอย่างเดียว',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ'
+    },
+    {
+      id: 'log_000_materials_move_wbs_stats_replace_search',
+      timestamp: '2026-10-31 14:30:00',
+      timestampTh: '31 ต.ค. 2569, 14:30 น.',
+      type: 'EDIT',
+      typeBadge: 'ปรับตำแหน่งสรุปงาน WBS',
+      badgeClass: 'badge-type-edit',
+      title: 'ย้ายปุ่มสรุปจำนวนงาน WBS จากหัวตารางมาแทนที่ช่องค้นหาเดิมในแถบเครื่องมือ',
+      targetSubject: 'เมนูรายการพัสดุ (แถบเครื่องมือตาราง #matToolbarWbsStats)',
+      storageFile: 'js/materials.js, css/styles.css, index.html',
+      changeSummary: 'นำช่องค้นหาเดิม (วงแดง) ออก และนำกล่องสรุปจำนวนงาน WBS รวม/มีพัสดุ/ไม่มีพัสดุ (วงเหลือง) จากหัวคอลัมน์ WBS มาแทนที่',
+      details: '1) นำช่องค้นหา #matLocalSearchInput ออกจากแถบเครื่องมือตารางพัสดุ 2) นำป้ายสรุปจำนวนงาน WBS (รวม...งาน, พัสดุ...งาน, ไม่มีพัสดุ...งาน) จากหัวคอลัมน์ WBS ขึ้นมาวางแทนที่ช่องค้นหาใน Toolbar (#matToolbarWbsStats) พร้อมรักษาการทำงานคลิกกรองงานมี/ไม่มีพัสดุ 3) ล้างส่วนแสดงผล metricHtml ในหัวคอลัมน์ WBS ให้เหลือเฉพาะชื่อคอลัมน์สะอาดตา 4) เพิ่มสไตล์ .btn-tb-scope-pill และ .tb-hasmat-group รองรับทั้ง Dark และ Light Theme',
+      sourceFile: 'คำสั่งผู้ใช้งาน: วงแดงเอาออก แล้วเอาวงเหลืองมาแทนที่',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ'
+    },
+    {
+      id: 'log_000_materials_sticky_purple_filter_and_reselect_fix',
+      timestamp: '2026-10-31 14:25:00',
+      timestampTh: '31 ต.ค. 2569, 14:25 น.',
+      type: 'EDIT',
+      typeBadge: 'ตัวกรองพัสดุ Sticky เรืองแสง & แก้เลือกซ้ำ',
+      badgeClass: 'badge-type-edit',
+      title: 'ปรับแถบตัวกรองรายการพัสดุให้ติดตรึงบนสุด (Sticky) ตลอดเวลา พื้นหลังม่วงเรืองแสง และแก้ปัญหาเลือกข้อมูลใหม่ไม่ขึ้น',
+      targetSubject: 'เมนูรายการพัสดุ (#matSubFilterBar)',
+      storageFile: 'js/materials.js, css/styles.css, index.html',
+      changeSummary: 'แถบตัวกรองหน้ารายการพัสดุติดบนสุดตลอดการเลื่อนหน้าจอ พื้นหลังม่วงไล่เฉดเรืองแสง และเปลี่ยน WBS / ข้อความวัสดุเป็น Select Dropdown พร้อมปุ่มเคลียร์ด่วน ✕ เลือกเปลี่ยนรายการใหม่ได้ตลอดเวลา',
+      details: '1) ปรับ .mat-sub-filter-bar เป็น position: sticky; top: var(--sticky-header-height, 134px); z-index: 92; ค้างตรึงใต้แถบ Sticky Header ตลอดเวลาแม้เลื่อนถึงล่างสุด 2) ปรับพื้นหลังเป็น Gradient สีม่วงเข้มเรืองแสงสไตล์ PEA พร้อมเงา Box-shadow สีม่วงทองและเส้นขอบทอง 3) แก้ปัญหาเลือกค่าแล้วเลือกใหม่ไม่ขึ้น โดยเปลี่ยนจาก input datalist เป็น select dropdown ที่คงรายการตัวเลือกทั้งหมดไว้ตลอด ทำให้ผู้ใช้คลิกเลือกเปลี่ยน WBS หรือข้อความวัสดุใหม่ได้ทันที 4) เพิ่มปุ่มกากบาทสีแดง ✕ ด้านข้างเพื่อล้างค่าตัวกรองรายช่องได้ด้วยคลิกเดียว',
+      sourceFile: 'คำสั่งผู้ใช้งาน: ตัวกรองให้คงแสดงไว้ด้าบบน และให้เห็นตลอดเวลา แม้เลื่อนมาล่างสุด และปรับพื้นหลังม่วงไล่เฉดสีสวยงามเรืองแสง / เลือกข้อมูลในตัวกรองแล้ว จะเลือกใหม่ทำไม่ขึ้นข้อมูล ให้แก้ไข',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง'
+    },
+    {
+      id: 'log_000_materials_hbar_chart',
+      timestamp: '2026-10-31 14:08:00',
+      timestampTh: '31 ต.ค. 2569, 14:08 น.',
+      type: 'EDIT',
+      typeBadge: 'เพิ่มกราฟแนวนอนหน้าพัสดุ',
+      badgeClass: 'badge-type-edit',
+      title: 'เพิ่มกราฟแนวนอนปริมาณค้างเบิกแยกตามข้อความวัสดุ ในเมนูรายการพัสดุ',
+      targetSubject: 'เมนูรายการพัสดุ (กราฟแนวนอน #matHChartCard)',
+      storageFile: 'js/materials.js, css/styles.css, index.html',
+      changeSummary: 'กราฟแท่งแดงแนวนอน เรียงมากสุดอยู่บน น้อยสุดอยู่ล่าง ลิงก์ตัวกรองทั้งหมด คลิกรายการเพื่อกรองตารางทางเดียว และเผื่อช่องกราฟเขียวสำหรับไฟล์ 08',
+      details: 'เพิ่ม renderMatRemainChart รวมปริมาณค้างเบิก (remainQty) ตาม matDesc จากแถวที่มีพัสดุและค้างเบิก > 0 เท่านั้น เรียกผ่าน getFilteredMaterialRows(false, true) เพื่อใช้ตัวกรองทั้งหมดยกเว้นตัวเลือกจากกราฟเอง เพิ่ม matState.chartSelDesc, selectMatChartItem / clearMatChartSelection (คลิกซ้ำเพื่อยกเลิก) การเลือกจากตารางไม่ส่งผลกลับมาที่กราฟ เพิ่มช่อง .track-green ใต้แท่งแดงทุกรายการ (data-stock-slot) สำหรับปริมาณคงเหลือในคลังจากไฟล์ 08 ในอนาคต จำกัดแสดง 500 อันดับแรกและเลื่อนดูได้',
+      sourceFile: 'คำสั่งผู้ใช้งาน: สร้างกราฟแนวนอนปริมาณค้างเบิก ตามภาพตัวอย่าง',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง'
+    },
+    {
+      id: 'log_000_materials_sap_panel_zindex',
+      timestamp: '2026-10-30 22:05:00',
+      timestampTh: '30 ต.ค. 2569, 22:05 น.',
+      type: 'EDIT',
+      typeBadge: 'แก้ป๊อปอัปสถานะ SAP โดนบัง',
+      badgeClass: 'badge-type-edit',
+      title: 'แก้รายการตัวกรองสถานะ SAP ถูกตารางบัง',
+      targetSubject: 'แถบตัวกรองหน้ารายการพัสดุ (.mat-sub-filter-bar)',
+      storageFile: 'css/styles.css, index.html',
+      changeSummary: 'เพิ่ม position:relative และ z-index ให้แถบตัวกรอง เพื่อให้ป๊อปอัปสถานะ SAP แสดงทับตาราง',
+      details: 'แถบใช้ backdrop-filter จึงสร้าง stacking context ทำให้ป๊อปอัปถูกการ์ดตารางที่อยู่ถัดมาทับ จึงกำหนด .mat-sub-filter-bar z-index 600 และ .mat-sf-sap-panel z-index 700',
+      sourceFile: 'คำสั่งผู้ใช้งาน: สถานะSAP โดนตารางบัง',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ'
+    },
+    {
+      id: 'log_000_materials_sap_filter_to_top',
+      timestamp: '2026-10-30 22:00:00',
+      timestampTh: '30 ต.ค. 2569, 22:00 น.',
+      type: 'EDIT',
+      typeBadge: 'ย้ายตัวกรองสถานะ SAP',
+      badgeClass: 'badge-type-edit',
+      title: 'ย้ายตัวกรองสถานะ SAP จากหัวตารางไปไว้แถบตัวกรองด้านบน (แทนตัวเดิม)',
+      targetSubject: 'เมนูรายการพัสดุ (ตัวกรองสถานะ SAP)',
+      storageFile: 'js/materials.js, css/styles.css, index.html',
+      changeSummary: 'เอาปุ่มกรองสถานะ SAP ออกจากหัวตาราง และแทนที่ Dropdown สถานะ SAP ด้านบนด้วยตัวเลือกหลายสถานะ (Multi-select) ชุดเดียวกัน',
+      details: 'ย้าย panel #matSapThDropdownPanel เข้าแถบ .mat-sub-filter-bar เพิ่มปุ่ม #matSfSapBtn ใช้ matState.sapStatuses ร่วมกับตาราง ตัวเลือก WBS/ข้อความวัสดุ เชื่อมโยงกับสถานะ SAP ที่เลือก และปุ่มล้างตัวกรองล้างสถานะ SAP ด้วย',
+      sourceFile: 'คำสั่งผู้ใช้งาน: สถานะ SAP ในตารางให้เอาออก ไปไว้ด้านบนแทนตัวด้านบนเดิม',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง'
+    },
+    {
+      id: 'log_000_materials_hide_kpi_cards',
+      timestamp: '2026-10-30 21:50:00',
+      timestampTh: '30 ต.ค. 2569, 21:50 น.',
+      type: 'EDIT',
+      typeBadge: 'ซ่อนการ์ด KPI หน้าพัสดุ',
+      badgeClass: 'badge-type-edit',
+      title: 'เอาการ์ดสรุป KPI 4 ใบออกจากเมนูรายการพัสดุ',
+      targetSubject: 'เมนูรายการพัสดุ (#matKpiSummaryGrid)',
+      storageFile: 'js/materials.js, index.html',
+      changeSummary: 'ซ่อนการ์ดสรุป 4 ใบ (รายการพัสดุ, ค้างเบิก, ปริมาณ, รวมราคา) ตามคำสั่งผู้ใช้งาน',
+      details: 'เปลี่ยน style ของ #matKpiSummaryGrid เป็น display:none !important คง element และ id เดิมไว้เพื่อไม่ให้ฟังก์ชันอัปเดตตัวเลขใน renderMaterialsTab เกิดข้อผิดพลาด สามารถเปิดกลับได้โดยแก้ style กลับเป็น display:grid',
+      sourceFile: 'คำสั่งผู้ใช้งาน: เอาทั้ง 4 อันออก',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ'
+    },
+    {
+      id: 'log_000_materials_sub_filters_dropdown',
+      timestamp: '2026-10-30 21:45:00',
+      timestampTh: '30 ต.ค. 2569, 21:45 น.',
+      type: 'EDIT',
+      typeBadge: 'ตัวกรองหน้าพัสดุแบบ Dropdown',
+      badgeClass: 'badge-type-edit',
+      title: 'เปลี่ยนตัวกรอง WBS / ข้อความวัสดุ / สถานะ SAP เป็น Dropdown ลิงก์กับตารางรายการพัสดุ',
+      targetSubject: 'เมนูรายการพัสดุ (#tab-materials)',
+      storageFile: 'js/materials.js, css/styles.css, index.html',
+      changeSummary: 'ตัวเลือก WBS และข้อความวัสดุแสดงตามเกณฑ์วัด/พื้นที่/กฟฟ. ที่เลือก และเชื่อมโยงกันเอง (Cascading) เมื่อเลือกแล้วตารางและการ์ด KPI กรองตามทันที',
+      details: 'เพิ่ม refreshMatSubFilterOptions สร้าง datalist (WBS, ข้อความวัสดุ) และ select สถานะ SAP (REL/TECO/CLSD + รหัสจริง) จากแถว Mvt 281 ที่ผ่านตัวกรองด้านบน เพิ่มโหมดตรงตัว (filterWbsExact / filterMatDescExact) เมื่อเลือกจากรายการ และรีเฟรชตัวเลือกทุกครั้งที่ตัวกรองเปลี่ยน',
+      sourceFile: 'คำสั่งผู้ใช้งาน: แก้ไขตัวกรองเป็น Dropdown list ลิงก์กับตารางรายการพัสดุ',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง'
+    },
+    {
+      id: 'log_000_materials_sub_filters',
+      timestamp: '2026-10-30 21:35:00',
+      timestampTh: '30 ต.ค. 2569, 21:35 น.',
+      type: 'EDIT',
+      typeBadge: 'เพิ่มตัวกรองหน้ารายการพัสดุ',
+      badgeClass: 'badge-type-edit',
+      title: 'เพิ่มแถบตัวกรองย่อย WBS / ข้อความวัสดุ / สถานะ SAP ในเมนูรายการพัสดุ',
+      targetSubject: 'เมนูรายการพัสดุ (#tab-materials)',
+      storageFile: 'js/materials.js, css/styles.css, index.html',
+      changeSummary: 'เพิ่มแถบกรองบรรทัดใหม่เหนือการ์ด KPI กรองได้เฉพาะหน้ารายการพัสดุ พร้อมปุ่มล้างตัวกรองและจำนวนที่พบ',
+      details: 'เพิ่ม matState.filterWbs / filterMatDesc / filterSapStatus, รวมเข้า cacheKey และเงื่อนไขใน getFilteredMaterialRows (การ์ด KPI และตารางอัปเดตตาม) เพิ่ม handleMatSubFilter / resetMatSubFilters และสไตล์ .mat-sub-filter-bar ไม่กระทบหน้าภาพรวมและ WBS',
+      sourceFile: 'คำสั่งผู้ใช้งาน: เพิ่มตัวกรอง WBS, ข้อความวัสดุ, สถานะ SAP หน้ารายการพัสดุ',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง'
+    },
+    {
+      id: 'log_000_fix_history_mojibake',
+      timestamp: '2026-10-30 21:25:00',
+      timestampTh: '30 ต.ค. 2569, 21:25 น.',
+      type: 'EDIT',
+      typeBadge: 'แก้ไขภาษาไทยหน้าประวัติ',
+      badgeClass: 'badge-type-edit',
+      title: 'แก้ข้อความภาษาไทยอ่านไม่ออกในหน้าประวัติการนำเข้า & แก้ไขข้อมูล',
+      targetSubject: 'หน้าประวัติ (Model View / Timeline / Storage)',
+      storageFile: 'js/data_history.js, index.html',
+      changeSummary: 'กู้คืนข้อความไทยที่ถูกเข้ารหัสซ้ำสองชั้น (UTF-8 ถูกอ่านเป็น CP874) กลับเป็นข้อความปกติทั้งไฟล์',
+      details: 'ตรวจพบว่าไฟล์ data_history.js มีข้อความไทยเสีย (double-encoded) ประมาณ 2,200 บรรทัด จึงแปลงกลับรายบรรทัด (CP874 bytes → UTF-8) บันทึกเป็น UTF-8 BOM และสำรองไฟล์เดิมไว้ที่ scratch/data_history.backup_before_fix.js พร้อมอัปเดต Cache Buster ใน index.html',
+      sourceFile: 'คำสั่งผู้ใช้งาน: แก้ไขหน้าประวัติ ภาษาอ่านไม่ออก',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'สูง'
+    },
+
+    {
+      id: 'log_000_temp_unlock_all_locks',
+      timestamp: '2026-10-30 21:05:00',
+      timestampTh: '30 ต.ค. 2569, 21:05 น.',
+      type: 'CONFIG',
+      typeBadge: 'ปลดล็อคระบบชั่วคราว',
+      badgeClass: 'badge-type-config',
+      title: 'ปลดล็อคปุ่มล็อคการแก้ไข WBS และปุ่มล็อคเมนูนำทางชั่วคราวตามคำสั่งผู้ใช้งาน',
+      targetSubject: 'ปุ่มล็อคตาราง WBS (#btnToggleWbsEditLock, #btnThWbsNoteLock, .btn-wbs-inline-edit) และปุ่มล็อค 3 เมนู (#btnToggleNavTabsLock)',
+      storageFile: 'js/app.js, js/wbs.js, index.html, js/data_history.js',
+      changeSummary: 'ตามคำสั่งผู้ใช้งาน: "ปุ่มล็อค ให้ปลดล็อคชั่วคราวก่อน" ดำเนินการตั้งค่าเริ่มต้นของระบบล็อคให้ปลดล็อคชั่วคราว (Default Unlocked): 1) ปลดล็อคการแก้ไขตาราง WBS (_wbsEditUnlockedInMemory = true) ปุ่มแก้ไขทุกแถวเปลี่ยนเป็นไอคอนดินสอ ✏️ สามารถคลิกแก้ไขแผนงานและหมายเหตุ Google Sheet ได้ทันทีโดยไม่ต้องผ่าน Admin PIN 2) ปลดล็อคแถบเมนูนำทาง 3 เมนู (_navTabsUnlockedInMemory = true) สามารถคลิกเข้าแท็บ วิเคราะห์เปรียบเทียบ, ศูนย์แจ้งเตือน และประวัติข้อมูล ได้ทันที 3) ผู้ดูแลระบบยังสามารถกดปุ่มล็อคเพื่อล็อคระบบกลับได้ตลอดเวลาตามต้องการ',
+      details: 'อัปเดต _wbsEditUnlockedInMemory และ _navTabsUnlockedInMemory ใน js/app.js ให้เป็น true โดยปริยาย, ปรับ initWbsApp() ใน js/wbs.js ให้เรียก setWbsEditAuthenticated(true), และอัปเดต Cache Busters ?v=20261030_2105 ใน index.html',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "ปุ่มล็อค ให้ปลดล็อคชั่วคราวก่อน"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง (อำนวยความสะดวกในการใช้งานและแก้ไขข้อมูลได้ทันที)'
+    },
+    {
+      id: 'log_000_dh_file_07_card_hidden_rules_toggle_btn',
+      timestamp: '2026-10-30 20:55:00',
+      timestampTh: '30 ต.ค. 2569, 20:55 น.',
+      type: 'EDIT',
+      typeBadge: 'ซ่อนข้อความสรุปและเพิ่มปุ่มเปิดดู',
+      badgeClass: 'badge-type-edit',
+      title: 'ปรับปรุงการ์ดไฟล์ 07: ซ่อนข้อความสรุปเงื่อนไขการแสดงผลไว้ในการ์ด และเพิ่มปุ่มกดเปิด/ปิดดูรายละเอียดได้ตามต้องการ',
+      targetSubject: 'การ์ดไฟล์ 07 ในหน้าประวัติการนำเข้าและแก้ไขข้อมูล (#tab-data-history, js/data_history.js)',
+      storageFile: 'js/data_history.js, index.html',
+      changeSummary: 'ตามคำสั่งผู้ใช้งาน: "ข้อความให้ซ่อน อยู่ในการ์ด กดปุ่มถึงจะดูได้" ดำเนินการปรับปรุงการ์ดไฟล์ 07 บนหน้าประวัติ 1) ซ่อนข้อความสรุปประวัติเงื่อนไขการประมวลผล (แสดง/ไม่แสดง เช่น เฉพาะรหัส 1*, เฉพาะ Mvt 281) เริ่มต้นให้ซ่อนไว้ ไม่รกการ์ด 2) เพิ่มปุ่มกด "📋 เงื่อนไขสรุปการแสดง / ไม่แสดงข้อมูล (คลิกดู) ▼" บนการ์ดไฟล์ 07 เมื่อคลิกปุ่มจะคลี่แสดงรายละเอียดเงื่อนไขออกมาอย่างสวยงาม และเปลี่ยนปุ่มเป็น "▲ ซ่อนเงื่อนไข" 3) ป้องกัน Event Bubble ไม่ให้คลิกปุ่มแล้วเด้งเปิด Model View Modal 4) คงการแสดงผลเงื่อนไขแบบเต็มใน Model View Modal ครบถ้วนสมบูรณ์',
+      details: 'เพิ่มโครงสร้าง dh-btn-toggle-rules และ dh-rules-hidden-box (display: none) ใน dh-file-card, สร้างฟังก์ชัน window.toggleDhCardRules(fileId) จัดการการเปิด/ปิดพร้อมเปลี่ยนไอคอนลูกศรและสีปุ่ม, อัปเดต Cache Busters ?v=20261030_2055 ใน index.html',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "ข้อความให้ซ่อน อยู่ในการ์ด กดปุ่มถึงจะดูได้"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำถึงปานกลาง (ปรับปรุง UX/UI การ์ดให้กระชับ สะอาดตา และกดเปิดดูได้สะดวก)'
+    },
+    {
+      id: 'log_000_remove_toolbar_filter_restore_gold_pill_and_col_tags',
+      timestamp: '2026-10-30 20:05:00',
+      timestampTh: '30 ต.ค. 2569, 20:05 น.',
+      type: 'EDIT',
+      typeBadge: 'ปรับปรุง UI ตามวงแดง/เหลือง',
+      badgeClass: 'badge-type-edit',
+      title: 'นำปุ่มตัวกรองซ้ำซ้อนออกจากแถบเครื่องมือ (วงแดง) และคืนพื้นหลังสีทอง/สีอำพันสวยงาม (วงเหลือง)',
+      targetSubject: 'แถบเครื่องมือพัสดุ, สรุปหัวคอลัมน์ WBS และป้ายแท็กไฟล์ 07 ในเมนูเลือกคอลัมน์',
+      storageFile: 'js/materials.js, css/styles.css, index.html, js/data_history.js',
+      changeSummary: 'ตามคำสั่งผู้ใช้งาน: 1) เอาปุ่มเลือก มี/ไม่มีพัสดุ ในแถบเครื่องมือด้านบนออก (วงแดง) เพื่อให้แถบเครื่องมือสะอาดเรียบร้อย 2) ปรับแต่งป้ายสรุปสถานะพัสดุใต้หัวคอลัมน์ WBS (วงเหลือง) ให้ใช้พื้นหลังสีทอง .th-header-gold-pill สวยงามเหมือนเดิม พร้อมคลิกเลือกได้โดยไม่มีพื้นหลังสีขาว 3) เพิ่มคลาส .col-tag-07 ใน css/styles.css เพื่อให้ป้าย 07 พัสดุ ในหน้าต่างเลือกคอลัมน์ (วงเหลือง) มีพื้นหลังสีส้มทองอำพันสวยงามครบถ้วน',
+      details: '1) นำ div.mat-hasmat-filter-pills ออกจาก js/materials.js, 2) ปรับโครงสร้าง HTML ใต้คอลัมน์ WBS ให้บรรทัดล่างอยู่ใน th-header-gold-subpill และปุ่มภายในเป็นโปร่งแสงไร้พื้นขาว (btn-th-hasmat-sub), 3) เพิ่มสไตล์ .col-tag-07 ใน css/styles.css สำหรับแท็ก 07 พัสดุ, 4) อัปเดต Cache Busters ?v=20261030_2005 ใน index.html',
+      sourceFile: 'คำสั่งผู้ใช้งาน & ภาพระบุจุด: "วงแดง เอาออก วงเหลือง ให้แก้ไขมีพื้นหลังเหมือนเดิมสวยงาม"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง (ปรับแต่ง UI และ CSS ให้สวยงามตามเดิม)'
+    },
+    {
+      id: 'log_000_add_warehouse_column_from_plant',
+      timestamp: '2026-10-30 19:50:00',
+      timestampTh: '30 ต.ค. 2569, 19:50 น.',
+      type: 'EDIT',
+      typeBadge: 'เพิ่มคอลัมน์คลังพัสดุ',
+      badgeClass: 'badge-type-edit',
+      title: 'เพิ่มคอลัมน์ "คลังพัสดุ" โดยแปลงค่าจากคอลัมน์โรงงาน (Plant) ตามตารางแมปคลังพัสดุของ กฟน.3',
+      targetSubject: 'ตารางรายการพัสดุและเมนูเลือกคอลัมน์ (#tab-materials, js/materials.js)',
+      storageFile: 'js/materials.js, index.html, js/data_history.js',
+      changeSummary: 'ตามคำสั่งผู้ใช้งาน: เพิ่มคอลัมน์ใหม่ "คลังพัสดุ" ถัดจากคอลัมน์โรงงาน (Plant) ในตารางรายการพัสดุ โดยแปลงค่ารหัสโรงงานเป็นชื่อคลังพัสดุ ได้แก่ I010/1010 ➔ คลังพัสดุนครชัยศรี, I020/1020 ➔ คลังสุพรรณบุรี, I030/1030 ➔ คลังกาญจนบุรี, I040/1040 ➔ คลังสมุทรสาคร, I050/1050 ➔ คลังสามพราน, I070/1070 ➔ คลังท่ามะกา พร้อมแสดงป้ายสีคลังพัสดุ สรุปจำนวนคลังที่หัวตาราง (🏬 N คลัง) รองรับการจัดเรียง การค้นหา และส่งออก CSV',
+      details: '1) ใน js/materials.js สร้าง MAT_WAREHOUSE_MAP และฟังก์ชัน getWarehouseFromPlant(), 2) เพิ่มคอลัมน์ warehouse (group: custom, source: custom) ใน MAT_COL_DEFS (รวมเป็น 50 คอลัมน์) โดยตั้งค่าเริ่มต้นให้แสดงผลถัดจากโรงงาน, 3) ผูกข้อมูล warehouse ใน ensureMaterialsHydrated, คำนวณ uniqueWarehouses ใน computeAggregates, 4) แสดงป้าย 🏬 คลังพัสดุ... ในเซลล์ตาราง และป้ายสรุปคลังในหัวคอลัมน์, 5) รองรับการค้นหา topQ/locQ และส่งออก CSV, 6) อัปเดต Cache Busters ?v=20261030_1950 ใน index.html',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "เพิ่มคอลัม คลังพัสดุ โดยใช้ข้อมูลจาก คอมลัมโรงงาน ดังนี้ คลังพัสุดนครชัยศรี = I010..."',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง'
+    },
+    {
+      id: 'log_000_wbs_materials_summary_dual_count',
+      timestamp: '2026-10-30 19:30:00',
+      timestampTh: '30 ต.ค. 2569, 19:30 น.',
+      type: 'CONFIG',
+      typeBadge: 'สรุปยอดงาน WBS และรายการไฟล์ 03',
+      badgeClass: 'badge-type-config',
+      title: 'ปรับการแสดงผลสรุปยอดงาน WBS ในตารางพัสดุให้แสดงทั้งยอดงานไม่ซ้ำและจำนวนรายการไฟล์ 03 (แนวทางที่ 1)',
+      targetSubject: 'ส่วนสรุปหัวคอลัมน์ WBS และป้ายสถิติภาพรวมในแท็บรายการพัสดุ (js/materials.js)',
+      storageFile: 'js/materials.js, index.html, js/data_history.js',
+      changeSummary: 'ตามคำสั่งผู้ใช้งานเลือกแนวทางที่ 1: ปรับปรุงการแสดงผลหัวคอลัมน์ WBS ในตารางรายการพัสดุให้ระบุทั้งจำนวนโครงการจริงและจำนวนรายการในไฟล์ 03 เป็น \"รวม 2,069 งาน (2,083 รายการ)\" เพื่อไขข้อข้องใจเรื่องตัวเลขไม่เท่ากันระหว่างป้ายแท็บ WBS (2,083 รายการ) กับยอดงาน WBS ไม่ซ้ำ (2,069 งาน) พร้อมแก้ไขการเข้ารหัสข้อความภาษาไทยในประวัติการแก้ไขข้อมูลให้แสดงผลคมชัด 100%',
+      details: 'อัปเดต js/materials.js ให้คำนวณ scope03RowCount จากไฟล์ 03 เทียบกับ uniqueWbs หากมีรายการซ้ำข้ามเกณฑ์วัดจะแสดงส่วนต่อท้าย (N รายการ) อัตโนมัติ, ปรับแก้การเข้ารหัส Windows-874 ใน js/data_history.js ให้ถูกต้องสมบูรณ์ และอัปเดต Cache Busters ?v=20261030_1930 ใน index.html',
+      sourceFile: 'คำสั่งผู้ใช้งาน: \"แนวทางที่ 1\"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง'
+    },
+    {
+      id: 'log_000_col_groups_custom_category_added',
+      timestamp: '2026-10-30 16:40:00',
+      timestampTh: '30 ต.ค. 2569, 16:40 น.',
+      type: 'CONFIG',
+      typeBadge: 'เพิ่มหมวดหมู่กลุ่ม CUSTOM',
+      badgeClass: 'badge-type-config',
+      title: 'เพิ่มกลุ่ม CUSTOM ในโครงสร้าง MAT_COL_GROUPS และผูกกลุ่มคอลัมน์คำนวณแยกตามกลุ่มไฟล์ให้สมบูรณ์',
+      targetSubject: 'โครงสร้างกลุ่มคอลัมน์ MAT_COL_GROUPS และการแสดงผลแยกตามกลุ่มไฟล์ (js/materials.js)',
+      storageFile: 'js/materials.js, index.html, js/data_history.js',
+      changeSummary: 'เพิ่มหมวดหมู่ ✨ CUSTOM (ค่าที่ระบบคำนวณและแปลงค่า) ใน MAT_COL_GROUPS และกำหนด group: custom ให้กับ สถานะ SAP, % เบิกพัสดุ, % เบิก คชจ. และ ปริมาณค้างเบิก เพื่อให้การแสดงผลทั้งแบบเรียงลำดับ (1-49) และแบบแยกตามกลุ่มไฟล์จัดกลุ่มคอลัมน์ CUSTOM ได้อย่างถูกต้อง พร้อมปรับปรุงการแสดงผลแถวไม่มีพัสดุให้รองรับคอลัมน์ CUSTOM ได้ครบถ้วน',
+      details: 'อัปเดต js/materials.js ให้ MAT_COL_GROUPS มี 4 กลุ่ม (03 WBS, 04 ZBUDR, 07 พัสดุ, และ custom), ปรับ MAT_COL_DEFS ให้ statusSap, pctMatWithdraw, pctExpenseWithdraw, remainQty มี group: custom, อัปเดตเงื่อนไข r.noMat ใน renderMaterialsTab, และอัปเดต Cache Busters ?v=20261030_1640 ใน index.html',
+      sourceFile: 'คำสั่งผู้ใช้งาน & ภาพสรุปความต้องการ (Image Review 1-6)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง'
+    },    {
+      id: 'log_000_col_picker_custom_tags_sap_pct',
+      timestamp: '2026-10-30 16:30:00',
+      timestampTh: '30 ต.ค. 2569, 16:30 น.',
+      type: 'EDIT',
+      typeBadge: 'แก้ป้ายคอลัมน์เป็น CUSTOM ตามจริง',
+      badgeClass: 'badge-type-edit',
+      title: 'ปรับป้ายแหล่งที่มาในเมนูเลือกคอลัมน์ของ สถานะ SAP, % เบิกพัสดุ และ % เบิก คชจ. จาก 04 ZBUDR เป็น CUSTOM',
+      targetSubject: 'เมนูเลือกคอลัมน์ (#matColDropdownPanel, js/materials.js)',
+      storageFile: 'js/materials.js, index.html, js/data_history.js',
+      changeSummary: 'ตามคำสั่งผู้ใช้งาน: "ให้แก้ตามจริง เป็น CUSTOM" โดยปรับป้ายแหล่งที่มาของคอลัมน์ สถานะ SAP, % เบิกพัสดุ และ % เบิก คชจ. ในเมนูเลือกคอลัมน์จากเดิม 04 ZBUDR ให้แสดงเป็น CUSTOM (สีม่วง col-tag-custom) ตรงตามที่เป็นคอลัมน์คำนวณและประมวลผลโดยระบบ',
+      details: 'ใน js/materials.js: ตั้งค่า source: custom สำหรับ statusSap, pctMatWithdraw, pctExpenseWithdraw, remainQty และใน renderMatColDropdownList กำหนดให้แสดงแท็ก CUSTOM (col-tag-custom) พร้อมอัปเดต Cache Busters ?v=20261030_1630',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "ให้แก้ตามจริง เป็น CUSTOM"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ (ปรับข้อความและสีป้ายแท็กในเมนูเลือกคอลัมน์)'
+    },
+    {
+      id: 'log_000_has_mat_filter_buttons_default',
+      timestamp: '2026-10-30 16:25:00',
+      timestampTh: '30 ต.ค. 2569, 16:25 น.',
+      type: 'EDIT',
+      typeBadge: 'ปุ่มเลือก มี/ไม่มีพัสดุ (Default มีพัสดุ)',
+      badgeClass: 'badge-type-edit',
+      title: 'สร้างปุ่มตัวกรองเลือกรายการ มี/ไม่มีพัสดุ (มีพัสดุ / ไม่มีพัสดุ / ทั้งหมด) และตั้งค่าเริ่มต้นเป็น มีพัสดุ',
+      targetSubject: 'แถบเครื่องมือและหัวตารางรายการพัสดุ (js/materials.js, css/styles.css)',
+      storageFile: 'js/materials.js, css/styles.css, index.html, js/data_history.js',
+      changeSummary: 'ตามคำสั่งผู้ใช้งาน: สร้างปุ่มเลือก มี/ไม่มีพัสดุ ทั้งในแถบเครื่องมือด้านบนและทำให้ป้ายสรุปใต้หัวคอลัมน์ WBS (รวม N งาน, พัสดุ X งาน, ไม่มีพัสดุ Y งาน) สามารถคลิกเพื่อสลับตัวกรองได้ทันที โดยตั้งค่าเริ่มต้น (Default) ให้แสดงเฉพาะงานที่มีพัสดุ',
+      details: '1) ใน js/materials.js เพิ่มสถานะ hasMatFilter (ค่าเริ่มต้น HAS_MAT) พร้อมฟังก์ชัน setMatHasMatFilter() และเพิ่มปุ่มเลือก 3 สถานะ (.mat-hasmat-filter-pills) ในแถบเครื่องมือ 2) ปรับแต่งป้ายสถิติใต้หัวคอลัมน์ WBS (.btn-th-hasmat-pill) ให้คลิกสลับโหมด มีพัสดุ / ไม่มีพัสดุ / รวมทั้งหมด ได้โดยตรง 3) เพิ่ม CSS สำหรับ .btn-th-hasmat-pill ใน css/styles.css และอัปเดต Cache Busters ?v=20261030_1625',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "สร้างปุ่มเลือกรายการ มี/ไม่มีพัสดุ และให้ default มีพัสดุไว้"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง (เพิ่มตัวเลือกกรองงานมี/ไม่มีพัสดุ และปรับค่าเริ่มต้นให้แสดงเฉพาะงานที่มีพัสดุ)'
+    },
+    {
+      id: 'log_000_filter_material_code_prefix_1',
+      timestamp: '2026-10-30 16:20:00',
+      timestampTh: '30 ต.ค. 2569, 16:20 น.',
+      type: 'EDIT',
+      typeBadge: 'แสดงเฉพาะรหัสพัสดุขึ้นต้น 1',
+      badgeClass: 'badge-type-edit',
+      title: 'ตารางรายการพัสดุแสดงเฉพาะรหัสพัสดุ (วัสดุ) ที่ขึ้นต้นด้วย 1',
+      targetSubject: 'ตารางรายการพัสดุ (js/materials.js)',
+      storageFile: 'js/materials.js, index.html, js/data_history.js',
+      changeSummary: 'ตามคำสั่งผู้ใช้งาน: คัดกรองรายการไฟล์ 07 (Mvt 281) ให้เหลือเฉพาะรหัสวัสดุที่ขึ้นต้นด้วย 1 งานที่ไม่มีรายการเข้าเงื่อนไขแสดงเป็นแถว ไม่มีรายการพัสดุ',
+      details: 'เพิ่มเงื่อนไข matCode ขึ้นต้นด้วย 1 ใน ensureMaterialsHydrated ของ js/materials.js อัปเดต Cache Busters ?v=20261030_1620',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "แสดงรายการเฉพาะ รหัสพัสดุ ขึ้นต้นด้วย 1 เท่านั้น"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง (ลดจำนวนรายการพัสดุที่แสดง)'
+    },
+    {
+      id: 'log_000_wbs_header_summary_total_with_without',
+      timestamp: '2026-10-30 16:15:00',
+      timestampTh: '30 ต.ค. 2569, 16:15 น.',
+      type: 'EDIT',
+      typeBadge: 'สรุปจำนวนงาน รวม/พัสดุ/ไม่มีพัสดุ',
+      badgeClass: 'badge-type-edit',
+      title: 'สรุปใต้หัวคอลัมน์ WBS: รวม N งาน และ พัสดุ X งาน ไม่มีพัสดุ Y งาน',
+      targetSubject: 'หัวตารางรายการพัสดุ (คอลัมน์ WBS)',
+      storageFile: 'js/materials.js, index.html, js/data_history.js',
+      changeSummary: 'ตามคำสั่งผู้ใช้งาน: แสดง 2 บรรทัด รวม N งาน / พัสดุ X งาน ไม่มีพัสดุ Y งาน ตามเกณฑ์วัดและตัวกรองที่เลือก',
+      details: 'ปรับ metricHtml ของคอลัมน์ wbs ใน js/materials.js ใช้ withMatWbs และ noMatWbs จาก computeAggregates อัปเดต Cache Busters ?v=20261030_1615',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "ให้สรุป รวม งาน / พัสดุ งาน ไม่มีพัสดุ งาน"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ (เพิ่มข้อมูลสรุปที่หัวตาราง)'
+    },
+    {
+      id: 'log_000_revert_wbs_header_summary',
+      timestamp: '2026-10-30 16:12:00',
+      timestampTh: '30 ต.ค. 2569, 16:12 น.',
+      type: 'EDIT',
+      typeBadge: 'ยกเลิกสรุปมี/ไม่มีพัสดุ ใต้ รวม งาน',
+      badgeClass: 'badge-type-edit',
+      title: 'ยกเลิกการแสดงสรุปจำนวนงานมีพัสดุ/ไม่มีพัสดุใต้หัวคอลัมน์ WBS',
+      targetSubject: 'หัวตารางรายการพัสดุ (คอลัมน์ WBS)',
+      storageFile: 'js/materials.js, index.html, js/data_history.js',
+      changeSummary: 'ตามคำสั่งผู้ใช้งาน: ยกเลิก คืนหัวคอลัมน์ WBS เป็นแสดงเฉพาะ รวม N งาน',
+      details: 'ย้อน metricHtml ของคอลัมน์ wbs ใน js/materials.js กลับเป็นเดิม อัปเดต Cache Busters ?v=20261030_1612',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "ยกเลิก"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ (คืนค่าการแสดงผลเดิม)'
+    },
+    {
+      id: 'log_000_wbs_header_summary_with_without_material',
+      timestamp: '2026-10-30 16:10:00',
+      timestampTh: '30 ต.ค. 2569, 16:10 น.',
+      type: 'EDIT',
+      typeBadge: 'สรุปจำนวนงาน มี/ไม่มีพัสดุ',
+      badgeClass: 'badge-type-edit',
+      title: 'เพิ่มสรุปใต้หัวคอลัมน์ WBS: รวมงาน / มีพัสดุ / ไม่มีพัสดุ',
+      targetSubject: 'หัวตารางรายการพัสดุ (คอลัมน์ WBS)',
+      storageFile: 'js/materials.js, index.html, js/data_history.js',
+      changeSummary: 'ตามคำสั่งผู้ใช้งาน: ใต้ รวม N งาน แสดงสรุปจำนวนงานที่มีพัสดุและไม่มีพัสดุตามเกณฑ์วัดที่เลือก',
+      details: 'เพิ่ม withMatWbs ใน computeAggregates และแสดงผลใน metricHtml ของคอลัมน์ wbs อัปเดต Cache Busters ?v=20261030_1610',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "ให้สรุป รวม งาน"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ (เพิ่มข้อมูลสรุปที่หัวตาราง)'
+    },
+    {
+      id: 'log_000_show_all_wbs_empty_material_rows',
+      timestamp: '2026-10-30 16:05:00',
+      timestampTh: '30 ต.ค. 2569, 16:05 น.',
+      type: 'EDIT',
+      typeBadge: 'แสดงครบทุกงาน WBS (แถวไม่มีพัสดุ)',
+      badgeClass: 'badge-type-edit',
+      title: 'ตารางรายการพัสดุแสดงครบทุกงาน WBS ของแต่ละเกณฑ์วัด งานที่ไม่มีพัสดุ Mvt 281 แสดงเป็นแถวว่างพร้อมข้อความ ไม่มีรายการพัสดุ',
+      targetSubject: 'ตารางรายการพัสดุ (js/materials.js)',
+      storageFile: 'js/materials.js, index.html, js/data_history.js',
+      changeSummary: 'ตามคำสั่งผู้ใช้งาน: เพิ่มแถวว่างสำหรับ WBS ในไฟล์ 03 ที่ไม่มีรายการพัสดุ (492 งานจาก 2,069 งาน) แสดงข้อความ ไม่มีรายการพัสดุ ทำให้จำนวนงานตรงกับหน้า WBS คงเหลือ ส่วนยอดรายการพัสดุ (68,211) และป้าย Navbar ไม่นับแถวว่าง',
+      details: 'ใน hydrate เพิ่ม placeholder row (noMat) ต่อ WBS ที่ไม่ match ไฟล์ 07 เรียงตามลำดับ WBS ไฟล์ 03 ปรับ computeAggregates / การ์ดสรุป / ป้าย Navbar / การ render เซลล์กลุ่มไฟล์ 07 อัปเดต Cache Busters ?v=20261030_1605',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "แสดงครบงานแต่ละเกณฑ์วัด โดยงานที่ไม่มีพัสดุแสดงเป็นแถวว่างไว้ และแจ้งว่าไม่มีรายการพัสดุ"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง (เปลี่ยนจำนวนงานและแถวที่แสดงในตารางพัสดุ)'
+    },
+    {
+      id: 'log_000_remain_qty_label_shorten',
+      timestamp: '2026-10-30 15:50:00',
+      timestampTh: '30 ต.ค. 2569, 15:50 น.',
+      type: 'EDIT',
+      typeBadge: 'ลบข้อความสูตรหัวคอลัมน์',
+      badgeClass: 'badge-type-edit',
+      title: 'นำข้อความสูตรในวงเล็บออกจากหัวคอลัมน์ ปริมาณค้างเบิก',
+      targetSubject: 'หัวตารางรายการพัสดุ (คอลัมน์ remainQty)',
+      storageFile: 'js/materials.js, index.html, js/data_history.js',
+      changeSummary: 'ตามคำสั่งผู้ใช้งาน: เอาข้อความ (ต้องการ - เบิก - จุดขนส/คลง) ที่วงแดงออก เหลือชื่อ ปริมาณค้างเบิก',
+      details: 'ปรับ label ของ remainQty ใน MAT_COL_DEFS อัปเดต Cache Busters ?v=20261030_1550',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "วงแดง เอาออก"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ (ปรับข้อความหัวคอลัมน์)'
+    },
+    {
+      id: 'log_000_remain_qty_min_zero',
+      timestamp: '2026-10-30 15:48:00',
+      timestampTh: '30 ต.ค. 2569, 15:48 น.',
+      type: 'EDIT',
+      typeBadge: 'ปริมาณค้างเบิกติดลบ = 0',
+      badgeClass: 'badge-type-edit',
+      title: 'ปริมาณค้างเบิก หากคำนวณได้ติดลบให้แสดงเป็น 0',
+      targetSubject: 'ตารางรายการพัสดุ (คอลัมน์ remainQty)',
+      storageFile: 'js/materials.js, index.html, js/data_history.js',
+      changeSummary: 'ตามคำสั่งผู้ใช้งาน: สูตร ต้องการ − เบิกจ่าย − จุดขนส/คลง หากได้ค่าติดลบให้เท่ากับ 0',
+      details: 'ใน js/materials.js ใช้ Math.max(0, ...) กับ remainQty อัปเดต Cache Busters ?v=20261030_1548',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "ปริมาณค้างเบิก หากติดลบให้ =0"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ (ปรับการแสดงผลค่าติดลบ)'
+    },
+    {
+      id: 'log_000_remain_qty_formula_custom_tag',
+      timestamp: '2026-10-30 15:46:00',
+      timestampTh: '30 ต.ค. 2569, 15:46 น.',
+      type: 'EDIT',
+      typeBadge: 'แก้สูตรปริมาณค้างเบิก & ป้าย CUSTOM',
+      badgeClass: 'badge-type-edit',
+      title: 'แก้วิธีคำนวณ ปริมาณค้างเบิก = ปริมาณที่ต้องการ − ปริมาณการเบิกจ่าย − จุดขนส/คลง และเปลี่ยนป้ายในเมนูเลือกคอลัมน์เป็น CUSTOM',
+      targetSubject: 'ตารางรายการพัสดุ (คอลัมน์ remainQty), เมนูเลือกคอลัมน์',
+      storageFile: 'js/materials.js, index.html, js/data_history.js',
+      changeSummary: 'ตามคำสั่งผู้ใช้งาน: 1) สูตรคอลัมน์ ปริมาณค้างเบิก (คอลัมน์คำนวณ ไม่มีในไฟล์ 07) เปลี่ยนเป็น ต้องการ − เบิกจ่าย − จุดขนส/คลง 2) ป้ายแหล่งที่มาของคอลัมน์นี้ในเมนูเลือกคอลัมน์เปลี่ยนจาก 07 พัสดุ เป็น CUSTOM',
+      details: 'ใน js/materials.js: ปรับการคำนวณ remainQty ให้หักค่า จุดขนส/คลง (แปลงเป็นตัวเลข) และใช้ col-tag-custom ใน renderMatColDropdownList พร้อมปรับป้ายชื่อคอลัมน์ อัปเดต Cache Busters ?v=20261030_1546',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "แก้วิธีคำนวณ ... - จุดขนส/คลง" และ "เมนูเลือกคอลัมน์ ให้เปลี่ยนเป็น CUSTOM"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง (เปลี่ยนตัวเลขค้างเบิกและยอดรายการค้างเบิกทั้งหมด)'
+    },
+    {
+      id: 'log_000_filter_mvt281_and_remove_pending_pills',
+      timestamp: '2026-10-30 15:20:00',
+      timestampTh: '30 ต.ค. 2569, 15:20 น.',
+      type: 'EDIT',
+      typeBadge: 'ดึงเฉพาะ Mvt 281 & เอาปุ่มกรองด่วนออก',
+      badgeClass: 'badge-type-edit',
+      title: 'ปรับปรุงระบบรายการพัสดุ: ดึงเฉพาะข้อมูล Mvt.type 281 (68,211 รายการ) และนำปุ่มตัวกรองด่วน (ทั้งหมด/ค้างเบิก/เบิกครบแล้ว) ออกจากหัวตาราง',
+      targetSubject: 'หน้าแท็บรายการพัสดุ (#tab-materials), ฐานข้อมูลพัสดุ (js/data_materials_07.js, js/materials.js)',
+      storageFile: 'js/data_materials_07.js, js/materials.js, index.html, js/data_history.js',
+      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน: 1) "ไฟล์ 07 ให้ดึงข้อมูลมาแสดงเฉพาะ Mvt281 เท่านั้น" โดยนำเข้าข้อมูลเฉพาะ Mvt.type = 281 รวมทั้งสิ้น 68,211 รายการ (จาก 1,577 งาน WBS, 566 รหัสวัสดุ) ขนาดไฟล์ลดลงเหลือ 3.15 MB โหลดรวดเร็วยิ่งขึ้น 2) "เอาออก วงสีแดง" โดยนำกลุ่มปุ่มกรองด่วนสถานะ [ทั้งหมด | ค้างเบิก (ต้องการ≠เบิก) | เบิกครบแล้ว] ออกจากแถบเครื่องมือหัวตารางพัสดุ 3) อัปเดตป้ายแสดงจำนวนรายการบน Navbar และ Version Cache Busters เป็น ?v=20261030_1520',
+      details: '1) ปรับปรุงสคริปต์ scratch/import_materials_07.ps1 ให้คัดกรองเฉพาะ Mvt.type = 281 ในไฟล์ 07 CN52N.xlsx แล้วสร้าง js/data_materials_07.js ใหม่ (68,211 แถว, 3.15 MB) 2) ใน js/materials.js: ปรับการรวมข้อมูล (Hydrate) ให้อ่านเฉพาะ Mvt 281 และนำบล็อก .mat-quick-filter-pills ออกจากแถบด้านบนของตาราง matTableCard 3) ปรับค่าตัวเลขเริ่มต้นใน #materialsTabTotalBadge ใน index.html เป็น 68,211 และบันทึกประวัติการแก้ไขข้อมูลตามข้อกำหนด AGENTS.md',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "ไฟล์ 07 ให้ดึงข้อมูลมาแสดงเฉพาะ Mvt281 เท่านั้น" และ "เอาออก วงสีแดง"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง (คัดกรองข้อมูลเฉพาะ Mvt 281 และจัดแถบหัวตารางให้เรียบง่ายตามที่ผู้ใช้งานต้องการ)'
+    },    {
+      id: 'log_000_add_materials_07_tab_and_table',
+      timestamp: '2026-10-30 14:05:00',
+      timestampTh: '30 ต.ค. 2569, 14:05 น.',
+      type: 'IMPORT',
+      typeBadge: 'นำเข้าไฟล์ 07 พัสดุค้างเบิก & สร้างเมนูรายการพัสดุ',
+      badgeClass: 'badge-type-import',
+      title: 'นำเข้าไฟล์ 07 พัสดุค้างเบิก CN52N (88,959 รายการ) ภายใต้เมนูใหม่ "รายการพัสดุ" ต่อจากเมนู WBS คงเหลือ พร้อมตารางเชื่อม WBS ไฟล์ 03 / 04 / 07 และเมนูเลือกคอลัมน์',
+      targetSubject: 'เมนูนำทางด้านบน (#navTabBtnMaterials), หน้าแท็บรายการพัสดุ (#tab-materials), ฐานข้อมูลพัสดุ (js/data_materials_07.js, js/materials.js)',
+      storageFile: 'index.html, css/styles.css, js/data_materials_07.js, js/materials.js, js/app.js, js/data_history.js',
+      changeSummary: 'ดำเนินการครบทั้ง 3 ข้อตามคำสั่งผู้ใช้งาน: 1) นำไฟล์ 07 พัสดุค้างเบิก CN52N.xlsx (แก้ไขล่าสุด 30 ต.ค. 2569, 07:57 น. จำนวน 88,959 รายการ) เข้าระบบภายใต้เมนูด้านบนใหม่ชื่อ "รายการพัสดุ" ต่อจากเมนู WBS คงเหลือ 2) สร้างตารางใหม่โดยใช้ไฟล์ 03 คอลัมน์ WBS เป็นตัวอ้างอิงหลักและรองรับตัวกรองเกณฑ์วัด/พื้นที่/กฟฟ./ค้นหา เชื่อมกับไฟล์ 07 ผ่านคอลัมน์ "องค์ประกอบ WBS" (แมตช์ 100% ครบ 88,959 รายการ ใน 1,583 งาน WBS) และเชื่อมกับไฟล์ 04 ผ่านคอลัมน์ "ข้อกำหนดโครงการ /WBS" 3) ออกแบบตารางและป๊อปอัป "เลือกคอลัมน์" ตามรูป 8+ ทุกประการ รองรับทั้งโหมดลำดับการแสดง (ลาก/เลื่อนขึ้นลงได้) และโหมดแยกตามกลุ่มไฟล์ (03 WBS / 04 ZBUDR064 / 07 พัสดุค้างเบิก รวม 49 คอลัมน์) พร้อมส่งออก CSV และขยายเต็มจอ',
+      details: '1) สร้างสคริปต์ scratch/import_materials_07.ps1 แปลงไฟล์ 07 พัสดุค้างเบิก CN52N.xlsx (88,959 แถว, 14 คอลัมน์) เป็นโครงสร้าง Compact Dictionary ใน js/data_materials_07.js (ขนาดเพียง 4.15 MB โหลดไว) 2) พัฒนาโมดูล js/materials.js ทำ Relational Join อ้างอิง WBS จากไฟล์ 03 เป็นหลัก เชื่อมคอลัมน์ไฟล์ 04 และไฟล์ 07 ครบทั้ง 49 คอลัมน์ พร้อมการ์ดสรุปยอดรวม, ตัวกรองด่วน (ทั้งหมด / ค้างเบิก / เบิกครบแล้ว / Mvt.type / สถานะ SAP), การเรียงลำดับทุกคอลัมน์, แบ่งหน้า และส่งออก CSV 3) เพิ่มปุ่มแท็บ "รายการพัสดุ" ต่อจาก "WBS คงเหลือ" ใน index.html และเชื่อม switchTab / renderAll ใน js/app.js 4) อัปเดต DATA_SOURCE_CATALOG (src_07), SYSTEM_STORAGE_FILES และ Cache Busters (?v=20261030_1405) ครบถ้วนตามกฎ AGENTS.md',
+      sourceFile: '07 พัสดุค้างเบิก CN52N.xlsx (30 ต.ค. 2569, 07:57 น.), 03 WBSงานคงเหลือเดือนล่าสุด.xlsx, 04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'สูง (เพิ่มระบบติดตามรายการพัสดุค้างเบิก CN52N ครบวงจร เชื่อมโยงฐานข้อมูล WBS 03 และ SAP ZBUDR064 04 แบบอัตโนมัติ)'
+    },
+    {
+      id: 'log_000_revert_sparkles_to_original',
+      timestamp: '2026-10-30 13:47:00',
+      timestampTh: '30 ต.ค. 2569, 13:47 น.',
+      type: 'EDIT',
+      typeBadge: 'ยกเลิกเพิ่มไฟวิบวับ กลับไปใช้แบบเดิม',
+      badgeClass: 'badge-type-edit',
+      title: 'ยกเลิกการเพิ่มแสงไฟวิบวับเพิ่มเติม และคืนค่ารูปแบบประกายเพชรวิบวับรอบคำว่า "บรรลุเป้าหมาย" กลับเป็นแบบเดิม',
+      targetSubject: 'เอฟเฟกต์แอนิเมชันบนกราฟเปรียบเทียบเกณฑ์วัด (#criteriaFireworksCanvas, window.CriteriaFireworks ใน js/app.js)',
+      storageFile: 'js/app.js, js/data_history.js',
+      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน: "ยกเลิกเพิ่มไฟวิบวับ ให้ใช้แบบเดิม" โดยคืนค่าโค้ดใน window.CriteriaFireworks กลับเป็นชุดประกายเพชรสีต่างๆ ขนาดเล็กวิบวับ 14 จุดแบบเดิม',
+      details: 'นำเมธอด drawFairyBokehOrb และลำแสงแฉกเพิ่มเติมออก คืนค่าเมธอด drawDiamondGemSparkle และ drawAchieveDiamondSparkles ใน js/app.js กลับเป็นเวอร์ชันประกายเพชรจิ๋ว 14 จุดแบบเดิมตามความต้องการของผู้ใช้งาน',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "ยกเลิกเพิ่มไฟวิบวับ ให้ใช้แบบเดิม"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ (คืนค่าการแสดงผลแอนิเมชันประกายเพชรกลับเป็นรูปแบบเดิมที่ผู้ใช้งานต้องการ)'
+    },
+    {
+      id: 'log_000_enhance_achieve_twinkling_lights',
+      timestamp: '2026-10-30 13:42:00',
+      timestampTh: '30 ต.ค. 2569, 13:42 น.',
+      type: 'EDIT',
+      typeBadge: 'เพิ่มแสงไฟวิบวับรอบคำว่า บรรลุเป้าหมาย',
+      badgeClass: 'badge-type-edit',
+      title: 'เพิ่มความสว่างและจำนวนแสงไฟวิบวับหลากสี (Starburst Light Flares, ซุ้มไฟโค้ง & ละอองโบเก้) รอบคำว่า "บรรลุเป้าหมาย"',
+      targetSubject: 'เอฟเฟกต์แอนิเมชันบนกราฟเปรียบเทียบเกณฑ์วัด (#criteriaFireworksCanvas, window.CriteriaFireworks ใน js/app.js)',
+      storageFile: 'js/app.js, index.html, js/data_history.js',
+      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน: "เพิ่มแสงไฟวิบวับอีก" ยกระดับเอฟเฟกต์แสงไฟรอบคำว่า "บรรลุเป้าหมาย" เป็น 3 ชั้นแสงแบบ Additive Light Glow: 1) เพิ่มแสงไฟแฉกเพชร (Starburst & Diamond Light Flares) จาก 14 ดวง เป็น 24 ดวง พร้อมลำแสงแฉกไฟแนวตั้ง-แนวนอน (Lens Flare Streaks) จังหวะสว่างพีค จัดเรียงเป็นซุ้มโค้งด้านบน 9 ดวง ปีกซ้าย-ขวา 8 ดวง และสายไฟขอบล่าง 7 ดวง 2) เพิ่มละอองแสงไฟโบเก้นีออน (Micro-Bokeh Fairy Lights) อีก 16 ดวง รวมเป็น 40 ดวงไฟระยิบระยับ 3) เพิ่มคลื่นไฟวิ่งไล่ระดับ (Chasing Light Wave) และชิมเมอร์แสงทองอ่อนๆ โดยไม่ทับตัวอักษรและไม่ชนแท่งข้างเคียง',
+      details: '1) ใน js/app.js (window.CriteriaFireworks): เพิ่มเมธอด drawFairyBokehOrb() ใช้ globalCompositeOperation = "lighter" วาดละอองไฟนีออนเรืองแสง 16 ดวง, อัปเกรด drawDiamondGemSparkle() ให้มีออร่าแสงฟุ้ง (Additive Light Bloom) และลำแสงแฉกไฟยาวคมชัด (Starburst Cross-Flare Beams) พร้อมจุดสะท้อนแสงขาวกึ่งกลาง และขยายจุดไฟเพชรใน drawAchieveDiamondSparkles() เป็น 24 ดวง พร้อมระบบคำนวณระยะเพดานอัตโนมัติ (topHeadroom / safeCeilingY) และขอบเขตแนวนอน (halfGroupLimit) ป้องกันการซ้อนทับ 100% 2) อัปเดต Cache Busters ใน index.html เป็น ?v=20261030_1342 และบันทึก Audit Log ตามกฎ AGENTS.md',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "เพิ่มแสงไฟวิบวับอีก"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง (เพิ่มความโดดเด่นสวยงามและชีวิตชีวาให้ป้าย "บรรลุเป้าหมาย" ด้วยแสงไฟวิบวับหลากสีคมชัดโดยไม่บดบังตัวอักษร)'
+    },
+    {
+      id: 'log_000_fix_diff_truncation_restore_system',
+      timestamp: '2026-10-30 11:50:00',
+      timestampTh: '30 ต.ค. 2569, 11:50 น.',
+      type: 'EDIT',
+      typeBadge: 'กู้คืนไฟล์ระบบที่ถูกตัดท้าย (SyntaxError Fix)',
+      badgeClass: 'badge-type-edit',
+      title: 'กู้คืนส่วนท้ายของไฟล์ js/app.js และ js/data_history.js ที่ถูกตัดด้วยข้อความ [truncated for diff preview] ทำให้ข้อมูลไม่โหลดและกดปุ่มไม่ได้',
+      targetSubject: 'ระบบหลักทั้งหมด (js/app.js, js/data_history.js, index.html)',
+      storageFile: 'js/app.js, js/data_history.js, index.html',
+      changeSummary: 'แก้ไขปัญหาด่วน "ข้อมูลหายหมด กดอะไรไม่ได้เลย": ตรวจสอบพบว่าเมื่อไฟล์ js/app.js และ js/data_history.js มีขนาดเกิน 512 KB ระบบ Diff Preview ได้ตัดท้ายไฟล์แล้วแทรกข้อความ "... [truncated for diff preview]" ทำให้เกิด Uncaught SyntaxError สคริปต์หลักจึงหยุดทำงานทันที ได้ดำเนินการกู้คืนโค้ดส่วนท้ายทั้ง 2 ไฟล์กลับคืนครบ 100% พร้อมคงการอัปเดตทั้งหมดของวันนี้ไว้ครบถ้วน และลบฟังก์ชันเก่าที่ไม่ได้ใช้งานออกเพื่อลดขนาดไฟล์ app.js ให้ต่ำกว่า 505 KB',
+      details: '1) กู้คืนโค้ดส่วนท้ายของ js/app.js (ตั้งแต่ฟังก์ชัน initColorPaletteManager จนถึงปิด IIFE ท้ายไฟล์) และลบเมธอดเก่าที่ไม่ได้เรียกใช้งานแล้ว (_legacyAchieveDiamondSparkles, drawGoldenCrown, drawSparkleStar) เพื่อให้ขนาดไฟล์ลดลงเหลือ ~504 KB ปลอดภัยจากการถูกตัด 512 KB 2) กู้คืนโค้ดส่วนท้ายของ js/data_history.js (ตั้งแต่ log_000_remove_metric_toggle_for_all_criteria จนถึงฟังก์ชันเรนเดอร์หน้าประวัติข้อมูลและผัง Model View ท้ายไฟล์) พร้อมคงวันที่ไฟล์ 04 WBS (30 ต.ค. 69 • 937.7 KB และ 2.37 MB) ครบทุกจุด 3) เขียนไฟล์แบบ Direct UTF-8 (No BOM) และตรวจสอบไวยากรณ์ JavaScript (Syntax Validation) ทั้งระบบไม่พบข้อผิดพลาด 4) อัปเดต Version Cache Busters เป็น ?v=20261030_1150',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "ข้อมูลหายหมด กดอะไรไม่ได้เลย"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'วิกฤต (กู้คืนการทำงานของระบบ Dashboard ทั้งหมด 100% โดยไม่สูญเสียฟีเจอร์และข้อมูลที่อัปเดตในวันนี้)'
+    },
+    {
+      id: 'log_000_remove_crown_enlarge_achieve_goal_no_overlap',
+      timestamp: '2026-10-30 11:36:00',
+      timestampTh: '30 ต.ค. 2569, 11:36 น.',
+      type: 'EDIT',
+      typeBadge: 'เอามงกุฎออก & ขยายขนาดบรรลุเป้าหมายไม่ให้ซ้อนทับ',
+      badgeClass: 'badge-type-edit',
+      title: 'นำสัญลักษณ์มงกุฎออกจากแท่งที่บรรลุเป้าหมาย ขยายขนาดตัวอักษร "บรรลุเป้าหมาย" ให้ใหญ่เด่นชัด และจัดระบบป้องกันการซ้อนทับทั้งแนวนอนและแนวตั้ง',
+      targetSubject: 'กราฟแท่งเปรียบเทียบเกณฑ์วัด (#criteriaComparisonChart, #criteriaFireworksCanvas, PeaChart, window.CriteriaFireworks)',
+      storageFile: 'js/chart.js, js/app.js, index.html, js/data_history.js',
+      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน: "เอามงกุฎออก และเพิ่มขนาดบรรลุเป้าหมาย และไม่ให้ซ้อนทับกัน" 1) นำรูปมงกุฎสีทองเหนือคำว่า "บรรลุเป้าหมาย" และไอคอน 👑 ในแถบคำอธิบาย (Legend) ออกทั้งหมด คงไว้เฉพาะประกายเพชรสีต่างๆ ขนาดเล็กวิบวับ 2) ขยายขนาดฟอนต์คำว่า "บรรลุเป้าหมาย" จากเดิมสูงสุด 13.8px เป็นสูงสุด 18.5px ให้ใหญ่คมชัดสมดุลกับตัวเลข % ด้านล่าง 3) จัดระบบป้องกันการซ้อนทับครบทุกทิศทาง: เว้นระยะห่างแนวนอนระหว่างแท่งข้างเคียงอย่างน้อย 20px (เช่น แท่ง 1.2 และ 1.3 ที่บรรลุเป้าหมายติดกัน), ล็อคป้าย KPI ในแท่งไม่ให้ลอยขึ้นไปซ้อนทับข้อความด้านบน, คำนวณขอบล่าง Legend อัตโนมัติไม่ให้ชนกันเมื่อจอแคบ และจัดวางประกายเพชรให้อยู่เฉพาะกรอบนอกโดยไม่ทับตัวอักษร',
+      details: '1) ใน js/app.js (window.CriteriaFireworks): ยกเลิกการวาด drawGoldenCrown() ใน render() และเอาไอคอน 👑 ออกจาก customLegend พร้อมปรับพิกัด drawAchieveDiamondSparkles() ให้ล้อมกรอบนอกของข้อความขนาดใหม่และจำกัด wingOuterX ตาม groupW ไม่ให้ชนแท่งข้างเคียง 2) ใน js/chart.js (PeaChart): ขยายขนาดฟอนต์ achieveText เป็น 13.0px-18.5px พร้อมคำนวณ safeHorizontalLimit = groupW - 20 ป้องกันข้อความชนกันแนวนอน คำนวณ legendBottomY ป้องกันชน Legend ด้านบน และล็อค minAllowedY ของป้าย KPI ในแท่งให้อยู่ใต้ขอบบนแท่งกราฟ (y + 4) เสมอ 3) อัปเดต Cache Busters เป็น ?v=20261030_1136 และบันทึก Audit Log ตามข้อกำหนด AGENTS.md',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "เอามงกุฎออก และเพิ่มขนาดบรรลุเป้าหมาย และไม่ให้ซ้อนทับกัน"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง (ทำให้ข้อความ "บรรลุเป้าหมาย" ใหญ่เด่นชัด อ่านง่าย สะอาดตา ไร้การซ้อนทับในทุกขนาดหน้าจอและทุกหน่วยงาน)'
+    },
+    {
+      id: 'log_000_pastel_thai_tea_seg3_all_menus',
+      timestamp: '2026-10-30 11:25:00',
+      timestampTh: '30 ต.ค. 2569, 11:25 น.',
+      type: 'EDIT',
+      typeBadge: 'เปลี่ยนสีพื้นหลังเป้าหมาย ธ.ค. เป็นสีชาไทยพาสเทลทุกเมนู',
+      badgeClass: 'badge-type-edit',
+      title: 'เปลี่ยนสีพื้นหลังช่องเป้าหมายเดือนที่ 3 (ธ.ค.) จากสีฟ้าไซยาน เป็นโทนสีชาไทยพาสเทล (Pastel Thai Milk Tea) ครบทุกเมนูที่เกี่ยวข้อง',
+      targetSubject: 'แถบเป้าหมายเดือน ธ.ค. หน้า Overview (.single-bar-segment.seg-3, .bar-row-fill.m-3, .next3m-month-card.month-3) และหน้า WBS คงเหลือ (.btn-wbs-kpi-month.m-seg-3, .fill-target.target-seg-3 / .target-m-12, .wbs-floating-target-month.target-seg-3)',
+      storageFile: 'css/styles.css, js/app.js, index.html, js/data_history.js',
+      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน: "พื้นหลังเปลี่ยนสีชาไทย พาสเทล สวยๆ และเปลี่ยนทุกเมฯูที่เกี่ยวข้องด้วย" 1) ปรับสีพื้นหลังช่องเป้าหมายเดือนที่ 3 (ธ.ค.) ในหน้าภาพรวมผู้บริหาร (Overview) เป็นโทนสีชาไทยพาสเทลไล่เฉดนุ่มนวล (#D97742 -> #EE965B -> #F7B787 -> #FDE2C8) พร้อมกล่องป้าย เป้า KPI โทนชาเข้มโปร่งแสงและเงาตัวอักษรคมชัด 2) อัปเดตทุกเมนูและองค์ประกอบที่เกี่ยวข้องให้เป็นชุดสีชาไทยพาสเทลเดียวกันทั้งหมด ได้แก่ แถบลูกศรเลือกเดือนเป้าหมายในหน้า WBS คงเหลือ (ทั้งสถานะปกติและสถานะกำลังเลือก), กราฟแท่งบนเป้าหมายปิดเพิ่มเมื่อเลือกเดือน ธ.ค., ป้ายเดือนในการ์ดลอยสีฟ้า Checkbox (#wbsFloatingTargetMonth) เมื่อเลือกเดือน ธ.ค. ตลอดจนการ์ดเป้าหมายและตารางเป้าหมายเชิงลึก',
+      details: '1) ใน css/styles.css: ปรับ .single-bar-segment.seg-3 (+ .seg-mname, .seg-kpi-badge), .bar-row-fill.m-3, .next3m-month-card.month-3 (Dark/Light), .btn-wbs-kpi-month.m-seg-3 และ .active.m-seg-3, .fill-target.target-seg-3 / .target-m-12 และ .wbs-floating-target-month.target-seg-3 เป็นโทนสีชาไทยพาสเทล (#D97742, #EE965B, #F7B787, #FDE2C8) 2) ใน js/app.js และ index.html: ปรับสีจุดสัญลักษณ์และหัวตาราง #thNext3mMonth3 ให้เข้าชุดสีชาไทยพาสเทล และอัปเดต Version Cache Busters เป็น ?v=20261030_1125 3) บันทึก Audit Log ตามข้อกำหนด AGENTS.md',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "พื้นหลังเปลี่ยนสีชาไทย พาสเทล สวยๆ และเปลี่ยนทุกเมฯูที่เกี่ยวข้องด้วย"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง (ปรับโทนสีเป้าหมายเดือน ธ.ค. เป็นสีชาไทยพาสเทลสวยงามสอดคล้องกันทั้งหน้า Overview และหน้า WBS คงเหลือทุกจุด)'
+    },
+    {
+      id: 'log_000_achieve_goal_colorful_diamond_sparkles',
+      timestamp: '2026-10-30 11:17:00',
+      timestampTh: '30 ต.ค. 2569, 11:17 น.',
+      type: 'EDIT',
+      typeBadge: 'เพิ่มประกายเพชรหลากสีวิบวับที่ป้ายบรรลุเป้าหมาย',
+      badgeClass: 'badge-type-edit',
+      title: 'เพิ่มเอฟเฟกต์ประกายเพชรสีต่างๆ ขนาดเล็ก วิบวับ ล้อมรอบข้อความ "บรรลุเป้าหมาย" เฉพาะเกณฑ์วัดที่บรรลุเป้าหมายสิ้นปี',
+      targetSubject: 'กราฟแท่งเปรียบเทียบ 10 ประเภทเกณฑ์วัด (#criteriaComparisonChart, #criteriaFireworksCanvas, window.CriteriaFireworks)',
+      storageFile: 'js/chart.js, js/app.js, index.html, js/data_history.js',
+      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน: "เฉพาะบรรลุเป้าหมาย ให้เพิ่มประกายเพชรสีต่างๆเล็ก วิบวับ สวยๆ" 1) เพิ่มการวาดประกายเพชรเจียระไนขนาดเล็กหลากสี (ฟ้าไอซ์ไซยาน, ชมพูโรส, เขียวมรกต, ม่วงอเมทิสต์, ทองคำแชมเปญ, น้ำเงินไพลิน และเพชรขาวบริสุทธิ์) จำนวน 15 จุด ล้อมรอบข้อความ "บรรลุเป้าหมาย" เฉพาะแท่งกราฟที่บรรลุเป้าหมาย KPI สิ้นปี (ext.isExceedDecKpi === true) 2) ออกแบบจังหวะกะพริบวิบวับ (Non-linear Diamond Twinkle Curve) สลับเฟสกันอย่างเป็นธรรมชาติ พร้อมเหลี่ยมเพชร 8 แฉกเรียวคมและจุดสะท้อนแสงสีขาวตรงกลาง โดยไม่บดบังความคมชัดของตัวอักษรสีทองและมงกุฎด้านบน',
+      details: '1) ใน js/chart.js: บันทึกค่าความกว้างข้อความจริง (curBarObj.achieveTextW) และขนาดฟอนต์ (curBarObj.achieveFontSize) ของคำว่า "บรรลุเป้าหมาย" เพื่อส่งต่อพิกัดที่แม่นยำไปยังเลเยอร์แอนิเมชัน 2) ใน js/app.js (window.CriteriaFireworks): ยกระดับความละเอียด DPR สูงสุดเป็น 2x เพื่อความคมชัดของเหลี่ยมเพชร เพิ่มฟังก์ชัน drawDiamondGemSparkle() และ drawAchieveDiamondSparkles() วาดประกายเพชรหลากสีขนาดเล็กกะพริบวิบวับบน #criteriaFireworksCanvas เฉพาะรายการที่บรรลุเป้าหมาย 3) อัปเดต Cache Busters เป็น ?v=20261030_1117 และบันทึก Audit Log ตามข้อกำหนด AGENTS.md',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "เฉพาะบรรลุเป้าหมาย ให้เพิ่มประกายเพชรสีต่างๆเล็ก วิบวับ สวยๆ"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง (ยกระดับความโดดเด่นสวยงามให้ป้าย "บรรลุเป้าหมาย" ด้วยประกายเพชรหลากสีวิบวับแบบเรียลไทม์โดยไม่กระทบประสิทธิภาพหรือความชัดเจนของตัวอักษร)'
+    },
+    {
+      id: 'log_000_update_file_04_wbs_oct30_morning',
+      timestamp: '2026-10-30 08:28:00',
+      timestampTh: '30 ต.ค. 2569, 08:28 น.',
+      type: 'MERGE',
+      typeBadge: 'อัปเดตไฟล์ 04 WBS & สถานะ SAP 30 ต.ค. 69',
+      badgeClass: 'badge-type-merge',
+      title: 'อัปเดตข้อมูลไฟล์ 04 WBS ZBUDR064 (รอบ 30 ต.ค. 2569, 08:16 น.) คำนวณ % เบิกพัสดุและ % เบิก คชจ. ผสานเข้า data_wbs.js และอัปเดตวันที่สถานะ SAP ครบทุกจุด',
+      targetSubject: 'ฐานข้อมูล WBS คงเหลือ (js/data_wbs.js), สถานะ SAP, % เบิกพัสดุ, % เบิก คชจ. และป้ายวันที่แก้ไขล่าสุดทุกจุดบนหน้าเว็บ',
+      storageFile: '04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx, js/data_wbs.js, index.html, js/wbs.js, js/data_history.js',
+      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน "update ไฟล์ 04WBS": 1) นำเข้าและประมวลผลไฟล์ Excel ต้นทาง "04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx" (ต้นฉบับ 731.7 KB / 749,279 ไบต์, 4,590 แถวดิบ บันทึกเมื่อ 30 ต.ค. 2569 เวลา 08:16:07 น.) 2) เติมสูตรและจัดรูปแบบเปอร์เซ็นต์ในคอลัมน์ 24 (% เบิกพัสดุ: =IFERROR((M/T),0)) และคอลัมน์ 25 (% เบิก คชจ.: =IF(V=0,0,IFERROR(R/V,0))) ครบทุกแถว (ขนาดหลังบันทึกสูตร 937.7 KB เวลา 08:26 น.) 3) ผสานข้อมูล (Merge) เข้ากับฐานข้อมูลงานคงเหลือหลัก 2,083 โครงการ (ไฟล์ 03 + 04 + 05 + 06) ครบถ้วน 100% 4) ซิงค์ข้อมูลสดจาก Google Sheet Live API คงไว้ครบถ้วน (แผนปิดงาน planClose 1,095 รายการ, หมายเหตุ note 1,021 รายการ) 5) ตรวจพบการเปลี่ยนแปลงสถานะ SAP จำนวน 114 โครงการ (เช่น TECO D2 และ REL D1 ปิดงานเป็น CLSD F4), การเปลี่ยนแปลง % เบิกพัสดุ 81 โครงการ และการเปลี่ยนแปลง % เบิก คชจ. 32 โครงการ 6) อัปเดตวันที่สถานะ SAP แก้ไขล่าสุดเป็น "30 ต.ค. 69" ครบถ้วนทุกจุดตามข้อกำหนด AGENTS.md',
+      details: '1) สำรองไฟล์ Excel ดิบไว้ที่ scratch/04_backup_before_update.xlsx และสำรองฐานข้อมูลเดิมไว้ที่ js/data_wbs.bak_before_update_f4_oct30_morning.js 2) เติมสูตรคอลัมน์ X (% เบิกพัสดุ) และคอลัมน์ Y (% เบิก คชจ.) ในไฟล์ 04 WBS แล้วรันสคริปต์ผสานข้อมูลสร้าง js/data_wbs.js ใหม่ขนาด 2.37 MB (2,480,438 ไบต์) 3) อัปเดตวันที่สถานะ SAP ล่าสุดเป็น 30 ต.ค. 69 ครบทุกจุด: #wbsHeaderDatesPlain, #dataHistoryBadge, .pill-file-04, #wbsKpiSapDateText, .bar-sap-date-plain, หัวคอลัมน์ statusSap (.th-sub-date-text), DATA_SOURCE_CATALOG (src_04), SYSTEM_STORAGE_FILES และผัง Model View 4) อัปเดต Cache Busters เป็น ?v=20261030_0828',
+      sourceFile: '04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx (แก้ไขล่าสุด 30 ต.ค. 2569, 08:16:07 น. / บันทึกสูตร 08:26:01 น., ขนาด 937.7 KB)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'สูง (อัปเดตสถานะโครงการจริงในระบบ SAP จำนวน 114 โครงการที่เปลี่ยนสถานะ/ปิดงาน CLSD F4 พร้อมอัปเดต % เบิกพัสดุ 81 โครงการ และ % เบิก คชจ. 32 โครงการ)'
+    },
+    {
+      id: 'log_000_floating_target_month_badge_dynamic_bg',
+      timestamp: '2026-10-30 08:23:00',
+      timestampTh: '30 ต.ค. 2569, 08:23 น.',
+      type: 'EDIT',
+      typeBadge: 'เปลี่ยนสีพื้นหลังป้ายเดือนในการ์ดลอยตามเดือนที่เลือก',
+      badgeClass: 'badge-type-edit',
+      title: 'เปลี่ยนสีพื้นหลังป้ายเดือนเป้าหมาย (#wbsFloatingTargetMonth) ในการ์ดลอยสีฟ้า ให้เปลี่ยนสีตรงกับเป้าหมายเดือนที่เลือกปิดงานในแถบลูกศร (รูปที่ 4)',
+      targetSubject: 'ป้ายชื่อเดือนเป้าหมายในการ์ดลอย Checkbox (#wbsFloatingTargetMonth, .wbs-floating-target-month, getWbsSelectedTargetMonthInfo, updateWbsFloatingSelection)',
+      storageFile: 'css/styles.css, js/wbs.js, index.html, js/data_history.js',
+      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน: "เปลี่ยนสีพื้นหลัง กรอบสีแดงที่วงไว้ ให้เหมือนกับเป้าหมายเดือนที่เลือกกปิดงานไว้ ตามรููปที่ 4" 1) ปรับปรุงป้ายเดือนเป้าหมาย (#wbsFloatingTargetMonth) ในแถวบนของการ์ดลอยสีฟ้า ให้เปลี่ยนสีพื้นหลังแบบไล่เฉดสีพร้อมขอบสีทอง (#FFD700) และตัวอักษรสีขาวคมชัดตามเดือนเป้าหมายที่กดเลือกในแถบลูกศรโดยอัตโนมัติ (ต.ค. = สีชมพูสดใส, พ.ย. = สีน้ำเงินเข้ม Royal Blue, ธ.ค. = สีฟ้าสว่างไซยาน Cyan/Sky Blue ขอบทองตรงตามรูปที่ 4)',
+      details: '1) ใน js/wbs.js: ปรับ getWbsSelectedTargetMonthInfo() ให้คืนค่า segIndex (1, 2, 3, 4) ตรงกับตำแหน่งปุ่มในแถบเลือกเดือนเป้าหมาย และปรับ updateWbsFloatingSelection() ให้อัปเดตคลาส .target-seg-{N} และ .target-m-{M} บน #wbsFloatingTargetMonth ทุกครั้งที่สลับเดือน 2) ใน css/styles.css: กำหนดสีพื้นหลังไล่เฉดของ .wbs-floating-target-month.target-seg-1..4 ให้ตรงกับ .btn-wbs-kpi-month.active.m-seg-1..4 พร้อมขอบทอง #FFD700 และตัวอักษรสีขาวหนา 3) อัปเดต Cache Busters เป็น ?v=20261030_0823 และบันทึก Audit Log ตามข้อกำหนด AGENTS.md',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "เปลี่ยนสีพื้นหลัง กรอบสีแดงที่วงไว้ ให้เหมือนกับเป้าหมายเดือนที่เลือกกปิดงานไว้ ตามรููปที่ 4"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง (ช่วยให้สีป้ายเดือนเป้าหมายในการ์ดลอยเชื่อมโยงเป็นสีเดียวกับปุ่มเดือนเป้าหมายที่กำลังเลือกในแถบลูกศรอย่างชัดเจน)'
+    },
+    {
       id: 'log_000_fix_browser_autofill_search_wbs_zero',
       timestamp: '2026-10-30 08:15:00',
       timestampTh: '30 ต.ค. 2569, 08:15 น.',
@@ -463,278 +1452,6 @@
       sourceFile: 'คำสั่งผู้ใช้งาน: "รหัสผ่านเอาออกทั้งหมด ไม่ต้องแสดง"',
       author: 'ผู้ดูแลระบบ (System Admin)',
       impactLevel: 'ปานกลาง (ยกระดับความปลอดภัยสูงสุดโดยไม่แสดงตัวเลขรหัสผ่าน Admin PIN บนหน้าจอหรือ Tooltip ใดๆ)'
-    },
-    {
-      id: 'log_000_fix_wbs_fullscreen_edit_modal',
-      timestamp: '2026-10-28 16:18:00',
-      timestampTh: '28 ต.ค. 2569, 16:18 น.',
-      type: 'EDIT',
-      typeBadge: 'แก้ไขหน้าจอขยายตาราง WBS ให้กดแก้ไขได้',
-      badgeClass: 'badge-type-edit',
-      title: 'แก้ไขโหมดขยายตาราง WBS เต็มจอ (Fullscreen Mode) ให้สามารถคลิกปุ่มแก้ไข (✏️) และป้ายแผนปิดงานเพื่อเปิดหน้าต่างแก้ไขข้อมูลได้ตามปกติ',
-      targetSubject: 'หน้าต่างแก้ไขแผนปิดงาน/หมายเหตุ (#wbsEditNoteModal), หน้าต่างยืนยันรหัสปลดล็อก (#adminPinModal), โหมดตารางขยายเต็มจอ (.table-card.is-fullscreen)',
-      storageFile: 'css/styles.css, index.html, js/wbs.js, js/data_history.js',
-      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน: "แก้ไขให้ หน้าจอขยาย สามารถกดแก้ไขได้" 1) กำหนดคลาส .modal-overlay ให้มี position: fixed !important; inset: 0 !important; z-index: 200000 !important; และ #adminPinModal มี z-index: 200010 !important; เพื่อให้อยู่เหนือตารางโหมดขยายเต็มจอ (.table-card.is-fullscreen ที่มี z-index: 99999) และแถบตัวกรองลอย (z-index: 100005) เสมอ 2) ปรับระดับ .toast-container เป็น z-index: 200050 เพื่อให้เห็นข้อความแจ้งเตือนบันทึกสำเร็จในโหมดขยายหน้าจอ 3) ปรับการกดปุ่ม Escape ให้ปิดเฉพาะหน้าต่างแก้ไขก่อนโดยไม่หลุดออกจากโหมดหน้าจอขยาย',
-      details: '1) ใน css/styles.css: เพิ่มกฎ .modal-overlay (position: fixed !important; inset: 0 !important; z-index: 200000 !important;) และปรับ .modal-backdrop (z-index: 200000) รวมถึง .toast-container (z-index: 200050) 2) ใน index.html: เพิ่ม position:fixed; inset:0; z-index:200000; บน #wbsEditNoteModal, #updateGithubModal และ z-index:200010; บน #adminPinModal 3) ใน js/wbs.js: ปรับ openWbsEditNoteModal() และ handleWbsEditLockToggle() ให้ย้าย Modal ไปยัง document.body โดยตรงพร้อมบังคับ z-index ระดับบนสุด และปรับตัวดักปุ่ม Escape ไม่ให้ปิดโหมดหน้าจอขยายหากเปิดหน้าต่างแก้ไขอยู่ 4) อัปเดต Cache Busters เป็น ?v=20261028_1618',
-      sourceFile: 'คำสั่งผู้ใช้งาน: "แก้ไขให้ หน้าจอขยาย สามารถกดแก้ไขได้"',
-      author: 'ผู้ดูแลระบบ (System Admin)',
-      impactLevel: 'สูง (แก้ไขปัญหาคลิกปุ่มดินสอ ✏️ หรือป้ายแผนปิดงานในโหมดหน้าจอขยายแล้วหน้าต่างแก้ไขถูกบังอยู่ใต้ตาราง)'
-    },
-    {
-      id: 'log_000_floating_card_auc_label_and_goal_ref',
-      timestamp: '2026-10-28 16:10:00',
-      timestampTh: '28 ต.ค. 2569, 16:10 น.',
-      type: 'EDIT',
-      typeBadge: 'แก้ข้อความ มูลค่า AUC & อ้างอิง ลบ. รูป 55',
-      badgeClass: 'badge-type-edit',
-      title: 'ปรับปรุงการ์ดลอยสีฟ้า (#wbsTableFloatingSelection): แก้ข้อความ "มูลค่าตามไฟล์ 06" เป็น "มูลค่า AUC" และให้อ้างอิงจำนวน ลบ. ตามการ์ดรูปที่ 55 ทั้งเมื่อยังไม่บรรลุเป้าและบรรลุเป้า',
-      targetSubject: 'การ์ดลอยสรุปการเลือก Checkbox บนตาราง WBS (#wbsTableFloatingSelection, .wbs-floating-sel-auc-lbl, #wbsFloatingRemainRow, updateWbsFloatingSelection)',
-      storageFile: 'index.html, js/wbs.js, js/data_history.js',
-      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน: "1.มูลค่าตามไฟล์ 06 แก้เป็ย มูลค่า AUC 2. บรรลุเป้าให้อ้างอิง จำนวน ลบ. ตามการ์ด รูปที่ 55" 1) เปลี่ยนข้อความป้ายในแถวที่ 3 ของการ์ดลอยสีฟ้าจาก "มูลค่าตามไฟล์ 06:" เป็น "มูลค่า AUC:" 2) ปรับปรุงการแสดงผลแถวล่างสุด (#wbsFloatingRemainRow) ให้อ้างอิงจำนวน ลบ. จากการ์ดเปรียบเทียบ KPI (รูปที่ 55) โดยตรงทั้งกรณีที่ต้องปิดอีก (แสดง "⚠️ ต้องปิดอีก: XX.XX ลบ.") และกรณีบรรลุเป้าหมายแล้ว (แสดง "🎉 บรรลุเป้า (เกินเป้า): +XX.XX ลบ." แทน 0.00 ลบ. เดิม)',
-      details: '1) ใน index.html: เปลี่ยนข้อความใน .wbs-floating-sel-auc-lbl จาก "มูลค่าตามไฟล์ 06:" เป็น "มูลค่า AUC:" 2) ใน js/wbs.js: ปรับลำดับใน renderWbsTab() ให้เรนเดอร์การ์ดเปรียบเทียบ KPI ก่อนอัปเดตการ์ดลอยสีฟ้า และใน updateWbsFloatingSelection() เมื่อบรรลุเป้า (isGoalReached) ให้แสดงตัวเลขยอดเกินเป้าหมายในหน่วย ลบ./งาน (+XX.XX ลบ.) อ้างอิงตรงกับการ์ดในรูปที่ 55 3) อัปเดต Cache Busters เป็น ?v=20261028_1610 และบันทึก Audit Log ตามข้อกำหนด AGENTS.md',
-      sourceFile: 'คำสั่งผู้ใช้งาน: "1.มูลค่าตามไฟล์ 06 แก้เป็ย มูลค่า AUC 2. บรรลุเป้าให้อ้างอิง จำนวน ลบ. ตามการ์ด รูปที่ 55"',
-      author: 'ผู้ดูแลระบบ (System Admin)',
-      impactLevel: 'ปานกลาง (ช่วยให้ข้อความป้ายกระชับเข้าใจง่าย และแสดงตัวเลข ลบ. ตรงกับการ์ดผลลัพธ์รูปที่ 55 ทุกกรณี)'
-    },
-    {
-      id: 'log_000_floating_card_mb_format_and_remain_row',
-      timestamp: '2026-10-28 15:50:00',
-      timestampTh: '28 ต.ค. 2569, 15:50 น.',
-      type: 'EDIT',
-      typeBadge: 'ปรับการ์ดสีฟ้าแสดง ลบ. & ต้องปิดอีก',
-      badgeClass: 'badge-type-edit',
-      title: 'ปรับปรุงการ์ดลอยสีฟ้า (#wbsTableFloatingSelection): แสดงเป้าหมายและมูลค่าไฟล์ 06 เป็นหน่วย "ลบ." พร้อมเพิ่มบรรทัดล่าง "ต้องปิดอีก ... ลบ."',
-      targetSubject: 'การ์ดลอยสรุปการเลือก Checkbox บนตาราง WBS (#wbsTableFloatingSelection, #wbsFloatingTargetRow, #wbsFloatingRemainRow, updateWbsFloatingSelection)',
-      storageFile: 'index.html, css/styles.css, js/wbs.js, js/data_history.js',
-      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน 3 ข้อ: "1.ที่กากบาทเอาออก คงเหลือเลข ลบ. 2.วงกลมสีเหลือง เปลี่ยนให้แสดง ลบ. 3.เพิ่มบรรทัดล่าง ต้องปิดอีก ลบ." 1) นำตัวเลขจำนวนบาทเต็มที่กากบาทในแถวบนออก คงเหลือเฉพาะป้ายเดือนที่เลือกและเลขเป้าหมายหน่วย ลบ. เช่น (48.94 ลบ.) 2) เปลี่ยนการแสดงผลมูลค่าตามไฟล์ 06 (วงกลมสีเหลือง) จากหน่วย "บาท" ให้แสดงเป็นหน่วย "ลบ." (เช่น 0.05 ลบ.) 3) เพิ่มบรรทัดล่างสุด (#wbsFloatingRemainRow) แสดง "⚠️ ต้องปิดอีก: XX.XX ลบ." ซิงค์ตามยอดคงเหลือต้องปิดเพิ่มในการ์ดเปรียบเทียบ KPI แบบเรียลไทม์ทุกครั้งที่ติ๊ก Checkbox หรือเปลี่ยนเดือนเป้าหมาย',
-      details: '1) ใน index.html: นำ #wbsFloatingTargetVal และ #wbsFloatingTargetUnit ออก คงเหลือ #wbsFloatingTargetMb ในแถวบน, เปลี่ยนหน่วยในแถวมูลค่าตามไฟล์ 06 เป็น "ลบ." (#wbsFloatingSelAucUnit), และเพิ่มแถวล่างสุด #wbsFloatingRemainRow แสดง "ต้องปิดอีก: XX.XX ลบ." 2) ใน css/styles.css: เพิ่มคลาส .wbs-floating-sel-row.middle-auc, .wbs-floating-sel-row.bottom-remain, .wbs-floating-remain-pill (.is-pending สีแดงขอบสว่างเหมือนป้ายในการ์ด KPI และ .is-achieved สีเขียวเมื่อบรรลุเป้า) 3) ใน js/wbs.js: อัปเดต updateWbsFloatingSelection() ให้คำนวณมูลค่าไฟล์ 06 เป็นล้านบาท (auc / 1e6) และคำนวณยอดคงเหลือต้องปิดอีก (remainingAmount = targetAmt - (closedInSap + selectedFromCheckbox)) แสดงผลในหน่วย ลบ./งาน ทันที 4) อัปเดต Cache Busters เป็น ?v=20261028_1550 และบันทึก Audit Log ตามข้อกำหนด AGENTS.md',
-      sourceFile: 'คำสั่งผู้ใช้งาน: "1.ที่กากบาทเอาออก คงเหลือเลข ลบ. 2.วงกลมสีเหลือง เปลี่ยนให้แสดง ลบ. 3.เพิ่มบรรทัดล่าง ต้องปิดอีก ลบ."',
-      author: 'ผู้ดูแลระบบ (System Admin)',
-      impactLevel: 'ปานกลาง (ช่วยให้การ์ดลอยสีฟ้ากระชับ อ่านค่าหน่วย ลบ. ได้ตรงกันทุกบรรทัด และเห็นยอดที่ยังต้องปิดเพิ่มอีกแบบเรียลไทม์ขณะติ๊กเลือกงานในตาราง)'
-    },
-    {
-      id: 'log_000_floating_card_top_row_selected_target_month',
-      timestamp: '2026-10-28 15:35:00',
-      timestampTh: '28 ต.ค. 2569, 15:35 น.',
-      type: 'EDIT',
-      typeBadge: 'เพิ่มเป้าหมายเดือนที่เลือกบนการ์ดสีฟ้า',
-      badgeClass: 'badge-type-edit',
-      title: 'เพิ่มการแสดงผล "เป้าหมายเดือนที่เลือก และจำนวน บาท/งาน ตามรูป 52 ที่กดเลือก" ไว้ที่แถวบนของการ์ดลอยสีฟ้า (Floating Checkbox Card)',
-      targetSubject: 'การ์ดลอยสรุปการเลือก Checkbox บนตาราง WBS (#wbsTableFloatingSelection, #wbsFloatingTargetRow, updateWbsFloatingSelection)',
-      storageFile: 'index.html, css/styles.css, js/wbs.js, js/data_history.js',
-      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน: "1.เพิ่ม เป้าหมายเดือนที่เลือก และจำนวน บาท/งาน ตามรูป 52 ที่กดเลือก 2.ให้แสดงตัวอักษร แถวบน" พร้อมภาพประกอบ 2 รูป: 1) เพิ่มแถวบนสุด (#wbsFloatingTargetRow) ในการ์ดลอยสีฟ้า (#wbsTableFloatingSelection) เพื่อแสดงเดือนเป้าหมายที่กำลังกดเลือกจากแถบเลือกเดือนเป้าหมาย (เช่น ต.ค., พ.ย., ธ.ค.) 2) แสดงจำนวนเป้าหมายเป็นหน่วย "บาท" พร้อมป้าย "(XX.XX ลบ.)" สำหรับเกณฑ์มูลค่า หรือเป็นหน่วย "งาน" สำหรับเกณฑ์จำนวนงาน (ข้อ 3, 4) โดยซิงค์ข้อมูลแบบเรียลไทม์ทุกครั้งที่คลิกสลับเดือนเป้าหมายตามรูป 52 หรือเปลี่ยนตัวกรอง',
-      details: '1) ใน index.html: เพิ่มบล็อก <div class="wbs-floating-sel-row target-top" id="wbsFloatingTargetRow"> ไว้ที่แถวบนสุดภายใน .wbs-floating-sel-card แสดงป้าย "🎯 เป้าหมายเดือน [ต.ค.]:" คู่กับตัวเลขเป้าหมาย (#wbsFloatingTargetVal), หน่วย บาท/งาน (#wbsFloatingTargetUnit) และป้ายล้านบาทสีแดงขอบขาว (#wbsFloatingTargetMb) ตามรูป 52 2) ใน css/styles.css: เพิ่มสไตล์ .wbs-floating-sel-row.target-top, .wbs-floating-target-month, .wbs-floating-target-val, .wbs-floating-target-mb และปรับความกว้างการ์ดให้รองรับข้อความแถวบนอย่างสวยงามไม่ตัดบรรทัด 3) ใน js/wbs.js: สร้างฟังก์ชัน getWbsSelectedTargetMonthInfo() และอัปเดต updateWbsFloatingSelection(), renderWbsTargetComparisonSection(), setWbsKpiTargetMonth() ให้ซิงค์ค่าเป้าหมายเดือนที่กดเลือกแบบเรียลไทม์ 4) อัปเดต Cache Busters เป็น ?v=20261028_1535 และบันทึก Audit Log ตามข้อกำหนด AGENTS.md',
-      sourceFile: 'คำสั่งผู้ใช้งาน: "1.เพิ่ม เป้าหมายเดือนที่เลือก และจำนวน บาท/งาน ตามรูป 52 ที่กดเลือก 2.ให้แสดงตัวอักษร แถวบน"',
-      author: 'ผู้ดูแลระบบ (System Admin)',
-      impactLevel: 'ปานกลาง (ช่วยให้ผู้ใช้งานสามารถเปรียบเทียบยอดที่ติ๊กเลือกใน Checkbox กับเป้าหมายของเดือนที่กดเลือกได้ทันทีบนตารางโดยไม่ต้องเลื่อนจอกลับขึ้นไปด้านบน)'
-    },
-    {
-      id: 'log_000_rule_auto_update_timestamps_agents_md',
-      timestamp: '2026-10-28 08:10:00',
-      timestampTh: '28 ต.ค. 2569, 08:10 น.',
-      type: 'CONFIG',
-      typeBadge: 'กำหนดกฎ Mandatory Rule',
-      badgeClass: 'badge-type-config',
-      title: 'เพิ่มข้อกำหนดบังคับใน AGENTS.md: ทุกครั้งที่อัปเดตไฟล์ข้อมูล ต้องอัปเดตวันที่สถานะแก้ไขล่าสุดใน UI ครบทุกจุดทันที',
-      targetSubject: 'กฎระเบียบและแนวทางการพัฒนาโครงการ (AGENTS.md, Mandatory Update Timestamp Rule)',
-      storageFile: 'AGENTS.md, js/data_history.js',
-      changeSummary: 'บันทึกข้อกำหนดบังคับถาวรลงใน AGENTS.md ตามคำสั่งผู้ใช้งาน "ครั้งถัดไป หากแก้ไขไฟล์ ให้แสดงวันที่ update ทุกครั้งแล้วใช่ไหม": กำหนดให้ทุกครั้งที่มีการอัปเดตไฟล์ข้อมูล (04 WBS ZBUDR064, 06 WBS CN41, 03 WBS, 05 WBS หรือรายงานประจำเดือน) AI ต้องตรวจสอบเวลาแก้ไขไฟล์จริงและอัปเดตข้อความวันที่แก้ไขล่าสุดบนหน้าเว็บ (Header, Table Header, KPI Side Card, Progress Bar, Active Filter Pills, Model View และ Navbar Badge) ให้ตรงกันทุกจุดเสมอ',
-      details: 'เพิ่มหัวข้อ "### อัปเดตวันที่สถานะแก้ไขล่าสุดทุกครั้งหลังอัปเดตไฟล์ (Mandatory Update Timestamp Rule)" ใน AGENTS.md กำหนด 3 ข้อปฏิบัติชัดเจน: 1) ตรวจสอบ Last Modified Timestamp & Size จริงของไฟล์ต้นทาง 2) อัปเดตข้อความวันที่แก้ไขล่าสุดบน UI ให้ครบถ้วนทุกจุด (#wbsHeaderDatesPlain, .th-sub-date-text, #wbsKpiSapDateText, .bar-sap-date-plain, .pill-file-04 ถึง 06, DATA_SOURCE_CATALOG, #dataHistoryBadge และ Cache Busters) 3) ห้ามปล่อยให้วันที่ใน UI ค้างเป็นวันที่เก่าเด็ดขาด โดยถือเป็นข้อบังคับระดับเดียวกับการบันทึก Audit Log',
-      sourceFile: 'คำสั่งผู้ใช้งาน: "ครั้งถัดไป หากแก้ไขไฟล์ ให้แสดงวันที่ update ทุกครั้งแล้วใช่ไหม"',
-      author: 'ผู้ดูแลระบบ (System Admin)',
-      impactLevel: 'สูง (เป็นข้อกำหนดเชิงนโยบายการพัฒนาถาวร ป้องกันข้อผิดพลาดในการแสดงผลวันที่ในอนาคต 100%)'
-    },
-    {
-      id: 'log_000_update_sap_status_date_oct28',
-      timestamp: '2026-10-28 08:00:00',
-      timestampTh: '28 ต.ค. 2569, 08:00 น.',
-      type: 'EDIT',
-      typeBadge: 'ปรับปรุงวันที่สถานะแก้ไขล่าสุด',
-      badgeClass: 'badge-type-edit',
-      title: 'ปรับปรุงวันที่สถานะ SAP แก้ไขล่าสุด ให้เป็น 28 ต.ค. 69 ทุกจุดตรงตามไฟล์จริงหลังอัปเดตไฟล์',
-      targetSubject: 'ป้ายแสดงวันที่สถานะ SAP แก้ไขล่าสุด (#wbsHeaderDatesPlain, #wbsKpiSapDateText, .bar-sap-date-plain, .th-sub-date-text, #dataHistoryBadge, DATA_SOURCE_CATALOG src_04)',
-      storageFile: 'index.html, js/wbs.js, js/data_history.js',
-      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน "ให้แก้ วันที่สถานะแก้ไขล่าสุด ด้วยทุกครั้ง หลังupdate ไฟล์": ปรับแก้ป้ายแสดงวันที่สถานะ SAP แก้ไขล่าสุด จากเดิม "27 ต.ค. 69" เป็น "28 ต.ค. 69" (อ้างอิงวันเวลาบันทึกล่าสุดของไฟล์ 04 WBS ZBUDR064 รอบ 28 ต.ค. 2569 เวลา 07:42:30 น.) ให้ครบถ้วนทุกจุดในระบบ ทั้งหัวการ์ด WBS, หัวการ์ดภาพรวม KPI, หัวกราฟล่างยอดดำเนินการ, แถบตัวกรองที่เลือก (Pills), หัวคอลัมน์ตาราง WBS (สถานะ SAP), แท็บเมนูประวัติข้อมูล (#dataHistoryBadge) และผัง Model View',
-      details: '1) ใน index.html: ปรับปรุงป้ายวันที่ใน #wbsHeaderDatesPlain คอลัมน์สถานะ SAP เป็น "แก้ไขล่าสุด: 28 ต.ค. 69" (title: 28 ต.ค. 2569), ปรับป้ายแท็บ #dataHistoryBadge เป็น "28 ต.ค.", และอัปเดต Version Cache Busters เป็น ?v=20261028_0800 2) ใน js/wbs.js: ปรับปรุงป้าย pill-file-04 เป็น 28 ต.ค. 2569, 07:42 น., ปรับปรุง #wbsKpiSapDateText เป็น "สถานะ SAP แก้ไขล่าสุดวันที่ 28 ต.ค. 69", ปรับปรุง .bar-sap-date-plain เป็น "สถานะ SAP แก้ไขล่าสุด: 28 ต.ค. 69", และปรับปรุงหัวคอลัมน์ statusSap ใน renderWbsTableHead เป็น "แก้ไขล่าสุด: 28 ต.ค. 69" 3) ใน js/data_history.js: อัปเดตข้อมูล src_04 ใน DATA_SOURCE_CATALOG (นำเข้า 28 ต.ค. 2569, 07:42 น., ขนาด 937.5 KB), อัปเดตผัง Model View Data Flow Diagram และอัปเดตเวลา SYSTEM_STORAGE_FILES ของ js/data_wbs.js พร้อมบันทึกประวัติการแก้ไขลงใน BASE_AUDIT_LOGS ตามข้อบังคับ AGENTS.md',
-      sourceFile: 'คำสั่งผู้ใช้งาน: "ให้แก้ วันที่สถานะแก้ไขล่าสุด ด้วยทุกครั้ง หลังupdate ไฟล์"',
-      author: 'ผู้ดูแลระบบ (System Admin)',
-      impactLevel: 'ปานกลาง (ตรวจสอบและปรับปรุงป้ายแสดงวันที่สถานะ SAP ล่าสุดให้สอดคล้องกับไฟล์ข้อมูลจริง 28 ต.ค. 2569 ในทุกจุดแสดงผล)'
-    },
-    {
-      id: 'log_000_update_wbs_file_04_zbudr064_oct28_morning',
-      timestamp: '2026-10-28 07:45:00',
-      timestampTh: '28 ต.ค. 2569, 07:45 น.',
-      type: 'IMPORT',
-      typeBadge: 'อัปเดตไฟล์ 04 WBS ZBUDR064',
-      badgeClass: 'badge-type-import',
-      title: 'อัปเดตฐานข้อมูลไฟล์ 04 WBS ZBUDR064 (รอบ 28 ต.ค. 2569, 07:37:04 น.) พร้อมคำนวณ % เบิกพัสดุและ % เบิก คชจ. ผสานเข้าสู่ data_wbs.js',
-      targetSubject: 'ไฟล์ 04 WBS ZBUDR064, ฐานข้อมูล WBS คงเหลือ (js/data_wbs.js, window.AUC_WBS_REMAINING_DATA)',
-      storageFile: '04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx, js/data_wbs.js, index.html, js/data_history.js',
-      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน "update ไฟล์ 04 WBS": 1) นำเข้าและประมวลผลไฟล์ Excel ใหม่ "04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx" (ขนาด 749.4 KB, 4,590 แถวดิบ บันทึกล่าสุด 28 ต.ค. 2569 เวลา 07:37:04 น.) 2) เขียนสูตรและจัดรูปแบบเปอร์เซ็นต์อัตโนมัติในคอลัมน์ 24 (% เบิกพัสดุ: =IFERROR((M/T),0)) และคอลัมน์ 25 (% เบิก คชจ.: =IF(V=0,0,IFERROR(R/V,0))) ครบทุกแถว 3) ดำเนินการ Merge เข้ากับฐานข้อมูลงานคงเหลือหลัก 2,083 โครงการ (File 03, File 05 Baseline, File 06) ครบถ้วน 100% 4) ซิงค์และคงข้อมูลแผนปิดงาน (planClose 1,044 รายการ) และหมายเหตุหน้างาน (note 1,004 รายการ) จาก Google Sheet Live API และฐานข้อมูลเดิมครบถ้วน ไม่สูญหาย 5) ตรวจพบการเปลี่ยนแปลงสถานะ SAP จำนวน 19 โครงการ (ส่วนใหญ่เปลี่ยนเป็น CLSD F4/F2 หรือ D1) และมีการเปลี่ยนแปลง % เบิกพัสดุจำนวน 12 โครงการ 6) ส่งออกและอัปเดต js/data_wbs.js ขนาด 2.36 MB เรียบร้อยสมบูรณ์',
-      details: '1) ในไฟล์ Excel 04 WBS: เติมสูตร Excel และฟอร์แมต 0.00% ในคอลัมน์ 24 และ 25 พร้อมตรวจสอบค่าตัวอย่างถูกต้องสมบูรณ์ 2) สำรองไฟล์ js/data_wbs.bak_before_update_f4_oct28_morning.js ก่อนดำเนินการ 3) รันสคริปต์ผสานข้อมูล WBS 2,083 โครงการ โดยอัปเดตฟิลด์สถานะ SAP (status, statusSap), งบประมาณ, ค่าใช้จ่ายจริง, แผนงาน, เปอร์เซ็นต์การเบิกจ่าย (% เบิกพัสดุ, % เบิก คชจ.) จากไฟล์ 04 รอบใหม่ 4) ดึงและผสานข้อมูลแผนปิดงานและหมายเหตุจาก Google Sheet API คงไว้ครบถ้วน 5) สร้างไฟล์ js/data_wbs.js ใหม่ขนาด 2.36 MB (2,477,355 ไบต์) พร้อมใช้งาน 6) อัปเดต Cache Buster ใน index.html เป็น ?v=20261028_0745 และบันทึกประวัติการเปลี่ยนแปลงตามข้อกำหนดใน AGENTS.md',
-      sourceFile: '04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx (แก้ไขล่าสุด 28 ต.ค. 2569, 07:37:04 น., ขนาด 749.4 KB)',
-      author: 'ผู้ดูแลระบบ (System Admin)',
-      impactLevel: 'สูง (อัปเดตสถานะโครงการจริงในระบบ SAP จำนวน 19 โครงการที่ปิดงาน/เปลี่ยนสถานะ และอัปเดต % เบิกจ่ายพัสดุและงบประมาณล่าสุดของ กฟก.3)'
-    },
-    {
-      id: 'log_000_nav_tabs_lock_passcode',
-      timestamp: '2026-10-28 07:35:00',
-      timestampTh: '28 ต.ค. 2569, 07:35 น.',
-      type: 'CONFIG',
-      typeBadge: 'เพิ่มปุ่มล็อค 3 เมนู (Admin PIN)',
-      badgeClass: 'badge-type-config',
-      title: 'เพิ่มปุ่มล็อค 3 เมนู (วิเคราะห์เปรียบเทียบ & Timeline, ศูนย์แจ้งเตือนจุดวิกฤต, ประวัติการนำเข้า & แก้ไขข้อมูล) ด้วยรหัส Admin PIN',
-      targetSubject: 'แถบเมนูนำทาง Navigation Bar (#btnToggleNavTabsLock, tab-analytics, tab-warning, tab-data-history, .nav-tab-lock-badge, adminPinModal)',
-      storageFile: 'index.html, css/styles.css, js/app.js, js/data_history.js',
-      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน "เพิ่มปุ่มล็อค 3 เมนู" พร้อมภาพถ่ายแถบเมนู: 1) เพิ่มปุ่มล็อค 3 เมนู (#btnToggleNavTabsLock) สไตล์พรีเมียมสีทองเรืองแสงบนแถบ Navigation Bar วางไว้ถัดจากเมนูประวัติการนำเข้า & แก้ไขข้อมูล 2) ล็อคการเข้าถึง 3 เมนูพิเศษ (วิเคราะห์เปรียบเทียบ & Timeline, ศูนย์แจ้งเตือนจุดวิกฤต, ประวัติการนำเข้า & แก้ไขข้อมูล) เป็นสถานะเริ่มต้น (Default Locked 🔒) พร้อมแสดงป้ายไอคอนแม่กุญแจทอง (.nav-tab-lock-badge) บนแท็บทั้งสาม 3) เมื่อคลิกปุ่มล็อค 3 เมนู หรือคลิกที่แท็บใดแท็บหนึ่งใน 3 เมนูนี้ ระบบจะเปิดหน้าต่างยืนยัน Admin PIN เพื่อกรอกรหัสผ่าน 4) เมื่อกรอกรหัสผ่านสำเร็จ ระบบจะปลดล็อคทั้ง 3 เมนูพร้อมกัน ปรับเปลี่ยนปุ่มเป็น "🔓 ปลดล็อคแล้ว (Admin)" สีเขียวมรกต ซ่อนป้ายแม่กุญแจ และสลับไปยังแท็บที่เลือกทันที 5) สามารถคลิกปุ่มเพื่อล็อคกลับได้ทุกเมื่อ โดยระบบจะสลับกลับไปยังหน้าภาพรวมผู้บริหาร (Overview) อัตโนมัติเพื่อความปลอดภัยสูงสุด',
-      details: '1) ใน index.html: เพิ่ม id="navTabBtnAnalytics", id="navTabBtnWarning" และป้าย <span class="nav-tab-lock-badge">🔒</span> บนปุ่มแท็บทั้ง 3 เมนู; เพิ่มปุ่มแม่กุญแจ <button class="btn-nav-tabs-lock is-locked" id="btnToggleNavTabsLock"> วางต่อท้ายเมนูประวัติการนำเข้า & แก้ไขข้อมูล; อัปเดต Cache Busters ของ data_history.js และ app.js เป็น ?v=20261028_0730 2) ใน css/styles.css: เพิ่มคลาส .btn-nav-tabs-lock สไตล์ Glassmorphism สีทองขอบเรืองแสงสำหรับสถานะล็อก (.is-locked) และสีเขียวมรกตสำหรับสถานะปลดล็อก (.admin-unlocked) รองรับทั้ง Dark Theme และ Light Theme; เพิ่มคลาส .nav-tab-lock-badge สำหรับป้ายไอคอนล็อกบนแท็บเมนู 3) ใน js/app.js: เพิ่มระบบจัดการสิทธิ์การเข้าถึง 3 เมนู (isNavTabsAuthenticated, setNavTabsAuthenticated, lockNavTabs, toggleNavTabsLock, updateNavTabsLockUI) โดยรีเซ็ตสถานะเป็นล็อก (false) เสมอทุกครั้งที่โหลดหน้าเว็บใหม่; ปรับปรุง switchTab() และ event listener ของ .nav-tab-btn ให้ดักจับการคลิกแท็บที่ล็อกและเปิดโมดัล Admin PIN; ปรับปรุง openAdminPinModal() และ verifyAdminPin() รองรับบริบท "nav_tabs" และ "nav_lock" 4) บันทึกประวัติลงใน BASE_AUDIT_LOGS ตามข้อบังคับ AGENTS.md',
-      sourceFile: 'คำสั่งผู้ใช้งาน: "เพิ่มปุ่มล็อค 3 เมนู" พร้อมภาพหน้าจอแถบเมนูนำทาง 3 เมนู',
-      author: 'ผู้ดูแลระบบ (System Admin)',
-      impactLevel: 'ปานกลาง (ยกระดับความปลอดภัยในการเข้าถึงข้อมูลเชิงลึก 3 เมนูสำคัญ โดยต้องใช้รหัส Admin PIN ในการเข้าถึง)'
-    },
-    {
-      id: 'log_000_wbs_clear_table_selections_button_toolbar',
-      timestamp: '2026-10-27 20:00:00',
-      timestampTh: '27 ต.ค. 2569, 20:00 น.',
-      type: 'EDIT',
-      typeBadge: 'ปุ่มล้างตัวเลือกในตาราง WBS',
-      badgeClass: 'badge-type-edit',
-      title: 'นำข้อความแสดงข้อมูลรายการที่ออก และเพิ่มปุ่ม "ล้างตัวเลือกทั้งหมดในตารางนี้" วางข้างๆ ปุ่มขยายจอ ตามภาพกรอบสีแดง',
-      targetSubject: 'แถบเครื่องมือหัวตาราง WBS (#aucWbsRemainingTableCard, .table-header-right, #btnClearWbsTableSelections, .table-stats-info)',
-      storageFile: 'index.html, css/styles.css, js/wbs.js, js/data_history.js',
-      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน: "คำสั่ง เอาออก และเพิ่มล้างตัวเลือกทั้งหมดในตารางนี้ โดยวางปุ่มข้างๆ ปุ่มขยายจอ" (ภาพเวลา 07.06 pm): 1) เอาข้อความแสดงจำนวนรายการ "แสดงข้อมูลรายการที่ 1 - 25 จากที่กรองได้ 2,083 รายการ" ที่ตีกรอบสีแดงออกจากแถบเครื่องมือหัวตาราง เพื่อคืนพื้นที่แนวนอนให้หัวตารางกระชับ สะอาดตา และไม่ซ้ำซ้อนกับตัวเลขหน้าด้านล่าง (Pagination Footer) 2) เพิ่มปุ่มใหม่ "ล้างตัวเลือกทั้งหมดในตารางนี้" (#btnClearWbsTableSelections) วางไว้ข้างๆ ปุ่มขยายจอ (#btnWbsTableFullscreen) 3) เมื่อคลิกปุ่ม ระบบจะปลดเครื่องหมาย Checkbox ทุกแถว, ปลด Master Checkbox, ล้างตัวกรองสถานะ SAP และงวดบัญชีเฉพาะในตาราง, ปิด Dropdown และรีเซ็ตกลับหน้าแรกทันที',
-      details: '1) ใน index.html: กำหนด style="display:none;" ให้กับ .table-stats-info เพื่อซ่อนข้อความตามกรอบสีแดงแต่ยังคง id wbsPageRange/wbsFilteredCount ไว้สำหรับคำนวณภายใน, เพิ่มปุ่ม <button class="btn-wbs-clear-table-selections" id="btnClearWbsTableSelections" onclick="window.clearAllWbsTableSelections()"> พร้อมไอคอนถังขยะ/ล้างข้อมูล วางชิดข้างซ้ายของปุ่ม #btnWbsTableFullscreen 2) ใน css/styles.css: เพิ่มสไตล์ .btn-wbs-clear-table-selections ธีมมืดและสว่าง โทนสีแดง-ส้มปะการัง (#F87171) พร้อมเอฟเฟกต์โฮเวอร์เรืองแสง 3) ใน js/wbs.js: สร้างฟังก์ชัน window.clearAllWbsTableSelections() สำหรับปลด Checkbox ทุกแถว, ปลด Checkbox หัวตาราง, เคลียร์ wbsState.tableSapStatuses และ wbsState.tablePlanCloseStatuses, ปิดหน้าต่างตัวกรอง และรีเรนเดอร์ตาราง 4) อัปเดต Cache Busters ใน index.html เป็น ?v=20261027_2005 5) บันทึกประวัติลงใน BASE_AUDIT_LOGS ตามข้อบังคับ AGENTS.md',
-      sourceFile: 'คำสั่งผู้ใช้งาน: "รันคำสั่ง เวลา 07.06 pm ที่ค้างไว้ต่อได้เลย" และ "คำสั่ง เอาออก และเพิ่มล้างตัวเลือกทั้งหมดในตารางนี้ โดยวางปุ่มข้างๆ ปุ่มขยายจอ"',
-      author: 'ผู้ดูแลระบบ (System Admin)',
-      impactLevel: 'ปานกลาง (ปรับปรุงการใช้งานตาราง WBS ให้สามารถล้างตัวเลือก/ตัวกรองภายในตารางได้อย่างสะดวกรวดเร็วในคลิกเดียว และทำให้แถบเครื่องมือหัวตารางสะอาดตา)'
-    },
-    {
-      id: 'log_000_wbs_restore_system_syntax_fix',
-      timestamp: '2026-10-27 19:48:00',
-      timestampTh: '27 ต.ค. 2569, 19:48 น.',
-      type: 'EDIT',
-      typeBadge: 'กู้คืนระบบตาราง WBS',
-      badgeClass: 'badge-type-edit',
-      title: 'กู้คืนระบบแสดงผลข้อมูลหน้า WBS คงเหลือครบ 2,083 โครงการ และแก้ไขข้อผิดพลาด Syntax Error ในไฟล์ js/wbs.js',
-      targetSubject: 'หน้างานคงค้าง WBS (wbs.js, wbsMasterTable, RAW_WBS_DATA, WBS_DATA, renderWbsTab)',
-      storageFile: 'js/wbs.js, index.html, js/data_history.js',
-      changeSummary: 'ดำเนินการตรวจสอบและกู้คืนระบบทันทีตามคำสั่งผู้ใช้: "ข้อมูล หน้า WBS คงเหลือหายทั้งหมดให้กู้คืนระบบ และสาเหตุที่เกิดขึ้น": 1) สาเหตุที่เกิดขึ้น: ฐานข้อมูลจริงใน js/data_wbs.js ไม่ได้สูญหายหรือเสียหาย (คงอยู่ครบ 2,083 โครงการ ขนาด 2.47 MB) แต่เกิดจากการขาดวงเล็บปีกกาปิด "}" ในบล็อก switch-case (case "planClose":) บริเวณบรรทัดที่ 3646 ของไฟล์ js/wbs.js ทำให้ JavaScript Engine หยุดการทำงาน (SyntaxError: Unexpected token "case") ส่งผลให้ฟังก์ชัน renderWbsTab() และตัวตาราง WBS ทั้งหมดไม่ถูกประมวลผล 2) การแก้ไข: เติมเครื่องหมายปีกกาปิด "}" ก่อนเริ่มบล็อก case "note": ให้ไวยากรณ์ถูกต้องสมบูรณ์ 3) ผลลัพธ์: ตาราง WBS สามารถประมวลผลและกลับมาแสดงผลครบถ้วนสมบูรณ์ 2,083 โครงการ พร้อมข้อมูลทุกคอลัมน์ ค่า AUC, %เบิกพัสดุ, สถานะ SAP, แผนปิดงาน และปุ่มล็อก 🔒 ตามปกติ',
-      details: '1) วิเคราะห์และตรวจสอบไฟล์ฐานข้อมูลหลัก js/data_wbs.js พบว่าข้อมูลทั้งหมด 2,083 โครงการสมบูรณ์ครบถ้วน 2) ทดสอบการโหลดสคริปต์ js/wbs.js พบข้อผิดพลาด SyntaxError: Unexpected token "case" บริเวณ switch(headerCol.id) case "planClose": {...} บรรทัดที่ 3646 ขาดเครื่องหมายปีกกาปิด "}" ก่อนเริ่ม case "note": 3) ทำการเพิ่มปีกกาปิด "}" ปิดบล็อก case "planClose": ใน js/wbs.js 4) ทดสอบด้วย Headless Microsoft Edge DOM Rendering ผลปรากฏว่า wbsFilteredCount แสดงผล 2,083 รายการ และแถวในตาราง wbsTableBody เรนเดอร์ครบถ้วนถูกต้องสมบูรณ์ 5) อัปเดต Cache Busters ใน index.html เป็น ?v=20261027_1950 และบันทึกประวัติการกู้คืนใน BASE_AUDIT_LOGS',
-      sourceFile: 'คำสั่งผู้ใช้งาน: "ข้อมูล หน้า WBS คงเหลือหายทั้งหมดให้กู้คืนระบบ และสาเหตุที่เกิดขึ้น"',
-      author: 'ผู้ดูแลระบบ (System Admin)',
-      impactLevel: 'สูง (กู้คืนระบบหน้าตาราง WBS ให้กลับมาแสดงผล 100% ครบทั้ง 2,083 โครงการโดยข้อมูลไม่มีการสูญหาย)'
-    },
-    {
-      id: 'log_000_wbs_default_lock_button_until_unlocked_pencil',
-      timestamp: '2026-10-27 19:35:00',
-      timestampTh: '27 ต.ค. 2569, 19:35 น.',
-      type: 'EDIT',
-      typeBadge: 'ปรับปุ่มแก้ไข WBS เป็นปุ่มล็อกโดยเริ่มต้น',
-      badgeClass: 'badge-type-config',
-      title: 'กำหนดให้ค่าเริ่มต้น (Default) แสดงปุ่มล็อก 🔒 ในทุกแถวของตาราง WBS จนกว่าจะปลดล็อกด้วย Admin PIN ถึงจะเปลี่ยนเป็นรูปดินสอ ✏️',
-      targetSubject: 'ปุ่มแก้ไขในตาราง WBS (.btn-wbs-inline-edit, .btn-th-wbs-lock, isWbsEditAuthenticated, wbsMasterTable)',
-      storageFile: 'js/app.js, js/wbs.js, css/styles.css, index.html, js/data_history.js',
-      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน: "default แสดงปุ่มล็อค จนกว่าจะปลดล็อค ถึงเป็นรูปดินสอ" พร้อมภาพกรอบสี่เหลี่ยมสีแดงครอบคอลัมน์ปุ่มแก้ไขในตาราง WBS: 1) กำหนดให้ค่าเริ่มต้น (Default State) ของระบบในการโหลดหน้าเว็บหรือรีเฟรช เป็นสถานะล็อก (🔒) เสมอ โดยทุกแถวแสดงปุ่มแม่กุญแจล็อกสีทอง (.btn-wbs-inline-edit.is-locked) 2) เมื่อผู้ใช้คลิกปุ่มล็อกในแถวใด หรือคลิกปุ่ม "ปลดล็อกแก้ไข" ที่หัวตาราง ระบบจะเปิดหน้าต่างกรอกรหัส Admin PIN 3) เมื่อกรอก PIN ถูกต้อง ระบบจะปลดล็อกและเปลี่ยนปุ่มทุกแถวให้กลายเป็นรูปดินสอ (✏️) สีเขียวมรกตทันที พร้อมเปิดหน้าต่างแก้ไขข้อมูลของแถวที่คลิกให้ทันที 4) เมื่อคลิกปุ่มล็อกที่หัวตาราง หรือเมื่อเปิด/รีเฟรชหน้าเว็บใหม่ ระบบจะรีเซ็ตกลับไปเป็นปุ่มล็อก (🔒) โดยเริ่มต้นอย่างปลอดภัย',
-      details: '1) ใน js/app.js: กำหนดตัวแปร _wbsEditUnlockedInMemory = false; และล้าง sessionStorage.removeItem("auc_wbs_edit_authenticated") ในตอนเริ่มต้น เพื่อให้ค่าเริ่มต้นของ isWbsEditAuthenticated() คืนค่าเป็น false (ล็อก) เสมอทุกครั้งที่โหลดหน้าเว็บ 2) ใน js/wbs.js: กำหนดค่าเริ่มต้นใน initWbsApp() ให้ล็อกเสมอ, อัปเดตการตรวจสอบ isWbsAuth ให้ยึดค่าเริ่มต้นเป็น false, เพิ่มปุ่มล็อก/ปลดล็อก (.btn-th-wbs-lock) ใต้หัวคอลัมน์หมายเหตุ (G-SHEET) เพื่อให้ผู้ใช้สามารถคลิกล็อกกลับได้สะดวก และคงการทำงานเมื่อปลดล็อกแล้วจะเปลี่ยนไอคอนเป็นดินสอ ✏️ ทุกแถว 3) ใน css/styles.css: ปรับขนาดปุ่ม .btn-wbs-inline-edit เป็น 20x20px พร้อมจัดสไตล์สีทองเรืองแสงสำหรับสถานะล็อก (.is-locked) และสีเขียวมรกตสำหรับสถานะปลดล็อก (ดินสอ ✏️) 4) ใน index.html: อัปเดต Cache Busters เป็น ?v=20261027_1935 5) บันทึกประวัติลงใน BASE_AUDIT_LOGS ตามข้อกำหนดใน AGENTS.md',
-      sourceFile: 'คำสั่งผู้ใช้งาน: "default แสดงปุ่มล็อค จนกว่าจะปลดล็อค ถึงเป็นรูปดินสอ" พร้อมภาพตาราง WBS วาดกรอบสีแดงครอบคอลัมน์ปุ่มแก้ไข',
-      author: 'ผู้ดูแลระบบ (System Admin)',
-      impactLevel: 'ปานกลาง (เพิ่มความปลอดภัยในการแก้ไขข้อมูล แผนงานและหมายเหตุจะไม่ถูกแก้ไขโดยไม่ได้ตั้งใจ และมีสถานะเริ่มต้นเป็นปุ่มล็อก 🔒 ชัดเจนตามความต้องการ)'
-    },
-    {
-      id: 'log_000_target_five_pct_latest_save_timestamp_and_neon_gradient_border',
-      timestamp: '2026-10-27 19:25:00',
-      timestampTh: '27 ต.ค. 2569, 19:25 น.',
-      type: 'EDIT',
-      typeBadge: 'เพิ่มวันบันทึกล่าสุดและขอบนีออนไล่เฉด',
-      badgeClass: 'badge-type-config',
-      title: 'เพิ่มการแสดงผลวัน-เวลาบันทึกการตั้งค่าล่าสุด (Save Timestamp) และปรับขอบการ์ดตั้งค่า +5% คงเหลือ เป็นแสงนีออนไล่เฉดสีเปลี่ยนสีต่อเนื่อง',
-      targetSubject: 'การ์ดตั้งค่า +5% คงเหลือ (.next3m-config-panel-card, .next3m-config-saved-at, btnSaveTargetFivePct)',
-      storageFile: 'js/app.js, css/styles.css, index.html, js/data_history.js',
-      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน: "1.เพิ่มวันแสดง การsave ล่าสุด 2.ขอบการ์ดเปลี่ยนสี นีออนไล่เฉดสี" พร้อมภาพการ์ดตั้งค่า +5% คงเหลือ: 1) เพิ่มส่วนแสดงผลวัน-เวลาการบันทึกการตั้งค่าล่าสุด (เช่น "บันทึกล่าสุด: 27 ต.ค. 2569, 19:25 น.") พร้อมไอคอนนาฬิกาเรืองแสงสีฟ้าและตัวเลขสีทองเด่นชัด โดยจัดเก็บลง localStorage (PEA_AUC_TARGET_FIVE_PERCENT_SAVED_AT_V1) แบบถาวร 2) เมื่อกดปุ่ม "บันทึกการตั้งค่า (Save)" จะอัปเดตวันเวลาเป็นปัจจุบันทันที พร้อมแอนิเมชันแฟลชสีเขียวมรกต 3) ปรับแต่งขอบการ์ด .next3m-config-panel-card ให้เป็นเส้นขอบนีออนไล่เฉดสีแบบ Dynamic Neon Gradient (Hot Pink -> Violet -> Cyan -> Lime -> Gold) หมุนเวียนเปลี่ยนสีต่อเนื่องอย่างนุ่มนวล พร้อมออร่าแสงนีออน (Neon Aura Glow) สะท้อนรอบการ์ดสวยงามสมบูรณ์แบบ',
-      details: '1) ใน js/app.js: เพิ่มตัวแปร STORAGE_FIVE_PCT_SAVED_AT_KEY, ฟังก์ชัน formatThaiSaveTimestamp(), getTargetFivePctSavedAt(), setTargetFivePctSavedAt(); เพิ่มส่วนแสดงผล .next3m-config-saved-at ในฟังก์ชัน renderTargetFivePctConfigCard(); ปรับปรุง window.saveTargetFivePctConfigFromUI() ให้บันทึกเวลาปัจจุบันและอัปเดตข้อความใน UI ทันที 2) ใน css/styles.css: ปรับขอบ .next3m-config-panel-card เป็น border: 2.2px solid transparent; พร้อมพื้นหลังสองชั้น padding-box และ border-box ไล่เฉดสีนีออน #FF007F, #8B5CF6, #00F0FF, #00FF87, #FACC15; เพิ่ม @keyframes neonBorderShift ให้เฉดสีนีออนเคลื่อนที่เปลี่ยนสีตลอดเวลา และ @keyframes neonAuraPulse สร้างแสงนีออนเรืองรอบการ์ด; เพิ่มสไตล์ .next3m-config-saved-at, .saved-clock-icon, .saved-time-highlight และคลาส .just-updated 3) ใน index.html: อัปเดต Cache Busters เป็น ?v=20261027_1925 4) บันทึกประวัติลงใน BASE_AUDIT_LOGS ตามข้อบังคับ AGENTS.md',
-      sourceFile: 'คำสั่งผู้ใช้งาน: "1.เพิ่มวันแสดง การsave ล่าสุด 2.ขอบการ์ดเปลี่ยนสี นีออนไล่เฉดสี" พร้อมภาพหน้าจอการ์ดตั้งค่า +5% คงเหลือ',
-      author: 'ผู้ดูแลระบบ (System Admin)',
-      impactLevel: 'ปานกลาง (เพิ่มความชัดเจนในการติดตามวันเวลาที่บันทึกข้อมูลล่าสุด และยกระดับดีไซน์การ์ดให้โดดเด่น สวยงามระดับพรีเมียมด้วยเอฟเฟกต์นีออนเคลื่อนไหว)'
-    },
-    {
-      id: 'log_000_update_wbs_file_04_zbudr064_oct27_evening',
-      timestamp: '2026-10-27 19:15:00',
-      timestampTh: '27 ต.ค. 2569, 19:15 น.',
-      type: 'IMPORT',
-      typeBadge: 'อัปเดตไฟล์ 04 WBS ZBUDR064',
-      badgeClass: 'badge-type-import',
-      title: 'อัปเดตฐานข้อมูลไฟล์ 04 WBS ZBUDR064 (รอบ 15:30:24 น.) พร้อมคำนวณ % เบิกพัสดุและค่าใช้จ่าย ผสานเข้าสู่ data_wbs.js อย่างสมบูรณ์',
-      targetSubject: 'ไฟล์ 04 WBS ZBUDR064, ฐานข้อมูล WBS คงเหลือ (js/data_wbs.js, window.AUC_WBS_REMAINING_DATA)',
-      storageFile: '04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx, js/data_wbs.js, index.html, js/data_history.js',
-      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน "update ไฟล์ 04 WBS": 1) นำเข้าและประมวลผลไฟล์ Excel ใหม่ "04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx" ขนาด 749.5 KB (4,590 แถวดิบ บันทึกล่าสุด 27 ต.ค. 2569 เวลา 15:30:24 น.) 2) เขียนสูตรและจัดรูปแบบเปอร์เซ็นต์อัตโนมัติในคอลัมน์ 24 (% เบิกพัสดุ: =IFERROR((M/T),0)) และคอลัมน์ 25 (% เบิก คชจ.: =IF(V=0,0,IFERROR(R/V,0))) ครบทุกแถว 3) ดำเนินการ Merge เข้ากับฐานข้อมูลงานคงเหลือหลัก 2,083 โครงการ (File 03, File 05 Baseline, File 06) ครบถ้วน 100% 4) ซิงค์และคงข้อมูลแผนปิดงาน (planClose) และหมายเหตุหน้างาน (note) จาก Google Sheet Live API และฐานข้อมูลเดิมครบถ้วน ไม่สูญหาย 5) ตรวจพบการเปลี่ยนแปลงสถานะ SAP จำนวน 40 โครงการ (ส่วนใหญ่เปลี่ยนเป็น CLSD F4 ปิดงานแล้ว) และมีการเปลี่ยนแปลง % เบิกพัสดุจำนวน 29 โครงการ 6) ส่งออกและอัปเดต js/data_wbs.js เรียบร้อยสมบูรณ์',
-      details: '1) ในไฟล์ Excel 04 WBS: เติมสูตร Excel และฟอร์แมต 0.00% ในคอลัมน์ 24 และ 25 พร้อมตรวจสอบค่าตัวอย่างถูกต้องสมบูรณ์ 2) สำรองไฟล์ js/data_wbs.bak_before_update_f4_evening.js ก่อนดำเนินการ 3) รันสคริปต์ผสานข้อมูล WBS 2,083 โครงการ โดยอัปเดตฟิลด์สถานะ SAP (status, statusSap), งบประมาณ, ค่าใช้จ่ายจริง (actMatNoCheck, actTotalCtrl ฯลฯ), แผนงาน (planMat, planSite), เปอร์เซ็นต์การเบิกจ่าย (% เบิกพัสดุ, % เบิก คชจ.) จากไฟล์ 04 รอบใหม่ 4) ดึงและผสานข้อมูลแผนปิดงานและหมายเหตุจาก Google Sheet API คงไว้ครบ 1,004 หมายเหตุ และ 1,044 แผนปิดงาน 5) สร้างไฟล์ js/data_wbs.js ใหม่ขนาด 2.36 MB (2,476,715 ไบต์) พร้อมใช้งาน 6) อัปเดต Cache Buster ใน index.html เป็น ?v=20261027_1915 และบันทึกประวัติการเปลี่ยนแปลงตามข้อกำหนดใน AGENTS.md',
-      sourceFile: '04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx (แก้ไขล่าสุด 27 ต.ค. 2569, 15:30:24 น., ขนาด 749.5 KB)',
-      author: 'ผู้ดูแลระบบ (System Admin)',
-      impactLevel: 'สูง (อัปเดตสถานะโครงการจริงในระบบ SAP จำนวน 40 โครงการที่ปิดงานแล้ว และอัปเดต % เบิกจ่ายพัสดุและงบประมาณล่าสุดของ กฟก.3)'
-    },
-    {
-      id: 'log_000_target_five_pct_criteria_names_standardize_and_single_page_fit',
-      timestamp: '2026-10-27 19:05:00',
-      timestampTh: '27 ต.ค. 2569, 19:05 น.',
-      type: 'EDIT',
-      typeBadge: 'ปรับชื่อเกณฑ์และเลย์เอาต์การ์ดเป้าหมาย',
-      badgeClass: 'badge-type-config',
-      title: 'แก้ไขชื่อเกณฑ์ ข้อ 1.1 - 5 ในการ์ดตั้งค่า +5% คงเหลือ ให้ตรงตามรูปแบบทางการ (รูปที่ 44) และปรับให้แสดงผลพอดีในหน้าเดียวโดยไม่ต้องเลื่อน',
-      targetSubject: 'การ์ดตั้งค่า +5% คงเหลือ (TARGET_FIVE_PCT_ITEMS, .next3m-config-panel-card, .next3m-config-body, .next3m-crit-row)',
-      storageFile: 'js/app.js, css/styles.css, index.html, js/data_history.js',
-      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน: "แก้ไขชื่อ ข้อ 1.1 - 5 ให้เหมือนกับ รูปที่ 44 และปรับให้แสดงในหน้าเดียว ไม่ต้องเลื่อนขึ้น ลง" พร้อมภาพเปรียบเทียบระหว่างรายการเช็คบ็อกซ์เดิมและดรอปดาวน์เกณฑ์วัดทางการ: 1) ปรับปรุงชื่อรายการใน TARGET_FIVE_PCT_ITEMS ทั้ง 10 ข้อให้กระชับและตรงตามรูปที่ 44 ทุกประการ เช่น ข้อ 1.1 งบ C.1 ก่อน 69, ข้อ 1.2 งบ I , P ก่อนปี 68, ข้อ 3.1 - 3.3 TECO D2, ข้อ 4 งบ C02.2 ปี 69, ข้อ5 งานบ้านและที่ดินจัดสรร 2) ยกเลิกการจำกัดความสูง max-height: 275px และแถบเลื่อน overflow-y: auto ใน .next3m-config-body 3) ปรับขนาดระยะห่างและ padding ของแต่ละแถวให้กระชับพอดี ทำให้แสดงผลครบทั้ง 10 ข้อในหน้าเดียวได้อย่างสวยงาม สมบูรณ์แบบโดยไม่ต้องเลื่อนขึ้น-ลงอีกต่อไป',
-      details: '1) ใน js/app.js: ปรับปรุง name และ shortName ใน TARGET_FIVE_PCT_ITEMS ทั้ง 10 เกณฑ์ (ข้อ 1.1, 1.2, 1.3, 2.1, 2.2, 3.1, 3.2, 3.3, 4, 5) ให้ใช้ชื่อทางการตรงตามดรอปดาวน์เกณฑ์วัดในระบบ (รูปที่ 44) ทั้งหมด 2) ใน css/styles.css: นำ max-height: 275px; และ overflow-y: auto; ออกจาก .next3m-config-body โดยกำหนดให้ flex: 1; overflow: visible; พร้อมปรับระยะห่าง gap: 0.18rem; และปรับ padding แถว .next3m-crit-row เป็น 0.14rem 0.35rem; min-height: 24px; เพื่อให้รายการทั้ง 10 แถวแสดงผลครบถ้วนเต็มพื้นที่การ์ดพอดีในหน้าเดียว 3) ใน index.html: อัปเดต Cache Busters ของ css/styles.css, js/app.js และ js/data_history.js เป็น ?v=20261027_1900 4) บันทึกประวัติลงใน BASE_AUDIT_LOGS ตามข้อกำหนดใน AGENTS.md',
-      sourceFile: 'คำสั่งผู้ใช้งาน: "แก้ไขชื่อ ข้อ 1.1 - 5 ให้เหมือนกับ รูปที่ 44 และปรับให้แสดงในหน้าเดียว ไม่ต้องเลื่อนขึ้น ลง" พร้อมภาพแคปหน้าจอรายการเช็คบ็อกซ์เดิมและดรอปดาวน์เกณฑ์วัด (รูปที่ 44)',
-      author: 'ผู้ดูแลระบบ (System Admin)',
-      impactLevel: 'ปานกลาง (เพิ่มความสะดวกในการใช้งาน อ่านง่าย สบายตา สอดคล้องกับชื่อเกณฑ์ทางการ และเห็นสถานะครบทุกข้อในหน้าจอเดียว)'
-    },
-    {
-      id: 'log_000_top_sticky_filter_bar_align_max_width_1720',
-      timestamp: '2026-10-27 18:45:00',
-      timestampTh: '27 ต.ค. 2569, 18:45 น.',
-      type: 'EDIT',
-      typeBadge: 'ปรับขนาดแถวตัวกรองแนวนอน',
-      badgeClass: 'badge-type-config',
-      title: 'ปรับขนาดความกว้างของแถวตัวกรองด้านบน (.top-filter-inner) ให้มีขนาดกว้างเท่ากับตัวอื่น พอดีหน้า ไม่ยื่นเกินแนวขอบเลย์เอาต์หลัก',
-      targetSubject: 'แถวตัวกรองแนวนอนด้านบน (.top-sticky-filter-bar, .top-filter-inner)',
-      storageFile: 'css/styles.css, index.html, js/data_history.js',
-      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน: "แถวตัวกรอง ปรับขนาดให้เท่ากับตัวอื่น พอดีหน้า ไม่ยื่นมาแบบนี้" พร้อมภาพกรอบสี่เหลี่ยมสีแดงครอบแถบตัวกรองและเส้นขนานสีเหลืองแสดงแนวยื่นเกินการ์ดด้านล่าง: 1) ปรับ .top-filter-inner ให้มี max-width: 1720px; margin: 0 auto; กว้างพอดีและจัดกึ่งกลางตรงกับ .header-inner, .nav-tabs-inner และ .main-container 2) ปรับ padding ของ .top-sticky-filter-bar เป็น 0.52rem 1.5rem ให้ตรงกับขอบซ้าย-ขวาของส่วนหัวและเมนูนำทาง 3) ทำให้แถวตัวกรองทั้งหมดเรียงตัวบรรทัดเดียวสวยงามบนหน้าจอทุกขนาด ไม่ยื่นเลยขอบการ์ดและส่วนอื่นๆ อีกต่อไป',
-      details: '1) ใน css/styles.css: แก้ไข .top-sticky-filter-bar ให้มี padding: 0.52rem 1.5rem; ให้มีขอบซ้าย-ขวา 1.5rem เท่ากับ .app-header, .nav-tabs-bar และ .main-container; เพิ่ม max-width: 1720px; margin: 0 auto; ใน .top-filter-inner เพื่อจำกัดขอบเขตความกว้างและจัดกึ่งกลางหน้าจอให้มีแนวขอบซ้าย-ขวาตรงกับโครงสร้างการ์ดและส่วนหัวของระบบอย่างแม่นยำ ไม่ยื่นล้นออกนอกเลย์เอาต์บนหน้าจอความละเอียดสูง (เช่น 1920px หรือ 4K) 2) ใน index.html: อัปเดต Cache Busters ของ css/styles.css และ js/data_history.js เป็น ?v=20261027_1845 3) บันทึกประวัติลงใน BASE_AUDIT_LOGS ตามข้อกำหนดใน AGENTS.md',
-      sourceFile: 'คำสั่งผู้ใช้งาน: "แถวตัวกรอง ปรับขนาดให้เท่ากับตัวอื่น พอดีหน้า ไม่ยื่นมาแบบนี้" พร้อมภาพแคปหน้าจอวาดกรอบสีแดงครอบแถบตัวกรองและขีดเส้นสีเหลืองแสดงแนวยื่นเกินการ์ด',
-      author: 'ผู้ดูแลระบบ (System Admin)',
-      impactLevel: 'ปานกลาง (ปรับปรุงเลย์เอาต์แนวกึ่งกลางและความกว้างของแถบตัวกรองด้านบนให้เป็นระเบียบเรียบร้อย สวยงาม พอดีหน้าจอ และสอดคล้องกับทุกคอมโพเนนต์)'
-    },
-    {
-      id: 'log_000_wbs_target_marker_flag_driver_replace_yellow_bar_remove_badge',
-      timestamp: '2026-10-27 18:25:00',
-      timestampTh: '27 ต.ค. 2569, 18:25 น.',
-      type: 'EDIT',
-      typeBadge: 'ปรับแต่งมาสคอตเสาธงเป้าหมาย WBS',
-      badgeClass: 'badge-type-config',
-      title: 'นำป้ายความสำเร็จออก ยกเลิกแท่งสีเหลืองทอง และนำเสาธงสีทองพร้อมน้องสว่างไปแทนที่แท่งเป้าหมายเดิม เคลื่อนไหวได้สวยงามและไม่บดบังตัวอักษร',
-      targetSubject: 'เส้นบอกระดับเป้าหมายและมาสคอตชักธงในการ์ดเปรียบเทียบ WBS (.target-marker-line, .pea-victory-hoist-wrapper, .pea-gold-flagpole, .pea-gold-flag-banner, .pea-flag-driver-mascot, .pea-victory-badge)',
-      storageFile: 'js/wbs.js, css/styles.css, index.html, js/data_history.js',
-      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน "เอาป้ายความสำเร็จออก และยกเลิกแท่งสีเหลืองทอง เอาธงและการ์ตูนไปแทนที่ พร้อมเคลื่อนไหวได้เหมือนเดิม และธงไม่บังอักษร" พร้อมภาพวงเล็บกากบาทสีแดงและลูกศรชี้ลงมายังแถบกราฟ: 1) เอาป้ายความสำเร็จ (.pea-victory-badge) ออก 2) ยกเลิกแท่งสีเหลืองทอง (.target-marker-line พื้นหลังสีทองและลำแสงเลเซอร์เดิม) 3) ย้ายเสาธงสีทอง ผืนธงทอง และตัวการ์ตูนน้องสว่าง กฟภ. ลงมาแทนที่แท่งสีเหลืองทองบนแถบกราฟ โดยเสาธงสีทองหัวยอดเสาเรืองแสงทำหน้าที่เป็นเส้นบอกระดับเป้าหมายโดยตรง 4) คงแอนิเมชันการเคลื่อนไหวโบกสะบัดของธง การขยับโบกมือของน้องสว่าง และประกายวิ้งบนยอดเสาตามเดิม 5) จัดระยะและขนาดให้พอดี ไม่บดบังตัวเลขและตัวอักษรด้านบนหรือด้านล่างแถบกราฟ',
-      details: '1) ใน js/wbs.js: นำ <div class="pea-victory-badge">...</div> และ <div class="target-marker-beam"></div> ออกจากมาร์กอัปของ .target-marker-line ใน renderComparisonCard() 2) ใน css/styles.css: ปรับ .target-marker-line ให้มี width: 0; background: transparent; border: none; box-shadow: none; ซ่อน .target-marker-beam และ .pea-victory-badge; ย้าย .pea-victory-hoist-wrapper ลงมาอยู่ที่ bottom: -2px; บนแถบกราฟ; ปรับเสาธง .pea-gold-flagpole ให้สูง 48px พร้อมหัวยอดเสาเรืองแสงทำหน้าที่เป็นเส้นเป้าหมาย; ปรับขนาดผืนธง .pea-gold-flag-banner เป็น 36x23px และน้องสว่าง .pea-flag-driver-mascot เป็น 28x28px ยืนข้างเสาธง; ปรับระยะ .track-progress margin-top: 0.85rem; เพื่อเว้นพื้นที่ให้อักษรด้านบนโปร่งตา ไม่บังตัวอักษร 3) ใน index.html: อัปเดต Cache Busters เป็น ?v=20261027_1820 4) บันทึกประวัติลงใน BASE_AUDIT_LOGS ตามข้อบังคับ AGENTS.md',
-      sourceFile: 'คำสั่งผู้ใช้งาน: "เอาป้ายความสำเร็จออก และยกเลิกแท่งสีเหลืองทอง เอาธงและการ์ตูนไปแทนที่ พร้อมเคลื่อนไหวได้เหมือนเดิม และธงไม่บังอักษร" พร้อมภาพกากบาทสีแดงบนป้ายความสำเร็จและลูกศรชี้ลงมายังแถบกราฟ',
-      author: 'ผู้ดูแลระบบ (System Admin)',
-      impactLevel: 'ปานกลาง (ปรับแต่งหน้าตาเส้นเป้าหมาย WBS ให้กระชับ เรียบร้อย ไม่บดบังตัวเลข และคงความมีชีวิตชีวาของแอนิเมชันมาสคอต กฟภ.)'
-    },
-    {
-      id: 'log_000_fix_reference_error_hover_buffer_tag_and_restore_all_dashboard_graphs',
-      timestamp: '2026-10-27 18:05:00',
-      timestampTh: '27 ต.ค. 2569, 18:05 น.',
-      type: 'EDIT',
-      typeBadge: 'แก้ไขข้อผิดพลาด & กู้คืนกราฟทั้งหมด',
-      badgeClass: 'badge-type-edit',
-      title: 'แก้ไขข้อผิดพลาด ReferenceError (hoverBufferTag & isCritFivePctActive) และกู้คืนการแสดงผลกราฟทั้งหมดในหน้าภาพรวมผู้บริหาร (Overview)',
-      targetSubject: 'ฟังก์ชัน renderNext3mHorizontalBarChart(), isCritFivePctActive(), และกราฟทั้งหมดในหน้า Overview (Criteria Comparison Bar, Next 3M Single Bar Track, Office % Bar Chart)',
-      storageFile: 'js/app.js, index.html, js/data_history.js',
-      changeSummary: 'แก้ไขข้อผิดพลาด ReferenceError ที่ทำให้กราฟในหน้า Dashboard Overview ไม่แสดงผล: 1) ประกาศและคำนวณ hoverBufferTag ใน renderNext3mHorizontalBarChart() 2) ยกระดับขอบเขตฟังก์ชัน isCritFivePctActive() ขึ้นมาที่ App/Module Scope เพื่อให้ renderNext3mHorizontalBarChart() สามารถเรียกใช้ได้โดยไม่เกิดข้อผิดพลาด ReferenceError 3) ลบการประกาศฟังก์ชันซ้ำซ้อนใน renderNext3MonthsProjection() 4) ส่งผลให้ renderAll() ทำงานต่อเนื่องจนจบครบทุกฟังก์ชัน กราฟเปรียบเทียบ 8 เกณฑ์วัด, กราฟแท่งคาดการณ์ 3 เดือนถัดไป, และกราฟ % ปิดงานราย กฟฟ. กลับมาแสดงผลอย่างสมบูรณ์แบบ 100%',
-      details: '1) ใน js/app.js: ประกาศฟังก์ชัน isCritFivePctActive(critDef, monthNum, cfg) ที่ระดับขอบเขตหลัก (Module Scope) พร้อมผูกเข้ากับ window.isCritFivePctActive เพื่อให้ทุกฟังก์ชันในระบบสามารถตรวจสอบสถานะการเปิด/ปิดบัฟเฟอร์ 5% คงเหลือของแต่ละเกณฑ์วัดได้โดยตรง; นำการประกาศ local function ซ้ำซ้อนใน renderNext3MonthsProjection() ออก; คำนวณ hoverBufferTag ใน segmentConfigs.map(...) สำหรับแสดง Tooltip ข้อมูลบัฟเฟอร์ 5% ในแถบ Single Bar Track; ลบโค้ดตรวจสอบ debug ชั่วคราวออกจาก startApp() 2) ใน index.html: อัปเดต Cache Busters ของ js/data_history.js และ js/app.js เป็น ?v=20261027_1805 3) บันทึกประวัติลงใน BASE_AUDIT_LOGS ตามข้อกำหนดใน AGENTS.md',
-      sourceFile: 'คำสั่งผู้ใช้งาน: "รันต่อคำสั่งล่าสุด เอากราฟกลับมาให้ได้" พร้อมภาพถ่ายหน้าจอผู้ใช้งาน 01 รูป/40.jpg',
-      author: 'ผู้ดูแลระบบ (System Admin)',
-      impactLevel: 'วิกฤต (แก้ไขข้อผิดพลาดร้ายแรงที่หยุดการทำงานของ JavaScript ในหน้า Overview ทำให้กราฟและข้อมูลวิเคราะห์ทั้งหมดกลับมาทำงานได้ตามปกติ)'
     },
     {
       id: 'log_000_target_card_criteria_1_1_to_5_full_filter_and_kpi_badge_clean',
@@ -1559,11 +2276,11 @@
       type: 'CONFIG',
       typeBadge: 'แยกสิทธิ์ล็อกอิสระต่อกัน',
       badgeClass: 'badge-type-config',
-      title: 'แยกระบบล็อก/ปลดล็อกให้อิสระต่อกันระหว่างแผนปิดงาน (WBS) และการ์ดเป้าหมาย โดยใช้รหัสผ่าน Admin PIN เดียวกัน',
+      title: 'แยกระบบล็อก/ปลดล็อกให้อิสระต่อกันระหว่างแผนปิดงาน (WBS) และการ์ดเป้าหมาย โดยใช้รหัสผ่าน 225588 เดียวกัน',
       targetSubject: 'ระบบตรวจสอบสิทธิ์ Admin (การ์ดเป้าหมาย #btnToggleNext3mCards และ แผนปิดงาน WBS #btnWbsHeaderLock_planClose, #btnWbsHeaderLock_note)',
       storageFile: 'js/app.js, js/wbs.js, index.html, js/data_history.js',
-      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน "แก้ไข ล็อค ให้อิสระต่อกัน ระหว่างแผนปิดงาน และการ์ดเป้าหมาย แต่ใช้รหัสผ่านเดียวกัน": แยกสถานะการปลดล็อก (Authentication State) ใน sessionStorage ออกเป็น 2 ชุดอิสระ (auc_target_cards_authenticated และ auc_wbs_edit_authenticated) โดยทั้งสองส่วนยังคงใช้รหัสผ่าน Admin PIN เดียวกัน เมื่อปลดล็อกแผนปิดงานจะไม่ปลดล็อกการ์ดเป้าหมาย และเมื่อปลดล็อกหรือล็อกกลับการ์ดเป้าหมายก็จะไม่กระทบต่อการแก้ไขตาราง WBS',
-      details: '1) ใน js/app.js: แยกฟังก์ชันตรวจสอบสิทธิ์เป็น isTargetCardsAuthenticated() และ isWbsEditAuthenticated() พร้อมแยกฟังก์ชันล็อกกลับเป็น logoutTargetCards() และ logoutWbsEdit() 2) ปรับปรุง openAdminPinModal(targetContext) ให้รับพารามิเตอร์ "cards" หรือ "wbs" เพื่อปรับหัวข้อคำอธิบายใน Modal ให้ตรงกับฟังก์ชันที่กำลังปลดล็อก 3) ใน verifyAdminPin(): ตรวจสอบรหัสผ่าน Admin PIN เดียวกัน แต่ปลดล็อกเฉพาะเป้าหมายที่เรียกใช้งาน (context) อย่างแม่นยำ 4) ใน js/wbs.js: อัปเดต renderWbsTableHead(), renderWbsTable(), openWbsEditNoteModal(), handleWbsEditLockToggle(), และ updateWbsEditLockUI() ให้ตรวจสอบและจัดการสิทธิ์ผ่าน isWbsEditAuthenticated() และ logoutWbsEdit() 5) ใน index.html: เพิ่ม id="adminPinSubtitle" และ id="adminPinDesc" และอัปเดต Cache Buster เป็น ?v=20261026_0848 6) บันทึกประวัติลงใน BASE_AUDIT_LOGS ตามข้อบังคับ',
+      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน "แก้ไข ล็อค ให้อิสระต่อกัน ระหว่างแผนปิดงาน และการ์ดเป้าหมาย แต่ใช้รหัสผ่านเดียวกัน": แยกสถานะการปลดล็อก (Authentication State) ใน sessionStorage ออกเป็น 2 ชุดอิสระ (auc_target_cards_authenticated และ auc_wbs_edit_authenticated) โดยทั้งสองส่วนยังคงใช้รหัสผ่าน Admin PIN "225588" เดียวกัน เมื่อปลดล็อกแผนปิดงานจะไม่ปลดล็อกการ์ดเป้าหมาย และเมื่อปลดล็อกหรือล็อกกลับการ์ดเป้าหมายก็จะไม่กระทบต่อการแก้ไขตาราง WBS',
+      details: '1) ใน js/app.js: แยกฟังก์ชันตรวจสอบสิทธิ์เป็น isTargetCardsAuthenticated() และ isWbsEditAuthenticated() พร้อมแยกฟังก์ชันล็อกกลับเป็น logoutTargetCards() และ logoutWbsEdit() 2) ปรับปรุง openAdminPinModal(targetContext) ให้รับพารามิเตอร์ "cards" หรือ "wbs" เพื่อปรับหัวข้อคำอธิบายใน Modal ให้ตรงกับฟังก์ชันที่กำลังปลดล็อก 3) ใน verifyAdminPin(): ตรวจสอบรหัสผ่าน 225588 เดียวกัน แต่ปลดล็อกเฉพาะเป้าหมายที่เรียกใช้งาน (context) อย่างแม่นยำ 4) ใน js/wbs.js: อัปเดต renderWbsTableHead(), renderWbsTable(), openWbsEditNoteModal(), handleWbsEditLockToggle(), และ updateWbsEditLockUI() ให้ตรวจสอบและจัดการสิทธิ์ผ่าน isWbsEditAuthenticated() และ logoutWbsEdit() 5) ใน index.html: เพิ่ม id="adminPinSubtitle" และ id="adminPinDesc" และอัปเดต Cache Buster เป็น ?v=20261026_0848 6) บันทึกประวัติลงใน BASE_AUDIT_LOGS ตามข้อบังคับ',
       sourceFile: 'คำสั่งผู้ใช้งาน (แก้ไข ล็อค ให้อิสระต่อกัน ระหว่างแผนปิดงาน และการ์ดเป้าหมาย แต่ใช้รหัสผ่านเดียวกัน)',
       author: 'ผู้ดูแลระบบ (System Admin)',
       impactLevel: 'ปานกลาง (เพิ่มความยืดหยุ่นและความปลอดภัยในการแยกสิทธิ์การแก้ไขข้อมูลและการแสดงผลอย่างอิสระ)',
@@ -1594,8 +2311,8 @@
       title: 'เพิ่มระบบล็อกการแก้ไขแผนปิดงานและหมายเหตุในตาราง WBS ปลดล็อกครั้งเดียวแก้ไขได้ทุกแถว',
       targetSubject: 'ตาราง WBS (#wbsMasterTable, #btnToggleWbsEditLock, คอลัมน์ planClose และ note)',
       storageFile: 'js/wbs.js, index.html, css/styles.css, js/app.js, js/data_history.js',
-      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน "และแผนปิดงาน และหมายเหตุ จะล็อคการแก้ไข ทำอย่างไร โดยปลดล็อคครั้งเดียว แก้ไขได้ทุกแถว": ล็อกการแก้ไขคอลัมน์แผนปิดงานและหมายเหตุเป็นค่าเริ่มต้น โดยแสดงไอคอน 🔒 หากคลิกแถวใดแถวหนึ่งจะเปิดหน้าต่าง Admin PIN เมื่อปลดล็อกครั้งเดียวจะสามารถแก้ไขได้ทุกแถวตลอดเซสชัน พร้อมปุ่มสลับสถานะ 🔒/🔓 บนแถบเครื่องมือตาราง WBS',
-      details: '1) ใน js/wbs.js: เพิ่มการตรวจสอบสิทธิ์ isWbsAuth ใน renderWbsTable โดยแสดงปุ่ม 🔒 เมื่อล็อก และ ✏️ เมื่อปลดล็อก 2) ใน openWbsEditNoteModal: หากยังไม่ปลดล็อกจะจำรหัส WBS ไว้และเปิดโมดัล Admin PIN 3) ใน js/app.js: เมื่อยืนยันรหัส Admin PIN สำเร็จจะปลดล็อกทุกแถวและเปิดหน้าต่างแก้ไขแถวที่เลือกให้อัตโนมัติ 4) ใน index.html: เพิ่มปุ่ม #btnToggleWbsEditLock บนแถบเครื่องมือตาราง WBS 5) ใน css/styles.css: เพิ่มสไตล์ .btn-wbs-lock และ .btn-wbs-inline-edit.is-locked 6) บันทึกประวัติลงใน BASE_AUDIT_LOGS',
+      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน "และแผนปิดงาน และหมายเหตุ จะล็อคการแก้ไข ทำอย่างไร โดยปลดล็อคครั้งเดียว แก้ไขได้ทุกแถว": ล็อกการแก้ไขคอลัมน์แผนปิดงานและหมายเหตุเป็นค่าเริ่มต้น โดยแสดงไอคอน 🔒 หากคลิกแถวใดแถวหนึ่งจะเปิดหน้าต่าง Admin PIN (225588) เมื่อปลดล็อกครั้งเดียวจะสามารถแก้ไขได้ทุกแถวตลอดเซสชัน พร้อมปุ่มสลับสถานะ 🔒/🔓 บนแถบเครื่องมือตาราง WBS',
+      details: '1) ใน js/wbs.js: เพิ่มการตรวจสอบสิทธิ์ isWbsAuth ใน renderWbsTable โดยแสดงปุ่ม 🔒 เมื่อล็อก และ ✏️ เมื่อปลดล็อก 2) ใน openWbsEditNoteModal: หากยังไม่ปลดล็อกจะจำรหัส WBS ไว้และเปิดโมดัล Admin PIN 3) ใน js/app.js: เมื่อยืนยันรหัส 225588 สำเร็จจะปลดล็อกทุกแถวและเปิดหน้าต่างแก้ไขแถวที่เลือกให้อัตโนมัติ 4) ใน index.html: เพิ่มปุ่ม #btnToggleWbsEditLock บนแถบเครื่องมือตาราง WBS 5) ใน css/styles.css: เพิ่มสไตล์ .btn-wbs-lock และ .btn-wbs-inline-edit.is-locked 6) บันทึกประวัติลงใน BASE_AUDIT_LOGS',
       sourceFile: 'คำสั่งผู้ใช้งาน (และแผนปิดงาน และหมายเหตุ จะล็อคการแก้ไข ทำอย่างไร โดยปลดล็อคครั้งเดียว แก้ไขได้ทุกแถว)',
       author: 'ผู้ดูแลระบบ (System Admin)',
       impactLevel: 'ปานกลาง (ป้องกันการแก้ไขข้อมูลแผนงานและหมายเหตุโดยไม่ได้รับอนุญาต)',
@@ -1617,18 +2334,18 @@
       impactLevel: 'เล็กน้อย (เพิ่มความสะดวกในการตรวจสอบความถูกต้องของรหัสผ่านขณะพิมพ์)',
     },
     {
-      id: 'log_000_admin_pin_update_hide_plain',
+      id: 'log_000_admin_pin_update_225588_hide_plain',
       timestamp: '2026-10-26 08:05:00',
       timestampTh: '26 ต.ค. 2569, 08:05 น.',
       type: 'CONFIG',
       typeBadge: 'เปลี่ยนรหัสผ่าน Admin PIN',
       badgeClass: 'badge-type-config',
-      title: 'เปลี่ยนรหัสผ่าน Admin PIN และซ่อนการแสดงรหัสผ่านทุกจุด',
+      title: 'เปลี่ยนรหัสผ่าน Admin PIN เป็น 225588 และซ่อนการแสดงรหัสผ่านทุกจุด',
       targetSubject: 'ระบบสิทธิ์ Admin PIN (#adminPinModal, #adminPinInput ใน index.html และ js/app.js)',
       storageFile: 'js/app.js, index.html, js/data_history.js',
-      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน "แก้รหัสผ่าน และไม่ให้แสดงรหัสผ่าน": ปรับเปลี่ยนรหัสผ่าน Admin PIN พร้อมลบป้ายคำใบ้รหัสผ่าน (Hint) และปุ่มแสดงรหัสผ่านตา 👁️ ออกจากหน้าต่าง Modal ทั้งหมด เพื่อป้องกันการแสดงรหัสผ่านบนหน้าจอ ให้แสดงเฉพาะจุดบังรหัสผ่าน (••••••) ตลอดเวลาอย่างปลอดภัย',
-      details: '1) ใน js/app.js: แก้ไข DEFAULT_ADMIN_PIN และปรับปรุงฟังก์ชัน verifyAdminPin() รองรับรหัสผ่านใหม่ พร้อมกำหนดให้ input.type เป็น password ตลอดเวลา 2) ใน index.html: ลบคำใบ้แสดงรหัสผ่านเริ่มต้น, ปรับ placeholder เป็น "กรอกรหัสผ่าน Admin PIN" โดยไม่เปิดเผยรหัสผ่าน และนำปุ่มตาดูรหัสผ่าน 👁️ ออก 3) อัปเดต Cache Buster เป็น ?v=20261026_0805 4) บันทึกประวัติการแก้ไขลงใน BASE_AUDIT_LOGS ตามกฎข้อบังคับ',
-      sourceFile: 'คำสั่งผู้ใช้งาน (แก้รหัสผ่าน และไม่ให้แสดงรหัสผ่าน)',
+      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน "แก้รหัสผ่าน 225588 และไม่ให้แสดงรหัสผ่าน": ปรับเปลี่ยนรหัสผ่าน Admin PIN เป็น 225588 พร้อมลบป้ายคำใบ้รหัสผ่าน (Hint) และปุ่มแสดงรหัสผ่านตา 👁️ ออกจากหน้าต่าง Modal ทั้งหมด เพื่อป้องกันการแสดงรหัสผ่านบนหน้าจอ ให้แสดงเฉพาะจุดบังรหัสผ่าน (••••••) ตลอดเวลาอย่างปลอดภัย',
+      details: '1) ใน js/app.js: แก้ไข DEFAULT_ADMIN_PIN เป็น "225588" และปรับปรุงฟังก์ชัน verifyAdminPin() รองรับรหัสผ่านใหม่ พร้อมกำหนดให้ input.type เป็น password ตลอดเวลา 2) ใน index.html: ลบคำใบ้แสดงรหัสผ่าน "💡 รหัสผ่านเริ่มต้นคือ 2569", ปรับ placeholder เป็น "กรอกรหัสผ่าน Admin PIN" โดยไม่เปิดเผยรหัสผ่าน และนำปุ่มตาดูรหัสผ่าน 👁️ ออก 3) อัปเดต Cache Buster เป็น ?v=20261026_0805 4) บันทึกประวัติการแก้ไขลงใน BASE_AUDIT_LOGS ตามกฎข้อบังคับ',
+      sourceFile: 'คำสั่งผู้ใช้งาน (แก้รหัสผ่าน 225588 และไม่ให้แสดงรหัสผ่าน)',
       author: 'ผู้ดูแลระบบ (System Admin)',
       impactLevel: 'ปานกลาง (ยกระดับความปลอดภัยของรหัสผ่านผู้ดูแลระบบและป้องกันการมองเห็นรหัสผ่านบนหน้าจอ)',
     },
@@ -4094,6 +4811,37 @@
   /**
    * Main Render Function for Tab: ประวัติการนำเข้า & แก้ไขข้อมูล
    */
+  /**
+   * Toggle visibility of rules summary inside file card
+   */
+  window.toggleDhCardRules = function(fileId) {
+    const box = document.getElementById('rulesBox_' + fileId);
+    const btn = document.getElementById('btnToggleRules_' + fileId);
+    const textSpan = document.getElementById('btnToggleRulesText_' + fileId);
+    const icon = document.getElementById('iconToggleRules_' + fileId);
+    if (!box) return;
+    const isHidden = box.style.display === 'none' || !box.style.display;
+    if (isHidden) {
+      box.style.display = 'block';
+      if (textSpan) textSpan.textContent = 'ซ่อนเงื่อนไขสรุปการแสดงผล (คลิกเพื่อปิด)';
+      if (icon) icon.innerHTML = '&#9650;';
+      if (btn) {
+        btn.style.background = 'rgba(14,165,233,0.24)';
+        btn.style.borderColor = '#38BDF8';
+        btn.style.boxShadow = '0 0 10px rgba(14,165,233,0.3)';
+      }
+    } else {
+      box.style.display = 'none';
+      if (textSpan) textSpan.textContent = 'เงื่อนไขสรุปการแสดง / ไม่แสดงข้อมูล (คลิกดู)';
+      if (icon) icon.innerHTML = '&#9660;';
+      if (btn) {
+        btn.style.background = 'rgba(14,165,233,0.12)';
+        btn.style.borderColor = 'rgba(14,165,233,0.4)';
+        btn.style.boxShadow = 'none';
+      }
+    }
+  };
+
   window.renderDataHistoryTab = function () {
     const container = document.getElementById('tab-data-history');
     if (!container) return;
@@ -4243,12 +4991,17 @@
                   <div class="dh-flow-node" onclick="window.openModelViewModal('src_04', 'source')">
                     <div class="dh-node-badge" style="background:#8B5CF6;">ไฟล์ 04</div>
                     <div class="dh-node-title">ZBUDR064 (%พัสดุ/สถานะ SAP)</div>
-                    <div class="dh-node-meta">นำเข้า: 28 ต.ค. 69 • 937.5 KB</div>
+                    <div class="dh-node-meta">นำเข้า: 27 ต.ค. 69 • 732.0 KB</div>
                   </div>
                   <div class="dh-flow-node" onclick="window.openModelViewModal('src_06', 'source')">
                     <div class="dh-node-badge" style="background:#F59E0B;">ไฟล์ 06</div>
                     <div class="dh-node-title">CN41 (มูลค่า AUC บาท)</div>
                     <div class="dh-node-meta">นำเข้า: 27 ต.ค. 69 • 337.8 KB</div>
+                  </div>
+                  <div class="dh-flow-node" onclick="window.openModelViewModal('src_07', 'source')">
+                    <div class="dh-node-badge" style="background:#0EA5E9;">ไฟล์ 07</div>
+                    <div class="dh-node-title">CN52N พัสดุ (Mvt 281 / รหัส 1*)</div>
+                    <div class="dh-node-meta">นำเข้า: 30 ต.ค. 69 • 5.67 MB</div>
                   </div>
                   <div class="dh-flow-node" onclick="window.openModelViewModal('src_sheet', 'source')">
                     <div class="dh-node-badge" style="background:#10B981;">G-Sheet</div>
@@ -4293,6 +5046,11 @@
                     <div class="dh-node-badge" style="background:#10B981; color:#fff;">Status Parser</div>
                     <div class="dh-node-title">จัดกลุ่มสถานะ SAP อัจฉริยะ</div>
                     <div class="dh-node-meta">แยก REL, TECO, CLSD ย่อเหลือ 2 อักษร</div>
+                  </div>
+                  <div class="dh-flow-node highlight">
+                    <div class="dh-node-badge" style="background:#0EA5E9; color:#fff;">Material Filter</div>
+                    <div class="dh-node-title">กรอง Mvt 281 / รหัสพัสดุ 1*</div>
+                    <div class="dh-node-meta">คำนวณค้างเบิก &amp; ผูก WBS ไฟล์ 03/04</div>
                   </div>
                   <div class="dh-flow-node highlight">
                     <div class="dh-node-badge" style="background:#3B82F6; color:#fff;">KPI Calculator</div>
@@ -4373,6 +5131,24 @@
                 </div>
 
                 <p class="dh-file-desc">${escapeHtml(file.description)}</p>
+                ${file.rulesHtml ? `
+                  <div class="dh-card-rules-wrapper" style="margin:0.65rem 0;">
+                    <button type="button" 
+                            class="btn btn-sm dh-btn-toggle-rules" 
+                            id="btnToggleRules_${file.id}" 
+                            onclick="event.stopPropagation(); window.toggleDhCardRules('${file.id}')"
+                            style="cursor:pointer; width:100%; display:flex; align-items:center; justify-content:space-between; padding:0.45rem 0.75rem; background:rgba(14,165,233,0.12); border:1px solid rgba(14,165,233,0.4); border-radius:8px; color:#38BDF8; font-size:0.79rem; font-weight:700; transition:all 0.2s ease;">
+                      <span style="display:flex; align-items:center; gap:0.4rem;">
+                        <span>📋</span>
+                        <span id="btnToggleRulesText_${file.id}">เงื่อนไขสรุปการแสดง / ไม่แสดงข้อมูล (คลิกดู)</span>
+                      </span>
+                      <span id="iconToggleRules_${file.id}" style="font-size:0.75rem; transition:transform 0.2s ease;">▼</span>
+                    </button>
+                    <div id="rulesBox_${file.id}" class="dh-rules-hidden-box" style="display:none; margin-top:0.5rem;">
+                      ${file.rulesHtml}
+                    </div>
+                  </div>
+                ` : ''}
 
                 <div class="dh-file-meta-list">
                   <div class="dh-meta-row">
@@ -4683,6 +5459,15 @@
             <div class="dh-var-mapping">
               <strong>ตัวแปรจัดเก็บในระบบ:</strong> <code>${escapeHtml(file.storageVar)}</code>
             </div>
+
+          ${file.rulesHtml ? `
+            <div class="dh-model-rules-box" style="margin-top:1rem; padding:0.85rem 1rem; background:rgba(14,165,233,0.08); border:1px solid rgba(14,165,233,0.3); border-radius:10px;">
+              <div class="dh-box-title" style="color:#38BDF8; font-weight:700; margin-bottom:0.5rem; display:flex; align-items:center; gap:0.4rem;">
+                <span>📋 สรุปเงื่อนไขการประมวลผล (แสดง / ไม่แสดง ข้อมูล):</span>
+              </div>
+              ${file.rulesHtml}
+            </div>
+          ` : ''}
           </div>
 
           <!-- Mapped Columns Structure -->
@@ -4824,10 +5609,6 @@
 
   window.openDhAddLogModal = function () {
     const modalEl = document.getElementById('dhAddLogModal');
-    const authorEl = document.getElementById('dhInputAuthor');
-    if (authorEl && !authorEl.value) {
-      authorEl.value = 'ผู้ใช้งานระบบ (User)';
-    }
     if (modalEl) {
       modalEl.classList.add('show');
       modalEl.style.display = 'flex';

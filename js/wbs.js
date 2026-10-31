@@ -1,4 +1,4 @@
-/**
+﻿/**
  * PEA AUC Dashboard - WBS Remaining Jobs Module
  * (03 WBSคงเหลือ ผสานไฟล์ 04 WBS ZBUDR064 และไฟล์ 05 WBS CN41 มูลค่า AUC)
  * Connected with Executive Dashboard Filters (Month, Criteria, Province, Office, Search)
@@ -389,14 +389,7 @@
     const topCrit = globalFilters.criteria || (document.getElementById('filterCriteria') ? document.getElementById('filterCriteria').value : 'ALL');
     const topProv = globalFilters.province || (document.getElementById('filterProvince') ? document.getElementById('filterProvince').value : 'ALL');
     const topOff = globalFilters.office || (document.getElementById('filterOffice') ? document.getElementById('filterOffice').value : 'ALL');
-    let rawTopSearch = (globalFilters.search !== undefined ? globalFilters.search : (document.getElementById('searchInput') ? document.getElementById('searchInput').value : '')).trim();
-    if (rawTopSearch === 'ผู้ใช้งานระบบ (User)') {
-      rawTopSearch = '';
-      if (globalFilters.search !== undefined) globalFilters.search = '';
-      const sEl = document.getElementById('searchInput');
-      if (sEl && sEl.value.trim() === 'ผู้ใช้งานระบบ (User)') sEl.value = '';
-    }
-    const topSearch = rawTopSearch.toLowerCase();
+    const topSearch = (globalFilters.search !== undefined ? globalFilters.search : (document.getElementById('searchInput') ? document.getElementById('searchInput').value : '')).trim().toLowerCase();
 
     // Local WBS Sub-filters
     const localSearch = (wbsState.search || '').trim().toLowerCase();
@@ -670,8 +663,8 @@
       <span class="wbs-pill pill-file pill-file-03" onclick="if(window.openDhModelModal)window.openDhModelModal('src_03')" title="วันที่/เวลา นำเข้าข้อมูล: 23 ต.ค. 2569, 08:04 น. (ไฟล์ 03 WBSงานคงเหลือเดือนล่าสุด.xlsx)">
         📋 <strong>03 WBSงานคงเหลือเดือนล่าสุด.xlsx:</strong> 23 ต.ค. 2569, 08:04 น.
       </span>
-      <span class="wbs-pill pill-file pill-file-04" onclick="if(window.openDhModelModal)window.openDhModelModal('src_04')" title="วันที่/เวลา นำเข้าข้อมูล: 28 ต.ค. 2569, 07:42 น. (ไฟล์ 04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx)">
-        ⚡ <strong>04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx:</strong> 28 ต.ค. 2569, 07:42 น.
+      <span class="wbs-pill pill-file pill-file-04" onclick="if(window.openDhModelModal)window.openDhModelModal('src_04')" title="วันที่/เวลา นำเข้าข้อมูล: 30 ต.ค. 2569, 08:26 น. (ไฟล์ 04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx)">
+        ⚡ <strong>04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx:</strong> 30 ต.ค. 2569, 08:26 น.
       </span>
       <span class="wbs-pill pill-file pill-file-05" onclick="if(window.openDhModelModal)window.openDhModelModal('src_06')" title="วันที่/เวลา นำเข้าข้อมูล: 27 ต.ค. 2569, 08:09 น. (ไฟล์ 06 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 27 ตค 69.xlsx)">
         📑 <strong>06 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 27 ตค 69:</strong> 27 ต.ค. 2569, 08:09 น.
@@ -1946,7 +1939,9 @@
     }
 
     const selectedMonth = availableMonths.find(m => m.monthNum === wbsState.kpiTargetMonth) || selectableMonths[0] || availableMonths[0];
-    return selectedMonth || null;
+    if (!selectedMonth) return null;
+    const segIdx = Math.max(0, availableMonths.findIndex(m => m.monthNum === selectedMonth.monthNum)) + 1;
+    return { ...selectedMonth, segIndex: segIdx };
   }
 
   /**
@@ -1987,7 +1982,10 @@
     const selectedMonth = getWbsSelectedTargetMonthInfo();
     if (selectedMonth) {
       if (targetRowEl) targetRowEl.style.display = 'flex';
-      if (targetMonthEl) targetMonthEl.textContent = selectedMonth.shortName || 'ต.ค.';
+      if (targetMonthEl) {
+        targetMonthEl.textContent = selectedMonth.shortName || 'ต.ค.';
+        targetMonthEl.className = `wbs-floating-target-month target-seg-${selectedMonth.segIndex || 1} target-m-${selectedMonth.monthNum || 10}`;
+      }
       const targetAmt = Math.max(0, Number(selectedMonth.amt) || 0);
       const isVal = selectedMonth.unit === 'val';
 
@@ -2072,7 +2070,10 @@
         }
       }
     } else {
-      if (targetMonthEl) targetMonthEl.textContent = '-';
+      if (targetMonthEl) {
+        targetMonthEl.textContent = '-';
+        targetMonthEl.className = 'wbs-floating-target-month';
+      }
       if (targetMbEl) targetMbEl.style.display = 'none';
       if (remainRowEl) remainRowEl.style.display = 'none';
     }
@@ -2504,7 +2505,7 @@
                 </div>
               </div>
               <div style="display: flex; justify-content: flex-end; margin-top: 3px;">
-                <span class="wbs-sap-date-plain-text" id="wbsKpiSapDateText" onclick="if(window.openDhModelModal)window.openDhModelModal('src_04')" title="ข้อมูลสถานะ SAP จากไฟล์ 04 ZBUDR064 แก้ไขล่าสุด: 28 ต.ค. 2569 (คลิกเพื่อดูผัง Model View)">สถานะ SAP แก้ไขล่าสุดวันที่ 28 ต.ค. 69</span>
+                <span class="wbs-sap-date-plain-text" id="wbsKpiSapDateText" onclick="if(window.openDhModelModal)window.openDhModelModal('src_04')" title="ข้อมูลสถานะ SAP จากไฟล์ 04 ZBUDR064 แก้ไขล่าสุด: 30 ต.ค. 2569 (คลิกเพื่อดูผัง Model View)">สถานะ SAP แก้ไขล่าสุดวันที่ 30 ต.ค. 69</span>
               </div>
             </div>
 
@@ -2729,7 +2730,7 @@
                     <div class="bar-header-left">
                       <span class="bar-tag tag-progress">⚡ กราฟล่าง (ยอดดำเนินการ)</span>
                       <span class="bar-month-pill">${selectedMonth.shortName} 69</span>
-                      <span class="bar-sap-date-plain" onclick="if(window.openDhModelModal)window.openDhModelModal('src_04')" style="cursor:pointer;" title="ข้อมูลสถานะ SAP จากไฟล์ 04 ZBUDR064 แก้ไขล่าสุด: 28 ต.ค. 2569 (คลิกเพื่อดูผัง Model View)">สถานะ SAP แก้ไขล่าสุด: 28 ต.ค. 69</span>
+                      <span class="bar-sap-date-plain" onclick="if(window.openDhModelModal)window.openDhModelModal('src_04')" style="cursor:pointer;" title="ข้อมูลสถานะ SAP จากไฟล์ 04 ZBUDR064 แก้ไขล่าสุด: 30 ต.ค. 2569 (คลิกเพื่อดูผัง Model View)">สถานะ SAP แก้ไขล่าสุด: 30 ต.ค. 69</span>
                     </div>
                     <div class="bar-header-right">
                       <!-- CLSD F4 / F2: ขนาดอักษรเท่ากับจำนวนเงิน -->
@@ -3916,7 +3917,7 @@
                 <span class="sort-indicator" style="font-size:0.75rem; margin-left:2px; color:var(--pea-gold-400);">${sortArrow}</span>
               </div>
             </div>
-            ${col.id === 'statusSap' ? `<div class="th-sub-date-text" style="font-size: 0.70rem; color: #CBD5E1; font-weight: 500; line-height: 1.2; margin: 1px 0 3px 0; text-align: center; white-space: nowrap;" title="วันที่แก้ไขล่าสุดของไฟล์ 04 ZBUDR064: 28 ต.ค. 2569">แก้ไขล่าสุด: 28 ต.ค. 69</div>` : ''}
+            ${col.id === 'statusSap' ? `<div class="th-sub-date-text" style="font-size: 0.70rem; color: #CBD5E1; font-weight: 500; line-height: 1.2; margin: 1px 0 3px 0; text-align: center; white-space: nowrap;" title="วันที่แก้ไขล่าสุดของไฟล์ 04 ZBUDR064: 30 ต.ค. 2569">แก้ไขล่าสุด: 30 ต.ค. 69</div>` : ''}
             ${col.id === 'cn41Cost05' ? `<div class="th-sub-date-text" style="font-size: 0.70rem; color: #CBD5E1; font-weight: 500; line-height: 1.2; margin: 1px 0 3px 0; text-align: center; white-space: nowrap;" title="วันที่แก้ไขล่าสุดของไฟล์ 05 CN41: 14 ต.ค. 2569">แก้ไขล่าสุด: 14 ต.ค. 69</div>` : ''}
             ${col.id === 'cn41ActualCost' ? `<div class="th-sub-date-text" style="font-size: 0.70rem; color: #CBD5E1; font-weight: 500; line-height: 1.2; margin: 1px 0 3px 0; text-align: center; white-space: nowrap;" title="วันที่แก้ไขล่าสุดของไฟล์ 06 CN41: 27 ต.ค. 2569">แก้ไขล่าสุด: 27 ต.ค. 69</div>` : ''}
             ${(col.id === 'planClose' || col.id === 'note') ? `<div class="th-sub-date-text wbs-th-sync-time" style="font-size: 0.70rem; color: #CBD5E1; font-weight: 500; line-height: 1.2; margin: 1px 0 3px 0; text-align: center; white-space: nowrap;" title="เวลาซิงค์ข้อมูลล่าสุดจาก Google Sheet: ${getGoogleSheetFullSyncTimeText()}">${getGoogleSheetSyncTimeText()}</div>` : ''}
@@ -6579,14 +6580,7 @@
 
     const topSearch = document.getElementById('searchInput');
     if (topSearch) {
-      if (topSearch.value && topSearch.value.trim() === 'ผู้ใช้งานระบบ (User)') {
-        topSearch.value = '';
-      }
       topSearch.addEventListener('input', () => {
-        if (topSearch.value && (topSearch.value.trim() === 'ผู้ใช้งานระบบ (User)' || (document.activeElement !== topSearch && topSearch.hasAttribute('readonly')))) {
-          topSearch.value = '';
-          if (window.state && window.state.filters) window.state.filters.search = '';
-        }
         wbsState.page = 1;
         renderWbsTab();
       });
@@ -6951,7 +6945,7 @@
         window.logoutWbsEdit();
       } else {
         if (typeof window.setWbsEditAuthenticated === 'function') {
-          window.setWbsEditAuthenticated(false);
+          window.setWbsEditAuthenticated(true);
         } else {
           sessionStorage.removeItem('auc_wbs_edit_authenticated');
           window.updateWbsEditLockUI();
@@ -7397,7 +7391,7 @@
   function initWbsApp() {
     // Default: แสดงปุ่มล็อค (🔒) เสมอ จนกว่าจะปลดล็อกด้วย Admin PIN
     if (typeof window.setWbsEditAuthenticated === 'function') {
-      window.setWbsEditAuthenticated(false);
+      window.setWbsEditAuthenticated(true);
     }
     setupWbsListeners();
     applyCachedGoogleSheetData();
