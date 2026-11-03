@@ -122,6 +122,7 @@
     chartSelDesc: '',
     chartBudgetFilter: 'ALL', // 'ALL' | 'IP' | 'C' (เลือกแสดงตามงบ I,P หรือ C หรือ ทั้ง 2 งบ)
     chartSelBudget: 'ALL',    // 'ALL' | 'IP' | 'C' (งบประมาณที่เลือกจากการคลิกแท่งกราฟโดยตรง)
+    lastCrit: null,           // ติดตามเกณฑ์วัดล่าสุดเพื่อซิงก์สถานะล็อคงบประมาณตามเกณฑ์วัด
     pendingMode: 'ALL', // 'ALL' | 'DIFF' | 'POS' | 'DONE'
     mvtFilter: '281',   // ดึงข้อมูลเฉพาะ Mvt 281 เท่านั้น
     hasMatFilter: 'HAS_MAT', // 'HAS_MAT' (default มีพัสดุ) | 'NO_MAT' (ไม่มีพัสดุ) | 'ALL' (ทั้งหมด)
@@ -241,6 +242,26 @@
     const p2 = getPrefix(filterCrit).replace(/\s+/g, '');
     if (p1 && p2 && p1 === p2) return true;
     return itemCrit.includes(p2) || filterCrit.includes(p1);
+  }
+
+  /**
+   * ตรวจสอบว่าเกณฑ์วัดที่เลือก ล็อคเฉพาะงบประมาณใดหรือไม่
+   * - งบ C: ข้อ 1.1, ข้อ 2.1, ข้อ 4, C02.2 หรือมีคำว่า "งบ C" -> คืนค่า 'C'
+   * - งบ I, P: ข้อ 1.2, ข้อ 1.3, ข้อ 2.2 หรือมีคำว่า "งบ I" หรือ "งบ P" -> คืนค่า 'IP'
+   * - อื่นๆ (เลือกทั้งหมด, ข้อ 3.1, 3.2, 3.3, ข้อ 5): คืนค่า null (ไม่ล็อคงบ)
+   */
+  function getCriteriaBudgetLock(crit) {
+    if (!crit || crit === 'ALL' || crit === 'เลือกทั้งหมด' || crit === 'ทุกเกณฑ์วัด' || crit === 'ทั้งหมด') {
+      return null;
+    }
+    const c = String(crit).trim();
+    if (/(?:ข้อ\s*|crit\s*|^)(?:1\.1|2\.1|4\b)|C02\.2|งบ\s*C\b/i.test(c)) {
+      return 'C';
+    }
+    if (/(?:ข้อ\s*|crit\s*|^)(?:1\.2|1\.3|2\.2)|งบ\s*(?:I|P|[IP]\s*,\s*[IP])/i.test(c)) {
+      return 'IP';
+    }
+    return null;
   }
 
   function parseDateSortNum(ddmmyyyy) {
@@ -444,11 +465,13 @@
 
     const gf = getGlobalFilters();
     const sapKey = skipTableSap ? 'SKIP_SAP' : Array.from(matState.sapStatuses).sort().join('|');
+    const chartDescKey = ignoreChartSel ? '' : (matState.chartSelDesc || '');
+    const chartBudgetKey = ignoreChartSel ? '' : (matState.chartSelBudget || '');
     const cacheKey = [
       gf.crit, gf.prov, gf.off, gf.search,
       matState.localSearch, matState.pendingMode, matState.mvtFilter, matState.hasMatFilter,
-      matState.filterWbs, matState.filterMatDesc, matState.filterSapStatus, (matState.filterPlant || ''), matState.chartSelDesc,
-      matState.chartBudgetFilter, (matState.chartSelBudget || 'ALL'),
+      matState.filterWbs, matState.filterMatDesc, matState.filterSapStatus, (matState.filterPlant || ''),
+      chartDescKey, chartBudgetKey,
       sapKey, matState.sortCol, matState.sortAsc ? '1' : '0'
     ].join('§');
 
@@ -456,7 +479,6 @@
       return matState.cachedFilteredRows;
     }
 
-    const chartSel = ignoreChartSel ? '' : (matState.chartSelDesc || '');
     const filterCrit = gf.crit;
     const hasCritFilter = filterCrit && filterCrit !== 'ALL' && filterCrit !== 'เลือกทั้งหมด';
     const hasProvFilter = gf.prov && gf.prov !== 'ALL' && gf.prov !== 'กฟก.3 (ทั้งหมด)';
@@ -498,22 +520,24 @@
       if (!r.noMat && r.mvtType !== '281') continue;
       if (hasSapF && !matState.sapStatuses.has(r.sapShort || '(ไม่ระบุ)')) continue;
 
-      // ตัวกรองจากการคลิกกราฟแนวนอน (ทางเดียว: กราฟ → ตาราง)
-      if (chartSel && (r.noMat || (r.matDesc || r.matCode || '') !== chartSel)) continue;
-
-      // ตัวกรองประเภทงบประมาณที่เลือกจากกราฟ (C = งบ C, IP = งบ I, P อ้างอิงตามกราฟ หรือแท่งกราฟที่คลิกเลือก)
-      const effectiveBudget = (matState.chartSelBudget && matState.chartSelBudget !== 'ALL')
-        ? matState.chartSelBudget
-        : matState.chartBudgetFilter;
-      if (!ignoreChartSel && effectiveBudget && effectiveBudget !== 'ALL') {
-        const w = String(r.wbs || '').trim().toUpperCase();
-        if (effectiveBudget === 'C' && !w.startsWith('C')) continue;
-        if (effectiveBudget === 'IP' && !w.startsWith('I') && !w.startsWith('P')) continue;
-      }
       // ตัวกรองย่อยเฉพาะหน้าเมนูรายการพัสดุ (WBS / ข้อความวัสดุ / สถานะ SAP)
       if (subWbsQ && subWbsQ !== 'all' && (r.wbs || '').toLowerCase() !== subWbsQ) continue;
       if (subDescQ && subDescQ !== 'all' && (r.matDesc || '').toLowerCase() !== subDescQ) continue;
       if (matState.filterPlant && String(r.plant || '').trim().toUpperCase() !== matState.filterPlant) continue;
+
+      // กรองเชื่อมโยงตามรายการพัสดุและงบประมาณที่เลือกจากกราฟแนวนอน
+      if (!ignoreChartSel && matState.chartSelDesc) {
+        const rowDesc = String(r.matDesc || r.matCode || '').trim();
+        if (rowDesc !== matState.chartSelDesc.trim()) continue;
+
+        if (matState.chartSelBudget === 'IP') {
+          const isC = String(r.wbs || '').trim().toUpperCase().startsWith('C');
+          if (isC) continue;
+        } else if (matState.chartSelBudget === 'C') {
+          const isC = String(r.wbs || '').trim().toUpperCase().startsWith('C');
+          if (!isC) continue;
+        }
+      }
       if (subSap !== 'ALL') {
         const sShort = String(r.sapShort || '').toUpperCase();
         if (subSap === '(ไม่ระบุ)') { if (sShort) continue; }
@@ -572,14 +596,6 @@
         if (hasCritFilter && !matchesCriteria(b.criteria, filterCrit)) continue;
         if (hasProvFilter && b.province !== gf.prov) continue;
         if (hasOffFilter && b.office !== gf.off) continue;
-        const effectiveBudget = (matState.chartSelBudget && matState.chartSelBudget !== 'ALL')
-          ? matState.chartSelBudget
-          : matState.chartBudgetFilter;
-        if (effectiveBudget && effectiveBudget !== 'ALL') {
-          const bw = String(b.wbs || '').trim().toUpperCase();
-          if (effectiveBudget === 'C' && !bw.startsWith('C')) continue;
-          if (effectiveBudget === 'IP' && !bw.startsWith('I') && !bw.startsWith('P')) continue;
-        }
         if (topQ) {
           const hit =
             (b.wbs && b.wbs.toLowerCase().includes(topQ)) ||
@@ -640,7 +656,7 @@
       <!-- แถบสรุปภาพรวมรายการพัสดุค้างเบิก (ไฟล์ 07 เชื่อมไฟล์ 03 WBS และไฟล์ 04 ZBUDR064) -->
       <!-- ตัวกรองย่อยเฉพาะเมนูรายการพัสดุ: WBS / ข้อความวัสดุ / สถานะ SAP -->
       <div class="mat-sub-filter-bar" id="matSubFilterBar">
-        <div class="mat-sf-title">🔎 ตัวกรองรายการพัสดุ</div>
+        <div class="mat-sf-title" id="matSfTitle">🔎 ตัวกรองรายการที่พบพัสดุ</div>
         <div class="mat-sf-group">
           <span class="mat-sf-label">WBS</span>
           <select id="matFilterWbs" class="mat-sf-select" onchange="window.handleMatFilterWbsChange(this.value)">
@@ -671,7 +687,9 @@
             </div>
           </div>
         </div>
-        <button type="button" class="mat-sf-reset" onclick="window.resetMatSubFilters()">🔄 ล้างตัวกรอง</button>
+        <button type="button" class="mat-sf-reset" onclick="window.resetMatSubFilters()" title="คลิกเพื่อล้างตัวกรองรายการที่พบพัสดุทั้งหมด">
+          <span class="mat-sf-reset-icon">🔄</span> ล้างตัวกรอง
+        </button>
         <span class="mat-sf-count" id="matSubFilterCount"></span>
         <!-- สรุปจำนวนงาน WBS และสถานะพัสดุ (แสดงด้านหลังปุ่มล้างตัวกรอง เป็น 3 บรรทัด แคบๆ พอดี ตามคำสั่ง) -->
         <div class="mat-sf-wbs-stats mat-sf-wbs-stats-3rows" id="matToolbarWbsStats"></div>
@@ -688,11 +706,11 @@
           </div>
           <div class="mat-hchart-legend" id="matHChartLegendContainer">
             <div class="mat-budget-pill-group" role="group" aria-label="เลือกแสดงตามงบ">
-              <button type="button" class="mat-budget-pill pill-red in-both" onclick="window.setMatChartBudgetFilter('IP')" title="คลิกเพื่อเลือกแสดงเฉพาะ งบ I, P (สีแดง)"><i class="lg-dot lg-red"></i> ค้างเบิก งบ I, P (สีแดง)</button>
-              <button type="button" class="mat-budget-pill pill-orange in-both" onclick="window.setMatChartBudgetFilter('C')" title="คลิกเพื่อเลือกแสดงเฉพาะ งบ C (สีส้มพาสเทล)"><i class="lg-dot lg-orange"></i> ค้างเบิก งบ C (สีส้มพาสเทล)</button>
+              <button type="button" class="mat-budget-pill pill-red in-both" onclick="window.setMatChartBudgetFilter('IP')" title="คลิกเพื่อเลือกแสดงเฉพาะ งบ I, P (สีแดงเข้ม)"><i class="lg-dot lg-red"></i> ค้างเบิก งบ I, P (สีแดงเข้ม)</button>
+              <button type="button" class="mat-budget-pill pill-orange in-both" onclick="window.setMatChartBudgetFilter('C')" title="คลิกเพื่อเลือกแสดงเฉพาะ งบ C (สีส้มอ่อน)"><i class="lg-dot lg-orange"></i> ค้างเบิก งบ C (สีส้มอ่อน)</button>
             </div>
-            <span class="mat-hchart-lg" title="เนเธเธฅเน 08 เธเธฅเธฑเธ SLoc 0022 เธเธฃเธดเธกเธฒเธ“เธเธเน€เธซเธฅเธทเธญเธเธเธเธฅเธฑเธเธเธ I,P (เธชเธตเธเธฃเธฒเธเน€เธเธตเธขเธงเน€เธเนเธก)"><i class="lg-dot" style="background:#15803D; box-shadow:0 0 6px rgba(21,128,61,0.8);"></i> <span style="color:#86EFAC;">เธเธเน€เธซเธฅเธทเธญ SLoc 0022 เธเธ I,P (เน€เธเธตเธขเธงเน€เธเนเธก)</span></span>
-            <span class="mat-hchart-lg" title="เนเธเธฅเน 08 เธเธฅเธฑเธ SLoc 0021 เธเธฃเธดเธกเธฒเธ“เธเธเน€เธซเธฅเธทเธญเธเธเธเธฅเธฑเธเธเธ C (เธชเธตเธเธฃเธฒเธเน€เธเธตเธขเธงเธญเนเธญเธ)"><i class="lg-dot" style="background:#4ADE80; box-shadow:0 0 6px rgba(74,222,128,0.8);"></i> <span style="color:#BBF7D0;">เธเธเน€เธซเธฅเธทเธญ SLoc 0021 เธเธ C (เน€เธเธตเธขเธงเธญเนเธญเธ)</span></span>
+            <span class="mat-hchart-lg" title="ไฟล์ 08 คลัง SLoc 0022 ปริมาณคงเหลือคงคลังงบ I,P (สีกราฟเขียวเข้ม)"><i class="lg-dot" style="background:#15803D; box-shadow:0 0 6px rgba(21,128,61,0.8);"></i> <span style="color:#86EFAC;">คงเหลือ SLoc 0022 งบ I,P (เขียวเข้ม)</span></span>
+            <span class="mat-hchart-lg" title="ไฟล์ 08 คลัง SLoc 0021 ปริมาณคงเหลือคงคลังงบ C (สีกราฟเขียวอ่อน)"><i class="lg-dot" style="background:#4ADE80; box-shadow:0 0 6px rgba(74,222,128,0.8);"></i> <span style="color:#BBF7D0;">คงเหลือ SLoc 0021 งบ C (เขียวอ่อน)</span></span>
           </div>
         </div>
           <div class="mat-hchart-scroll" id="matHChartScroll">
@@ -708,9 +726,7 @@
             <span>รายละเอียดแต่ละคลังพัสดุ</span>
             <span class="mat-wh-card-badge">6 คลัง</span>
           </div>
-          <div class="mat-wh-card-actions">
-            <span class="mat-wh-card-subtip">ค้างเบิก / คงเหลือ</span>
-          </div>
+          <div class="mat-wh-card-actions"></div>
         </div>
         <div id="matWhWidgetCol"></div>
       </div>
@@ -1145,7 +1161,7 @@
     const badge = document.getElementById('materialsTabTotalBadge');
     if (!badge) return;
     if (!ensureMaterialsHydrated()) return;
-    const rows = getFilteredMaterialRows(false);
+    const rows = getFilteredMaterialRows(false, true);
     badge.textContent = rows.filter(r => !r.noMat).length.toLocaleString('th-TH');
   }
 
@@ -1206,19 +1222,22 @@
       const totalWbsNum = matState.scopeStats ? matState.scopeStats.uniqueWbs : agg.uniqueWbs;
       const total03Num = matState.scopeStats ? matState.scopeStats.total03Rows : matState.totalBase03Wbs;
       const rowsExtra = (total03Num && total03Num > totalWbsNum) ? ` / ${total03Num.toLocaleString('th-TH')} งาน` : '';
-      const effectiveSelBudget = (matState.chartSelBudget && matState.chartSelBudget !== 'ALL')
-        ? matState.chartSelBudget
-        : matState.chartBudgetFilter;
-      const budgetExtra = (effectiveSelBudget === 'C')
-        ? ' • 🟠 งบ C (ส้มพาสเทล)'
-        : ((effectiveSelBudget === 'IP') ? ' • 🔴 งบ I, P (สีแดง)' : '');
-      const chartSelExtra = matState.chartSelDesc ? ` • 📦 พัสดุ: ${matState.chartSelDesc}` : '';
-      critValEl.textContent = `${critLabel} (${totalWbsNum.toLocaleString('th-TH')} งาน${rowsExtra} • ${agg.totalRows.toLocaleString('th-TH')} รายการพัสดุ)${budgetExtra}${chartSelExtra}`;
+
+      if (matState.chartSelDesc) {
+        const budgetLabel = matState.chartSelBudget === 'IP' ? ' (เฉพาะ งบ I, P)' : (matState.chartSelBudget === 'C' ? ' (เฉพาะ งบ C)' : '');
+        critValEl.innerHTML = `${critLabel} • <span style="color:#FDE047;">🔍 พัสดุ: ${escapeHtml(matState.chartSelDesc)}</span>${budgetLabel} (${agg.uniqueWbs.toLocaleString('th-TH')} งาน • ${agg.totalRows.toLocaleString('th-TH')} รายการ)`;
+      } else {
+        critValEl.textContent = `${critLabel} (${totalWbsNum.toLocaleString('th-TH')} งาน${rowsExtra} • ${agg.totalRows.toLocaleString('th-TH')} รายการพัสดุ)`;
+      }
 
       if (clearChartBtn) {
-        clearChartBtn.style.display = (matState.chartSelDesc || (matState.chartSelBudget && matState.chartSelBudget !== 'ALL'))
-          ? 'inline-flex'
-          : 'none';
+        if (matState.chartSelDesc) {
+          const shortName = matState.chartSelDesc.length > 22 ? matState.chartSelDesc.substring(0, 22) + '...' : matState.chartSelDesc;
+          clearChartBtn.innerHTML = `✕ ล้างตัวกรองกราฟ (${escapeHtml(shortName)})`;
+          clearChartBtn.style.display = 'inline-flex';
+        } else {
+          clearChartBtn.style.display = 'none';
+        }
       }
     }
 
@@ -1232,19 +1251,18 @@
         total03Rows: matState.totalBase03Wbs || agg.uniqueWbs
       };
       const curMode = matState.hasMatFilter;
-      const rowsExtra = (sc.total03Rows && sc.total03Rows > sc.uniqueWbs)
-        ? ` <span class="scope-btn-extra">(${sc.total03Rows.toLocaleString('th-TH')})</span>`
-        : '';
+      const total03 = sc.total03Rows || sc.uniqueWbs;
+      const dupWbs = Math.max(0, total03 - sc.uniqueWbs);
       tbStatsEl.innerHTML = `
         <button type="button" class="mat-scope-btn btn-scope-all ${curMode === 'ALL' ? 'active' : ''}"
-          onclick="window.setMatHasMatFilter('ALL')" title="คลิกเพื่อแสดงทุกงาน: ${sc.uniqueWbs.toLocaleString('th-TH')} งาน (จากทั้งหมด ${sc.total03Rows.toLocaleString('th-TH')} งานในไฟล์ 03)">
+          onclick="window.setMatHasMatFilter('ALL')" title="คลิกเพื่อแสดงทุกงาน: รวม ${sc.uniqueWbs.toLocaleString('th-TH')} งาน (${total03.toLocaleString('th-TH')} งาน) (ซ้ำเกณฑ์วัด ${dupWbs.toLocaleString('th-TH')} งาน)">
           <span class="scope-btn-label"><span class="scope-btn-icon">📁</span> รวม</span>
-          <span class="scope-btn-val"><strong>${sc.uniqueWbs.toLocaleString('th-TH')}</strong> งาน${rowsExtra}</span>
+          <span class="scope-btn-val"><strong>${sc.uniqueWbs.toLocaleString('th-TH')}</strong> งาน <span class="scope-btn-extra">(${total03.toLocaleString('th-TH')} งาน)</span><span class="scope-btn-dup">(ซ้ำเกณฑ์วัด ${dupWbs.toLocaleString('th-TH')} งาน)</span></span>
           ${curMode === 'ALL' ? '<span class="scope-btn-check">✓</span>' : ''}
         </button>
         <button type="button" class="mat-scope-btn btn-scope-hasmat ${curMode === 'HAS_MAT' ? 'active' : ''}"
-          onclick="window.setMatHasMatFilter('HAS_MAT')" title="คลิกเพื่อแสดงเฉพาะงานที่มีพัสดุ (อยู่ระหว่างก่อสร้าง)">
-          <span class="scope-btn-label"><span class="scope-btn-icon">✓</span> พัสดุ (อยู่ระหว่างก่อสร้าง)</span>
+          onclick="window.setMatHasMatFilter('HAS_MAT')" title="คลิกเพื่อแสดงเฉพาะงานที่พบพัสดุ (อยู่ระหว่างก่อสร้าง)">
+          <span class="scope-btn-label"><span class="scope-btn-icon">✓</span> พบพัสดุ (อยู่ระหว่างก่อสร้าง)</span>
           <span class="scope-btn-val"><strong>${sc.withMatWbs.toLocaleString('th-TH')}</strong> งาน</span>
           ${curMode === 'HAS_MAT' ? '<span class="scope-btn-check">✓</span>' : ''}
         </button>
@@ -1254,6 +1272,16 @@
           <span class="scope-btn-val"><strong>${sc.noMatWbs.toLocaleString('th-TH')}</strong> งาน</span>
           ${curMode === 'NO_MAT' ? '<span class="scope-btn-check">✓</span>' : ''}
         </button>`;
+      const sfTitleEl = document.getElementById('matSfTitle');
+      if (sfTitleEl) {
+        if (curMode === 'NO_MAT') {
+          sfTitleEl.innerHTML = '🔎 ตัวกรองรายการที่ไม่พบพัสดุ';
+        } else if (curMode === 'ALL') {
+          sfTitleEl.innerHTML = '🔎 ตัวกรองรายการพัสดุทั้งหมด';
+        } else {
+          sfTitleEl.innerHTML = '🔎 ตัวกรองรายการที่พบพัสดุ';
+        }
+      }
     }
 
     document.querySelectorAll('#matTableCard .mat-hasmat-filter-pills .mat-qpill').forEach(btn => {
@@ -1452,18 +1480,18 @@
     // 6. Render Pagination Controls
     const infoEl = document.getElementById('matPaginationInfoText');
     if (infoEl) {
-      infoEl.textContent = rows.length === 0
+      infoEl.innerHTML = rows.length === 0
         ? 'ไม่พบรายการ (0 รายการ)'
-        : `แสดง ${(startIdx + 1).toLocaleString('th-TH')} - ${endIdx.toLocaleString('th-TH')} จากทั้งหมด ${rows.length.toLocaleString('th-TH')} รายการ (หน้า ${matState.page.toLocaleString('th-TH')}/${totalPages.toLocaleString('th-TH')})`;
+        : `แสดง <strong style="color:#FFFFFF;">${(startIdx + 1).toLocaleString('th-TH')} - ${endIdx.toLocaleString('th-TH')}</strong> จากทั้งหมด <strong style="color:#FFE58F;">${rows.length.toLocaleString('th-TH')}</strong> รายการ (หน้า <strong style="color:#FDE047;">${matState.page.toLocaleString('th-TH')}</strong>/${totalPages.toLocaleString('th-TH')})`;
     }
 
     const ctrlEl = document.getElementById('matPaginationControls');
     if (ctrlEl) {
       let pHtml = '';
-      const mkBtn = (lbl, targetPage, disabled, active) =>
-        `<button type="button" class="btn-page ${active ? 'active' : ''}" ${disabled ? 'disabled' : ''} onclick="window.goToMatPage(${targetPage})">${lbl}</button>`;
+      const mkBtn = (lbl, targetPage, disabled, active, isNav = false) =>
+        `<button type="button" class="btn-page page-btn ${active ? 'active' : ''} ${isNav ? 'btn-nav-page' : ''}" ${disabled ? 'disabled' : ''} onclick="window.goToMatPage(${targetPage})" title="${isNav ? lbl.replace(/[^ก-๙a-zA-Z]/g, '').trim() : 'หน้า ' + targetPage}">${lbl}</button>`;
 
-      pHtml += mkBtn('« ก่อนหน้า', matState.page - 1, matState.page <= 1, false);
+      pHtml += mkBtn('« ก่อนหน้า', matState.page - 1, matState.page <= 1, false, true);
 
       const pagesToShow = [];
       pagesToShow.push(1);
@@ -1475,13 +1503,13 @@
       let prevP = 0;
       pagesToShow.forEach(p => {
         if (prevP && p - prevP > 1) {
-          pHtml += `<span style="padding:0 4px; color:var(--text-dim);">...</span>`;
+          pHtml += `<span class="pagination-dots">...</span>`;
         }
-        pHtml += mkBtn(p.toLocaleString('th-TH'), p, false, p === matState.page);
+        pHtml += mkBtn(p.toLocaleString('th-TH'), p, false, p === matState.page, false);
         prevP = p;
       });
 
-      pHtml += mkBtn('ถัดไป »', matState.page + 1, matState.page >= totalPages, false);
+      pHtml += mkBtn('ถัดไป »', matState.page + 1, matState.page >= totalPages, false, true);
       ctrlEl.innerHTML = pHtml;
     }
   }
@@ -1567,7 +1595,7 @@
 
     const curW = (matState.filterWbs || '').trim();
     const curD = (matState.filterMatDesc || '').trim();
-    const effectiveDesc = curD || matState.chartSelDesc || '';
+    const effectiveDesc = curD || '';
     const hasDescFilter = !!effectiveDesc && effectiveDesc !== 'ALL';
     const hasWbsFilter = !!curW && curW !== 'ALL';
 
@@ -1607,7 +1635,7 @@
       }
     }
 
-    const key = [wbsSet.size, descSet.size, gf.crit, gf.prov, gf.off, curW, curD, matState.chartSelDesc || '', Array.from(matState.sapStatuses).sort().join('|')].join('§');
+    const key = [wbsSet.size, descSet.size, gf.crit, gf.prov, gf.off, curW, curD, Array.from(matState.sapStatuses).sort().join('|')].join('§');
     if (matState._subOptKey === key) return;
     matState._subOptKey = key;
 
@@ -1654,32 +1682,7 @@
    */
   const MAT_CHART_MAX_ROWS = 500;
 
-  // Fast Stock lookup cache from File 08 (MB52)
-  function getMat08StockMap() {
-    if (window._mat08StockMap) return window._mat08StockMap;
-    const stock = window.AUC_MAT08_STOCK;
-    if (!stock || !Array.isArray(stock.entries)) return null;
 
-    const byCodePlant = new Map();
-    const byDescPlant = new Map();
-
-    for (let i = 0; i < stock.entries.length; i++) {
-      const e = stock.entries[i];
-      const code = String(e[0] || '').trim();
-      const desc = String(e[1] || '').trim();
-      const plnt = String(e[2] || '').trim().toUpperCase();
-      const unit = String(e[3] || '').trim();
-      const stockC = Number(e[4]) || 0;
-      const stockIp = Number(e[5]) || 0;
-
-      const obj = { code, desc, plant: plnt, unit, stockC, stockIp };
-      if (code && plnt) byCodePlant.set(code + '|' + plnt, obj);
-      if (desc && plnt) byDescPlant.set(desc + '|' + plnt, obj);
-    }
-
-    window._mat08StockMap = { byCodePlant, byDescPlant };
-    return window._mat08StockMap;
-  }
 
   // Fast Stock lookup cache from File 08 (MB52)
   function getMat08StockMap() {
@@ -1741,14 +1744,23 @@
           plants: new Set(),
           stockIp: 0,
           stockC: 0,
-          stockTotal: 0
+          stockTotal: 0,
+          byPlant: {
+            'I010': { remIp: 0, remC: 0, stockIp: 0, stockC: 0 },
+            'I020': { remIp: 0, remC: 0, stockIp: 0, stockC: 0 },
+            'I030': { remIp: 0, remC: 0, stockIp: 0, stockC: 0 },
+            'I040': { remIp: 0, remC: 0, stockIp: 0, stockC: 0 },
+            'I050': { remIp: 0, remC: 0, stockIp: 0, stockC: 0 },
+            'I070': { remIp: 0, remC: 0, stockIp: 0, stockC: 0 }
+          }
         };
         agg.set(key, item);
       }
 
-      // แยกงบตาม WBS: C = งบ C (ส้มพาสเทล), I, P = งบ I, P (แดง)
+      // แยกงบตาม WBS: C = งบ C (ส้มสะท้อนแสง), I, P = งบ I, P (แดง)
       const w = String(r.wbs || '').trim().toUpperCase();
-      if (w.startsWith('C')) {
+      const isC = w.startsWith('C');
+      if (isC) {
         item.remC += rem;
         hasAnyC = true;
       } else {
@@ -1757,77 +1769,182 @@
       }
       item.remTotal += rem;
 
+      const pl = String(r.plant || '').trim().toUpperCase();
+      if (item.byPlant && item.byPlant[pl]) {
+        if (isC) item.byPlant[pl].remC += rem;
+        else item.byPlant[pl].remIp += rem;
+      }
+
       if (r.matCode) item.matCodes.add(String(r.matCode).trim());
       if (r.plant) item.plants.add(String(r.plant).trim().toUpperCase());
     }
 
-    // คำนวณปริมาณคงคลังจากไฟล์ 08 ตามรหัสพัสดุและโรงงาน/Plant ของแถวที่ถูกกรอง
-    // (ข้อ 3: หากเลือกตัวกรองแล้ว ปริมาณคงคลังกราฟสีเขียว ต้องแสดงโรงงาน/plant เดียวกับปริมาณคงค้าง ไม่ใช่แสดงทุกโรงงาน)
+    // คำนวณปริมาณคงคลังจากไฟล์ 08 (MB52) ตามรหัสพัสดุและโรงงาน/Plant
+    // ให้คำนวณครบทั้ง 6 คลังพัสดุ (I010, I020, I030, I040, I050, I070) เพื่อให้ข้อมูลคงคลังตรงกับไฟล์ 08 100%
+    // และไม่ให้คลังที่ไม่มีงานค้างเบิกถูกตัดยอดคงคลังทิ้งเป็น 0
     const stockMaps = getMat08StockMap();
     if (stockMaps) {
+      const allWarehouseCodes = ['I010', 'I020', 'I030', 'I040', 'I050', 'I070'];
       for (const item of agg.values()) {
         let sIp = 0;
         let sC = 0;
-        item.plants.forEach(pl => {
-          item.matCodes.forEach(code => {
-            const s = stockMaps.byCodePlant.get(code + '|' + pl);
-            if (s) {
-              sIp += s.stockIp;
-              sC += s.stockC;
-            }
-          });
-          if (item.matCodes.size === 0) {
+
+        for (let pIdx = 0; pIdx < allWarehouseCodes.length; pIdx++) {
+          const pl = allWarehouseCodes[pIdx];
+          let plIp = 0;
+          let plC = 0;
+
+          if (item.matCodes && item.matCodes.size > 0) {
+            item.matCodes.forEach(code => {
+              const s = stockMaps.byCodePlant.get(code + '|' + pl);
+              if (s) {
+                plIp += s.stockIp;
+                plC += s.stockC;
+              }
+            });
+          }
+          if (plIp === 0 && plC === 0) {
             const sD = stockMaps.byDescPlant.get(item.name + '|' + pl);
             if (sD) {
-              sIp += sD.stockIp;
-              sC += sD.stockC;
+              plIp += sD.stockIp;
+              plC += sD.stockC;
             }
           }
-        });
+
+          if (item.byPlant && item.byPlant[pl]) {
+            item.byPlant[pl].stockIp = plIp;
+            item.byPlant[pl].stockC = plC;
+          }
+
+          // รวมยอดตามตัวกรองคลัง (หากไม่มีตัวกรองคลัง filterPlant ให้รวมครบทั้ง 6 คลัง)
+          if (!matState.filterPlant || matState.filterPlant === pl) {
+            sIp += plIp;
+            sC += plC;
+          }
+        }
+
         item.stockIp = sIp;
         item.stockC = sC;
         item.stockTotal = sIp + sC;
       }
     }
 
-    // ตรวจสอบ effectiveBudget
-    let effectiveBudget = matState.chartBudgetFilter || 'ALL';
-    let lockedByCriteria = false;
-    if (hasAnyC && !hasAnyIp) {
-      effectiveBudget = 'C';
-      lockedByCriteria = true;
-    } else if (hasAnyIp && !hasAnyC) {
-      effectiveBudget = 'IP';
-      lockedByCriteria = true;
+    window._matLastChartAgg = agg;
+
+    const gf = getGlobalFilters();
+    const critBudgetLock = getCriteriaBudgetLock(gf.crit);
+
+    // ซิงก์สถานะล็อคงบประมาณเมื่อเปลี่ยนเกณฑ์วัด
+    if (matState.lastCrit !== gf.crit) {
+      matState.lastCrit = gf.crit;
+      if (critBudgetLock === 'C') {
+        matState.chartBudgetFilter = 'C';
+        matState.chartSelBudget = 'C';
+      } else if (critBudgetLock === 'IP') {
+        matState.chartBudgetFilter = 'IP';
+        matState.chartSelBudget = 'IP';
+      } else {
+        // เมื่อไม่ได้เลือกเกณฑ์วัดที่ล็อคงบ ให้คืนค่าแสดงทั้ง 2 งบ
+        matState.chartBudgetFilter = 'ALL';
+        matState.chartSelBudget = 'ALL';
+      }
     }
 
-    // อัปเดต Legend และปุ่มเลือกงบ
+    // ตรวจสอบ effectiveBudget
+    let effectiveBudget = matState.chartBudgetFilter || 'ALL';
+    let lockedBudget = null;
+
+    if (critBudgetLock === 'C') {
+      effectiveBudget = 'C';
+      matState.chartBudgetFilter = 'C';
+      if (matState.chartSelBudget !== 'C') matState.chartSelBudget = 'C';
+      lockedBudget = 'C';
+    } else if (critBudgetLock === 'IP') {
+      effectiveBudget = 'IP';
+      matState.chartBudgetFilter = 'IP';
+      if (matState.chartSelBudget !== 'IP') matState.chartSelBudget = 'IP';
+      lockedBudget = 'IP';
+    } else if (hasAnyC && !hasAnyIp) {
+      effectiveBudget = 'C';
+    } else if (hasAnyIp && !hasAnyC) {
+      effectiveBudget = 'IP';
+    }
+
+    // อัปเดต Legend และปุ่มเลือกงบ (คำสั่งผู้ใช้: หากล็อคเกณฑ์งบ ให้แสดงปุ่มแต่กดอะไรไม่ได้เลย)
     if (legendEl) {
-      const activeBudget = (matState.chartSelBudget && matState.chartSelBudget !== 'ALL')
-        ? matState.chartSelBudget
-        : effectiveBudget;
-      const isAll = activeBudget === 'ALL';
-      const isIp = activeBudget === 'IP';
-      const isC = activeBudget === 'C';
+      let isAll = false;
+      let isIp = false;
+      let isC = false;
+      let disableIp = false;
+      let disableC = false;
+      let tagIp = '';
+      let tagC = '';
+      let titleIp = '';
+      let titleC = '';
+      let styleIp = '';
+      let styleC = '';
+      let attrIp = '';
+      let attrC = '';
 
-      const tagAll = isAll ? '<span class="mat-budget-check">✓ เลือกอยู่</span>' : '';
-      const tagIp = isIp
-        ? `<span class="mat-budget-check">✓ ${lockedByCriteria ? 'ตามเกณฑ์วัด' : 'เลือกอยู่'}</span>`
-        : (!hasAnyIp ? '<span class="mat-budget-subtag">(ไม่มีในเกณฑ์วัด)</span>' : '');
-      const tagC = isC
-        ? `<span class="mat-budget-check">✓ ${lockedByCriteria ? 'ตามเกณฑ์วัด' : 'เลือกอยู่'}</span>`
-        : (!hasAnyC ? '<span class="mat-budget-subtag">(ไม่มีในเกณฑ์วัด)</span>' : '');
+      if (lockedBudget === 'C') {
+        // ล็อคที่งบ C: แสดงทั้งสองปุ่ม แต่กดอะไรไม่ได้เลย
+        isC = true;
+        disableIp = true;
+        tagC = '<span class="mat-budget-check">✓ ตามเกณฑ์วัด</span>';
+        tagIp = '<span class="mat-budget-subtag">(ล็อคตามเกณฑ์วัด)</span>';
+        titleC = `ล็อคแสดงเฉพาะ งบ C ตามเกณฑ์วัดที่เลือก (${escapeHtml(gf.crit || '')}) — ไม่สามารถเปลี่ยนได้`;
+        titleIp = `ล็อคตามเกณฑ์วัด งบ C (ไม่สามารถเลือก งบ I, P ได้)`;
+        styleC = 'cursor: default; pointer-events: none;';
+        styleIp = 'opacity: 0.35; cursor: not-allowed; pointer-events: none;';
+        attrIp = 'disabled="disabled" tabindex="-1"';
+        attrC = 'tabindex="-1"';
+      } else if (lockedBudget === 'IP') {
+        // ล็อคที่งบ I, P: แสดงทั้งสองปุ่ม แต่กดอะไรไม่ได้เลย
+        isIp = true;
+        disableC = true;
+        tagIp = '<span class="mat-budget-check">✓ ตามเกณฑ์วัด</span>';
+        tagC = '<span class="mat-budget-subtag">(ล็อคตามเกณฑ์วัด)</span>';
+        titleIp = `ล็อคแสดงเฉพาะ งบ I, P ตามเกณฑ์วัดที่เลือก (${escapeHtml(gf.crit || '')}) — ไม่สามารถเปลี่ยนได้`;
+        titleC = `ล็อคตามเกณฑ์วัด งบ I, P (ไม่สามารถเลือก งบ C ได้)`;
+        styleIp = 'cursor: default; pointer-events: none;';
+        styleC = 'opacity: 0.35; cursor: not-allowed; pointer-events: none;';
+        attrC = 'disabled="disabled" tabindex="-1"';
+        attrIp = 'tabindex="-1"';
+      } else {
+        // โหมดปกติ (ALL หรือเกณฑ์ที่ไม่มีการล็อคงบ): ผู้ใช้สามารถกดเลือกงบได้อย่างอิสระ
+        const activeBudget = (matState.chartSelBudget && matState.chartSelBudget !== 'ALL')
+          ? matState.chartSelBudget
+          : effectiveBudget;
+        isAll = (activeBudget === 'ALL');
+        isIp = (activeBudget === 'IP');
+        isC = (activeBudget === 'C');
 
-      const disableIp = !hasAnyIp && !lockedByCriteria;
-      const disableC = !hasAnyC && !lockedByCriteria;
+        disableIp = !hasAnyIp;
+        disableC = !hasAnyC;
+
+        tagIp = isIp
+          ? '<span class="mat-budget-check">✓ เลือกอยู่</span>'
+          : (!hasAnyIp ? '<span class="mat-budget-subtag">(ไม่มีข้อมูล)</span>' : '');
+        tagC = isC
+          ? '<span class="mat-budget-check">✓ เลือกอยู่</span>'
+          : (!hasAnyC ? '<span class="mat-budget-subtag">(ไม่มีข้อมูล)</span>' : '');
+
+        titleIp = isIp ? 'คลิกอีกครั้งเพื่อแสดงทั้ง 2 งบ' : 'คลิกเพื่อเลือกแสดงเฉพาะ งบ I, P (สีแดงเข้ม)';
+        titleC = isC ? 'คลิกอีกครั้งเพื่อแสดงทั้ง 2 งบ' : 'คลิกเพื่อเลือกแสดงเฉพาะ งบ C (สีส้มอ่อน)';
+      }
+
+      const clsIp = `mat-budget-pill pill-red${isIp ? ' active' : (isAll ? ' in-both' : ' dimmed')}${disableIp ? ' disabled locked-disabled' : ''}${lockedBudget === 'IP' ? ' locked-active' : ''}`;
+      const clsC = `mat-budget-pill pill-orange${isC ? ' active' : (isAll ? ' in-both' : ' dimmed')}${disableC ? ' disabled locked-disabled' : ''}${lockedBudget === 'C' ? ' locked-active' : ''}`;
+      const clickIp = lockedBudget ? 'onclick="return false;"' : 'onclick="window.setMatChartBudgetFilter(\'IP\')"';
+      const clickC = lockedBudget ? 'onclick="return false;"' : 'onclick="window.setMatChartBudgetFilter(\'C\')"';
 
       legendEl.innerHTML =
         '<div class="mat-budget-pill-group" role="group" aria-label="เลือกแสดงตามงบ">' +
-        `<button type="button" class="mat-budget-pill pill-red${isIp ? ' active' : (isAll ? ' in-both' : ' dimmed')}${disableIp ? ' disabled' : ''}" onclick="window.setMatChartBudgetFilter('IP')" title="${isIp ? 'คลิกอีกครั้งเพื่อแสดงทั้ง 2 งบ' : 'คลิกเพื่อเลือกแสดงเฉพาะ งบ I, P (สีแดง)'}">` +
-        `<i class="lg-dot lg-red"></i> ค้างเบิก งบ I, P (สีแดง) ${tagIp}` +
+        `<button type="button" class="${clsIp}" ${clickIp} ${attrIp} style="${styleIp}" title="${titleIp}">` +
+        `<i class="lg-dot lg-red"></i> ค้างเบิก งบ I, P (สีแดงเข้ม) ${tagIp}` +
         '</button>' +
-        `<button type="button" class="mat-budget-pill pill-orange${isC ? ' active' : (isAll ? ' in-both' : ' dimmed')}${disableC ? ' disabled' : ''}" onclick="window.setMatChartBudgetFilter('C')" title="${isC ? 'คลิกอีกครั้งเพื่อแสดงทั้ง 2 งบ' : 'คลิกเพื่อเลือกแสดงเฉพาะ งบ C (สีส้มพาสเทล)'}">` +
-        `<i class="lg-dot lg-orange"></i> ค้างเบิก งบ C (สีส้มพาสเทล) ${tagC}` +
+        `<button type="button" class="${clsC}" ${clickC} ${attrC} style="${styleC}" title="${titleC}">` +
+        `<i class="lg-dot lg-orange"></i> ค้างเบิก งบ C (สีส้มอ่อน) ${tagC}` +
         '</button>' +
         '</div>' +
         `<span class="mat-hchart-lg${isIp ? ' active-stock-lg' : (isC ? ' dimmed-stock-lg' : '')}" title="ไฟล์ 08 คลัง SLoc 0022 ปริมาณคงเหลือคงคลังงบ I,P (สีกราฟเขียวเข้ม — แสดงอย่างเดียว)"><i class="lg-dot" style="background:#15803D; box-shadow:0 0 6px rgba(21,128,61,0.8);"></i> <span style="color:#86EFAC;">คงเหลือ SLoc 0022 งบ I,P (เขียวเข้ม)</span></span>` +
@@ -1853,18 +1970,21 @@
     const total = list.length;
     const shown = list.length > MAT_CHART_MAX_ROWS ? list.slice(0, MAT_CHART_MAX_ROWS) : list;
 
-    // คำนวณ maxVal โดยคิดทั้งยอดค้างเบิกและยอดคงเหลือในคลัง เพื่อให้แท่งกราฟทั้งสองชุดใช้สเกลเดียวกัน
-    let maxVal = 0;
+    // คำนวณความยาวสเกลบาร์: กำหนดให้แต่ละแถวแสดงค่าไม่เกิน ROW_CAP = 100,000 หากเกินให้ขึ้นแถวใหม่ทันที
+    const ROW_CAP = 100000;
+    let maxRowValInView = 0;
     for (let i = 0; i < shown.length; i++) {
       const it = shown[i];
       if (effectiveBudget === 'IP') {
-        maxVal = Math.max(maxVal, it.remIp, it.stockIp);
+        maxRowValInView = Math.max(maxRowValInView, Math.min(ROW_CAP, it.remIp), Math.min(ROW_CAP, it.stockIp));
       } else if (effectiveBudget === 'C') {
-        maxVal = Math.max(maxVal, it.remC, it.stockC);
+        maxRowValInView = Math.max(maxRowValInView, Math.min(ROW_CAP, it.remC), Math.min(ROW_CAP, it.stockC));
       } else {
-        maxVal = Math.max(maxVal, it.remTotal, it.stockTotal);
+        maxRowValInView = Math.max(maxRowValInView, Math.min(ROW_CAP, it.remTotal), Math.min(ROW_CAP, it.stockTotal));
       }
     }
+    // สเกลบาร์ต่อแถว (ความจุสูงสุด 100,000 ต่อแถว) โดยเผื่อพื้นที่ 32% ด้านหลังสำหรับตัวเลข
+    const scaleMax = maxRowValInView > 0 ? (maxRowValInView * 1.32) : (ROW_CAP * 1.32);
 
     const sumRemTotal = list.reduce((s, x) => s + x.remTotal, 0);
     const sumRemIp = list.reduce((s, x) => s + x.remIp, 0);
@@ -1874,13 +1994,13 @@
       let subText = '';
       if (total) {
         if (effectiveBudget === 'IP') {
-          subText = `${total.toLocaleString('th-TH')} รายการพัสดุ • รวมค้างเบิก งบ I, P ${formatQty(sumRemIp)}`;
+          subText = `${total.toLocaleString('th-TH')} รายการพัสดุ - รวมค้างเบิก งบ I, P จำนวน ${formatQty(sumRemIp)}`;
         } else if (effectiveBudget === 'C') {
-          subText = `${total.toLocaleString('th-TH')} รายการพัสดุ • รวมค้างเบิก งบ C ${formatQty(sumRemC)}`;
+          subText = `${total.toLocaleString('th-TH')} รายการพัสดุ - รวมค้างเบิก งบ C จำนวน ${formatQty(sumRemC)}`;
         } else {
-          subText = `${total.toLocaleString('th-TH')} รายการพัสดุ • รวมค้างเบิก ${formatQty(sumRemTotal)}`;
+          subText = `${total.toLocaleString('th-TH')} รายการพัสดุ - รวมค้างเบิก จำนวน ${formatQty(sumRemTotal)}`;
           if (sumRemIp > 0 || sumRemC > 0) {
-            subText += ` (งบ I,P: ${formatQty(sumRemIp)} • งบ C: ${formatQty(sumRemC)})`;
+            subText += ` (งบ I,P: จำนวน ${formatQty(sumRemIp)} - งบ C: จำนวน ${formatQty(sumRemC)})`;
           }
         }
         if (total > shown.length) {
@@ -1889,6 +2009,8 @@
       }
       subEl.textContent = subText;
     }
+
+
 
     const sel = matState.chartSelDesc || '';
     const selBudget = matState.chartSelBudget || 'ALL';
@@ -1899,131 +2021,182 @@
       return;
     }
 
+    /**
+     * สร้าง HTML แท่งกราฟแนวนอนแบบรองรับการตัดขึ้นแถวใหม่เมื่อเกิน 100,000 (ROW_CAP)
+     * แต่ละแถวแสดงค่าไม่เกิน 100,000 หากเกินจะขึ้นแถวใหม่ทันที
+     */
+    function renderWrappedTracks(cfg) {
+      const {
+        type, // 'pending' or 'stock'
+        budgetMode, // 'ALL', 'IP', 'C'
+        valA, // amount for IP (remIp or stockIp)
+        valB, // amount for C (remC or stockC)
+        scaleMax,
+        isRowSel,
+        selBudget,
+        safeAttr,
+        plantListStr
+      } = cfg;
+
+      const ROW_CAP = 100000;
+      const isPending = (type === 'pending');
+      const trackCls = isPending ? 'mat-hchart-track track-pending' : 'mat-hchart-track track-green track-stock';
+      const totalVal = (valA || 0) + (valB || 0);
+
+      // กรณีไม่มีข้อมูล (0)
+      if (totalVal <= 0.0005) {
+        if (isPending) {
+          return `<div class="${trackCls}" title="ปริมาณค้างเบิก: 0"><div class="mat-hchart-bar bar-zero" style="width:0%;"></div><div class="mat-hchart-val"><span style="color:rgba(255,255,255,0.35); font-size:0.68rem;">0</span></div></div>`;
+        } else {
+          return `<div class="${trackCls}" data-stock-slot="${safeAttr}" onclick="event.stopPropagation()" title="ปริมาณคงเหลือในคลัง = 0 (โรงงาน: ${plantListStr || '-'})"><div class="mat-hchart-bar bar-zero" style="width:0%;"></div><div class="mat-hchart-val"><span class="val-stock-zero">0</span></div></div>`;
+        }
+      }
+
+      const numRows = Math.ceil(totalVal / ROW_CAP);
+      let tracksHtml = '';
+
+      const isIpActive = isRowSel && (selBudget === 'IP' || selBudget === 'ALL');
+      const isCActive = isRowSel && (selBudget === 'C' || selBudget === 'ALL');
+      const isIpDimmed = isRowSel && selBudget === 'C';
+      const isCDimmed = isRowSel && selBudget === 'IP';
+
+      const barAClass = isPending ? 'bar-red' : 'bar-darkgreen';
+      const barBClass = isPending ? 'bar-orange' : 'bar-lightgreen';
+      const valAClass = isPending ? 'val-red' : 'val-darkgreen';
+      const valBClass = isPending ? 'val-orange' : 'val-lightgreen';
+      const valTotalClass = isPending ? 'val-total' : 'val-stock-total';
+
+      for (let rIdx = 0; rIdx < numRows; rIdx++) {
+        const start = rIdx * ROW_CAP;
+        const rowVal = Math.min(ROW_CAP, totalVal - start);
+        const end = start + rowVal;
+
+        // คำนวณส่วนของงบ A (I, P) และงบ B (C) ในแถวย่อยนี้
+        const rowA = Math.max(0, Math.min(valA, end) - Math.min(valA, start));
+        const rowB = Math.max(0, Math.min(totalVal, end) - Math.max(valA, start));
+
+        const hasA = rowA > 0.0005;
+        const hasB = rowB > 0.0005;
+
+        let segsHtml = '';
+        if (hasA && hasB) {
+          const wA = (rowA / scaleMax) * 100;
+          const wB = (rowB / scaleMax) * 100;
+          const clsA = `${barAClass} bar-seg-first${isIpActive ? ' active-target' : ''}${isIpDimmed ? ' bar-dimmed' : ''}`;
+          const clsB = `${barBClass} bar-seg-last${isCActive ? ' active-target' : ''}${isCDimmed ? ' bar-dimmed' : ''}`;
+          const tipA = isPending ? `ค้างเบิก งบ I, P: ${formatQty(valA)} (แถวนี้: ${formatQty(rowA)})` : `คงเหลือ SLoc 0022 งบ I, P: ${formatQty(valA)} (แถวนี้: ${formatQty(rowA)}) — คลิกดู 6 คลัง`;
+          const tipB = isPending ? `ค้างเบิก งบ C: ${formatQty(valB)} (แถวนี้: ${formatQty(rowB)})` : `คงเหลือ SLoc 0021 งบ C: ${formatQty(valB)} (แถวนี้: ${formatQty(rowB)}) — คลิกดู 6 คลัง`;
+          segsHtml = `<div class="mat-hchart-bar ${clsA}" style="width:${wA.toFixed(2)}%;" onclick="window.selectMatChartItemWithBudget('${safeAttr}', 'IP', event)" title="${tipA}"></div>` +
+                     `<div class="mat-hchart-bar ${clsB}" style="width:${wB.toFixed(2)}%;" onclick="window.selectMatChartItemWithBudget('${safeAttr}', 'C', event)" title="${tipB}"></div>`;
+        } else if (hasA) {
+          const wA = Math.min(100, Math.max(0.6, (rowA / scaleMax) * 100));
+          const clsA = `${barAClass}${isIpActive ? ' active-target' : ''}${isIpDimmed ? ' bar-dimmed' : ''}`;
+          const tipA = isPending ? `ค้างเบิก งบ I, P: ${formatQty(valA)} (แถวนี้: ${formatQty(rowA)})` : `คงเหลือ SLoc 0022 งบ I, P: ${formatQty(valA)} (แถวนี้: ${formatQty(rowA)}) — คลิกดู 6 คลัง`;
+          segsHtml = `<div class="mat-hchart-bar ${clsA}" style="width:${wA.toFixed(2)}%;" onclick="window.selectMatChartItemWithBudget('${safeAttr}', 'IP', event)" title="${tipA}"></div>`;
+        } else if (hasB) {
+          const wB = Math.min(100, Math.max(0.6, (rowB / scaleMax) * 100));
+          const clsB = `${barBClass}${isCActive ? ' active-target' : ''}${isCDimmed ? ' bar-dimmed' : ''}`;
+          const tipB = isPending ? `ค้างเบิก งบ C: ${formatQty(valB)} (แถวนี้: ${formatQty(rowB)})` : `คงเหลือ SLoc 0021 งบ C: ${formatQty(valB)} (แถวนี้: ${formatQty(rowB)}) — คลิกดู 6 คลัง`;
+          segsHtml = `<div class="mat-hchart-bar ${clsB}" style="width:${wB.toFixed(2)}%;" onclick="window.selectMatChartItemWithBudget('${safeAttr}', 'C', event)" title="${tipB}"></div>`;
+        }
+
+        let valTextHtml = '';
+        const isLastRow = (rIdx === numRows - 1);
+
+        if (numRows === 1) {
+          if (hasA && hasB) {
+            valTextHtml = `<span class="${valAClass}" onclick="window.selectMatChartItemWithBudget('${safeAttr}', 'IP', event)" style="cursor:pointer;" title="งบ I, P">${formatQty(valA)}</span>` +
+                          `<span class="val-plus">+</span>` +
+                          `<span class="${valBClass}" onclick="window.selectMatChartItemWithBudget('${safeAttr}', 'C', event)" style="cursor:pointer;" title="งบ C">${formatQty(valB)}</span>` +
+                          `<span class="${valTotalClass}">(รวม ${formatQty(totalVal)})</span>`;
+          } else if (hasA) {
+            valTextHtml = `<span class="${valAClass}" onclick="window.selectMatChartItemWithBudget('${safeAttr}', 'IP', event)" style="cursor:pointer;" title="งบ I, P">${formatQty(valA)}</span>`;
+          } else if (hasB) {
+            valTextHtml = `<span class="${valBClass}" onclick="window.selectMatChartItemWithBudget('${safeAttr}', 'C', event)" style="cursor:pointer;" title="งบ C">${formatQty(valB)}</span>`;
+          }
+        } else {
+          // หากเกิน 100,000 ขึ้นแถวใหม่
+          if (!isLastRow) {
+            if (hasA && hasB) {
+              valTextHtml = `<span class="${valAClass}">${formatQty(rowA)}</span><span class="val-plus">+</span><span class="${valBClass}">${formatQty(rowB)}</span> <span style="color:rgba(255,255,255,0.45); font-size:0.65rem;">(แถว ${rIdx + 1}: ${formatQty(rowVal)})</span>`;
+            } else if (hasA) {
+              valTextHtml = `<span class="${valAClass}">${formatQty(rowA)}</span> <span style="color:rgba(255,255,255,0.45); font-size:0.65rem;">(แถว ${rIdx + 1}: ${formatQty(rowVal)})</span>`;
+            } else if (hasB) {
+              valTextHtml = `<span class="${valBClass}">${formatQty(rowB)}</span> <span style="color:rgba(255,255,255,0.45); font-size:0.65rem;">(แถว ${rIdx + 1}: ${formatQty(rowVal)})</span>`;
+            }
+          } else {
+            // แถวสุดท้าย
+            if (hasA && hasB) {
+              valTextHtml = `<span class="${valAClass}">${formatQty(rowA)}</span><span class="val-plus">+</span><span class="${valBClass}">${formatQty(rowB)}</span> <span class="${valTotalClass}">(รวม ${formatQty(valA)} + ${formatQty(valB)} = ${formatQty(totalVal)})</span>`;
+            } else if (hasA) {
+              valTextHtml = `<span class="${valAClass}">${formatQty(rowA)}</span> <span class="${valTotalClass}">(รวมทั้งหมด ${formatQty(totalVal)})</span>`;
+            } else if (hasB) {
+              valTextHtml = `<span class="${valBClass}">${formatQty(rowB)}</span> <span class="${valTotalClass}">(รวมทั้งหมด ${formatQty(totalVal)})</span>`;
+            }
+          }
+        }
+
+        const rowTitle = isPending
+          ? `ปริมาณค้างเบิก (แถวที่ ${rIdx + 1}/${numRows})`
+          : `ปริมาณคงเหลือในคลัง (ไฟล์ 08: โรงงาน ${plantListStr || '-'}, แถวที่ ${rIdx + 1}/${numRows})`;
+        const dataStockAttr = isPending ? '' : ` data-stock-slot="${safeAttr}" onclick="event.stopPropagation()"`;
+        tracksHtml += `<div class="${trackCls}"${dataStockAttr} title="${rowTitle}">${segsHtml}<div class="mat-hchart-val">${valTextHtml}</div></div>`;
+      }
+
+      return tracksHtml;
+    }
+
     const html = [];
     for (let i = 0; i < shown.length; i++) {
       const it = shown[i];
       const isRowSel = (sel === it.name || sel === it.code);
       const safeAttr = escapeHtml(it.name);
-
-      const hasIp = it.remIp > 0.0005;
-      const hasC = it.remC > 0.0005;
-
-      const isRedActive = isRowSel && (selBudget === 'IP');
-      const isOrangeActive = isRowSel && (selBudget === 'C');
-
-      const isRedDimmed = isRowSel && (selBudget === 'C');
-      const isOrangeDimmed = isRowSel && (selBudget === 'IP');
-
-      let barHtml = '';
-      let valHtml = '';
-      let titleTip = `${safeAttr}`;
-
-      let stockBarHtml = '';
-      let stockValHtml = '';
       const plantListStr = it.plants.size > 0 ? Array.from(it.plants).join(', ') : '-';
 
+      let titleTip = `${safeAttr}`;
       if (effectiveBudget === 'IP') {
-        const w = (maxVal > 0) ? Math.max(0.6, (it.remIp / maxVal) * 100) : 0;
-        const targetCls = isRowSel && (selBudget === 'IP' || selBudget === 'ALL') ? ' active-target' : '';
-        barHtml = `<div class="mat-hchart-bar bar-red${targetCls}" style="width:${w.toFixed(2)}%;" onclick="window.selectMatChartItemWithBudget('${safeAttr}', 'IP', event)" title="คลิกเพื่อเลือกเฉพาะ งบ I, P (สีแดง) สำหรับพัสดุนี้: ${formatQty(it.remIp)}"></div>`;
-        valHtml = `<span class="val-red">${formatQty(it.remIp)}</span>`;
-        titleTip += ` — ค้างเบิก งบ I, P: ${formatQty(it.remIp)}`;
-
-        // สีกราฟเขียวเข้ม สำหรับ SLoc 0022 งบ I,P (แสดงอย่างเดียว กดเลือกไม่ได้)
-        if (it.stockIp > 0.0005) {
-          const wS = Math.min(100, Math.max(0.6, (it.stockIp / maxVal) * 100));
-          stockBarHtml = `<div class="mat-hchart-bar bar-darkgreen" style="width:${wS.toFixed(2)}%;" onclick="event.stopPropagation()" title="คงเหลือในคลัง SLoc 0022 งบ I, P: ${formatQty(it.stockIp)} (โรงงาน: ${plantListStr}) — แสดงอย่างเดียว"></div>`;
-          stockValHtml = `<span class="val-darkgreen" title="คงเหลือในคลัง SLoc 0022 งบ I, P (โรงงาน: ${plantListStr})">${formatQty(it.stockIp)}</span>`;
-        } else {
-          stockBarHtml = `<div class="mat-hchart-bar bar-zero" style="width:0%;" onclick="event.stopPropagation()"></div>`;
-          stockValHtml = `<span class="val-stock-zero" title="คงเหลือในคลัง SLoc 0022 งบ I, P = 0 (โรงงาน: ${plantListStr})">0</span>`;
-        }
+        titleTip += ` — ค้างเบิก งบ I, P: ${formatQty(it.remIp)} [คงคลัง SLoc 0022: ${formatQty(it.stockIp)}]`;
       } else if (effectiveBudget === 'C') {
-        const w = (maxVal > 0) ? Math.max(0.6, (it.remC / maxVal) * 100) : 0;
-        const targetCls = isRowSel && (selBudget === 'C' || selBudget === 'ALL') ? ' active-target' : '';
-        barHtml = `<div class="mat-hchart-bar bar-orange${targetCls}" style="width:${w.toFixed(2)}%;" onclick="window.selectMatChartItemWithBudget('${safeAttr}', 'C', event)" title="คลิกเพื่อเลือกเฉพาะ งบ C (สีส้มพาสเทล) สำหรับพัสดุนี้: ${formatQty(it.remC)}"></div>`;
-        valHtml = `<span class="val-orange">${formatQty(it.remC)}</span>`;
-        titleTip += ` — ค้างเบิก งบ C: ${formatQty(it.remC)} (ส้มพาสเทล)`;
-
-        // สีกราฟเขียวอ่อน สำหรับ SLoc 0021 งบ C (แสดงอย่างเดียว กดเลือกไม่ได้)
-        if (it.stockC > 0.0005) {
-          const wS = Math.min(100, Math.max(0.6, (it.stockC / maxVal) * 100));
-          stockBarHtml = `<div class="mat-hchart-bar bar-lightgreen" style="width:${wS.toFixed(2)}%;" onclick="event.stopPropagation()" title="คงเหลือในคลัง SLoc 0021 งบ C: ${formatQty(it.stockC)} (โรงงาน: ${plantListStr}) — แสดงอย่างเดียว"></div>`;
-          stockValHtml = `<span class="val-lightgreen" title="คงเหลือในคลัง SLoc 0021 งบ C (โรงงาน: ${plantListStr})">${formatQty(it.stockC)}</span>`;
-        } else {
-          stockBarHtml = `<div class="mat-hchart-bar bar-zero" style="width:0%;" onclick="event.stopPropagation()"></div>`;
-          stockValHtml = `<span class="val-stock-zero" title="คงเหลือในคลัง SLoc 0021 งบ C = 0 (โรงงาน: ${plantListStr})">0</span>`;
-        }
+        titleTip += ` — ค้างเบิก งบ C: ${formatQty(it.remC)} [คงคลัง SLoc 0021: ${formatQty(it.stockC)}]`;
       } else {
-        // ทั้ง 2 งบ: แดงขึ้นก่อน (งบ I, P) แล้วตามด้วยส้มพาสเทล (งบ C)
-        const wIp = (maxVal > 0 && hasIp) ? (it.remIp / maxVal) * 100 : 0;
-        const wC = (maxVal > 0 && hasC) ? (it.remC / maxVal) * 100 : 0;
-
-        if (hasIp && hasC) {
-          const redCls = `${isRedActive ? ' active-target' : ''}${isRedDimmed ? ' bar-dimmed' : ''}`;
-          const orangeCls = `${isOrangeActive ? ' active-target' : ''}${isOrangeDimmed ? ' bar-dimmed' : ''}`;
-          barHtml = `<div class="mat-hchart-bar bar-red bar-seg-first${redCls}" style="width:${wIp.toFixed(2)}%;" onclick="window.selectMatChartItemWithBudget('${safeAttr}', 'IP', event)" title="คลิกเพื่อเลือกเฉพาะ งบ I, P (สีแดง) สำหรับพัสดุนี้: ${formatQty(it.remIp)}"></div>` +
-            `<div class="mat-hchart-bar bar-orange bar-seg-last${orangeCls}" style="width:${wC.toFixed(2)}%;" onclick="window.selectMatChartItemWithBudget('${safeAttr}', 'C', event)" title="คลิกเพื่อเลือกเฉพาะ งบ C (สีส้มพาสเทล) สำหรับพัสดุนี้: ${formatQty(it.remC)}"></div>`;
-          valHtml = `<span class="val-red" title="งบ I, P">${formatQty(it.remIp)}</span>` +
-            `<span style="opacity:0.6; margin:0 3px; font-weight:700;">+</span>` +
-            `<span class="val-orange" title="งบ C">${formatQty(it.remC)}</span>` +
-            `<span style="color:#FFB81C; font-size:0.7rem; font-weight:700; margin-left:4px;">(รวม ${formatQty(it.remTotal)})</span>`;
-          titleTip += ` — รวมค้างเบิก ${formatQty(it.remTotal)} [งบ I, P: ${formatQty(it.remIp)} | งบ C: ${formatQty(it.remC)}]`;
-        } else if (hasIp) {
-          const w = Math.max(0.6, wIp);
-          const redCls = `${isRedActive ? ' active-target' : ''}`;
-          barHtml = `<div class="mat-hchart-bar bar-red${redCls}" style="width:${w.toFixed(2)}%;" onclick="window.selectMatChartItemWithBudget('${safeAttr}', 'IP', event)" title="คลิกเพื่อเลือกเฉพาะ งบ I, P (สีแดง) สำหรับพัสดุนี้: ${formatQty(it.remIp)}"></div>`;
-          valHtml = `<span class="val-red">${formatQty(it.remIp)}</span>`;
-          titleTip += ` — ค้างเบิก งบ I, P: ${formatQty(it.remIp)}`;
-        } else if (hasC) {
-          const w = Math.max(0.6, wC);
-          const orangeCls = `${isOrangeActive ? ' active-target' : ''}`;
-          barHtml = `<div class="mat-hchart-bar bar-orange${orangeCls}" style="width:${w.toFixed(2)}%;" onclick="window.selectMatChartItemWithBudget('${safeAttr}', 'C', event)" title="คลิกเพื่อเลือกเฉพาะ งบ C (สีส้มพาสเทล) สำหรับพัสดุนี้: ${formatQty(it.remC)}"></div>`;
-          valHtml = `<span class="val-orange">${formatQty(it.remC)}</span>`;
-          titleTip += ` — ค้างเบิก งบ C: ${formatQty(it.remC)} (ส้มพาสเทล)`;
-        }
-
-        // กราฟคงคลัง: เขียวเข้ม SLoc 0022 (งบ I,P) + เขียวอ่อน SLoc 0021 (งบ C) (แสดงอย่างเดียว กดเลือกไม่ได้)
-        const hasStockIp = it.stockIp > 0.0005;
-        const hasStockC = it.stockC > 0.0005;
-
-        if (hasStockIp && hasStockC) {
-          const wSIp = (maxVal > 0) ? Math.max(0.4, (it.stockIp / maxVal) * 100) : 0;
-          const wSC = (maxVal > 0) ? Math.max(0.4, (it.stockC / maxVal) * 100) : 0;
-          stockBarHtml = `<div class="mat-hchart-bar bar-darkgreen bar-seg-first" style="width:${wSIp.toFixed(2)}%;" onclick="event.stopPropagation()" title="คงเหลือในคลัง SLoc 0022 งบ I, P: ${formatQty(it.stockIp)} (โรงงาน: ${plantListStr}) — แสดงอย่างเดียว"></div>` +
-            `<div class="mat-hchart-bar bar-lightgreen bar-seg-last" style="width:${wSC.toFixed(2)}%;" onclick="event.stopPropagation()" title="คงเหลือในคลัง SLoc 0021 งบ C: ${formatQty(it.stockC)} (โรงงาน: ${plantListStr}) — แสดงอย่างเดียว"></div>`;
-          stockValHtml = `<span class="val-darkgreen" title="คงเหลือ SLoc 0022 งบ I, P">${formatQty(it.stockIp)}</span>` +
-            `<span style="opacity:0.6; margin:0 3px; font-weight:700;">+</span>` +
-            `<span class="val-lightgreen" title="คงเหลือ SLoc 0021 งบ C">${formatQty(it.stockC)}</span>` +
-            `<span class="val-stock-total" style="font-size:0.7rem; font-weight:700; margin-left:4px;">(รวม ${formatQty(it.stockTotal)})</span>`;
-        } else if (hasStockIp) {
-          const wS = Math.min(100, Math.max(0.6, (it.stockIp / maxVal) * 100));
-          stockBarHtml = `<div class="mat-hchart-bar bar-darkgreen" style="width:${wS.toFixed(2)}%;" onclick="event.stopPropagation()" title="คงเหลือในคลัง SLoc 0022 งบ I, P: ${formatQty(it.stockIp)} (โรงงาน: ${plantListStr}) — แสดงอย่างเดียว"></div>`;
-          stockValHtml = `<span class="val-darkgreen">${formatQty(it.stockIp)}</span>`;
-        } else if (hasStockC) {
-          const wS = Math.min(100, Math.max(0.6, (it.stockC / maxVal) * 100));
-          stockBarHtml = `<div class="mat-hchart-bar bar-lightgreen" style="width:${wS.toFixed(2)}%;" onclick="event.stopPropagation()" title="คงเหลือในคลัง SLoc 0021 งบ C: ${formatQty(it.stockC)} (โรงงาน: ${plantListStr}) — แสดงอย่างเดียว"></div>`;
-          stockValHtml = `<span class="val-lightgreen">${formatQty(it.stockC)}</span>`;
-        } else {
-          stockBarHtml = `<div class="mat-hchart-bar bar-zero" style="width:0%;" onclick="event.stopPropagation()"></div>`;
-          stockValHtml = `<span class="val-stock-zero" title="คงเหลือในคลัง = 0 (โรงงาน: ${plantListStr}) — แสดงอย่างเดียว">0</span>`;
-        }
+        titleTip += ` — รวมค้างเบิก จำนวน ${formatQty(it.remTotal)} [งบ I,P: จำนวน ${formatQty(it.remIp)} | งบ C: จำนวน ${formatQty(it.remC)}] [คงคลัง: รวม ${formatQty(it.stockTotal)} (งบ I,P: ${formatQty(it.stockIp)}, งบ C: ${formatQty(it.stockC)}) — โรงงาน: ${plantListStr}]`;
       }
+      titleTip += ' (คลิกชื่อพัสดุเพื่อเลือกทุกงบ หรือคลิกแท่งสีเพื่อเลือกเฉพาะงบนั้น • แถบสีเขียวแสดงยอดคงคลัง • แต่ละแถวไม่เกิน 100,000 เกินขึ้นแถวใหม่)';
 
-      titleTip += ` [คงคลัง: รวม ${formatQty(it.stockTotal)} (งบ I,P: ${formatQty(it.stockIp)}, งบ C: ${formatQty(it.stockC)}) — โรงงาน: ${plantListStr}]`;
-      titleTip += ' (คลิกชื่อพัสดุเพื่อเลือกทุกงบ หรือคลิกแท่งสีแดง/ส้ม เพื่อเลือกเฉพาะงบนั้น • แถบสีเขียวแสดงยอดคงคลังเท่านั้น ไม่สามารถกดเลือกได้)';
+      const pendingTracksHtml = renderWrappedTracks({
+        type: 'pending',
+        budgetMode: effectiveBudget,
+        valA: (effectiveBudget === 'C') ? 0 : it.remIp,
+        valB: (effectiveBudget === 'IP') ? 0 : it.remC,
+        scaleMax,
+        isRowSel,
+        selBudget,
+        safeAttr,
+        plantListStr
+      });
 
-      const isNameSelected = isRowSel && (selBudget === 'ALL');
-      const nameCheck = isNameSelected ? ' <span class="mat-hchart-name-check">✓</span>' : '';
-      const nameCls = `mat-hchart-name${isNameSelected ? ' selected-name active-target' : (isRowSel ? ' row-active-text' : '')}`;
+      const stockTracksHtml = renderWrappedTracks({
+        type: 'stock',
+        budgetMode: effectiveBudget,
+        valA: (effectiveBudget === 'C') ? 0 : it.stockIp,
+        valB: (effectiveBudget === 'IP') ? 0 : it.stockC,
+        scaleMax,
+        isRowSel,
+        selBudget,
+        safeAttr,
+        plantListStr
+      });
+
+      const nameCheck = isRowSel ? ' <span class="mat-hchart-check">✓</span>' : '';
+      const nameCls = `mat-hchart-name${isRowSel ? ' selected-name active-target' : ''}`;
 
       html.push(
         `<div class="mat-hchart-row${isRowSel ? ' selected' : ''}${sel && !isRowSel ? ' dimmed' : ''}" data-mat="${safeAttr}" onclick="window.selectMatChartItemWithBudget(this.getAttribute('data-mat'), 'ALL', event)" title="${titleTip}">` +
         `<div class="mat-hchart-rank">${i + 1}</div>` +
         `<div class="${nameCls}" onclick="window.selectMatChartItemWithBudget('${safeAttr}', 'ALL', event)" title="คลิกเพื่อเลือกพัสดุนี้: ${safeAttr} (แสดงทุกงบ)">${escapeHtml(it.name)}${nameCheck}</div>` +
         `<div class="mat-hchart-bars">` +
-        `<div class="mat-hchart-track" title="ปริมาณค้างเบิก">${barHtml}<span class="mat-hchart-val">${valHtml}</span></div>` +
-        `<div class="mat-hchart-track track-green" data-stock-slot="${safeAttr}" onclick="event.stopPropagation()" title="ปริมาณคงเหลือในคลัง (ไฟล์ 08: โรงงาน ${plantListStr}) — แสดงอย่างเดียว">${stockBarHtml}<span class="mat-hchart-val">${stockValHtml}</span></div>` +
+        pendingTracksHtml +
+        stockTracksHtml +
         `</div>` +
         `</div>`
       );
@@ -2065,107 +2238,340 @@
     if (window.updateMatSubFilterCount) window.updateMatSubFilterCount();
   };
 
+  function updateChartHighlightDom() {
+    const selName = matState.chartSelDesc || '';
+    const selBudget = matState.chartSelBudget || 'ALL';
+    const rows = document.querySelectorAll('.mat-hchart-row');
+
+    rows.forEach(r => {
+      const matName = r.getAttribute('data-mat');
+      const isMatch = (matName === selName);
+
+      r.classList.toggle('selected', isMatch);
+      r.classList.toggle('dimmed', !!selName && !isMatch);
+
+      const nameEl = r.querySelector('.mat-hchart-name');
+      if (nameEl) {
+        nameEl.classList.toggle('selected-name', isMatch);
+        nameEl.classList.toggle('active-target', isMatch);
+        let chk = nameEl.querySelector('.mat-hchart-check');
+        if (isMatch) {
+          if (!chk) {
+            chk = document.createElement('span');
+            chk.className = 'mat-hchart-check';
+            chk.textContent = ' ✓';
+            nameEl.appendChild(chk);
+          }
+        } else {
+          if (chk) chk.remove();
+        }
+      }
+
+      const barRed = r.querySelector('.bar-red');
+      const barOrange = r.querySelector('.bar-orange');
+      const barDarkGreen = r.querySelector('.bar-darkgreen');
+      const barLightGreen = r.querySelector('.bar-lightgreen');
+      const valRed = r.querySelector('.val-red');
+      const valOrange = r.querySelector('.val-orange');
+      const valDarkGreen = r.querySelector('.val-darkgreen');
+      const valLightGreen = r.querySelector('.val-lightgreen');
+
+      if (barRed) {
+        barRed.classList.toggle('active-target', isMatch && (selBudget === 'IP' || selBudget === 'ALL'));
+        barRed.classList.toggle('bar-dimmed', isMatch && selBudget === 'C');
+      }
+      if (valRed) {
+        valRed.classList.toggle('active-target', isMatch && (selBudget === 'IP' || selBudget === 'ALL'));
+        valRed.classList.toggle('val-dimmed', isMatch && selBudget === 'C');
+      }
+      if (barOrange) {
+        barOrange.classList.toggle('active-target', isMatch && (selBudget === 'C' || selBudget === 'ALL'));
+        barOrange.classList.toggle('bar-dimmed', isMatch && selBudget === 'IP');
+      }
+      if (valOrange) {
+        valOrange.classList.toggle('active-target', isMatch && (selBudget === 'C' || selBudget === 'ALL'));
+        valOrange.classList.toggle('val-dimmed', isMatch && selBudget === 'IP');
+      }
+      if (barDarkGreen) {
+        barDarkGreen.classList.toggle('active-target', isMatch && (selBudget === 'IP' || selBudget === 'ALL'));
+        barDarkGreen.classList.toggle('bar-dimmed', isMatch && selBudget === 'C');
+      }
+      if (valDarkGreen) {
+        valDarkGreen.classList.toggle('active-target', isMatch && (selBudget === 'IP' || selBudget === 'ALL'));
+        valDarkGreen.classList.toggle('val-dimmed', isMatch && selBudget === 'C');
+      }
+      if (barLightGreen) {
+        barLightGreen.classList.toggle('active-target', isMatch && (selBudget === 'C' || selBudget === 'ALL'));
+        barLightGreen.classList.toggle('bar-dimmed', isMatch && selBudget === 'IP');
+      }
+      if (valLightGreen) {
+        valLightGreen.classList.toggle('active-target', isMatch && (selBudget === 'C' || selBudget === 'ALL'));
+        valLightGreen.classList.toggle('val-dimmed', isMatch && selBudget === 'IP');
+      }
+    });
+  }
+
   function renderMatWarehouseSummary() {
     const colEl = document.getElementById('matWhWidgetCol');
     if (!colEl) return;
 
     const selPlant = matState.filterPlant || '';
-
-    const pendingSum = MAT_WH_PLANTS.reduce((sum, p) => sum + p.basePending, 0);
-    const stockSum = MAT_WH_PLANTS.reduce((sum, p) => sum + p.baseStock, 0);
+    const selDesc = matState.chartSelDesc || '';
+    const selBudget = matState.chartSelBudget || 'ALL';
+    const agg = window._matLastChartAgg;
+    const it = (selDesc && agg) ? agg.get(selDesc) : null;
 
     let pendingRowsHtml = '';
     let stockRowsHtml = '';
+    let pendingSum = 0;
+    let stockSum = 0;
+    let pendingColTitle = 'ค้างเบิก';
+    let stockColTitle = 'เหลือคลัง';
+    let leftIndicatorHtml = '';
+    let rightIndicatorHtml = '';
+    let tfootPendingStyle = '';
+    let tfootStockStyle = '';
+    let barPendingFillStyle = '';
+    let barStockFillStyle = '';
+    let subBannerHtml = '';
+    let headerBadgeHtml = '<span class="mat-wh-card-badge">6 คลัง</span>';
+    let headerActionHtml = '';
 
-    for (let i = 0; i < MAT_WH_PLANTS.length; i++) {
-      const p = MAT_WH_PLANTS[i];
-      const isSel = (selPlant === p.code);
-      const rowCls = isSel ? 'selected' : '';
-      const tip = isSel ? `คลิกเพื่อยกเลิกการกรองคลัง ${p.code}` : `คลิกเพื่อกรองตารางเฉพาะ ${p.code} (${p.name})`;
+    function renderWhCell(p) {
+      return `<div class="mat-wh-cell-2rows">
+        <span class="mat-wh-cell-code">${p.code}</span>
+        <span class="mat-wh-cell-name">${escapeHtml(p.name)}</span>
+      </div>`;
+    }
 
-      pendingRowsHtml += `
-        <tr class="${rowCls}" data-wh="${p.code}" onclick="window.toggleMatPlantFilter('${p.code}')" onmouseenter="window.setWhRowHover('${p.code}', true)" onmouseleave="window.setWhRowHover('${p.code}', false)" title="${tip}">
-          <td class="td-wh-code">${p.code}</td>
-          <td class="td-wh-val">${p.basePending.toLocaleString('en-US')}</td>
-        </tr>`;
+    if (!it) {
+      // โหมดปกติ: ภาพรวม 6 คลัง (ไม่เลือกพัสดุเฉพาะ)
+      pendingSum = MAT_WH_PLANTS.reduce((sum, p) => sum + p.basePending, 0);
+      stockSum = MAT_WH_PLANTS.reduce((sum, p) => sum + p.baseStock, 0);
+      leftIndicatorHtml = '<span class="wh-ind-dot">🔴</span> <span class="wh-ind-text text-red">ค้างเบิกคลัง</span>';
+      rightIndicatorHtml = '<span class="wh-ind-dot">🟢</span> <span class="wh-ind-text text-green">เหลือคลัง</span>';
 
-      stockRowsHtml += `
-        <tr class="${rowCls}" data-wh="${p.code}" onclick="window.toggleMatPlantFilter('${p.code}')" onmouseenter="window.setWhRowHover('${p.code}', true)" onmouseleave="window.setWhRowHover('${p.code}', false)" title="${tip}">
-          <td class="td-wh-code">${p.code}</td>
-          <td class="td-wh-val">${p.baseStock.toLocaleString('en-US')}</td>
-        </tr>`;
+      // หากไม่ได้เลือกให้แสดง ไม่มีรายการที่เลือก (วงเหลือง)
+      subBannerHtml = `
+        <div class="mat-wh-selected-mat-box not-selected">
+          <div class="mat-wh-selected-mat-title" title="ไม่มีรายการที่เลือก">
+            <span class="mat-wh-mat-icon">🔍</span>
+            <span class="mat-wh-mat-name">ไม่มีรายการที่เลือก</span>
+          </div>
+        </div>
+      `;
+
+      for (let i = 0; i < MAT_WH_PLANTS.length; i++) {
+        const p = MAT_WH_PLANTS[i];
+        const isSel = (selPlant === p.code);
+        const rowCls = isSel ? 'selected' : '';
+        const tip = isSel ? `คลิกเพื่อยกเลิกการกรองคลัง ${p.code}` : `คลิกเพื่อกรองตารางเฉพาะ ${p.code} (${p.name})`;
+
+        pendingRowsHtml += `
+          <tr class="${rowCls}" data-wh="${p.code}" onclick="window.toggleMatPlantFilter('${p.code}')" onmouseenter="window.setWhRowHover('${p.code}', true)" onmouseleave="window.setWhRowHover('${p.code}', false)" title="${tip}">
+            <td class="td-wh-code">${renderWhCell(p)}</td>
+            <td class="td-wh-val">${p.basePending.toLocaleString('en-US')}</td>
+          </tr>`;
+
+        stockRowsHtml += `
+          <tr class="${rowCls}" data-wh="${p.code}" onclick="window.toggleMatPlantFilter('${p.code}')" onmouseenter="window.setWhRowHover('${p.code}', true)" onmouseleave="window.setWhRowHover('${p.code}', false)" title="${tip}">
+            <td class="td-wh-code">${renderWhCell(p)}</td>
+            <td class="td-wh-val">${p.baseStock.toLocaleString('en-US')}</td>
+          </tr>`;
+      }
+    } else {
+      // โหมดเลือกพัสดุจากกราฟแนวนอน / ตัวอักษร
+      const bp = it.byPlant || {};
+      headerBadgeHtml = `<span class="mat-wh-card-badge" style="color:#FDE047; font-size:0.70rem;">เฉพาะพัสดุ</span>`;
+      headerActionHtml = '';
+
+      // ข้อความชื่อพัสดุที่เลือกไว้ด้านบนแบบเต็ม แสดงครบถ้วนไม่ตัดคำ (วงเหลือง)
+      subBannerHtml = `
+        <div class="mat-wh-selected-mat-box">
+          <div class="mat-wh-selected-mat-title" title="${escapeHtml(it.name)}">
+            <span class="mat-wh-mat-icon">🔍</span>
+            <span class="mat-wh-mat-name">${escapeHtml(it.name)}</span>
+          </div>
+        </div>
+      `;
+
+      if (selBudget === 'IP') {
+        leftIndicatorHtml = '<span class="wh-ind-dot">🔴</span> <span class="wh-ind-text text-red">ค้างเบิก งบ I, P</span>';
+        rightIndicatorHtml = '<span class="wh-ind-dot">🟢</span> <span class="wh-ind-text text-green">คงคลัง SLoc 0022</span>';
+        pendingSum = it.remIp;
+        stockSum = it.stockIp;
+        tfootPendingStyle = 'background: linear-gradient(90deg, #991B1B 0%, #B91C1C 100%); color: #FFFFFF;';
+        tfootStockStyle = 'background: linear-gradient(90deg, #10B981 0%, #059669 100%); color: #FFFFFF;';
+        barPendingFillStyle = 'background: linear-gradient(90deg, #991B1B 0%, #B91C1C 100%);';
+        barStockFillStyle = 'background: linear-gradient(90deg, #15803D 0%, #10B981 100%);';
+
+        for (let i = 0; i < MAT_WH_PLANTS.length; i++) {
+          const p = MAT_WH_PLANTS[i];
+          const plantData = bp[p.code] || { remIp: 0, stockIp: 0 };
+          const pVal = plantData.remIp || 0;
+          const sVal = plantData.stockIp || 0;
+          const isSel = (selPlant === p.code);
+          const rowCls = isSel ? 'selected' : '';
+          const tipP = `${p.code} ${p.name}: ค้างเบิก งบ I, P = ${formatQty(pVal)}`;
+          const tipS = `${p.code} ${p.name}: คงเหลือ SLoc 0022 = ${formatQty(sVal)}`;
+
+          pendingRowsHtml += `
+            <tr class="${rowCls}" data-wh="${p.code}" onclick="window.toggleMatPlantFilter('${p.code}')" onmouseenter="window.setWhRowHover('${p.code}', true)" onmouseleave="window.setWhRowHover('${p.code}', false)" title="${tipP}">
+              <td class="td-wh-code">${renderWhCell(p)}</td>
+              <td class="td-wh-val" style="color:${pVal > 0 ? '#FCA5A5' : 'rgba(255,255,255,0.30)'}; font-weight:${pVal > 0 ? '800' : '500'};">${formatQty(pVal)}</td>
+            </tr>`;
+
+          stockRowsHtml += `
+            <tr class="${rowCls}" data-wh="${p.code}" onclick="window.toggleMatPlantFilter('${p.code}')" onmouseenter="window.setWhRowHover('${p.code}', true)" onmouseleave="window.setWhRowHover('${p.code}', false)" title="${tipS}">
+              <td class="td-wh-code">${renderWhCell(p)}</td>
+              <td class="td-wh-val" style="color:${sVal > 0 ? '#34D399' : 'rgba(255,255,255,0.30)'}; font-weight:${sVal > 0 ? '800' : '500'};">${formatQty(sVal)}</td>
+            </tr>`;
+        }
+      } else if (selBudget === 'C') {
+        leftIndicatorHtml = '<span class="wh-ind-dot">🟠</span> <span class="wh-ind-text text-orange">ค้างเบิก งบ C</span>';
+        rightIndicatorHtml = '<span class="wh-ind-dot">🟢</span> <span class="wh-ind-text text-lightgreen">คงคลัง SLoc 0021</span>';
+        pendingSum = it.remC;
+        stockSum = it.stockC;
+        tfootPendingStyle = 'background: linear-gradient(90deg, #EA580C 0%, #FB923C 100%); color: #FFFFFF; box-shadow: 0 0 8px rgba(251, 146, 60, 0.45);';
+        tfootStockStyle = 'background: linear-gradient(90deg, #4ADE80 0%, #22C55E 100%); color: #064E3B;';
+        barPendingFillStyle = 'background: linear-gradient(90deg, #F97316 0%, #FDBA74 100%);';
+        barStockFillStyle = 'background: linear-gradient(90deg, #4ADE80 0%, #86EFAC 100%);';
+
+        for (let i = 0; i < MAT_WH_PLANTS.length; i++) {
+          const p = MAT_WH_PLANTS[i];
+          const plantData = bp[p.code] || { remC: 0, stockC: 0 };
+          const pVal = plantData.remC || 0;
+          const sVal = plantData.stockC || 0;
+          const isSel = (selPlant === p.code);
+          const rowCls = isSel ? 'selected' : '';
+          const tipP = `${p.code} ${p.name}: ค้างเบิก งบ C = ${formatQty(pVal)}`;
+          const tipS = `${p.code} ${p.name}: คงเหลือ SLoc 0021 = ${formatQty(sVal)}`;
+
+          pendingRowsHtml += `
+            <tr class="${rowCls}" data-wh="${p.code}" onclick="window.toggleMatPlantFilter('${p.code}')" onmouseenter="window.setWhRowHover('${p.code}', true)" onmouseleave="window.setWhRowHover('${p.code}', false)" title="${tipP}">
+              <td class="td-wh-code">${renderWhCell(p)}</td>
+              <td class="td-wh-val" style="color:${pVal > 0 ? '#FED7AA' : 'rgba(255,255,255,0.30)'}; text-shadow:${pVal > 0 ? '0 0 6px rgba(251, 146, 60, 0.45)' : 'none'}; font-weight:${pVal > 0 ? '800' : '500'};">${formatQty(pVal)}</td>
+            </tr>`;
+
+          stockRowsHtml += `
+            <tr class="${rowCls}" data-wh="${p.code}" onclick="window.toggleMatPlantFilter('${p.code}')" onmouseenter="window.setWhRowHover('${p.code}', true)" onmouseleave="window.setWhRowHover('${p.code}', false)" title="${tipS}">
+              <td class="td-wh-code">${renderWhCell(p)}</td>
+              <td class="td-wh-val" style="color:${sVal > 0 ? '#86EFAC' : 'rgba(255,255,255,0.30)'}; font-weight:${sVal > 0 ? '800' : '500'};">${formatQty(sVal)}</td>
+            </tr>`;
+        }
+      } else {
+        // ข้อ 1: กดเลือก ตัวอักษร (แสดงทุกงบรวมกัน)
+        leftIndicatorHtml = '<span class="wh-ind-dot">🟡</span> <span class="wh-ind-text text-yellow">ค้างเบิก (ทุกงบ)</span>';
+        rightIndicatorHtml = '<span class="wh-ind-dot">🟢</span> <span class="wh-ind-text text-green">คงคลังรวม</span>';
+        pendingSum = it.remTotal;
+        stockSum = it.stockTotal;
+        tfootPendingStyle = 'background: linear-gradient(90deg, #F59E0B 0%, #D97706 100%); color: #FFFFFF;';
+        tfootStockStyle = 'background: linear-gradient(90deg, #10B981 0%, #059669 100%); color: #FFFFFF;';
+        barPendingFillStyle = 'background: linear-gradient(90deg, #F59E0B 0%, #D97706 100%);';
+        barStockFillStyle = 'background: linear-gradient(90deg, #10B981 0%, #059669 100%);';
+
+        for (let i = 0; i < MAT_WH_PLANTS.length; i++) {
+          const p = MAT_WH_PLANTS[i];
+          const plantData = bp[p.code] || { remIp: 0, remC: 0, stockIp: 0, stockC: 0 };
+          const pVal = (plantData.remIp || 0) + (plantData.remC || 0);
+          const sVal = (plantData.stockIp || 0) + (plantData.stockC || 0);
+          const isSel = (selPlant === p.code);
+          const rowCls = isSel ? 'selected' : '';
+          const tipP = `${p.code} ${p.name}: ค้างเบิกรวม = ${formatQty(pVal)}`;
+          const tipS = `${p.code} ${p.name}: คงเหลือรวม = ${formatQty(sVal)}`;
+
+          pendingRowsHtml += `
+            <tr class="${rowCls}" data-wh="${p.code}" onclick="window.toggleMatPlantFilter('${p.code}')" onmouseenter="window.setWhRowHover('${p.code}', true)" onmouseleave="window.setWhRowHover('${p.code}', false)" title="${tipP}">
+              <td class="td-wh-code">${renderWhCell(p)}</td>
+              <td class="td-wh-val" style="color:${pVal > 0 ? '#FDE047' : 'rgba(255,255,255,0.30)'}; font-weight:${pVal > 0 ? '800' : '500'};">${formatQty(pVal)}</td>
+            </tr>`;
+
+          stockRowsHtml += `
+            <tr class="${rowCls}" data-wh="${p.code}" onclick="window.toggleMatPlantFilter('${p.code}')" onmouseenter="window.setWhRowHover('${p.code}', true)" onmouseleave="window.setWhRowHover('${p.code}', false)" title="${tipS}">
+              <td class="td-wh-code">${renderWhCell(p)}</td>
+              <td class="td-wh-val" style="color:${sVal > 0 ? '#34D399' : 'rgba(255,255,255,0.30)'}; font-weight:${sVal > 0 ? '800' : '500'};">${formatQty(sVal)}</td>
+            </tr>`;
+        }
+      }
     }
 
     const html = `
       <div class="mat-wh-widget-card" id="matWhWidgetCard">
-        <!-- 1. ส่วนหัวสีชมพูตามรูป 30 (Pink Banner 2 คอลัมน์) -->
-        <div class="mat-wh-header-pink" title="รายละเอียด 6 คลังพัสดุ เขต 3">
-          <div class="mat-wh-header-col">
-            <div class="mat-wh-header-item"><span class="mat-wh-code">I010</span> คลังนครชัยศรี</div>
-            <div class="mat-wh-header-item"><span class="mat-wh-code">I020</span> คลังสุพรรณบุรี</div>
-            <div class="mat-wh-header-item"><span class="mat-wh-code">I030</span> คลังกาญจนบุรี</div>
-          </div>
-          <div class="mat-wh-header-col">
-            <div class="mat-wh-header-item"><span class="mat-wh-code">I040</span> คลังสมุทรสาคร</div>
-            <div class="mat-wh-header-item"><span class="mat-wh-code">I050</span> คลังสามพราน</div>
-            <div class="mat-wh-header-item"><span class="mat-wh-code">I070</span> คลังท่ามะกา</div>
-          </div>
-        </div>
+        ${subBannerHtml}
 
-        <!-- 2. ตารางคู่ซ้าย-ขวา ตามรูป 30 (ค้างเบิกคลัง & เหลือคลัง) -->
+        <!-- 2. ตารางคู่ซ้าย-ขวา (ค้างเบิกคลัง & เหลือคลัง) แถวตรงกัน 100% ตามรูป 72 -->
         <div class="mat-wh-tables-row">
-          <!-- ตารางที่ 1: ค้างเบิกคลัง (กรอบแดงคอรัล) -->
+          <!-- ตารางที่ 1: ค้างเบิกคลัง -->
           <div class="mat-wh-subbox box-pending">
+            <div class="mat-wh-box-indicator ind-pending">
+              ${leftIndicatorHtml}
+            </div>
             <table class="mat-wh-table">
               <thead>
                 <tr>
                   <th class="th-wh">คลัง <span class="wh-sort-arrow">▲</span></th>
-                  <th class="th-val">ค้างเบิกคลัง</th>
+                  <th class="th-val">${pendingColTitle}</th>
                 </tr>
               </thead>
               <tbody id="matWhPendingTbody">
                 ${pendingRowsHtml}
               </tbody>
               <tfoot>
-                <tr class="tfoot-sum-pending" title="ผลรวมปริมาณค้างเบิกทั้งหมด: 544,753">
+                <tr class="tfoot-sum-pending" style="${tfootPendingStyle}" title="ผลรวม: ${formatQty(pendingSum)}">
                   <td class="td-sum-lbl">ผลรวม</td>
-                  <td class="td-sum-val" id="matWhPendingTotal">${pendingSum.toLocaleString('en-US')}</td>
+                  <td class="td-sum-val" id="matWhPendingTotal">${formatQty(pendingSum)}</td>
                 </tr>
               </tfoot>
             </table>
-            <div class="mat-wh-bot-bar bar-pending"><div class="mat-wh-bot-fill" style="width:100%;"></div></div>
           </div>
 
-          <!-- ตารางที่ 2: เหลือคลัง (กรอบเขียวมรกต) -->
+          <!-- ตารางที่ 2: เหลือคลัง -->
           <div class="mat-wh-subbox box-stock">
+            <div class="mat-wh-box-indicator ind-stock">
+              ${rightIndicatorHtml}
+            </div>
             <table class="mat-wh-table">
               <thead>
                 <tr>
                   <th class="th-wh">คลัง</th>
-                  <th class="th-val">เหลือคลัง</th>
+                  <th class="th-val">${stockColTitle}</th>
                 </tr>
               </thead>
               <tbody id="matWhStockTbody">
                 ${stockRowsHtml}
               </tbody>
               <tfoot>
-                <tr class="tfoot-sum-stock" title="ผลรวมปริมาณคงเหลือในคลังทั้งหมด: 2,298,519">
+                <tr class="tfoot-sum-stock" style="${tfootStockStyle}" title="ผลรวม: ${formatQty(stockSum)}">
                   <td class="td-sum-lbl">ผลรวม</td>
-                  <td class="td-sum-val" id="matWhStockTotal">${stockSum.toLocaleString('en-US')}</td>
+                  <td class="td-sum-val" id="matWhStockTotal">${formatQty(stockSum)}</td>
                 </tr>
               </tfoot>
             </table>
-            <div class="mat-wh-bot-bar bar-stock"><div class="mat-wh-bot-fill" style="width:100%;"></div></div>
           </div>
         </div>
       </div>
     `;
 
     colEl.innerHTML = html;
+
+    // Update Head element if present
+    const cardHeadEl = document.querySelector('#matWhStandaloneCard .mat-wh-card-head');
+    if (cardHeadEl) {
+      const badgeEl = cardHeadEl.querySelector('.mat-wh-card-badge');
+      if (badgeEl) badgeEl.outerHTML = headerBadgeHtml;
+      const actionsEl = cardHeadEl.querySelector('.mat-wh-card-actions');
+      if (actionsEl) actionsEl.innerHTML = headerActionHtml;
+    }
   }
   window.renderMatWarehouseSummary = renderMatWarehouseSummary;
 
   window.setMatChartBudgetFilter = function (mode) {
+    const gf = getGlobalFilters();
+    const critBudgetLock = getCriteriaBudgetLock(gf.crit);
+    if (critBudgetLock) {
+      // เมื่อเกณฑ์วัดล็อคงบไว้ ห้ามเปลี่ยนงบอื่นเด็ดขาด ("กดอะไรไม่ได้เลย")
+      return;
+    }
     mode = mode || 'ALL';
     if (matState.chartBudgetFilter === mode && mode !== 'ALL') {
       matState.chartBudgetFilter = 'ALL';
@@ -2181,6 +2587,8 @@
 
   /**
    * Unified selection for Material chart item and specific budget bar
+   * One-way driver: updates horizontal chart highlight and warehouse card ONLY
+   * Does NOT alter other cards or menus (Requirement 2 & 5)
    * @param {string} name - Material description or code
    * @param {string} budget - 'ALL' | 'IP' | 'C'
    * @param {Event} [e] - Mouse event to stop propagation
@@ -2193,11 +2601,18 @@
     name = name || '';
     budget = budget || 'ALL';
 
+    const gf = getGlobalFilters();
+    const critBudgetLock = getCriteriaBudgetLock(gf.crit);
+    if (critBudgetLock) {
+      // เมื่อถูกล็อคตามเกณฑ์วัด บังคับใช้งบประมาณตามเกณฑ์วัดเสมอ ห้ามเปลี่ยนงบ
+      budget = critBudgetLock;
+    }
+
     // Toggle behavior:
     // If clicking exact same material AND exact same budget -> toggle off (clear selection)
     if (matState.chartSelDesc === name && (matState.chartSelBudget || 'ALL') === budget) {
       matState.chartSelDesc = '';
-      matState.chartSelBudget = 'ALL';
+      matState.chartSelBudget = critBudgetLock || 'ALL';
     } else {
       matState.chartSelDesc = name;
       matState.chartSelBudget = budget;
@@ -2206,18 +2621,26 @@
     matState.cachedFilterKey = '';
     matState.page = 1;
     renderMaterialsTab();
+    updateMatSubFilterCount();
   };
 
   window.selectMatChartItem = function (name, e) {
-    window.selectMatChartItemWithBudget(name, 'ALL', e);
+    const gf = getGlobalFilters();
+    const critBudgetLock = getCriteriaBudgetLock(gf.crit);
+    window.selectMatChartItemWithBudget(name, critBudgetLock || 'ALL', e);
   };
 
   window.clearMatChartSelection = function () {
+    const gf = getGlobalFilters();
+    const critBudgetLock = getCriteriaBudgetLock(gf.crit);
     matState.chartSelDesc = '';
-    matState.chartSelBudget = 'ALL';
+    matState.chartSelBudget = critBudgetLock || 'ALL';
     matState.cachedFilterKey = '';
     matState.page = 1;
+    const scrollEl = document.getElementById('matHChartScroll');
+    if (scrollEl) scrollEl.scrollTop = 0;
     renderMaterialsTab();
+    updateMatSubFilterCount();
   };
 
   function updateMatSubFilterCount() {
@@ -2293,8 +2716,10 @@
     matState.filterPlant = '';
     matState.sapStatuses.clear();
     matState.chartSelDesc = '';
-    matState.chartBudgetFilter = 'ALL';
-    matState.chartSelBudget = 'ALL';
+    const gf = getGlobalFilters();
+    const critBudgetLock = getCriteriaBudgetLock(gf.crit);
+    matState.chartBudgetFilter = critBudgetLock || 'ALL';
+    matState.chartSelBudget = critBudgetLock || 'ALL';
     const w = document.getElementById('matFilterWbs');
     if (w) w.value = 'ALL';
     const d = document.getElementById('matFilterMatDesc');
@@ -2309,8 +2734,10 @@
 
   window.clearAllMatTableSelections = function () {
     matState.chartSelDesc = '';
-    matState.chartBudgetFilter = 'ALL';
-    matState.chartSelBudget = 'ALL';
+    const gf = getGlobalFilters();
+    const critBudgetLock = getCriteriaBudgetLock(gf.crit);
+    matState.chartBudgetFilter = critBudgetLock || 'ALL';
+    matState.chartSelBudget = critBudgetLock || 'ALL';
     matState.localSearch = '';
     matState.pendingMode = 'ALL';
     matState.mvtFilter = '281';
