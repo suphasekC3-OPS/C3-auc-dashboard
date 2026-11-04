@@ -580,6 +580,22 @@
    */
   const BASE_AUDIT_LOGS = [
     {
+      id: 'log_000_highlight_selected_bar_chart',
+      timestamp: '2026-11-04 16:45:00',
+      timestampTh: '4 พ.ย. 2569, 16:45 น.',
+      type: 'EDIT',
+      typeBadge: 'ไฮไลท์เฉพาะแท่งกราฟที่เลือก',
+      badgeClass: 'badge-type-edit',
+      title: 'เพิ่มไฮไลท์เฉพาะตัวแท่งกราฟที่เลือก (กรอบทองเรืองแสง + ลายแสงสะท้อนเฉียงในแท่ง) โดยแท่งอื่นไม่ต้องจาง',
+      targetSubject: 'กราฟแท่ง "ร้อยละความสำเร็จการปิดงาน (% Closed) แยกตาม 8 ประเภทเกณฑ์วัด" (#criteriaComparisonChart) และกราฟแท่งรายหน่วยงาน (#mainBarChart)',
+      storageFile: 'js/app.js, js/chart.js, index.html, js/data_history.js',
+      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน "ไฮไลเฉพาะที่เลือก กราฟแท่ง", "เพิ่ม hilight แต่กราฟอื่นไม่ต้องจาง" และ "เพิ่ม hilight เฉพาะแท่งกราฟ": 1) เมื่อคลิกเลือกแท่งกราฟหรือเลือกเกณฑ์วัดจากตัวกรอง ระบบจะเพิ่มไฮไลท์เฉพาะบนตัวแท่งกราฟที่เลือกเท่านั้น ด้วยกรอบทองเรืองแสง 2 ชั้น (#FFE600 + ขอบขาวด้านใน) และลายแสงสะท้อนเฉียง (Shimmer) ภายในตัวแท่งกราฟ 2) ไม่วาดกรอบด้านนอกแท่งหรือรอบชื่อแกน X และไม่ทำให้แท่งกราฟอื่นๆ จางลง',
+      details: '1) ใน js/app.js (renderCriteriaComparisonBar และ renderBarChart): กำหนด isDimmed: false เพื่อให้ทุกแท่งแสดงสีสดปกติ และกำหนด isHighlighted: true เฉพาะแท่งที่ตรงกับตัวกรองที่เลือก 2) ใน js/chart.js (drawBarChart): วาดเฉพาะกรอบทองเรืองแสง 2 ชั้น (#FFE600 + ขอบขาวด้านใน) และลาย Shimmer เฉียงภายในตัวแท่งกราฟที่เลือก (currentX, y, currentBarW, barH) เท่านั้น 3) อัปเดต Cache Busters ใน index.html เป็น ?v=20261104_1645',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "เพิ่ม hilight เฉพาะแท่งกราฟ"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง (ยกระดับความโดดเด่นเฉพาะตัวแท่งกราฟที่เลือกโดยคงความชัดเจนของแท่งอื่นครบ 100%)'
+    },
+    {
       id: 'log_000_fix_all_data_history_mojibake_icons',
       timestamp: '2026-11-04 16:23:00',
       timestampTh: '4 พ.ย. 2569, 16:23 น.',

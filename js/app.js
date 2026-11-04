@@ -1304,7 +1304,8 @@
 
   window.selectSidebarCriteria = function (crit) {
     if (state.hiddenTimelineSeries) state.hiddenTimelineSeries.clear();
-    const newCrit = (state.filters.criteria === crit && crit !== 'ALL') ? 'ALL' : crit;
+    const isAlreadySelected = (state.filters.criteria && state.filters.criteria !== 'ALL' && (state.filters.criteria === crit || matchCriteriaName(state.filters.criteria, crit)));
+    const newCrit = (isAlreadySelected && crit !== 'ALL') ? 'ALL' : crit;
     state.filters.criteria = newCrit;
     state.filters.selectedCriteria = newCrit === 'ALL' ? [] : [newCrit];
     const sideCrit = document.getElementById('filterCriteria');
@@ -1552,8 +1553,9 @@
     const critSelect = document.getElementById('filterCriteria');
     if (critSelect) {
       critSelect.addEventListener('change', (e) => {
-        state.filters.criteria = e.target.value;
-        state.filters.selectedCriteria = [e.target.value];
+        const val = e.target.value;
+        state.filters.criteria = val;
+        state.filters.selectedCriteria = (val === 'ALL' || !val || val === 'เลือกทั้งหมด' || val === 'ทุกเกณฑ์วัด') ? [] : [val];
         syncSidebarFilterUI();
         syncChartFilterUI();
         filterData();
@@ -1627,6 +1629,7 @@
         const crit = e.target.value;
         if (state.hiddenTimelineSeries) state.hiddenTimelineSeries.clear();
         state.filters.criteria = crit;
+        state.filters.selectedCriteria = (crit === 'ALL' || !crit || crit === 'เลือกทั้งหมด' || crit === 'ทุกเกณฑ์วัด') ? [] : [crit];
         const sideCrit = document.getElementById('filterCriteria');
         if (sideCrit) sideCrit.value = crit;
         document.querySelectorAll('.select-chart-crit').forEach(s => s.value = crit);
@@ -5087,13 +5090,7 @@
     const cColors = state.chartColors || DEFAULT_CHART_COLORS;
     const isAnyOfficeFiltered = filterOffice && filterOffice !== 'ALL';
     const barColors = officeList.map(o => {
-      let color = o.isNoWork ? '#475569' : (o.kpi >= 5 ? cColors.kpiGood : cColors.kpiWarn);
-      const isSelected = !isAnyOfficeFiltered || o.office === filterOffice;
-      if (!isSelected) {
-        // Dim unselected bars (including Kfg3Total) to highlight the selected one
-        color = o.isNoWork ? 'rgba(71, 85, 105, 0.2)' : (o.kpi >= 5 ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)');
-      }
-      return color;
+      return o.isNoWork ? '#475569' : (o.kpi >= 5 ? cColors.kpiGood : cColors.kpiWarn);
     });
 
     // Sync dots in info strip
@@ -5285,7 +5282,8 @@
                 isNoWork: o.isNoWork,
                 isKfg3Total: o.isKfg3Total,
                 isSelected: isSelected,
-                isDimmed: !isSelected,
+                isDimmed: false,
+                isHighlighted: Boolean(isAnyOfficeFiltered && o.office === filterOffice),
                 showDividerAfter: o.showDividerAfter,
                 closed: o.isNoWork ? 'ไม่มีงาน' : (isJobUnit ? o.closedJobs.toLocaleString('th-TH') + ' งาน' : (o.closed / 1000000).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ลบ.'),
                 total: o.isNoWork ? 'ไม่มีงาน' : (isJobUnit ? o.totalJobs.toLocaleString('th-TH') + ' งาน' : (o.total / 1000000).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ลบ.'),
@@ -8479,7 +8477,19 @@
     const targetColors = ['#34D399', '#F472B6', '#38BDF8'];
     const textColors = ['#6EE7B7', '#F9A8D4', '#7DD3FC'];
 
+    // ตรวจสอบว่ามีการเลือกเกณฑ์วัดเฉพาะเจาะจงหรือไม่ เพื่อไฮไลท์เฉพาะแท่งที่เลือก (โดยไม่ทำให้แท่งอื่นจางลง)
+    const rawSelCrits = (Array.isArray(state.filters.selectedCriteria) && state.filters.selectedCriteria.length > 0)
+      ? state.filters.selectedCriteria
+      : (state.filters.criteria ? [state.filters.criteria] : []);
+    const activeSelCrits = rawSelCrits.filter(c => c && c !== 'ALL' && c !== 'เลือกทั้งหมด' && c !== 'ทุกเกณฑ์วัด');
+    const hasCritFilter = activeSelCrits.length > 0;
+
     presentCrits.forEach(crit => {
+      const isCritMatched = hasCritFilter && activeSelCrits.some(sc => sc === crit || matchCriteriaName(crit, sc));
+      const isSelected = !hasCritFilter || isCritMatched;
+      const isDimmed = false; // กราฟแท่งอื่นไม่ต้องจาง แสดงสีเต็มตามปกติ
+      const isHighlighted = hasCritFilter && isCritMatched;
+
       let rows = state.allData.filter(d => d.criteria === crit && !d.isSummary);
       if (isFilteredOff) {
         rows = rows.filter(d => d.office === offFilter);
@@ -8685,6 +8695,9 @@
         unitKind: isJobUnit ? 'job' : 'value',
         unitText: isJobUnit ? 'งาน' : 'มูลค่า',
         kpi: isNoWork ? '-' : kpi,
+        isSelected: isSelected,
+        isDimmed: isDimmed,
+        isHighlighted: isHighlighted,
         targetBenchmark: targetLatest,
         barTargetLines: barTargetLines,
         kpiTargets: kpiTargets,

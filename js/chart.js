@@ -298,10 +298,16 @@ class PeaChart {
           grad.addColorStop(1, this.adjustAlpha(color, 0.6));
         }
 
+        const isHighlighted = Boolean(ext && ext.isHighlighted && !isDimmed);
+
         ctx.save();
         if (isKfg && !isDimmed) {
           ctx.shadowColor = isGoodKpi ? 'rgba(16, 185, 129, 0.95)' : 'rgba(239, 68, 68, 0.95)';
           ctx.shadowBlur = 14;
+          ctx.shadowOffsetY = -1;
+        } else if (isHighlighted) {
+          ctx.shadowColor = 'rgba(255, 215, 0, 0.95)';
+          ctx.shadowBlur = 18;
           ctx.shadowOffsetY = -1;
         } else if (!isDimmed && color === '#10B981') {
           ctx.shadowColor = 'rgba(16, 185, 129, 0.5)';
@@ -316,6 +322,42 @@ class PeaChart {
         this.roundRect(ctx, currentX, y, currentBarW, barH, Math.min(4, currentBarW / 2));
         ctx.fill();
         ctx.restore();
+
+        // กรอบไฮไลท์สีทองเรืองแสง + ลายแสงสะท้อนเฉียงเฉพาะบนแท่งกราฟที่ถูกเลือกเท่านั้น (Highlight ONLY on the bar itself)
+        if (isHighlighted && !isKfg) {
+          if (barH > 6) {
+            ctx.save();
+            ctx.beginPath();
+            this.roundRect(ctx, currentX, y, currentBarW, barH, Math.min(4, currentBarW / 2));
+            ctx.clip();
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.28)';
+            ctx.lineWidth = 1.6;
+            for (let dy = -currentBarW; dy < barH + currentBarW; dy += 8) {
+              ctx.beginPath();
+              ctx.moveTo(currentX, y + dy);
+              ctx.lineTo(currentX + currentBarW, y + dy - currentBarW);
+              ctx.stroke();
+            }
+            ctx.restore();
+          }
+
+          ctx.save();
+          ctx.strokeStyle = '#FFE600';
+          ctx.lineWidth = 2.8;
+          ctx.shadowColor = 'rgba(255, 215, 0, 0.95)';
+          ctx.shadowBlur = 14;
+          this.roundRect(ctx, currentX, y, currentBarW, barH, Math.min(4, currentBarW / 2));
+          ctx.stroke();
+
+          if (currentBarW > 8 && barH > 6) {
+            ctx.shadowBlur = 0;
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.92)';
+            ctx.lineWidth = 1.1;
+            this.roundRect(ctx, currentX + 1.5, y + 1.5, currentBarW - 3, barH - 3, Math.max(2, Math.min(3, currentBarW / 2 - 1)));
+            ctx.stroke();
+          }
+          ctx.restore();
+        }
 
         // Distinct styling for กฟก.3 (ทั้งหมด): Illuminated outline & metallic shimmer texture
         if (isKfg) {
@@ -509,6 +551,9 @@ class PeaChart {
             // 4. Render all items with clean, high-contrast badges
             barItems.forEach(item => {
               ctx.save();
+              if (isDimmed) {
+                ctx.globalAlpha = 0.18;
+              }
               if (item.type === 'target') {
                 const isFullW = options.targetBadgeFullWidth !== false;
                 const badgeInset = options.badgeInset !== undefined ? options.badgeInset : (currentBarW < 40 ? 4 : 6);
@@ -624,6 +669,9 @@ class PeaChart {
               const kpiH = options.barValueHeight || 17;
               let kpiFontSize = options.barValueFontSize || (isNoCard ? (currentBarW < 32 ? 11 : (currentBarW < 42 ? 13.5 : (currentBarW < 55 ? 16 : 18.5))) : (currentBarW < 32 ? 8 : (currentBarW < 42 ? 8.8 : (currentBarW < 55 ? 9.5 : 10.5))));
               ctx.save();
+              if (isDimmed) {
+                ctx.globalAlpha = 0.20;
+              }
               ctx.font = `800 ${kpiFontSize}px 'Prompt', 'Sarabun', sans-serif`;
               let textW = ctx.measureText(valText).width;
               const maxAllowedW = isNoCard ? Math.max(22, currentBarW - 2) : Math.max(24, currentBarW - (options.badgeInset !== undefined ? options.badgeInset : (currentBarW < 40 ? 4 : 6)) - 6);
@@ -712,6 +760,9 @@ class PeaChart {
                 const starFSize = Math.min(rawSize, Math.max(9, maxW / (starCount * 1.12)));
 
                 ctx.save();
+                if (isDimmed) {
+                  ctx.globalAlpha = 0.20;
+                }
                 ctx.font = `900 ${starFSize}px 'Prompt', 'Sarabun', sans-serif`;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'bottom';
@@ -731,6 +782,9 @@ class PeaChart {
         // Draw % value on / above bar if requested and height is sufficient (for bars without unified barTargetLines or special kfg)
         if (options.showBarValues && height > 25 && !hasDrawnUnifiedKpi) {
           ctx.save();
+          if (isDimmed && !isKfg) {
+            ctx.globalAlpha = 0.22;
+          }
           let valText = isNoWork
             ? 'ไม่มีงาน'
             : (options.formatBarValue ? options.formatBarValue(val, gIdx) : `${Math.round(val)}%`);
@@ -952,6 +1006,9 @@ class PeaChart {
           const achieveBadgeW = Math.max(24, currentBarW - badgeInset);
 
           ctx.save();
+          if (isDimmed) {
+            ctx.globalAlpha = 0.18;
+          }
           ctx.setLineDash([]);
 
           // เพิ่มขนาดอักษร "บรรลุเป้าหมาย" ให้ใหญ่คมชัดสมดุลกับตัวเลข % ด้านล่าง และจำกัดความกว้างตาม groupW ไม่ให้ซ้อนทับแท่งข้างเคียงเด็ดขาด
@@ -1072,6 +1129,7 @@ class PeaChart {
         const isKfg = ext && ext.isKfg3Total;
         const color = (datasets[0] && datasets[0].colors && datasets[0].colors[gIdx]) || (datasets[0] && datasets[0].color) || '';
         const isKfgDimmed = ext && (ext.isDimmed || (typeof color === 'string' && color.includes('rgba(') && !color.includes(', 1)') && !color.includes(',1)')));
+        const isBarHighlighted = Boolean(ext && ext.isHighlighted && !isKfgDimmed);
         let labelFontSize = 13;
 
         if (isKfg) {
