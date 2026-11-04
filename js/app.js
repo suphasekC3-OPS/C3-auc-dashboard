@@ -1,4 +1,4 @@
-﻿/**
+/**
  * PEA AUC Tracking & Asset Registration Web Application
  * Master Application Logic & State Controller
  * Theme: Provincial Electricity Authority (กฟก.3)
@@ -1784,7 +1784,7 @@
       });
     });
 
-    // Reset Filters Button
+    // Reset Filters Button ("คืนค่าทั้งหมด" - คืนค่าทุกตัวเลือกและตัวกรองทั้งหมดเป็นค่าเดิม)
     const resetBtn = document.getElementById('btnResetFilters');
     if (resetBtn) {
       resetBtn.addEventListener('click', () => {
@@ -1803,6 +1803,12 @@
           month: latestM
         };
 
+        if (typeof officeBarState !== 'undefined') {
+          officeBarState.criteria = 'ALL';
+          officeBarState.province = 'ALL';
+          officeBarState.sort = 'pct-desc';
+        }
+
         loadDataForMonth(latestM);
         updateMonthButtonsUI();
 
@@ -1817,12 +1823,38 @@
         const s = document.getElementById('searchInput');
         if (s) s.value = '';
 
+        document.querySelectorAll('.select-chart-month').forEach(sel => { sel.value = latestM; });
+        document.querySelectorAll('.select-chart-crit').forEach(sel => { sel.value = 'ALL'; });
+        document.querySelectorAll('.select-chart-prov').forEach(sel => { sel.value = 'ALL'; });
+        document.querySelectorAll('.select-chart-off').forEach(sel => { sel.value = 'ALL'; });
+
+        const barCritSel = document.getElementById('barChartCriteriaSelect');
+        if (barCritSel) barCritSel.value = 'ALL';
+        const barProvSel = document.getElementById('barChartProvinceSelect');
+        if (barProvSel) barProvSel.value = 'ALL';
+        const barSortSel = document.getElementById('barChartSortSelect');
+        if (barSortSel) barSortSel.value = 'pct-desc';
+
+        const chartProv = document.getElementById('chartFilterProvince');
+        if (chartProv) chartProv.value = 'ALL';
+        const chartOff = document.getElementById('chartFilterOffice');
+        if (chartOff) chartOff.value = 'ALL';
+
         updateOfficeDropdown();
         syncSidebarFilterUI();
         syncChartFilterUI();
         filterData();
         renderAll();
-        showToast(`รีเซ็ตตัวกรองทั้งหมดเป็นเดือนล่าสุด (${MONTHS_TH[latestM] || 'ก.ย.'}) เรียบร้อยแล้ว`, 'info');
+
+        if (typeof window.resetWbsAllFilters === 'function') {
+          window.resetWbsAllFilters();
+        }
+
+        if (typeof window.resetMatAllFilters === 'function') {
+          window.resetMatAllFilters();
+        }
+
+        showToast(`คืนค่าตัวเลือกและตัวกรองทั้งหมดเป็นค่าเดิมเรียบร้อยแล้ว (${MONTHS_TH[latestM] || 'ก.ย.'})`, 'info');
       });
     }
 
@@ -2606,9 +2638,9 @@
 
   // WBS Table Edit Authentication State (Independent from Target Cards)
   // Default is ALWAYS locked (false) on initial page load / refresh until unlocked with Admin PIN
-  let _wbsEditUnlockedInMemory = true;
+  let _wbsEditUnlockedInMemory = false;
   try {
-    sessionStorage.setItem('auc_wbs_edit_authenticated', 'true');
+    sessionStorage.removeItem('auc_wbs_edit_authenticated');
   } catch (e) {
     console.warn('Reset wbs edit lock error:', e);
   }
@@ -2621,9 +2653,9 @@
   // tab-analytics, tab-warning, tab-data-history
   // Default is ALWAYS locked (false) on initial page load / refresh until unlocked with Admin PIN (225588)
   const LOCKED_NAV_TABS_LIST = ['tab-analytics', 'tab-warning', 'tab-data-history'];
-  let _navTabsUnlockedInMemory = true;
+  let _navTabsUnlockedInMemory = false;
   try {
-    sessionStorage.setItem('auc_nav_tabs_authenticated', 'true');
+    sessionStorage.removeItem('auc_nav_tabs_authenticated');
   } catch (e) {
     console.warn('Reset nav tabs lock error:', e);
   }
@@ -2637,7 +2669,7 @@
     if (auth) {
       sessionStorage.setItem('auc_nav_tabs_authenticated', 'true');
     } else {
-      sessionStorage.setItem('auc_nav_tabs_authenticated', 'true');
+      sessionStorage.removeItem('auc_nav_tabs_authenticated');
     }
     if (typeof window.updateNavTabsLockUI === 'function') {
       window.updateNavTabsLockUI();
@@ -2717,7 +2749,7 @@
     if (auth) {
       sessionStorage.setItem('auc_wbs_edit_authenticated', 'true');
     } else {
-      sessionStorage.setItem('auc_wbs_edit_authenticated', 'true');
+      sessionStorage.removeItem('auc_wbs_edit_authenticated');
     }
     if (typeof window.updateWbsEditLockUI === 'function') {
       window.updateWbsEditLockUI();
