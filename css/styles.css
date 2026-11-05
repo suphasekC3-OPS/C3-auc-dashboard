@@ -21657,3 +21657,195 @@ body.pointer-mode-gold * {
 @media (max-width: 760px) {
   .mat-hchart-row { grid-template-columns: 24px minmax(110px, 38%) 1fr; }
 }
+
+/* ตัวกรองข้อความวัสดุ: Dropdown พร้อมช่องพิมพ์ค้นหาแถวบนสุด */
+.mat-sf-desc-wrap { position: relative; }
+.mat-sf-desc-btn { display:flex; align-items:center; justify-content:space-between; gap:.4rem; text-align:left; cursor:pointer; color:inherit; font:inherit; padding:.15rem 0; }
+.mat-sf-desc-btn > span:first-child { flex:1 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.mat-sf-desc-btn:disabled { opacity:.6; cursor:not-allowed; }
+.mat-sf-desc-chev { font-size:.65rem; }
+.mat-desc-dd-panel { position:absolute; top:calc(100% + 6px); left:0; z-index:700; width:max(100%, 420px); max-width:90vw; background:#2a0b3d; border:1px solid #FFB81C; border-radius:10px; box-shadow:0 8px 24px rgba(0,0,0,.5); overflow:hidden; }
+.mat-desc-dd-search-row { display:flex; align-items:center; gap:.4rem; padding:.45rem .6rem; background:#1E042D; border-bottom:1px solid rgba(255,184,28,.4); position:sticky; top:0; }
+.mat-desc-dd-search-input { flex:1 1 auto; min-width:0; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.25); border-radius:6px; color:#fff; padding:.3rem .5rem; font-size:.82rem; outline:none; }
+.mat-desc-dd-search-input:focus { border-color:#FFB81C; }
+.mat-desc-dd-count { font-size:.72rem; color:#FDE68A; white-space:nowrap; }
+.mat-desc-dd-list { max-height:300px; overflow-y:auto; }
+.mat-desc-dd-item { padding:.4rem .75rem; font-size:.8rem; color:#F3E8FF; cursor:pointer; }
+.mat-desc-dd-item:hover { background:rgba(255,184,28,.2); }
+.mat-desc-dd-item.is-selected { background:rgba(255,184,28,.3); color:#FFE58F; font-weight:700; }
+.mat-desc-dd-item.is-all { font-weight:700; border-bottom:1px solid rgba(255,255,255,.12); }
+.mat-desc-dd-empty { padding:.7rem; text-align:center; color:#C4B5FD; font-size:.8rem; }
+[data-theme="light"] .mat-desc-dd-panel { background:#fff; border-color:#682C91; }
+[data-theme="light"] .mat-desc-dd-search-row { background:#F5F0FA; }
+[data-theme="light"] .mat-desc-dd-search-input { background:#fff; color:#1E042D; border-color:#C4B5FD; }
+[data-theme="light"] .mat-desc-dd-item { color:#1E042D; }
+[data-theme="light"] .mat-desc-dd-item.is-selected { color:#682C91; }
+
+/* ให้ Dropdown ตัวกรองสถานะ SAP ใช้พื้นสี/สไตล์เดียวกับตัวกรองข้อความวัสดุ */
+.mat-sf-sap-panel.wbs-sap-dropdown-panel { background:#2a0b3d !important; border:1px solid #FFB81C !important; border-radius:10px !important; box-shadow:0 8px 24px rgba(0,0,0,.5) !important; overflow:hidden; }
+.mat-sf-sap-panel .sap-dropdown-panel-header { background:#1E042D !important; border-bottom:1px solid rgba(255,184,28,.4) !important; padding:.5rem .7rem !important; color:#FFE58F !important; }
+.mat-sf-sap-panel .sap-dropdown-item { color:#F3E8FF; font-size:.8rem; }
+.mat-sf-sap-panel .sap-dropdown-item:hover { background:rgba(255,184,28,.2) !important; }
+.mat-sf-sap-panel .sap-dropdown-item.is-selected { background:rgba(255,184,28,.3) !important; }
+.mat-sf-sap-panel .sap-dropdown-footer { background:#1E042D !important; border-top:1px solid rgba(255,184,28,.3) !important; color:#FDE68A !important; }
+[data-theme="light"] .mat-sf-sap-panel.wbs-sap-dropdown-panel { background:#fff !important; border-color:#682C91 !important; }
+[data-theme="light"] .mat-sf-sap-panel .sap-dropdown-panel-header, [data-theme="light"] .mat-sf-sap-panel .sap-dropdown-footer { background:#F5F0FA !important; color:#682C91 !important; }
+[data-theme="light"] .mat-sf-sap-panel .sap-dropdown-item { color:#1E042D; }
+
+/* ตัวกรอง กอง/กฟฟ. (Dropdown ค้นหาได้ สไตล์เดียวกับข้อความวัสดุ) */
+.office-dd-panel { position:fixed; z-index:99999; width:auto; }
+.office-dd-btn { text-align:left; cursor:pointer; }
+.office-dd-btn-text { display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+/* แถบเลื่อนในรายการ Dropdown ตัวกรอง (ใช้ร่วมกัน) */
+.mat-desc-dd-list { scrollbar-width:thin; scrollbar-color:#FFB81C #1E042D; }
+.mat-desc-dd-list::-webkit-scrollbar { width:8px; }
+.mat-desc-dd-list::-webkit-scrollbar-track { background:#1E042D; border:none; }
+.mat-desc-dd-list::-webkit-scrollbar-thumb { background:linear-gradient(180deg,#FFB81C,#EC4899); border-radius:8px; border:1px solid #1E042D; }
+[data-theme="light"] .mat-desc-dd-list { scrollbar-color:#682C91 #F5F0FA; }
+[data-theme="light"] .mat-desc-dd-list::-webkit-scrollbar-track { background:#F5F0FA; }
+[data-theme="light"] .mat-desc-dd-list::-webkit-scrollbar-thumb { border-color:#F5F0FA; }
+
+/* แถบเลื่อนของ Dropdown ตัวกรองทุกตัว ใช้สไตล์เดียวกับตัวกรองสถานะ SAP (แถบเลื่อนมาตรฐานของระบบ) */
+.mat-desc-dd-list, .mat-sf-sap-panel .sap-dropdown-list { scrollbar-width:auto !important; scrollbar-color:auto !important; }
+.mat-desc-dd-list::-webkit-scrollbar { width:10px; height:10px; }
+.mat-desc-dd-list::-webkit-scrollbar-track { background:rgba(18,4,30,0.85); border:1px solid rgba(255,255,255,0.08); }
+.mat-desc-dd-list::-webkit-scrollbar-thumb { background:linear-gradient(180deg, var(--pea-gold-400, #FFB81C) 0%, var(--sweet-pink, #EC4899) 100%); border-radius:8px; border:1px solid rgba(18,4,30,0.7); box-shadow:0 1px 6px rgba(255,184,28,0.45); }
+.mat-desc-dd-list::-webkit-scrollbar-thumb:hover { background:linear-gradient(135deg, #FFE082 0%, #F472B6 50%, #EC4899 100%); box-shadow:0 0 12px rgba(255,184,28,0.85); }
+[data-theme="light"] .mat-desc-dd-list::-webkit-scrollbar-track { background:#F3F4F6; border-color:rgba(0,0,0,0.1); }
+
+/* แถบเลื่อนของรายการตัวกรอง กอง/กฟฟ. (select) ใช้สีเดียวกับตัวกรองสถานะ SAP */
+#filterOffice, #chartFilterOffice { scrollbar-width:auto; scrollbar-color:auto; }
+#filterOffice::-webkit-scrollbar, #chartFilterOffice::-webkit-scrollbar { width:10px; height:10px; }
+#filterOffice::-webkit-scrollbar-track, #chartFilterOffice::-webkit-scrollbar-track { background:rgba(18,4,30,0.85); border:1px solid rgba(255,255,255,0.08); }
+#filterOffice::-webkit-scrollbar-thumb, #chartFilterOffice::-webkit-scrollbar-thumb { background:linear-gradient(180deg, var(--pea-gold-400, #FFB81C) 0%, var(--sweet-pink, #EC4899) 100%); border-radius:8px; border:1px solid rgba(18,4,30,0.7); box-shadow:0 1px 6px rgba(255,184,28,0.45); }
+#filterOffice::-webkit-scrollbar-thumb:hover, #chartFilterOffice::-webkit-scrollbar-thumb:hover { background:linear-gradient(135deg, #FFE082 0%, #F472B6 50%, #EC4899 100%); }
+[data-theme="light"] #filterOffice::-webkit-scrollbar-track, [data-theme="light"] #chartFilterOffice::-webkit-scrollbar-track { background:#F3F4F6; border-color:rgba(0,0,0,0.1); }
+
+/* ตัวกรอง กอง/กฟฟ.: รายการ Dropdown สีอักษรเดิม + แถบเลื่อนเหมือนสถานะ SAP */
+.office-dd-btn { text-align:left; cursor:pointer; }
+.office-dd-btn-text { display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.office-dd-panel { position:fixed; z-index:99999; max-height:320px; overflow-y:auto; background:#2D0A45; border:1px solid #FFB81C; border-radius:10px; box-shadow:0 8px 24px rgba(0,0,0,.5); }
+.office-dd-item { padding:6px 12px; font-size:.94rem; color:#FFB81C; cursor:pointer; white-space:nowrap; }
+.office-dd-item:hover { background:rgba(255,184,28,.2); }
+.office-dd-item.is-selected { background:rgba(255,184,28,.3); font-weight:700; }
+.office-dd-panel::-webkit-scrollbar { width:10px; height:10px; }
+.office-dd-panel::-webkit-scrollbar-track { background:rgba(18,4,30,0.85); border:1px solid rgba(255,255,255,0.08); }
+.office-dd-panel::-webkit-scrollbar-thumb { background:linear-gradient(180deg, var(--pea-gold-400, #FFB81C) 0%, var(--sweet-pink, #EC4899) 100%); border-radius:8px; border:1px solid rgba(18,4,30,0.7); box-shadow:0 1px 6px rgba(255,184,28,0.45); }
+.office-dd-panel::-webkit-scrollbar-thumb:hover { background:linear-gradient(135deg, #FFE082 0%, #F472B6 50%, #EC4899 100%); }
+[data-theme="light"] .office-dd-panel { background:#FFFFFF; border-color:#B45309; }
+[data-theme="light"] .office-dd-item { color:#111827; }
+[data-theme="light"] .office-dd-panel::-webkit-scrollbar-track { background:#F3F4F6; border-color:rgba(0,0,0,0.1); }
+
+/* ปุ่มซ่อนการ์ดลอยสีฟ้า และ Mini Floating Badge */
+.wbs-floating-hide-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  color: #FFFFFF;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  width: 20px;
+  height: 20px;
+  line-height: 1;
+  padding: 0;
+  cursor: pointer;
+  margin-left: 5px;
+  transition: all 0.15s ease;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+}
+.wbs-floating-hide-btn:hover {
+  background: rgba(239, 68, 68, 0.95);
+  border-color: #FFFFFF;
+  color: #FFFFFF;
+  transform: scale(1.15);
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.7);
+}
+
+.wbs-floating-mini-pill {
+  position: absolute;
+  right: 16px;
+  bottom: 18px;
+  z-index: 55;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, rgba(2, 132, 199, 0.95) 0%, rgba(14, 165, 233, 0.92) 50%, rgba(3, 105, 161, 0.96) 100%);
+  border: 1.5px solid rgba(186, 230, 253, 0.85);
+  border-radius: 20px;
+  padding: 5px 12px;
+  color: #FFFFFF;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(2, 132, 199, 0.5), 0 0 12px rgba(56, 189, 248, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
+  user-select: none;
+  animation: fadeInFloatingSelection 0.25s ease-out;
+}
+.wbs-floating-mini-pill:hover {
+  transform: translateY(-2px) scale(1.03);
+  border-color: #FFFFFF;
+  box-shadow: 0 6px 20px rgba(2, 132, 199, 0.7), 0 0 16px rgba(56, 189, 248, 0.6);
+}
+.wbs-floating-mini-pill .mini-badge {
+  background: #EF4444;
+  color: #FFFFFF;
+  font-size: 0.72rem;
+  padding: 1px 6px;
+  border-radius: 10px;
+  font-weight: 800;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+[data-theme="light"] .wbs-floating-mini-pill {
+  background: linear-gradient(135deg, #0284C7 0%, #0369A1 100%);
+  border-color: #38BDF8;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
+}
+
+.btn-wbs-toggle-floating {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-sm, 8px);
+  background: rgba(2, 132, 199, 0.16);
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  color: #38BDF8;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+.btn-wbs-toggle-floating:hover {
+  background: rgba(2, 132, 199, 0.32);
+  border-color: #38BDF8;
+  color: #FFFFFF;
+  box-shadow: 0 0 10px rgba(2, 132, 199, 0.45);
+  transform: translateY(-1px);
+}
+.btn-wbs-toggle-floating.is-hidden-mode {
+  background: rgba(148, 163, 184, 0.15);
+  border-color: rgba(148, 163, 184, 0.4);
+  color: #94A3B8;
+}
+.btn-wbs-toggle-floating.is-hidden-mode:hover {
+  background: rgba(2, 132, 199, 0.25);
+  border-color: #38BDF8;
+  color: #E0F2FE;
+}
+[data-theme="light"] .btn-wbs-toggle-floating {
+  background: rgba(2, 132, 199, 0.1);
+  border-color: rgba(2, 132, 199, 0.35);
+  color: #0284C7;
+}
+[data-theme="light"] .btn-wbs-toggle-floating:hover {
+  background: #0284C7;
+  border-color: #0369A1;
+  color: #FFFFFF;
+}

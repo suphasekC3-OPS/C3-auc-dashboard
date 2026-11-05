@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="th" data-theme="dark">
 
 <head>
@@ -8,7 +8,7 @@
   <meta name="description"
     content="ระบบสารสนเทศและแดชบอร์ดติดตามงานก่อสร้างและขึ้นทะเบียนทรัพย์สิน AUC การไฟฟ้าส่วนภูมิภาค เขต 3 (ภาคกลาง)">
   <link rel="icon" type="image/svg+xml" href="assets/pea_logo.svg">
-  <link rel="stylesheet" href="css/styles.css?v=20261105_1201">
+  <link rel="stylesheet" href="css/styles.css?v=20261105_1635">
 
 </head>
 
@@ -478,7 +478,7 @@
               <polyline points="12 12 12 14 14 15"></polyline>
             </svg>
             <span>ประวัติการนำเข้า & แก้ไขข้อมูล</span>
-            <span class="tab-badge" id="dataHistoryBadge" style="background:#8B5CF6; color:#fff; font-weight:700;">4
+            <span class="tab-badge" id="dataHistoryBadge" style="background:#8B5CF6; color:#fff; font-weight:700;">5
               พ.ย.</span>
             <span class="nav-tab-lock-badge" title="เมนูนี้ถูกล็อค (ต้องใช้รหัส Admin PIN)">🔒</span>
           </button>
@@ -1765,16 +1765,16 @@
                 <div class="wbs-header-dates-plain" id="wbsHeaderDatesPlain">
                   <div class="wbs-hdr-date-col" onclick="if(window.openDhModelModal)window.openDhModelModal('src_04')"
                     style="cursor:pointer;"
-                    title="ข้อมูลสถานะ SAP จากไฟล์ 04 ZBUDR064 แก้ไขล่าสุด: 3 พ.ย. 2569 (คลิกเพื่อดูผัง Model View)">
+                    title="ข้อมูลสถานะ SAP จากไฟล์ 04 ZBUDR064 แก้ไขล่าสุด: 5 พ.ย. 2569 (คลิกเพื่อดูผัง Model View)">
                     <span class="wbs-hdr-date-title">สถานะ SAP</span>
-                    <span class="wbs-hdr-date-sub">แก้ไขล่าสุด: 3 พ.ย. 69</span>
+                    <span class="wbs-hdr-date-sub">แก้ไขล่าสุด: 5 พ.ย. 69</span>
                   </div>
                   <div class="wbs-hdr-date-divider"></div>
                   <div class="wbs-hdr-date-col" onclick="if(window.openDhModelModal)window.openDhModelModal('src_06')"
                     style="cursor:pointer;"
-                    title="ข้อมูลมูลค่า AUC จากไฟล์ 06 CN41 แก้ไขล่าสุด: 3 พ.ย. 2569 (คลิกเพื่อดูผัง Model View)">
+                    title="ข้อมูลมูลค่า AUC จากไฟล์ 06 CN41 แก้ไขล่าสุด: 5 พ.ย. 2569 (คลิกเพื่อดูผัง Model View)">
                     <span class="wbs-hdr-date-title">มูลค่า AUC(บาท)</span>
-                    <span class="wbs-hdr-date-sub">แก้ไขล่าสุด: 3 พ.ย. 69</span>
+                    <span class="wbs-hdr-date-sub">แก้ไขล่าสุด: 5 พ.ย. 69</span>
                   </div>
                 </div>
 
@@ -1933,6 +1933,13 @@
                       <option value="99999">ทั้งหมด</option>
                     </select>
                   </div>
+
+                  <!-- ปุ่มแสดง/ซ่อนการ์ดลอยสีฟ้า (เป้าหมายเดือน) -->
+                  <button type="button" class="btn-wbs-toggle-floating active" id="btnToggleFloatingCard"
+                    onclick="window.toggleWbsFloatingCard(undefined, event)" title="คลิกเพื่อซ่อน/แสดงการ์ดลอยสีฟ้า (เป้าหมายเดือน/Checkbox)">
+                    <span style="font-size:0.85rem; line-height:1;">🎯</span>
+                    <span>การ์ดเป้าหมาย</span>
+                  </button>
 
                   <!-- ปุ่มล้างตัวเลือกทั้งหมดในตารางนี้ -->
                   <button type="button" class="btn-wbs-clear-table-selections" id="btnClearWbsTableSelections"
@@ -2120,6 +2127,10 @@
                       </div>
                       <div class="wbs-floating-target-val-wrap">
                         <span class="wbs-floating-target-mb" id="wbsFloatingTargetMb">(0.00 ลบ.)</span>
+                        <button type="button" class="wbs-floating-hide-btn" id="wbsFloatingHideBtn"
+                          onclick="window.toggleWbsFloatingCard(false, event)" title="ซ่อนการ์ดลอยสีฟ้านี้ (คลิกเปิดคืนได้ตลอดเวลา)">
+                          ✕
+                        </button>
                       </div>
                     </div>
                     <!-- แถวที่ 2: เลือกใน Checkbox -->
@@ -2164,6 +2175,14 @@
                     </div>
                   </div>
                 </div>
+
+                <!-- Mini Floating Badge เมื่อซ่อนการ์ดลอยสีฟ้า (คลิกเพื่อแสดงการ์ดลอยกลับมา) -->
+                <button type="button" class="wbs-floating-mini-pill" id="wbsFloatingMiniPill" style="display:none;"
+                  onclick="window.toggleWbsFloatingCard(true, event)" title="คลิกเพื่อแสดงการ์ดลอยสีฟ้า (เป้าหมายเดือน/Checkbox)">
+                  <span class="mini-icon">🎯</span>
+                  <span class="mini-text">การ์ดเป้าหมาย</span>
+                  <span class="mini-badge" id="wbsFloatingMiniCount" style="display:none;">0</span>
+                </button>
               </div>
 
               <!-- Pagination Footer -->
@@ -2861,13 +2880,14 @@
   <script src="js/data_sep.js?v=20261022_2315"></script>
   <script src="js/kpi_matrix.js?v=20261003_0930"></script>
   <script src="js/chart.js?v=20261105_1139"></script>
-  <script src="js/data_wbs.js?v=20261104_0950"></script>
-  <script src="js/wbs.js?v=20261105_1133"></script>
-  <script src="js/data_materials_07.js?v=20261030_2005"></script>
-  <script src="js/data_materials_08.js?v=20261031_2320"></script>
-  <script src="js/materials.js?v=20261105_1133"></script>
-  <script src="js/data_history_archive.js?v=20261105_1201"></script>
-  <script src="js/data_history.js?v=20261105_1201"></script>
+  <script src="js/data_wbs.js?v=20261105_1635"></script>
+  <script src="js/wbs.js?v=20261105_1635"></script>
+  <script src="js/data_materials_07.js?v=20261105_1437"></script>
+  <script src="js/data_materials_08.js?v=20261105_1454"></script>
+  <script src="js/materials.js?v=20261105_1635"></script>
+  <script charset="utf-8" src="js/data_history_archive.js?v=20261105_1514"></script>
+  <script src="js/office_dd.js?v=20261105_1620"></script>
+  <script charset="utf-8" src="js/data_history.js?v=20261105_1635"></script>
   <script src="js/app.js?v=20261105_1139"></script>
   <script src="js/criteria_dropdown.js?v=20261017_2055"></script>
   <script src="js/presentation_pointer.js?v=20261027_1435"></script>

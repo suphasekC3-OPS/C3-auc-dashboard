@@ -312,6 +312,7 @@
     const tuples = compact07.r;
     const joined = [];
     const matchedWbsSet = new Set();
+    const mergedMap = new Map();
 
     // Cache date sort integers per dictionary index
     const dtSortCache = new Array(d.dt.length);
@@ -341,7 +342,30 @@
       // หากติดลบให้เท่ากับ 0
       const remainQty = Math.max(0, Math.round((reqQty - wdrQty - slocQty) * 1000) / 1000);
 
-      joined.push({
+      // รวมรายการที่ WBS + รหัสพัสดุ เดียวกัน (หลายใบจอง/Network) เป็นบรรทัดเดียว
+      const mergeKey = wbs + '§' + d.m[t[1]];
+      const exist = mergedMap.get(mergeKey);
+      if (exist) {
+        exist.reqQty = Math.round((exist.reqQty + reqQty) * 1000) / 1000;
+        exist.wdrQty = Math.round((exist.wdrQty + wdrQty) * 1000) / 1000;
+        exist.remainQty = Math.round((exist.remainQty + remainQty) * 1000) / 1000;
+        const addUniq = (field, val) => {
+          const v = String(val || '').trim();
+          if (!v) return;
+          const parts = String(exist[field] || '').split(', ').filter(Boolean);
+          if (!parts.includes(v)) { parts.push(v); exist[field] = parts.join(', '); }
+        };
+        addUniq('network', d.nw[t[3]]);
+        addUniq('reservation', d.rs[t[7]]);
+        exist.mergedCount = (exist.mergedCount || 1) + 1;
+        if (dtSortCache[t[12]] && (!exist.reqDateSort || dtSortCache[t[12]] < exist.reqDateSort)) {
+          exist.reqDate = d.dt[t[12]];
+          exist.reqDateSort = dtSortCache[t[12]];
+        }
+        continue;
+      }
+
+      const newRow = {
         id: joined.length + 1,
         wbs: wbs,
         wbs07: wbs,
@@ -363,8 +387,11 @@
         remainQty: remainQty,
         reqDate: d.dt[t[12]],
         reqDateSort: dtSortCache[t[12]],
-        priceLocal: Number(t[13]) || 0
-      });
+        priceLocal: Number(t[13]) || 0,
+        mergedCount: 1
+      };
+      mergedMap.set(mergeKey, newRow);
+      joined.push(newRow);
     }
 
     // แสดงครบทุกงาน WBS ของไฟล์ 03 : งานที่ไม่มีรายการพัสดุ (Mvt 281) ให้เพิ่มแถวว่างและแจ้งว่าไม่มีรายการพัสดุ
@@ -638,6 +665,24 @@
           cmp = (Number(va) || 0) - (Number(vb) || 0);
         } else if (sKey === 'matDesc') {
           cmp = compareMatDescEnglishFirst(va, vb);
+        } else if (sKey === 'statusSap') {
+          const rk = (s) => {
+            const up = String(s || '').toUpperCase().trim();
+            if (up.startsWith('CLSD')) return 0;
+            if (up.startsWith('TECO')) return 1;
+            if (up.startsWith('REL')) return 2;
+            return 3;
+          };
+          cmp = rk(va) - rk(vb);
+          if (cmp === 0) {
+            const so = (s) => {
+              const m = String(s || '').toUpperCase().match(/([A-Z])\s*(\d+)\s*$/);
+              return m ? { l: m[1], n: parseInt(m[2], 10) } : { l: '', n: -1 };
+            };
+            const x = so(va), y = so(vb);
+            if (x.l !== y.l) cmp = x.l < y.l ? 1 : -1;
+            else if (x.n !== y.n) cmp = y.n - x.n;
+          }
         } else {
           cmp = String(va || '').localeCompare(String(vb || ''), 'th');
         }
@@ -662,34 +707,63 @@
 
     const m07 = (window.AUC_MAT07_COMPACT && window.AUC_MAT07_COMPACT.meta) || {};
     const m08 = (window.AUC_MAT08_STOCK && window.AUC_MAT08_STOCK.meta) || {};
-    const date07Short = m07.lastModifiedShortTh || '30 ต.ค. 69';
-    const date07Full = m07.lastModifiedTh || '30 ต.ค. 2569, 07:57 น.';
-    const date08Short = m08.lastModifiedShortTh || '30 ต.ค. 69';
-    const date08Full = m08.lastModifiedTh || '30 ต.ค. 2569, 08:02 น.';
+    const date07Short = m07.lastModifiedShortTh || '5 พ.ย. 69';
+    const date07Full = m07.lastModifiedTh || '5 พ.ย. 2569, 14:31 น.';
+    const date08Short = m08.lastModifiedShortTh || '5 พ.ย. 69';
+    const date08Full = m08.lastModifiedTh || '5 พ.ย. 2569, 14:51 น.';
+    const date04Short = '5 พ.ย. 69';
 
     pane.innerHTML = `
       <!-- แถบสรุปภาพรวมรายการพัสดุค้างเบิก (ไฟล์ 07 เชื่อมไฟล์ 03 WBS และไฟล์ 04 ZBUDR064) -->
       <!-- ตัวกรองย่อยเฉพาะเมนูรายการพัสดุ: WBS / ข้อความวัสดุ / สถานะ SAP -->
       <div class="mat-sub-filter-bar" id="matSubFilterBar">
-        <!-- วันที่แก้ไขล่าสุดของไฟล์ค้างเบิกพัสดุ (07) และไฟล์คงเหลือพัสดุ (08) แสดงบรรทัดบนสุดในกรอบการ์ดตัวกรอง (แสดงอย่างเดียว กดไม่ได้) -->
+        <!-- วันที่แก้ไขล่าสุดของไฟล์ 07 พัสดุค้างเบิก, ไฟล์ 08 พัสดุคงเหลือ และไฟล์ 04 สถานะ SAP แสดงบรรทัดบนสุดในกรอบการ์ดตัวกรอง (แสดงอย่างเดียว กดไม่ได้) -->
         <div class="mat-top-file-dates-bar" id="matHChartFileDates">
-          <span class="mat-hchart-fdate-item fdate-07">ไฟล์ค้างเบิกพัสดุ แก้ไขล่าสุด: <strong id="matChartFile07Date">${date07Short}</strong></span>
+          <span class="mat-hchart-fdate-item fdate-07">ไฟล์ 07 พัสดุค้างเบิก แก้ไขล่าสุด: <strong id="matChartFile07Date">${date07Short}</strong></span>
           <span class="mat-hchart-fdate-sep">|</span>
-          <span class="mat-hchart-fdate-item fdate-08">ไฟล์คงเหลือพัสดุ แก้ไขล่าสุด: <strong id="matChartFile08Date">${date08Short}</strong></span>
+          <span class="mat-hchart-fdate-item fdate-08">ไฟล์ 08 พัสดุคงเหลือ แก้ไขล่าสุด: <strong id="matChartFile08Date">${date08Short}</strong></span>
+          <span class="mat-hchart-fdate-sep">|</span>
+          <span class="mat-hchart-fdate-item fdate-04">ไฟล์ 04 สถานะ SAP แก้ไขล่าสุด: <strong id="matChartFile04Date">${date04Short}</strong></span>
         </div>
         <div class="mat-sf-title" id="matSfTitle">🔎 ตัวกรองรายการที่พบพัสดุ</div>
-        <div class="mat-sf-group">
+        <div class="mat-sf-group mat-sf-desc-wrap" onclick="event.stopPropagation()">
           <span class="mat-sf-label">WBS</span>
-          <select id="matFilterWbs" class="mat-sf-select" onchange="window.handleMatFilterWbsChange(this.value)">
+          <select id="matFilterWbs" class="mat-sf-select" style="display:none;" onchange="window.handleMatFilterWbsChange(this.value)">
             <option value="ALL">-- แสดง WBS ทั้งหมด --</option>
           </select>
+          <button type="button" class="mat-sf-select mat-sf-desc-btn" id="matFilterWbsBtn" onclick="window.toggleMatWbsDropdown(event)">
+            <span id="matFilterWbsBtnText">-- แสดง WBS ทั้งหมด --</span>
+            <span class="mat-sf-desc-chev">▼</span>
+          </button>
+          <div class="mat-desc-dd-panel" id="matWbsDropdownPanel" style="display:none;" onclick="event.stopPropagation()">
+            <div class="mat-desc-dd-search-row">
+              <span>🔍</span>
+              <input type="text" id="matWbsDropdownSearch" class="mat-desc-dd-search-input" placeholder="พิมพ์ค้นหา WBS..." autocomplete="off"
+                     oninput="window.filterMatWbsDropdownList(this.value)" onkeydown="window.handleMatWbsSearchKey(event)" />
+              <span class="mat-desc-dd-count" id="matWbsDropdownCount"></span>
+            </div>
+            <div class="mat-desc-dd-list" id="matWbsDropdownList"></div>
+          </div>
           <button type="button" class="mat-sf-clear-btn" id="matClearWbsBtn" onclick="window.clearMatFilterWbs()" title="ล้างตัวกรอง WBS นี้" style="display:none;">✕</button>
         </div>
-        <div class="mat-sf-group">
+        <div class="mat-sf-group mat-sf-desc-wrap" onclick="event.stopPropagation()">
           <span class="mat-sf-label">ข้อความวัสดุ</span>
-          <select id="matFilterMatDesc" class="mat-sf-select" onchange="window.handleMatFilterDescChange(this.value)">
+          <select id="matFilterMatDesc" class="mat-sf-select" style="display:none;" onchange="window.handleMatFilterDescChange(this.value)">
             <option value="ALL">-- แสดงข้อความวัสดุทั้งหมด --</option>
           </select>
+          <button type="button" class="mat-sf-select mat-sf-desc-btn" id="matFilterMatDescBtn" onclick="window.toggleMatDescDropdown(event)">
+            <span id="matFilterMatDescBtnText">-- แสดงข้อความวัสดุทั้งหมด --</span>
+            <span class="mat-sf-desc-chev">▼</span>
+          </button>
+          <div class="mat-desc-dd-panel" id="matDescDropdownPanel" style="display:none;" onclick="event.stopPropagation()">
+            <div class="mat-desc-dd-search-row">
+              <span>🔍</span>
+              <input type="text" id="matDescDropdownSearch" class="mat-desc-dd-search-input" placeholder="พิมพ์ค้นหาข้อความวัสดุ..." autocomplete="off"
+                     oninput="window.filterMatDescDropdownList(this.value)" onkeydown="window.handleMatDescSearchKey(event)" />
+              <span class="mat-desc-dd-count" id="matDescDropdownCount"></span>
+            </div>
+            <div class="mat-desc-dd-list" id="matDescDropdownList"></div>
+          </div>
           <button type="button" class="mat-sf-clear-btn" id="matClearDescBtn" onclick="window.clearMatFilterDesc()" title="ล้างตัวกรองข้อความวัสดุนี้" style="display:none;">✕</button>
         </div>
         <!-- ตัวกรองสถานะ SAP (ย้ายจากหัวตาราง มาไว้ที่แถบตัวกรองด้านบน) -->
@@ -767,7 +841,7 @@
         <div class="content-card" style="padding:0.85rem 1.05rem; margin-bottom:0; border-left:3px solid #38BDF8;">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.25rem; gap:0.35rem; flex-wrap:wrap;">
             <span style="font-size:0.78rem; color:var(--text-muted); font-weight:600;">📦 รายการพัสดุ Mvt 281 (เชื่อม WBS ไฟล์ 03)</span>
-            <span class="wbs-pill pill-file" style="font-size:0.68rem; padding:1px 7px; background:rgba(14,165,233,0.18); color:#7DD3FC; border:1px solid rgba(56,189,248,0.35);">07 CN52N: 30 ต.ค. 69</span>
+            <span class="wbs-pill pill-file" style="font-size:0.68rem; padding:1px 7px; background:rgba(14,165,233,0.18); color:#7DD3FC; border:1px solid rgba(56,189,248,0.35);">07 CN52N: ${date07Short}</span>
           </div>
           <div style="display:flex; align-items:baseline; gap:0.45rem; flex-wrap:wrap;">
             <strong id="matSummaryTotalRows" style="font-size:1.45rem; color:#38BDF8; font-weight:800; line-height:1.15;">0</strong>
@@ -803,7 +877,7 @@
         <div class="content-card" style="padding:0.85rem 1.05rem; margin-bottom:0; border-left:3px solid #A855F7;">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.25rem;">
             <span style="font-size:0.78rem; color:var(--text-muted); font-weight:600;">💰 รวมราคา/สกุลเงินในปท. (ไฟล์ 07)</span>
-            <span style="font-size:0.68rem; color:#D8B4FE;">SAP 04: 30 ต.ค. 69</span>
+            <span style="font-size:0.68rem; color:#D8B4FE;">SAP 04: 5 พ.ย. 69</span>
           </div>
           <div style="display:flex; align-items:baseline; gap:0.45rem; flex-wrap:wrap;">
             <strong id="matSummaryTotalPrice" style="font-size:1.32rem; color:var(--pea-gold-400); font-weight:800; line-height:1.15;">0.00</strong>
@@ -1089,6 +1163,22 @@
     const keys = Array.from(wbsBySap.keys()).sort((a, b) => {
       if (a === '(ไม่ระบุ)' || a === 'ไม่ระบุ') return 1;
       if (b === '(ไม่ระบุ)' || b === 'ไม่ระบุ') return -1;
+      const grp = (s) => {
+        const up = String(s || '').toUpperCase().trim();
+        if (up.startsWith('CLSD')) return 0;
+        if (up.startsWith('TECO')) return 1;
+        if (up.startsWith('REL')) return 2;
+        return 3;
+      };
+      const ga = grp(a), gb = grp(b);
+      if (ga !== gb) return ga - gb;
+      const so = (s) => {
+        const m = String(s || '').toUpperCase().match(/([A-Z])\s*(\d+)\s*$/);
+        return m ? { l: m[1], n: parseInt(m[2], 10) } : { l: '', n: -1 };
+      };
+      const x = so(a), y = so(b);
+      if (x.l !== y.l) return x.l < y.l ? 1 : -1;
+      if (x.n !== y.n) return y.n - x.n;
       return a.localeCompare(b, 'en', { numeric: true, sensitivity: 'base' });
     });
     const hasFilter = matState.sapStatuses.size > 0;
@@ -1388,9 +1478,11 @@
 
         let subDateHtml = '';
         if (col.id === 'statusSap') {
-          subDateHtml = `<div class="th-sub-date-text" style="font-size:0.69rem; color:#CBD5E1; font-weight:500; line-height:1.2; margin:1px 0 3px 0; text-align:center; white-space:nowrap;">แก้ไขล่าสุด: 30 ต.ค. 69</div>`;
+          subDateHtml = `<div class="th-sub-date-text" style="font-size:0.69rem; color:#CBD5E1; font-weight:500; line-height:1.2; margin:1px 0 3px 0; text-align:center; white-space:nowrap;" title="ข้อมูลสถานะ SAP จากไฟล์ 04 ZBUDR064 แก้ไขล่าสุด: 5 พ.ย. 2569 เวลา 14:09 น.">แก้ไขล่าสุด: 5 พ.ย. 69</div>`;
         } else if (col.id === 'matCode') {
-          subDateHtml = `<div class="th-sub-date-text" style="font-size:0.69rem; color:#7DD3FC; font-weight:500; line-height:1.2; margin:1px 0 3px 0; white-space:nowrap;">ไฟล์ 07: 30 ต.ค. 69 07:57 น.</div>`;
+          const m07Meta = (window.AUC_MAT07_COMPACT && window.AUC_MAT07_COMPACT.meta) ? window.AUC_MAT07_COMPACT.meta : {};
+          const f07Sub = m07Meta.lastModifiedShortTh ? `${m07Meta.lastModifiedShortTh} 14:31 น.` : '5 พ.ย. 69 14:31 น.';
+          subDateHtml = `<div class="th-sub-date-text" style="font-size:0.69rem; color:#7DD3FC; font-weight:500; line-height:1.2; margin:1px 0 3px 0; white-space:nowrap;" title="ข้อมูลพัสดุค้างเบิกจากไฟล์ 07 CN52N แก้ไขล่าสุด: 5 พ.ย. 2569 เวลา 14:31 น.">ไฟล์ 07: ${f07Sub}</div>`;
         }
 
         let metricHtml = '';
@@ -1851,6 +1943,8 @@
 
     const clearDBtn = document.getElementById('matClearDescBtn');
     if (clearDBtn) clearDBtn.style.display = (curD && curD !== 'ALL' && curMode !== 'NO_MAT') ? 'inline-flex' : 'none';
+    if (window.syncMatDescDropdown) window.syncMatDescDropdown();
+    if (window.syncMatWbsDropdown) window.syncMatWbsDropdown();
   }
 
   /**
@@ -2930,6 +3024,7 @@
     matState.filterWbs = '';
     const sel = document.getElementById('matFilterWbs');
     if (sel) sel.value = 'ALL';
+    if (window.syncMatWbsDropdown) window.syncMatWbsDropdown();
     matState.cachedFilterKey = '';
     matState._subOptKey = '';
     matState.page = 1;
@@ -2957,10 +3052,171 @@
     updateMatSubFilterCount();
   };
 
+  // ===== ตัวกรองข้อความวัสดุแบบ Dropdown ที่มีช่องพิมพ์ค้นหาแถวบนสุด =====
+  window.syncMatDescDropdown = function () {
+    const sel = document.getElementById('matFilterMatDesc');
+    const btn = document.getElementById('matFilterMatDescBtn');
+    const txt = document.getElementById('matFilterMatDescBtnText');
+    if (!sel || !btn || !txt) return;
+    const opt = sel.options[sel.selectedIndex];
+    txt.textContent = opt ? opt.textContent : '';
+    btn.disabled = !!sel.disabled;
+    btn.title = txt.textContent;
+  };
+
+  function closeMatDescDropdown() {
+    const p = document.getElementById('matDescDropdownPanel');
+    if (p) p.style.display = 'none';
+    const w = document.getElementById('matWbsDropdownPanel');
+    if (w) w.style.display = 'none';
+  }
+  window.closeMatDescDropdown = closeMatDescDropdown;
+
+  // ===== ตัวกรอง WBS แบบ Dropdown มีช่องพิมพ์ค้นหา (สไตล์เดียวกับตัวกรองข้อความวัสดุ) =====
+  window.syncMatWbsDropdown = function () {
+    const sel = document.getElementById('matFilterWbs');
+    const btn = document.getElementById('matFilterWbsBtn');
+    const txt = document.getElementById('matFilterWbsBtnText');
+    if (!sel || !btn || !txt) return;
+    const opt = sel.options[sel.selectedIndex];
+    txt.textContent = opt ? opt.textContent : '';
+    btn.disabled = !!sel.disabled;
+    btn.title = txt.textContent;
+  };
+
+  window.filterMatWbsDropdownList = function (q) {
+    const sel = document.getElementById('matFilterWbs');
+    const list = document.getElementById('matWbsDropdownList');
+    const cnt = document.getElementById('matWbsDropdownCount');
+    if (!sel || !list) return;
+    const query = String(q || '').trim().toLowerCase();
+    list.innerHTML = '';
+    let shown = 0;
+    for (let i = 0; i < sel.options.length; i++) {
+      const o = sel.options[i];
+      const isAll = o.value === 'ALL';
+      if (query && (isAll || !o.textContent.toLowerCase().includes(query))) continue;
+      const div = document.createElement('div');
+      div.className = 'mat-desc-dd-item' + (o.value === sel.value ? ' is-selected' : '') + (isAll ? ' is-all' : '');
+      div.textContent = o.textContent;
+      div.dataset.val = o.value;
+      div.onclick = function () {
+        sel.value = this.dataset.val;
+        closeMatDescDropdown();
+        window.syncMatWbsDropdown();
+        window.handleMatFilterWbsChange(sel.value);
+      };
+      list.appendChild(div);
+      if (!isAll) shown++;
+    }
+    if (cnt) cnt.textContent = query ? `พบ ${shown.toLocaleString('th-TH')}` : '';
+    if (!shown && query) {
+      const e = document.createElement('div');
+      e.className = 'mat-desc-dd-empty';
+      e.textContent = 'ไม่พบ WBS ที่ค้นหา';
+      list.appendChild(e);
+    }
+  };
+
+  window.handleMatWbsSearchKey = function (e) {
+    if (e.key === 'Escape') { closeMatDescDropdown(); return; }
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const first = document.querySelector('#matWbsDropdownList .mat-desc-dd-item:not(.is-all)') ||
+                    document.querySelector('#matWbsDropdownList .mat-desc-dd-item');
+      if (first) first.click();
+    }
+  };
+
+  window.toggleMatWbsDropdown = function (e) {
+    if (e) e.stopPropagation();
+    const panel = document.getElementById('matWbsDropdownPanel');
+    const sel = document.getElementById('matFilterWbs');
+    if (!panel || !sel || sel.disabled) return;
+    const wasOpen = panel.style.display === 'block';
+    closeMatDescDropdown();
+    const sap = document.getElementById('matSapThDropdownPanel');
+    if (sap) sap.style.display = 'none';
+    if (wasOpen) return;
+    const inp = document.getElementById('matWbsDropdownSearch');
+    if (inp) inp.value = '';
+    window.filterMatWbsDropdownList('');
+    panel.style.display = 'block';
+    if (inp) inp.focus();
+    const selEl = panel.querySelector('.mat-desc-dd-item.is-selected');
+    if (selEl && selEl.scrollIntoView) selEl.scrollIntoView({ block: 'nearest' });
+  };
+
+  window.filterMatDescDropdownList = function (q) {
+    const sel = document.getElementById('matFilterMatDesc');
+    const list = document.getElementById('matDescDropdownList');
+    const cnt = document.getElementById('matDescDropdownCount');
+    if (!sel || !list) return;
+    const query = String(q || '').trim().toLowerCase();
+    list.innerHTML = '';
+    let shown = 0;
+    for (let i = 0; i < sel.options.length; i++) {
+      const o = sel.options[i];
+      const isAll = o.value === 'ALL';
+      if (query && !isAll && !o.textContent.toLowerCase().includes(query)) continue;
+      if (query && isAll) continue;
+      const div = document.createElement('div');
+      div.className = 'mat-desc-dd-item' + (o.value === sel.value ? ' is-selected' : '') + (isAll ? ' is-all' : '');
+      div.textContent = o.textContent;
+      div.dataset.val = o.value;
+      div.onclick = function () {
+        sel.value = this.dataset.val;
+        closeMatDescDropdown();
+        window.syncMatDescDropdown();
+        window.handleMatFilterDescChange(sel.value);
+      };
+      list.appendChild(div);
+      if (!isAll) shown++;
+    }
+    if (cnt) cnt.textContent = query ? `พบ ${shown.toLocaleString('th-TH')}` : '';
+    if (!shown && query) {
+      const e = document.createElement('div');
+      e.className = 'mat-desc-dd-empty';
+      e.textContent = 'ไม่พบข้อความวัสดุที่ค้นหา';
+      list.appendChild(e);
+    }
+  };
+
+  window.handleMatDescSearchKey = function (e) {
+    if (e.key === 'Escape') { closeMatDescDropdown(); return; }
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const first = document.querySelector('#matDescDropdownList .mat-desc-dd-item:not(.is-all)') ||
+        document.querySelector('#matDescDropdownList .mat-desc-dd-item');
+      if (first) first.click();
+    }
+  };
+
+  window.toggleMatDescDropdown = function (e) {
+    if (e) e.stopPropagation();
+    const panel = document.getElementById('matDescDropdownPanel');
+    const sel = document.getElementById('matFilterMatDesc');
+    if (!panel || !sel || sel.disabled) return;
+    if (panel.style.display === 'block') { panel.style.display = 'none'; return; }
+    closeMatDescDropdown();
+    const sap = document.getElementById('matSapThDropdownPanel');
+    if (sap) sap.style.display = 'none';
+    const inp = document.getElementById('matDescDropdownSearch');
+    if (inp) inp.value = '';
+    window.filterMatDescDropdownList('');
+    panel.style.display = 'block';
+    if (inp) inp.focus();
+    const selEl = panel.querySelector('.mat-desc-dd-item.is-selected');
+    if (selEl && selEl.scrollIntoView) selEl.scrollIntoView({ block: 'nearest' });
+  };
+
+  document.addEventListener('click', closeMatDescDropdown);
+
   window.clearMatFilterDesc = function () {
     matState.filterMatDesc = '';
     const sel = document.getElementById('matFilterMatDesc');
     if (sel) sel.value = 'ALL';
+    window.syncMatDescDropdown();
     matState.cachedFilterKey = '';
     matState._subOptKey = '';
     matState.page = 1;
@@ -3187,6 +3443,7 @@
     if (e) e.stopPropagation();
     const panel = document.getElementById('matSapThDropdownPanel');
     if (!panel) return;
+    if (window.closeMatDescDropdown) window.closeMatDescDropdown();
     const isOpening = panel.style.display === 'none' || !panel.style.display;
     if (!isOpening) {
       panel.style.display = 'none';

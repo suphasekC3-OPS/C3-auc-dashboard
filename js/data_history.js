@@ -95,10 +95,10 @@
       groupNo: '04',
       name: '04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx',
       category: 'SAP ZBUDR064 & Costs',
-      importDate: '2026-10-27 08:06:27',
-      importDateTh: '27 ต.ค. 2569, 08:06 น.',
-      lastModifiedTh: '27 ต.ค. 2569, 08:06 น. (ไฟล์ล่าสุด)',
-      sizeText: '732.0 KB',
+      importDate: '2026-11-05 14:09:31',
+      importDateTh: '5 พ.ย. 2569, 14:09 น.',
+      lastModifiedTh: '5 พ.ย. 2569, 14:09 น. (ไฟล์ล่าสุด)',
+      sizeText: '936.8 KB',
       recordCount: 2083,
       status: 'active',
       statusText: 'ผสานข้อมูลสำเร็จ',
@@ -140,7 +140,7 @@
       columns: [
         'cn41Cost05 (ต้นทุนจริง วันเริ่มบัญชี 14 ต.ค. 69)',
         'cn41CostInc (มูลค่าAUCที่เพิ่มขึ้น = ไฟล์ 06 - ไฟล์ 05)',
-        'cn41ActualCost (ต้นทุนจริง ไฟล์ 06 ล่าสุด 27 ต.ค. 69)'
+        'cn41ActualCost (ต้นทุนจริง ไฟล์ 06 ล่าสุด 5 พ.ย. 69)'
       ],
       sampleProvider: () => (window.AUC_WBS_REMAINING_DATA || []).slice(0, 5).map(r => ({
         'WBS': r.wbs,
@@ -153,12 +153,12 @@
     {
       id: 'src_06',
       groupNo: '06',
-      name: '06 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 27 ตค 69.xlsx',
+      name: '06 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 5 พย 69.xlsx',
       category: 'SAP CN41 AUC Values (Latest)',
-      importDate: '2026-10-27 08:09:49',
-      importDateTh: '27 ต.ค. 2569, 08:09 น.',
-      lastModifiedTh: '27 ต.ค. 2569, 08:09 น. (ไฟล์ล่าสุด)',
-      sizeText: '338.1 KB',
+      importDate: '2026-11-05 14:14:11',
+      importDateTh: '5 พ.ย. 2569, 14:14 น.',
+      lastModifiedTh: '5 พ.ย. 2569, 14:14 น. (ไฟล์ล่าสุด)',
+      sizeText: '338.0 KB',
       recordCount: 2083,
       status: 'active',
       statusText: 'ผสานข้อมูลสำเร็จ',
@@ -166,7 +166,7 @@
       storageVar: 'window.AUC_WBS_REMAINING_DATA.cn41ActualCost',
       icon: '📑',
       badgeColor: '#F59E0B',
-      description: 'รายงาน SAP CN41 ระบุต้นทุนจริงและมูลค่า AUC สะสม (บาท) ของแต่ละโครงการ สำหรับวิเคราะห์มูลค่าสินทรัพย์ระหว่างก่อสร้าง ล่าสุด 27 ต.ค. 69',
+      description: 'รายงาน SAP CN41 ระบุต้นทุนจริงและมูลค่า AUC สะสม (บาท) ของแต่ละโครงการ สำหรับวิเคราะห์มูลค่าสินทรัพย์ระหว่างก่อสร้าง ล่าสุด 5 พ.ย. 69 ยอดรวม 643,201,468.93 บาท',
       columns: [
         'cn41ActualCost (มูลค่า AUC บาท)', 'cn41ObjDesc (ออบเจคโครงการ)', 'cn41Level (ระดับ)',
         'cn41Currency (สกุลเงิน THB)', 'cn41Row (ลำดับแถว)'
@@ -183,18 +183,18 @@
       groupNo: '07',
       name: '07 พัสดุค้างเบิก CN52N.xlsx',
       category: 'SAP CN52N Pending Materials',
-      importDate: '2026-10-30 07:57:27',
-      importDateTh: '30 ต.ค. 2569, 07:57 น.',
-      lastModifiedTh: '30 ต.ค. 2569, 07:57 น. (ไฟล์ล่าสุด)',
-      sizeText: '5.67 MB',
-      recordCount: 68211,
+      importDate: '2026-11-05 14:31:26',
+      importDateTh: '5 พ.ย. 2569, 14:31 น.',
+      lastModifiedTh: '5 พ.ย. 2569, 14:31 น. (ไฟล์ล่าสุด)',
+      sizeText: '6.34 MB',
+      recordCount: 75804,
       status: 'active',
       statusText: 'เชื่อม WBS ไฟล์ 03 & 04 สำเร็จ 100%',
       storageFile: 'js/data_materials_07.js',
       storageVar: 'window.AUC_MAT07_COMPACT',
       icon: '📦',
       badgeColor: '#0EA5E9',
-      description: 'รายงานพัสดุค้างเบิก SAP CN52N ทั้งหมด เฉพาะ Mvt 281 ทั้งหมด 68,211 รายการ (1,577 งาน WBS, 566 รหัสวัสดุ) เชื่อมกับไฟล์ 03 ผ่านคอลัมน์ องค์ประกอบ WBS และเชื่อมไฟล์ 04 ผ่านคอลัมน์ ข้อกำหนดโครงการ /WBS แสดงในเมนู รายการพัสดุ',
+      description: 'รายงานพัสดุค้างเบิก SAP CN52N ทั้งหมด เฉพาะ Mvt 281 ทั้งหมด 75,804 รายการ (1,613 งาน WBS, 591 รหัสวัสดุ) เชื่อมกับไฟล์ 03 ผ่านคอลัมน์ องค์ประกอบ WBS และเชื่อมไฟล์ 04 ผ่านคอลัมน์ ข้อกำหนดโครงการ /WBS แสดงในเมนู รายการพัสดุ',
       rulesHtml: `<div style="background:rgba(15,23,42,0.85); border:1px solid rgba(14,165,233,0.35); border-radius:8px; padding:0.65rem 0.85rem; font-size:0.8rem; line-height:1.5;">
   <div style="font-weight:700; color:#38BDF8; margin-bottom:0.45rem; display:flex; align-items:center; gap:0.35rem;">
     <span>📋 เงื่อนไขสรุปการประมวลผล (แสดง / ไม่แสดง ข้อมูลในระบบ):</span>
@@ -241,18 +241,18 @@
       groupNo: '08',
       name: '08 พัสดุคงเหลือ MB52.xlsx',
       category: 'SAP MB52 Warehouse Stock',
-      importDate: '2026-10-30 08:02:02',
-      importDateTh: '30 ต.ค. 2569, 08:02 น.',
-      lastModifiedTh: '30 ต.ค. 2569, 08:02 น. (ไฟล์ล่าสุด)',
-      sizeText: '218 KB',
-      recordCount: 4038,
+      importDate: '2026-11-05 14:51:01',
+      importDateTh: '5 พ.ย. 2569, 14:51 น.',
+      lastModifiedTh: '5 พ.ย. 2569, 14:51 น. (ไฟล์ล่าสุด)',
+      sizeText: '115.3 KB',
+      recordCount: 1935,
       status: 'active',
       statusText: 'เชื่อมพัสดุไฟล์ 07 (รหัสพัสดุ & โรงงาน) สำเร็จ 100%',
       storageFile: 'js/data_materials_08.js',
       storageVar: 'window.AUC_MAT08_STOCK',
       icon: '🏬',
       badgeColor: '#10B981',
-      description: 'รายงานปริมาณพัสดุคงเหลือในคลังจาก SAP MB52 รวม 4,038 รายการ (427 รหัสพัสดุ, 7 โรงงาน/Plant) แยกคลัง SLoc 0021 (งบ C) และ SLoc 0022 (งบ I,P) นำมาเชื่อมโยงกับไฟล์ 07 ด้วยรหัสพัสดุและโรงงาน เพื่อแสดงเปรียบเทียบในกราฟแท่งแนวนอนของเมนูรายการพัสดุ',
+      description: 'รายงานปริมาณพัสดุคงเหลือในคลังจาก SAP MB52 รวม 1,935 รายการ (347 รหัสพัสดุ, 6 โรงงาน/Plant, 1,375 คู่พัสดุ-โรงงาน) แยกคลัง SLoc 0021 (งบ C) และ SLoc 0022 (งบ I,P) นำมาเชื่อมโยงกับไฟล์ 07 ด้วยรหัสพัสดุและโรงงาน เพื่อแสดงเปรียบเทียบในกราฟแท่งแนวนอนของเมนูรายการพัสดุ',
       rulesHtml: `<div style="background:rgba(15,23,42,0.85); border:1px solid rgba(16,185,129,0.35); border-radius:8px; padding:0.65rem 0.85rem; font-size:0.8rem; line-height:1.5;">
   <div style="font-weight:700; color:#34D399; margin-bottom:0.45rem; display:flex; align-items:center; gap:0.35rem;">
     <span>📋 กฎการเชื่อมโยงและการแสดงผลไฟล์ 08 ในกราฟ:</span>
@@ -466,10 +466,10 @@
     {
       path: 'js/data_wbs.js',
       title: 'ฐานข้อมูลรวมงาน WBS คงเหลือ (Merged WBS Database)',
-      role: 'จัดเก็บข้อมูลหลักงาน WBS (ไฟล์ 03 + 04 + 05 + Google Sheet)',
+      role: 'จัดเก็บข้อมูลหลักงาน WBS (ไฟล์ 03 + 04 + 05 + 06 + Google Sheet)',
       recordsCount: '2,083 รายการ (41 คอลัมน์)',
-      fileSize: '2.36 MB',
-      updatedAt: '27 ต.ค. 2569, 08:09 น.',
+      fileSize: '2.42 MB',
+      updatedAt: '5 พ.ย. 2569, 14:18 น.',
       status: '100% ฐานข้อมูลอัปเดตล่าสุด',
       variable: 'window.AUC_WBS_REMAINING_DATA'
     },
@@ -477,9 +477,9 @@
       path: 'js/wbs.js',
       title: 'โมดูลจัดการหน้าตาราง WBS & ตัวกรอง',
       role: 'ตรรกะคำนวณตัวกรอง, ค้นหาสถานะ SAP, จัดกลุ่มสรุปผล',
-      recordsCount: '4,055 บรรทัดคำสั่ง',
-      fileSize: '184 KB',
-      updatedAt: '17 ต.ค. 2569, 08:15 น.',
+      recordsCount: '7,440 บรรทัดคำสั่ง',
+      fileSize: '338 KB',
+      updatedAt: '5 พ.ย. 2569, 14:20 น.',
       status: 'อัปเดตล่าสุดวันนี้',
       variable: 'window.renderWbsTab, getFilteredWbsData'
     },
@@ -487,9 +487,9 @@
       path: 'js/data_materials_07.js',
       title: 'ฐานข้อมูลรายการพัสดุค้างเบิก CN52N (ไฟล์ 07)',
       role: 'จัดเก็บข้อมูลพัสดุค้างเบิกแบบบีบอัด Dictionary (เฉพาะ Mvt 281, รหัสพัสดุ 1*, เชื่อม WBS ไฟล์ 03 และ 04)',
-      recordsCount: '68,211 รายการ (เฉพาะ Mvt 281, 14 คอลัมน์)',
-      fileSize: '3.15 MB',
-      updatedAt: '30 ต.ค. 2569, 13:57 น.',
+      recordsCount: '75,804 รายการ (เฉพาะ Mvt 281, 14 คอลัมน์)',
+      fileSize: '3.50 MB',
+      updatedAt: '5 พ.ย. 2569, 14:36 น.',
       status: '100% ฐานข้อมูลอัปเดตล่าสุด',
       variable: 'window.AUC_MAT07_COMPACT'
     },
@@ -497,9 +497,9 @@
       path: 'js/data_materials_08.js',
       title: 'ฐานข้อมูลพัสดุคงเหลือในคลัง MB52 (ไฟล์ 08)',
       role: 'จัดเก็บข้อมูลสต็อกคงเหลือในคลัง แยกตามรหัสพัสดุและโรงงาน (SLoc 0021 งบ C, SLoc 0022 งบ I,P)',
-      recordsCount: '2,466 รายการจับคู่พัสดุ-โรงงาน (4,038 แถวต้นฉบับ MB52)',
-      fileSize: '154 KB',
-      updatedAt: '30 ต.ค. 2569, 08:02 น.',
+      recordsCount: '1,375 รายการจับคู่พัสดุ-โรงงาน (1,935 แถวต้นฉบับ MB52)',
+      fileSize: '112.0 KB',
+      updatedAt: '5 พ.ย. 2569, 14:53 น.',
       status: '100% ฐานข้อมูลอัปเดตล่าสุด',
       variable: 'window.AUC_MAT08_STOCK'
     },
@@ -579,6 +579,326 @@
    * System Pre-defined Audit & Modification Log Entries
    */
   const BASE_AUDIT_LOGS = [
+    {
+      id: 'log_000_wbs_floating_card_hide_toggle',
+      timestamp: '2026-11-05 16:35:00',
+      timestampTh: '5 พ.ย. 2569, 16:35 น.',
+      type: 'EDIT',
+      typeBadge: 'เพิ่มปุ่มซ่อนการ์ดลอยสีฟ้า',
+      badgeClass: 'badge-type-edit',
+      title: 'เพิ่มปุ่มซ่อนการ์ดลอยสีฟ้า (เป้าหมายเดือน/Checkbox) พร้อมปุ่ม Mini Pill และปุ่มบน Toolbar สำหรับเปิดคืนได้ตลอดเวลา',
+      targetSubject: 'การ์ดลอยสีฟ้า (#wbsTableFloatingSelection) ในหน้า WBS คงเหลือ, index.html, js/wbs.js, css/styles.css',
+      storageFile: 'index.html, js/wbs.js, css/styles.css, js/data_history.js',
+      changeSummary: 'เพิ่มปุ่มกากบาท [✕] ซ่อนการ์ดลอยสีฟ้าไว้ที่แถวบนสุดของการ์ด เมื่อกดซ่อนจะยุบเป็นปุ่มแคปซูลมินิ 🎯 การ์ดเป้าหมาย ที่มุมขวาล่าง และมีปุ่มสลับบนแถบเครื่องมือตาราง สามารถคลิกเปิดคืนได้ตลอดเวลา พร้อมจำสถานะใน localStorage',
+      details: '1) ใน index.html: เพิ่มปุ่ม #wbsFloatingHideBtn ในแถวบนสุดของการ์ดลอย, เพิ่มปุ่ม #wbsFloatingMiniPill และปุ่ม #btnToggleFloatingCard บน Table Actions Bar 2) ใน js/wbs.js: เพิ่มฟังก์ชัน toggleWbsFloatingCard(show, event), ปรับ pointerdown/dblclick ไม่ให้ชนกับการลากการ์ด, จำสถานะเปิด/ซ่อนใน localStorage 3) ใน css/styles.css: เพิ่มสไตล์ .wbs-floating-hide-btn, .wbs-floating-mini-pill, .btn-wbs-toggle-floating; อัปเดต Cache Buster',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "เพิ่ม ปุ่มซ่อน การ์ดลอยสีฟ้า" (ภาพ media_1793869321408_cac3e490.jpg)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง'
+    },
+    {
+      id: 'log_000_mat_merge_same_wbs_material_rows',
+      timestamp: '2026-11-05 16:30:00',
+      timestampTh: '5 พ.ย. 2569, 16:30 น.',
+      type: 'EDIT',
+      typeBadge: 'รวมรายการพัสดุซ้ำ WBS+รหัสพัสดุ',
+      badgeClass: 'badge-type-edit',
+      title: 'รวมรายการพัสดุที่ WBS และรหัสพัสดุเดียวกัน (หลายใบจอง/Network) ให้เป็นบรรทัดเดียวในหน้าพัสดุ',
+      targetSubject: 'ensureMaterialsHydrated ใน js/materials.js (ตารางรายการพัสดุ ไฟล์ 07)',
+      storageFile: 'js/materials.js, index.html, js/data_history.js',
+      changeSummary: 'รวมแถวที่ WBS + รหัสพัสดุเหมือนกัน: บวกปริมาณต้องการ/เบิกแล้ว/ค้างเบิก และรวมเลข Network/ใบจองเป็นข้อความคั่นด้วยจุลภาค (ตัวอย่าง C-69-I-DBGSR.0028.01.1: 6,203 + 15 = 6,218)',
+      details: 'เพิ่ม mergedMap (key = wbs§matCode) ระหว่างสร้าง joined rows; เก็บ mergedCount; reqDate ใช้วันที่ต้องการที่เร็วที่สุด; อัปเดต Cache Buster',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "พัสดุเดียวกันทำไมแสดง 2 บรรทัด" → "รวมเลย"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง'
+    },
+    {
+      id: 'log_000_office_dd_no_search_sap_scrollbar',
+      timestamp: '2026-11-05 16:20:00',
+      timestampTh: '5 พ.ย. 2569, 16:20 น.',
+      type: 'EDIT',
+      typeBadge: 'แถบเลื่อนตัวกรองกอง/กฟฟ. สีเหมือน SAP',
+      badgeClass: 'badge-type-edit',
+      title: 'ตัวกรอง กอง/กฟฟ.: Dropdown ไม่มีช่องค้นหา สีอักษรเดิม และแถบเลื่อนสีเดียวกับสถานะ SAP',
+      targetSubject: '#filterOffice (js/office_dd.js) และ CSS .office-dd-*',
+      storageFile: 'js/office_dd.js, css/styles.css, index.html, js/data_history.js',
+      changeSummary: 'เนื่องจาก select ของเบราว์เซอร์ปรับสีแถบเลื่อนไม่ได้ จึงใช้ Dropdown แบบกำหนดเอง ไม่มีช่องค้นหา สีอักษรทอง #FFB81C บนพื้น #2D0A45 เหมือนเดิม และแถบเลื่อนไล่สีทอง-ชมพูเหมือนสถานะ SAP',
+      details: 'คง select ซ่อนไว้และ dispatch change event; panel เป็น position:fixed; รองรับธีมสว่าง; อัปเดต Cache Buster',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "ยังไม่เปลี่ยน" (แถบเลื่อนกอง/กฟฟ.)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ'
+    },
+    {
+      id: 'log_000_office_select_scrollbar_match_sap',
+      timestamp: '2026-11-05 16:10:00',
+      timestampTh: '5 พ.ย. 2569, 16:10 น.',
+      type: 'EDIT',
+      typeBadge: 'ปรับสีแถบเลื่อนตัวกรองกอง/กฟฟ.',
+      badgeClass: 'badge-type-edit',
+      title: 'ปรับแถบเลื่อนของตัวกรอง กอง/กฟฟ. ให้สีเหมือนตัวกรองสถานะ SAP',
+      targetSubject: '#filterOffice, #chartFilterOffice ใน css/styles.css',
+      storageFile: 'css/styles.css, index.html, js/data_history.js',
+      changeSummary: 'กำหนด ::-webkit-scrollbar ของ select กอง/กฟฟ. เป็นแถบ 10px ไล่สีทอง-ชมพู ราง/เงาเหมือนสถานะ SAP โดยคงสีอักษรและ select เดิม',
+      details: 'เพิ่ม CSS เฉพาะ #filterOffice / #chartFilterOffice (select::-webkit-scrollbar); อัปเดต Cache Buster',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "แก้ไขสีแถบเลื่อน กรอง กอง/กฟฟ ใช้สีเหมือนตัวกรองสถานะ sap"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ'
+    },
+    {
+      id: 'log_000_office_filter_revert_native',
+      timestamp: '2026-11-05 16:05:00',
+      timestampTh: '5 พ.ย. 2569, 16:05 น.',
+      type: 'EDIT',
+      typeBadge: 'ยกเลิกช่องค้นหาตัวกรองกอง/กฟฟ.',
+      badgeClass: 'badge-type-edit',
+      title: 'ยกเลิก Dropdown ค้นหาได้ของตัวกรอง กอง/กฟฟ. และคืนสีอักษรเดิม',
+      targetSubject: 'ตัวกรองหลักด้านบน #filterOffice',
+      storageFile: 'index.html, js/office_dd.js (ลบ), js/data_history.js',
+      changeSummary: 'คืนตัวกรอง กอง/กฟฟ. เป็น select แบบเดิม ไม่มีช่องพิมพ์ค้นหา และใช้สีอักษร/สไตล์เดิมก่อนปรับแถบเลื่อน',
+      details: 'ลบการโหลด js/office_dd.js ออกจาก index.html และลบไฟล์ ทำให้ select เดิมแสดงตามปกติ; อัปเดต Cache Buster',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "กอง/กฟฟ ให้ยกเลิกพิมพ์ค้นหา และใช้สีอักษรเดิมก่อนมีแถบเลื่อน"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ'
+    },
+    {
+      id: 'log_000_filter_scrollbar_match_sap',
+      timestamp: '2026-11-05 15:58:00',
+      timestampTh: '5 พ.ย. 2569, 15:58 น.',
+      type: 'EDIT',
+      typeBadge: 'ปรับสีแถบเลื่อนตัวกรอง',
+      badgeClass: 'badge-type-edit',
+      title: 'ปรับแถบเลื่อน (scrollbar) ของ Dropdown ตัวกรองทุกตัวให้สีเหมือนตัวกรองสถานะ SAP',
+      targetSubject: '.mat-desc-dd-list (ข้อความวัสดุ / WBS / กอง/กฟฟ.) ใน css/styles.css',
+      storageFile: 'css/styles.css, index.html, js/data_history.js',
+      changeSummary: 'แถบเลื่อนกว้าง 10px ราง/ปุ่มไล่สีทอง-ชมพู พร้อมเงาเรืองแสง เหมือนตัวกรองสถานะ SAP',
+      details: 'ยกเลิก scrollbar-width/color แบบบาง และกำหนด ::-webkit-scrollbar ให้ตรงกับสไตล์มาตรฐานของระบบ; อัปเดต Cache Buster',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "แก้ไขแถบเลื่อนทุกตัวกรอง ให้ใช้สีเหมือนตัวกรองสถานะ sap"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ'
+    },
+    {
+      id: 'log_000_office_filter_searchable_dd_scrollbar',
+      timestamp: '2026-11-05 15:55:00',
+      timestampTh: '5 พ.ย. 2569, 15:55 น.',
+      type: 'EDIT',
+      typeBadge: 'ปรับตัวกรองกอง/กฟฟ. และแถบเลื่อน',
+      badgeClass: 'badge-type-edit',
+      title: 'ปรับตัวกรอง กอง/กฟฟ. ให้เป็น Dropdown ค้นหาได้ พร้อมแถบเลื่อนสไตล์เดียวกับตัวกรองข้อความวัสดุ',
+      targetSubject: 'ตัวกรองหลักด้านบน #filterOffice (js/office_dd.js) และ CSS .mat-desc-dd-list',
+      storageFile: 'js/office_dd.js, css/styles.css, index.html, js/data_history.js',
+      changeSummary: 'แทน native select ด้วย Dropdown พื้นม่วงเข้มขอบทอง มีช่องพิมพ์ค้นหาและแถบเลื่อนไล่สีทอง-ชมพู เหมือนตัวกรองข้อความวัสดุ',
+      details: 'เพิ่ม js/office_dd.js คง select ซ่อนไว้และ dispatch change event; panel เป็น position:fixed; เพิ่ม scrollbar style ให้ .mat-desc-dd-list; อัปเดต Cache Buster',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "ตัวกรอง กอง/กฟฟ แก้ไข บาร์สไลด์เท่านั้น ให้เหมือนข้อความวัสดุด้วย"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ'
+    },
+    {
+      id: 'log_000_mat_filters_unified_style_dropdown',
+      timestamp: '2026-11-05 15:45:00',
+      timestampTh: '5 พ.ย. 2569, 15:45 น.',
+      type: 'EDIT',
+      typeBadge: 'ปรับสไตล์ตัวกรองให้เหมือนกัน',
+      badgeClass: 'badge-type-edit',
+      title: 'ปรับ Dropdown ตัวกรอง WBS และสถานะ SAP ให้พื้นสีและสไตล์เดียวกับตัวกรองข้อความวัสดุ',
+      targetSubject: 'แท็บพัสดุ: #matFilterWbs, #matSapThDropdownPanel',
+      storageFile: 'js/materials.js, css/styles.css, index.html, js/data_history.js',
+      changeSummary: 'ตัวกรอง WBS เปลี่ยนเป็น Dropdown แบบเดียวกับข้อความวัสดุ (มีช่องพิมพ์ค้นหาบนสุด) และ panel สถานะ SAP ใช้พื้นสี ขอบ และ hover เดียวกัน',
+      details: 'เพิ่ม toggleMatWbsDropdown/filterMatWbsDropdownList/syncMatWbsDropdown คง select ซ่อนไว้; เพิ่ม CSS override .mat-sf-sap-panel; แต่ละ panel ปิดอีกอันเมื่อเปิด; อัปเดต Cache Buster',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "แก้ไขภายในตัวกรองให้พื้นสีเดียวกัน และสไตล์ โดยอ้างอิงจากตัวกรองข้อความวัสดุ"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ'
+    },
+    {
+      id: 'log_000_sap_sort_letter_num_desc_top_clsd_f4',
+      timestamp: '2026-11-05 15:36:00',
+      timestampTh: '5 พ.ย. 2569, 15:36 น.',
+      type: 'EDIT',
+      typeBadge: 'จัดเรียงสถานะ SAP ให้ CLSD F4 อยู่บนสุด',
+      badgeClass: 'badge-type-edit',
+      title: 'เรียงคอลัมน์สถานะ SAP (ตาราง WBS และพัสดุ) ให้ CLSD F4 อยู่บนสุด ตามลำดับเดียวกับการ์ดสรุปสถานะ',
+      targetSubject: 'sortWbsData (js/wbs.js), comparator statusSap และตัวกรองสถานะ SAP ใน js/materials.js',
+      storageFile: 'js/wbs.js, js/materials.js, index.html, js/data_history.js',
+      changeSummary: 'กลุ่ม CLSD → TECO → REL และภายในกลุ่มเรียงอักษรมากสุดก่อน แล้วเลขมากสุดก่อน (CLSD F4, F2, E2 / TECO F2, F0, D3, D2 / REL D2, D1, C9...)',
+      details: 'เพิ่มการแยกอักษรและเลขท้ายสถานะแบบ descending ในการเรียงตารางและรายการตัวกรอง; อัปเดต Cache Buster',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "สถานะ SAP ให้เรียงตามรูป บนสุดคือ CLSD F4"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ'
+    },
+    {
+      id: 'log_000_wbs_sap_filter_order_desc_sub',
+      timestamp: '2026-11-05 15:30:00',
+      timestampTh: '5 พ.ย. 2569, 15:30 น.',
+      type: 'EDIT',
+      typeBadge: 'จัดเรียงตัวกรองสถานะ SAP หน้า WBS คงเหลือ',
+      badgeClass: 'badge-type-edit',
+      title: 'ตัวกรองสถานะ SAP หน้า WBS คงเหลือ: เรียงกลุ่ม CLSD → TECO → REL และภายในกลุ่มเรียงอักษร/เลขมากสุดก่อน',
+      targetSubject: 'renderWbsSapThDropdownList (#wbsSapThDropdownList) ใน js/wbs.js',
+      storageFile: 'js/wbs.js, index.html, js/data_history.js',
+      changeSummary: 'ภายในแต่ละกลุ่มสถานะ เรียงอักษรอังกฤษจากมากไปน้อย แล้วเลขจากมากไปน้อย (เช่น REL D1, C3, C2, C1; CLSD F4, F2)',
+      details: 'เพิ่ม parseSub แยกอักษรและเลขท้ายสถานะ แล้วเปรียบเทียบแบบ descending ใน comparator ของ sortedStatuses; อัปเดต Cache Buster',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "ตัวกรองสถานะ SAP เฉพาะหน้า WBS คงเหลือ เรียง CLSD/TECO/REL อักษรอังกฤษมากสุด และเลขมากสุด"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ'
+    },
+    {
+      id: 'log_000_mat_desc_filter_type_search',
+      timestamp: '2026-11-05 15:25:00',
+      timestampTh: '5 พ.ย. 2569, 15:25 น.',
+      type: 'EDIT',
+      typeBadge: 'เพิ่มช่องพิมพ์ค้นหาในตัวกรองข้อความวัสดุ',
+      badgeClass: 'badge-type-edit',
+      title: 'เพิ่มช่องพิมพ์ค้นหาแถวบนสุดใน Dropdown ตัวกรอง "ข้อความวัสดุ"',
+      targetSubject: 'แท็บพัสดุ: ตัวกรองข้อความวัสดุ (#matFilterMatDesc, #matDescDropdownPanel)',
+      storageFile: 'js/materials.js, css/styles.css, index.html, js/data_history.js',
+      changeSummary: 'เปลี่ยน select ข้อความวัสดุเป็น Dropdown แบบกำหนดเอง มีช่องพิมพ์ค้นหาแถวบนสุด กรองรายการ (529 รายการ) ทันทีที่พิมพ์ กด Enter เลือกรายการแรก Esc ปิด',
+      details: 'คง <select id="matFilterMatDesc"> ซ่อนไว้เพื่อให้ตรรกะ cascading เดิมทำงานต่อ เพิ่มปุ่ม #matFilterMatDescBtn, panel พร้อมช่องค้นหา, syncMatDescDropdown() เรียกท้าย refreshMatSubFilterOptions; เพิ่ม CSS .mat-desc-dd-*; อัปเดต Cache Buster',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "ในตัวกรองแถวบนสุด ให้เพิ่ม การค้นหาแบบพิมพ์ด้วย"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง'
+    },
+    {
+      id: 'log_000_mat_sap_status_order_clsd_teco_rel',
+      timestamp: '2026-11-05 15:20:00',
+      timestampTh: '5 พ.ย. 2569, 15:20 น.',
+      type: 'EDIT',
+      typeBadge: 'จัดเรียงสถานะ SAP (CLSD → TECO → REL)',
+      badgeClass: 'badge-type-edit',
+      title: 'เรียงสถานะ SAP แถวบนสุดตามกลุ่ม CLSD → TECO → REL ในหน้าพัสดุ (ตัวกรอง + ตาราง)',
+      targetSubject: 'แท็บพัสดุ: ตัวกรองสถานะ SAP (renderMatSapThDropdownList) และการเรียงคอลัมน์สถานะ SAP ในตาราง (getFilteredMaterialRows)',
+      storageFile: 'js/materials.js, index.html, js/data_history.js',
+      changeSummary: 'รายการสถานะ SAP ในตัวกรองและการเรียงคอลัมน์สถานะ SAP ของตารางพัสดุ เรียงตามกลุ่ม CLSD (F4, F2) → TECO (D2) → REL (D1, C1, C2, C3) แทนการเรียง A-Z เดิมที่ทำให้ REL มาก่อน TECO',
+      details: 'เพิ่ม rank กลุ่ม CLSD=0, TECO=1, REL=2, อื่นๆ=3 แล้วเรียงรหัสย่อยในกลุ่มแบบ numeric ทั้งใน renderMatSapThDropdownList และ comparator ของ sKey statusSap; อัปเดต Cache Buster',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "เรียงลำดับแถวบนสุดตามกลุ่มสถานะ SAP CLSD / TECO / REL"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง'
+    },
+    {
+      id: 'log_000_wbs_table_sort_sap_status_clsd_teco_rel',
+      timestamp: '2026-11-05 15:14:00',
+      timestampTh: '5 พ.ย. 2569, 15:14 น.',
+      type: 'EDIT',
+      typeBadge: 'จัดเรียงสถานะ SAP ตาราง WBS (CLSD -> TECO -> REL)',
+      badgeClass: 'badge-type-edit',
+      title: 'กำหนดลำดับการเรียงสถานะ SAP ในตาราง WBS คงเหลือ ให้เรียงจากบนสุดเป็น CLSD -> TECO -> REL',
+      targetSubject: 'ตาราง WBS คงเหลือ (#wbsDataTable, sortWbsData และ wbsState.sortCol ใน js/wbs.js)',
+      storageFile: 'js/wbs.js, index.html, js/data_history.js',
+      changeSummary: 'ปรับการเรียงลำดับคอลัมน์ "สถานะ SAP" เฉพาะตาราง WBS คงเหลือ ให้เรียงแถวบนสุดตามลำดับกลุ่มสถานะ CLSD -> TECO -> REL (แทนการเรียงตัวอักษร A-Z เดิมที่ทำให้ REL มาคั่นก่อน TECO) และตั้งค่าเริ่มต้นให้ตารางเรียงตามสถานะ SAP',
+      details: '1) ใน js/wbs.js (sortWbsData): เพิ่ม getSapSortRank(status) กำหนดลำดับ CLSD = 0, TECO = 1, REL = 2, อื่นๆ = 3 เมื่อ sortCol === "statusSap" 2) ตั้งค่าเริ่มต้น wbsState.sortCol = "statusSap" และ wbsState.sortAsc = true; อัปเดต Cache Buster ?v=20261105_1514',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "สถานะ SAP เฉพาะตาราง WBS คงเหลือ ให้เรียงแถบบนสุดดังนี้ CLSD / TECO / REL" (ภาพ media_1793866140076_7143b30b.jpg)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง (จัดลำดับการแสดงผลสถานะ SAP ในตาราง WBS คงเหลือเป็น CLSD -> TECO -> REL)'
+    },
+    {
+      id: 'log_000_fix_data_history_mojibake_icons_nov5',
+      timestamp: '2026-11-05 15:03:00',
+      timestampTh: '5 พ.ย. 2569, 15:03 น.',
+      type: 'EDIT',
+      typeBadge: 'แก้ไขภาษาและสัญลักษณ์หน้าประวัติ',
+      badgeClass: 'badge-type-edit',
+      title: 'แก้ไขข้อความและสัญลักษณ์ไอคอนที่อ่านไม่ออก (Mojibake) ในหน้าประวัติการนำเข้าและแก้ไขข้อมูล พร้อมอัปเดตวันที่ในผัง Model View',
+      targetSubject: 'หน้าประวัติการนำเข้า & แก้ไขข้อมูล (#tab-data-history, renderTimelineItemsHtml, openModelViewModal, ตาราง System Storage Files)',
+      storageFile: 'js/data_history.js, index.html',
+      changeSummary: 'แก้ไขสัญลักษณ์และข้อความที่เพี้ยนอ่านไม่ออกในการ์ดประวัติการแก้ไข (Timeline), ตารางไฟล์จัดเก็บข้อมูล (System Storage Files) และหน้าต่าง Model View Modal ให้แสดงผลถูกต้องคมชัด 100% พร้อมอัปเดตวันที่ในการ์ดสถิติและผังการไหลของข้อมูลเป็น 5 พ.ย. 2569',
+      details: '1) ใน js/data_history.js: แก้ไข typeIcons (EDIT: ✏️, IMPORT: 📥, MERGE: 🔄, CONFIG: ⚙️, default: 📑), ไอคอนเวลา 🕒, ไอคอนไฟล์ 📄, ไอคอนค้นหา 🔍, ไอคอนแจ้งเตือน ⚠️ และปุ่มปิดหน้าต่าง ✕ ที่ถูกเข้ารหัสเพี้ยนเป็น CP874 2) อัปเดตการ์ดสถิติและผังการไหลของข้อมูล Stage 1/Stage 3 ให้ตรงกับไฟล์ 04, 06, 07, 08 ล่าสุด (5 พ.ย. 69); อัปเดต Cache Buster ?v=20261105_1503',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "แก้ไข ภาษาหน้าประวัติ ที่อ่านไม่ออก"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง (แก้ไขข้อความและไอคอนที่อ่านไม่ออกในหน้าประวัติข้อมูลทั้งหมด)'
+    },
+    {
+      id: 'log_000_update_materials_file_08_nov5',
+      timestamp: '2026-11-05 14:54:00',
+      timestampTh: '5 พ.ย. 2569, 14:54 น.',
+      type: 'IMPORT',
+      typeBadge: 'อัปเดตไฟล์ 08 พัสดุคงเหลือ (5 พ.ย. 69)',
+      badgeClass: 'badge-type-import',
+      title: 'นำเข้าและอัปเดตฐานข้อมูลพัสดุคงเหลือในคลังจากไฟล์ 08 พัสดุคงเหลือ MB52.xlsx ล่าสุด วันที่ 5 พ.ย. 2569 (js/data_materials_08.js)',
+      targetSubject: 'ฐานข้อมูลพัสดุคงเหลือในคลัง (js/data_materials_08.js) และป้ายแสดงวันที่แก้ไขล่าสุดในแท็บรายการพัสดุ (#matHChartFileDates)',
+      storageFile: 'js/data_materials_08.js, js/materials.js, js/data_history.js, index.html',
+      changeSummary: 'อัปเดตข้อมูลจากไฟล์ 08 พัสดุคงเหลือ MB52.xlsx (แก้ไขล่าสุด 5 พ.ย. 2569, 14:51 น., ขนาด 115.3 KB, ต้นฉบับ 1,935 แถว) รวมเป็น 1,375 คู่พัสดุ-โรงงาน (347 รหัสวัสดุ, 6 คลัง/โรงงาน; คงเหลือ SLoc 0021 งบ C รวม 754,934.519 หน่วย และ SLoc 0022 งบ I,P รวม 2,251,933.896 หน่วย) บันทึกลง js/data_materials_08.js (112.0 KB) พร้อมอัปเดตวันที่แก้ไขล่าสุดเป็น "5 พ.ย. 69" บนการ์ดตัวกรองรายการพัสดุและผัง Model View',
+      details: '1) รันสคริปต์ build_data_materials_08.ps1 สร้าง window.AUC_MAT08_STOCK ใหม่จากไฟล์ 08 พัสดุคงเหลือ MB52.xlsx (meta.lastModifiedShortTh = "5 พ.ย. 69", meta.lastModifiedTh = "5 พ.ย. 2569, 14:51 น.") 2) อัปเดต DATA_SOURCE_CATALOG (src_08) และ SYSTEM_STORAGE_FILES ใน js/data_history.js; อัปเดต Cache Buster ?v=20261105_1454',
+      sourceFile: '08 พัสดุคงเหลือ MB52.xlsx (แก้ไขล่าสุด 5 พ.ย. 2569, 14:51 น.)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'สูง (อัปเดตฐานข้อมูลปริมาณพัสดุคงเหลือในคลัง MB52 ทั้ง 6 คลังในแท็บรายการพัสดุ)'
+    },
+    {
+      id: 'log_000_mat_top_file_dates_add_file_04_sap',
+      timestamp: '2026-11-05 14:49:00',
+      timestampTh: '5 พ.ย. 2569, 14:49 น.',
+      type: 'EDIT',
+      typeBadge: 'เพิ่มแสดงวันที่ไฟล์ 04 สถานะ SAP',
+      badgeClass: 'badge-type-edit',
+      title: 'เพิ่มแสดงข้อความ "ไฟล์ 04 สถานะ SAP แก้ไขล่าสุด: 5 พ.ย. 69" บนแถบบรรทัดบนสุดของการ์ดตัวกรองรายการพัสดุ (#matHChartFileDates)',
+      targetSubject: 'แถบแสดงวันที่แก้ไขล่าสุดในการ์ดตัวกรองรายการพัสดุ (#matHChartFileDates ใน js/materials.js)',
+      storageFile: 'js/materials.js, index.html, js/data_history.js',
+      changeSummary: 'เพิ่ม "ไฟล์ 04 สถานะ SAP แก้ไขล่าสุด: 5 พ.ย. 69" ต่อท้ายไฟล์ 07 และไฟล์ 08 ในบรรทัดบนสุดของการ์ดตัวกรองรายการพัสดุ',
+      details: 'js/materials.js (renderMaterialsTab): เพิ่ม <span class="mat-hchart-fdate-sep">|</span><span class="mat-hchart-fdate-item fdate-04">ไฟล์ 04 สถานะ SAP แก้ไขล่าสุด: <strong id="matChartFile04Date">5 พ.ย. 69</strong></span> ใน #matHChartFileDates; อัปเดต Cache Buster ?v=20261105_1449',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "เพิ่มแสดง updadte wa]N 04 สถานะ sap แก้ไขล่าสุด..." (ภาพ media_1793864876340_1d1e5d81.jpg)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ (เพิ่มการแสดงวันที่แก้ไขล่าสุดของไฟล์ 04 สถานะ SAP บนการ์ดตัวกรองรายการพัสดุ)'
+    },
+    {
+      id: 'log_000_mat_table_sap_subdate_nov5',
+      timestamp: '2026-11-05 14:46:00',
+      timestampTh: '5 พ.ย. 2569, 14:46 น.',
+      type: 'EDIT',
+      typeBadge: 'อัปเดตวันที่ใต้หัวคอลัมน์ตารางพัสดุ',
+      badgeClass: 'badge-type-edit',
+      title: 'อัปเดตข้อความวันที่แก้ไขล่าสุดใต้หัวคอลัมน์ "สถานะ SAP" (อ้างอิงไฟล์ 04 ZBUDR064) และ "วัสดุ" (อ้างอิงไฟล์ 07 CN52N) ในตารางรายการพัสดุเป็น "5 พ.ย. 69"',
+      targetSubject: 'หัวคอลัมน์ตารางรายการพัสดุ (.th-sub-date-text ใน js/materials.js)',
+      storageFile: 'js/materials.js, index.html, js/data_history.js',
+      changeSummary: 'เปลี่ยนข้อความวันที่แก้ไขล่าสุดใต้หัวคอลัมน์ "สถานะ SAP" ในตารางรายการพัสดุจาก "แก้ไขล่าสุด: 30 ต.ค. 69" เป็น "แก้ไขล่าสุด: 5 พ.ย. 69" (ตามไฟล์ 04 ZBUDR064) และใต้หัวคอลัมน์ "วัสดุ" เป็น "ไฟล์ 07: 5 พ.ย. 69 14:31 น."',
+      details: 'js/materials.js (renderMaterialsTable): อัปเดต subDateHtml ของ col.id === "statusSap" เป็น "แก้ไขล่าสุด: 5 พ.ย. 69" และ col.id === "matCode" เป็น "ไฟล์ 07: 5 พ.ย. 69 14:31 น."; อัปเดต Cache Buster ?v=20261105_1446',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "แก้ไข / ใช้วันไหน" (ภาพ media_1793864685868_3d1d5bb6.jpg)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ (อัปเดตวันที่แก้ไขล่าสุดใต้หัวคอลัมน์ในตารางรายการพัสดุให้ตรงกับไฟล์ 04 และไฟล์ 07)'
+    },
+    {
+      id: 'log_000_update_materials_file_07_nov5',
+      timestamp: '2026-11-05 14:37:00',
+      timestampTh: '5 พ.ย. 2569, 14:37 น.',
+      type: 'IMPORT',
+      typeBadge: 'อัปเดตไฟล์ 07 พัสดุค้างเบิก (5 พ.ย. 69)',
+      badgeClass: 'badge-type-import',
+      title: 'นำเข้าและอัปเดตฐานข้อมูลพัสดุค้างเบิกจากไฟล์ 07 พัสดุค้างเบิก CN52N.xlsx ล่าสุด วันที่ 5 พ.ย. 2569 (js/data_materials_07.js)',
+      targetSubject: 'ฐานข้อมูลพัสดุค้างเบิก (js/data_materials_07.js) และป้ายแสดงวันที่แก้ไขล่าสุดในแท็บรายการพัสดุ (#matHChartFileDates)',
+      storageFile: 'js/data_materials_07.js, js/materials.js, js/data_history.js, index.html',
+      changeSummary: 'อัปเดตข้อมูลจากไฟล์ 07 พัสดุค้างเบิก CN52N.xlsx (แก้ไขล่าสุด 5 พ.ย. 2569, 14:31 น., ขนาด 6.34 MB, ต้นฉบับ 99,424 แถว) กรองเฉพาะ Mvt.type 281 ได้ 75,804 รายการ (1,613 งาน WBS, 591 รหัสวัสดุ) บันทึกลง js/data_materials_07.js (3.50 MB) พร้อมอัปเดตวันที่แก้ไขล่าสุดเป็น "5 พ.ย. 69" บนการ์ดตัวกรองรายการพัสดุและผัง Model View',
+      details: '1) รันสคริปต์ import_materials_07.ps1 สร้าง window.AUC_MAT07_COMPACT ใหม่จากไฟล์ 07 พัสดุค้างเบิก CN52N.xlsx (75,804 แถว Mvt 281, meta.lastModifiedShortTh = "5 พ.ย. 69", meta.lastModifiedTh = "5 พ.ย. 2569, 14:31 น.") 2) อัปเดต DATA_SOURCE_CATALOG (src_07) และ SYSTEM_STORAGE_FILES ใน js/data_history.js; อัปเดต Cache Buster ?v=20261105_1437',
+      sourceFile: '07 พัสดุค้างเบิก CN52N.xlsx (แก้ไขล่าสุด 5 พ.ย. 2569, 14:31 น.)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'สูง (อัปเดตฐานข้อมูลปริมาณพัสดุค้างเบิก CN52N ทั้งระบบในแท็บรายการพัสดุ)'
+    },
+    {
+      id: 'log_000_mat_top_file_dates_rename_07_08',
+      timestamp: '2026-11-05 14:28:00',
+      timestampTh: '5 พ.ย. 2569, 14:28 น.',
+      type: 'EDIT',
+      typeBadge: 'ปรับชื่อไฟล์ 07 & 08 บนตัวกรองพัสดุ',
+      badgeClass: 'badge-type-edit',
+      title: 'แก้ไขข้อความชื่อไฟล์บรรทัดบนสุดของการ์ดตัวกรองรายการพัสดุเป็น "ไฟล์ 07 พัสดุค้างเบิก" และ "ไฟล์ 08 พัสดุคงเหลือ"',
+      targetSubject: 'แถบแสดงวันที่แก้ไขล่าสุดในการ์ดตัวกรองรายการพัสดุ (#matHChartFileDates ใน js/materials.js)',
+      storageFile: 'js/materials.js, index.html, js/data_history.js',
+      changeSummary: 'เปลี่ยนข้อความจาก "ไฟล์ค้างเบิกพัสดุ แก้ไขล่าสุด: 30 ต.ค. 69 | ไฟล์คงเหลือพัสดุ แก้ไขล่าสุด: 30 ต.ค. 69" เป็น "ไฟล์ 07 พัสดุค้างเบิก แก้ไขล่าสุด: 30 ต.ค. 69 | ไฟล์ 08 พัสดุคงเหลือ แก้ไขล่าสุด: 30 ต.ค. 69"',
+      details: 'js/materials.js (renderMaterialsTab): เปลี่ยนป้ายข้อความใน .fdate-07 เป็น "ไฟล์ 07 พัสดุค้างเบิก แก้ไขล่าสุด:" และ .fdate-08 เป็น "ไฟล์ 08 พัสดุคงเหลือ แก้ไขล่าสุด:"; อัปเดต Cache Buster ?v=20261105_1428',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "ไฟล์ 07 พัสดุค้างเบิก และ ไฟล์ 08 พัสดุคงเหลือ" (ภาพ media_1793863531319_96135d8c.jpg)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ (ปรับข้อความป้ายชื่อไฟล์บนการ์ดตัวกรองในแท็บรายการพัสดุ)'
+    },
+    {
+      id: 'log_000_update_wbs_file_04_and_06_nov5',
+      timestamp: '2026-11-05 14:20:00',
+      timestampTh: '5 พ.ย. 2569, 14:20 น.',
+      type: 'IMPORT',
+      typeBadge: 'อัปเดตไฟล์ 04 & 06 (5 พ.ย. 69)',
+      badgeClass: 'badge-type-import',
+      title: 'นำเข้าและผสานข้อมูลใหม่จากไฟล์ 04 ZBUDR064 และไฟล์ 06 CN41 มูลค่า AUC ล่าสุด วันที่ 5 พ.ย. 2569 เข้าสู่ฐานข้อมูลหลัก (js/data_wbs.js)',
+      targetSubject: 'ฐานข้อมูลรวมงาน WBS คงเหลือ (js/data_wbs.js) และป้ายแสดงวันที่แก้ไขล่าสุดทุกตำแหน่งในหน้าเว็บ',
+      storageFile: 'js/data_wbs.js, js/wbs.js, js/data_history.js, index.html',
+      changeSummary: 'อัปเดตข้อมูลไฟล์ 04 (แก้ไขล่าสุด 5 พ.ย. 2569, 14:09 น.) และไฟล์ 06 (06 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 5 พย 69.xlsx แก้ไขล่าสุด 5 พ.ย. 2569, 14:14 น.) จับคู่ WBS ครบ 2,083 งาน (100%) มีการเปลี่ยนแปลงสถานะ SAP 250 งาน, มูลค่า AUC 20 งาน (รวม 643,201,468.93 บาท), % เบิกพัสดุ 255 งาน และ % เบิก คชจ. 44 งาน พร้อมอัปเดตป้ายวันที่แก้ไขล่าสุดเป็น 5 พ.ย. 69 ครบทุกจุด',
+      details: '1) เตรียมคอลัมน์ X (% เบิกพัสดุ) และ Y (% เบิก คชจ.) ในไฟล์ 04 และผสานไฟล์ 03 + 04 + 05 + 06 + Google Sheet Live API ลงใน js/data_wbs.js (2.42 MB) 2) อัปเดตวันที่แก้ไขล่าสุดเป็น "5 พ.ย. 69" ใน #wbsHeaderDatesPlain, .th-sub-date-text, #wbsKpiSapDateText, .bar-sap-date-plain, .pill-file-04, .pill-file-05, DATA_SOURCE_CATALOG, SYSTEM_STORAGE_FILES และ #dataHistoryBadge; อัปเดต Cache Buster ?v=20261105_1420',
+      sourceFile: '04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx (5 พ.ย. 69 14:09 น.), 06 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 5 พย 69.xlsx (5 พ.ย. 69 14:14 น.)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'สูง (อัปเดตฐานข้อมูลสถานะ SAP, % เบิกพัสดุ/คชจ. และมูลค่า AUC ล่าสุดของงาน WBS ทั้ง 2,083 โครงการ)'
+    },
     {
       id: 'log_000_wbs_floating_card_enlarge_target_row_font',
       timestamp: '2026-11-05 12:01:00',
@@ -2198,26 +2518,26 @@
             <div class="dh-stat-icon" style="background:rgba(236,72,153,0.15); color:#F472B6;">📂</div>
             <div class="dh-stat-body">
               <div class="dh-stat-val">${totalFiles} ไฟล์หลัก</div>
-              <div class="dh-stat-label">ไฟล์ Excel ต้นทางทั้งหมด (01 - 06)</div>
-              <div class="dh-stat-sub">รายงาน AUC, KPI, WBS, SAP, CN41, แผนงาน</div>
+              <div class="dh-stat-label">ไฟล์ Excel ต้นทางทั้งหมด (01 - 08)</div>
+              <div class="dh-stat-sub">รายงาน AUC, KPI, WBS, SAP, CN41, พัสดุ 07-08</div>
             </div>
           </div>
 
           <div class="dh-stat-card">
             <div class="dh-stat-icon" style="background:rgba(139,92,246,0.15); color:#A78BFA;">📅</div>
             <div class="dh-stat-body">
-              <div class="dh-stat-val">27 ต.ค. 2569</div>
-              <div class="dh-stat-label">นำเข้าข้อมูล WBS คงเหลือล่าสุด</div>
-              <div class="dh-stat-sub">2,083 รายการ WBS (ผสานไฟล์ 03, 04, 05, 06)</div>
+              <div class="dh-stat-val">5 พ.ย. 2569</div>
+              <div class="dh-stat-label">นำเข้าข้อมูล WBS &amp; พัสดุล่าสุด</div>
+              <div class="dh-stat-sub">2,083 รายการ WBS (ผสานไฟล์ 03, 04, 05, 06, 07, 08)</div>
             </div>
           </div>
 
           <div class="dh-stat-card">
             <div class="dh-stat-icon" style="background:rgba(245,158,11,0.15); color:#FBBF24;">🛠️</div>
             <div class="dh-stat-body">
-              <div class="dh-stat-val">17 ต.ค. 2569</div>
+              <div class="dh-stat-val">5 พ.ย. 2569</div>
               <div class="dh-stat-label">แก้ไขข้อมูล / ตัวกรองล่าสุด</div>
-              <div class="dh-stat-sub">แยก TECO กับ REL D1 & บันทึก Checkbox</div>
+              <div class="dh-stat-sub">อัปเดตฐานข้อมูลไฟล์ 04, 06, 07 และ 08 ล่าสุด</div>
             </div>
           </div>
 
@@ -2294,17 +2614,22 @@
                   <div class="dh-flow-node" onclick="window.openModelViewModal('src_04', 'source')">
                     <div class="dh-node-badge" style="background:#8B5CF6;">ไฟล์ 04</div>
                     <div class="dh-node-title">ZBUDR064 (%พัสดุ/สถานะ SAP)</div>
-                    <div class="dh-node-meta">นำเข้า: 27 ต.ค. 69 • 732.0 KB</div>
+                    <div class="dh-node-meta">นำเข้า: 5 พ.ย. 69 • 936.8 KB</div>
                   </div>
                   <div class="dh-flow-node" onclick="window.openModelViewModal('src_06', 'source')">
                     <div class="dh-node-badge" style="background:#F59E0B;">ไฟล์ 06</div>
                     <div class="dh-node-title">CN41 (มูลค่า AUC บาท)</div>
-                    <div class="dh-node-meta">นำเข้า: 27 ต.ค. 69 • 337.8 KB</div>
+                    <div class="dh-node-meta">นำเข้า: 5 พ.ย. 69 • 338.0 KB</div>
                   </div>
                   <div class="dh-flow-node" onclick="window.openModelViewModal('src_07', 'source')">
                     <div class="dh-node-badge" style="background:#0EA5E9;">ไฟล์ 07</div>
                     <div class="dh-node-title">CN52N พัสดุ (Mvt 281 / รหัส 1*)</div>
-                    <div class="dh-node-meta">นำเข้า: 30 ต.ค. 69 • 5.67 MB</div>
+                    <div class="dh-node-meta">นำเข้า: 5 พ.ย. 69 • 6.34 MB</div>
+                  </div>
+                  <div class="dh-flow-node" onclick="window.openModelViewModal('src_08', 'source')">
+                    <div class="dh-node-badge" style="background:#10B981;">ไฟล์ 08</div>
+                    <div class="dh-node-title">MB52 พัสดุคงเหลือ (SLoc 0021/0022)</div>
+                    <div class="dh-node-meta">นำเข้า: 5 พ.ย. 69 • 115.3 KB</div>
                   </div>
                   <div class="dh-flow-node" onclick="window.openModelViewModal('src_sheet', 'source')">
                     <div class="dh-node-badge" style="background:#10B981;">G-Sheet</div>
@@ -2561,7 +2886,7 @@
                       <td style="text-align:center; font-weight:700; color:var(--text-muted);">${idx + 1}</td>
                       <td>
                         <div style="display:flex; align-items:center; gap:0.4rem;">
-                          <span style="font-size:1.1rem;">๐“</span>
+                          <span style="font-size:1.1rem;">📄</span>
                           <strong style="color:var(--text-main); font-family:monospace; font-size:0.88rem;">${escapeHtml(f.path)}</strong>
                         </div>
                         <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">${escapeHtml(f.title)}</div>
@@ -2606,7 +2931,7 @@
       if (container) {
         container.innerHTML = `
           <div style="background:rgba(239,68,68,0.1); border:1px solid #EF4444; border-radius:12px; padding:2rem; text-align:center; color:#fff; margin:2rem;">
-            <div style="font-size:2rem; margin-bottom:0.5rem;">โ ๏ธ</div>
+            <div style="font-size:2rem; margin-bottom:0.5rem;">⚠️</div>
             <h3 style="color:#F87171;">เกิดข้อผิดพลาดในการโหลดหน้าประวัติ</h3>
             <p style="color:#CBD5E1; font-family:monospace; margin-top:0.5rem;">${escapeHtml(err.message)}</p>
             <button class="btn btn-primary" onclick="window.renderDataHistoryTab()" style="margin-top:1rem;">ลองใหม่อีกครั้ง</button>
@@ -2623,7 +2948,7 @@
     if (!logs || logs.length === 0) {
       return `
         <div style="text-align:center; padding:3rem 1rem; color:var(--text-muted);">
-          <div style="font-size:2.5rem; margin-bottom:0.5rem;">๐”</div>
+          <div style="font-size:2.5rem; margin-bottom:0.5rem;">🔍</div>
           <div>ไม่พบรายการประวัติที่ตรงกับเงื่อนไขค้นหา</div>
         </div>
       `;
@@ -2631,12 +2956,12 @@
 
     return logs.map((log, index) => {
       const typeIcons = {
-        EDIT: 'โ๏ธ',
-        IMPORT: '๐“ฅ',
-        MERGE: '๐”',
-        CONFIG: 'โ๏ธ'
+        EDIT: '✏️',
+        IMPORT: '📥',
+        MERGE: '🔄',
+        CONFIG: '⚙️'
       };
-      const icon = typeIcons[log.type] || '๐“‘';
+      const icon = typeIcons[log.type] || '📑';
       const badgeClass = log.badgeClass || (log.type === 'IMPORT' ? 'badge-type-import' : 'badge-type-edit');
 
       return `
@@ -2651,7 +2976,7 @@
               <div class="dh-tl-meta-left">
                 <span class="dh-tl-icon">${icon}</span>
                 <span class="dh-type-badge ${badgeClass}">${escapeHtml(log.typeBadge || log.type)}</span>
-                <span class="dh-tl-time">๐•’ ${escapeHtml(log.timestampTh)}</span>
+                <span class="dh-tl-time">🕒 ${escapeHtml(log.timestampTh)}</span>
               </div>
               <div class="dh-tl-meta-right">
                 <span class="dh-author-badge">👤 ${escapeHtml(log.author || 'ระบบ')}</span>
@@ -2730,7 +3055,7 @@
               <div class="dh-model-cat">${file.category}</div>
             </div>
           </div>
-          <button class="modal-btn-close" onclick="window.closeDhModelModal()">โ•</button>
+          <button class="modal-btn-close" onclick="window.closeDhModelModal()">✕</button>
         </div>
 
         <div class="modal-body dh-model-body">
@@ -2834,7 +3159,7 @@
         <div class="modal-header dh-model-header">
           <div class="dh-model-title-group">
             <div class="dh-model-avatar" style="background:rgba(245,158,11,0.2); color:#FBBF24;">
-              โ๏ธ
+              ✏️
             </div>
             <div>
               <div class="dh-model-badge-top">AUDIT LOG MODEL VIEW • รหัสประวัติ ${log.id}</div>
