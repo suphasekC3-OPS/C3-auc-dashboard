@@ -13215,8 +13215,10 @@ tr.wbs-row-checked:hover {
 
 .wbs-table-floating-selection {
   position: absolute;
-  right: 16px;
-  bottom: 18px;
+  left: 28px;
+  top: 8px;
+  right: auto;
+  bottom: auto;
   z-index: 55;
   pointer-events: auto;
   user-select: none;
@@ -21766,8 +21768,10 @@ body.pointer-mode-gold * {
 
 .wbs-floating-mini-pill {
   position: absolute;
-  right: 16px;
-  bottom: 18px;
+  left: 28px;
+  top: 8px;
+  right: auto;
+  bottom: auto;
   z-index: 55;
   display: inline-flex;
   align-items: center;

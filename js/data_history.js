@@ -580,6 +580,22 @@
    */
   const BASE_AUDIT_LOGS = [
     {
+      id: 'log_000_wbs_floating_card_relocate_top_left',
+      timestamp: '2026-11-05 16:40:00',
+      timestampTh: '5 พ.ย. 2569, 16:40 น.',
+      type: 'EDIT',
+      typeBadge: 'ย้ายการ์ดลอยสีฟ้าไว้ด้านบนซ้าย',
+      badgeClass: 'badge-type-edit',
+      title: 'ย้ายตำแหน่งเริ่มต้นของการ์ดลอยสีฟ้าและปุ่ม Mini Pill ไปไว้ที่ด้านบนตารางซ้ายมือ',
+      targetSubject: '#wbsTableFloatingSelection, #wbsFloatingMiniPill ในหน้า WBS คงเหลือ (css/styles.css, js/wbs.js)',
+      storageFile: 'css/styles.css, js/wbs.js, index.html, js/data_history.js',
+      changeSummary: 'ปรับตำแหน่งเริ่มต้นของการ์ดลอยสีฟ้าและปุ่ม Mini Pill จากมุมขวาล่าง ย้ายไปไว้ที่ด้านบนตารางซ้ายมือ (left: 28px, top: 8px) พร้อมปรับฟังก์ชัน resetFloatingCardPosition ให้คืนค่ากลับด้านบนซ้ายมือ',
+      details: '1) ใน css/styles.css: ปรับ .wbs-table-floating-selection และ .wbs-floating-mini-pill ให้เป็น left: 28px; top: 8px; right: auto; bottom: auto; 2) ใน js/wbs.js: อัปเดต initDraggableFloatingCard และ resetFloatingCardPosition ให้ default/reset อยู่ที่ด้านบนซ้ายมือ; อัปเดต Cache Buster',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "ย้ายตำแหน่งไว้ด้านบนตารางซ้ายมือ"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ'
+    },
+    {
       id: 'log_000_wbs_floating_card_hide_toggle',
       timestamp: '2026-11-05 16:35:00',
       timestampTh: '5 พ.ย. 2569, 16:35 น.',

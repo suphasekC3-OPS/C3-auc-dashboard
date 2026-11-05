@@ -2189,6 +2189,7 @@
     let hasMoved = false;
 
     // Restore saved position from localStorage
+    let hasValidSavedPos = false;
     try {
       const saved = localStorage.getItem('AUC_WBS_FLOATING_CARD_POS_V1');
       if (saved) {
@@ -2204,10 +2205,18 @@
             el.style.top = `${clampedTop}px`;
             el.style.right = 'auto';
             el.style.bottom = 'auto';
+            hasValidSavedPos = true;
           }
         }
       }
     } catch (err) {}
+
+    if (!hasValidSavedPos) {
+      el.style.left = '28px';
+      el.style.top = '8px';
+      el.style.right = 'auto';
+      el.style.bottom = 'auto';
+    }
 
     el.addEventListener('pointerdown', (e) => {
       // Do not drag if clicking the clear button or hide button
@@ -2294,15 +2303,15 @@
   function resetFloatingCardPosition() {
     const el = document.getElementById('wbsTableFloatingSelection');
     if (!el) return;
-    el.style.left = 'auto';
-    el.style.top = 'auto';
-    el.style.right = '16px';
-    el.style.bottom = '18px';
+    el.style.left = '28px';
+    el.style.top = '8px';
+    el.style.right = 'auto';
+    el.style.bottom = 'auto';
     try {
       localStorage.removeItem('AUC_WBS_FLOATING_CARD_POS_V1');
     } catch (err) {}
     if (window.showToast) {
-      window.showToast('รีเซ็ตตำแหน่งการ์ดสีฟ้ากลับมุมขวาล่างเรียบร้อย', 'info');
+      window.showToast('รีเซ็ตตำแหน่งการ์ดสีฟ้ากลับด้านบนตารางซ้ายมือเรียบร้อย', 'info');
     }
   }
   window.resetFloatingCardPosition = resetFloatingCardPosition;
