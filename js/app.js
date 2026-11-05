@@ -1,8 +1,3 @@
-/**
- * PEA AUC Tracking & Asset Registration Web Application
- * Master Application Logic & State Controller
- * Theme: Provincial Electricity Authority (กฟก.3)
- */
 
 (function () {
   'use strict';
@@ -62,9 +57,7 @@
   };
   window.state = state;
 
-  // ==========================================================================
   // TARGET BUFFER CONFIGURATION (+5% คงเหลือ เกณฑ์ 1.1 - 5)
-  // ==========================================================================
   const STORAGE_FIVE_PCT_KEY = 'PEA_AUC_TARGET_FIVE_PERCENT_CONFIG_V1';
 
   const TARGET_FIVE_PCT_ITEMS = [
@@ -164,6 +157,244 @@
   }
   window.setTargetFivePctSavedAt = setTargetFivePctSavedAt;
 
+  // KPI BADGE MONTHS CONFIG (เลือกเดือนที่แสดงป้ายเกณฑ์ KPI บนกราฟแท่ง % Closed ได้ 12 เดือน)
+  // - ติ๊ก Checkbox ได้ทั้ง 12 เดือน (กราฟเปลี่ยนทันที) / กด Save เพื่อจำค่าถาวร พร้อมแสดงเวลาบันทึกล่าสุด
+  // - ปุ่มเปิดแผงตั้งค่า / ซ่อน ต้องใส่รหัสผ่านก่อนเปิด (225588)
+  // - ถ้ายังไม่เคยบันทึก (โหมดอัตโนมัติ): เดือนที่เลือก + 2 เดือนถัดไป + ธ.ค. (พฤติกรรมเดิม)
+  const STORAGE_KPI_BADGE_MONTHS_KEY = 'PEA_AUC_KPI_BADGE_MONTHS_V1';
+  const STORAGE_KPI_BADGE_SAVED_AT_KEY = 'PEA_AUC_KPI_BADGE_MONTHS_SAVED_AT_V1';
+  const SESSION_KPI_BADGE_UNLOCK_KEY = 'PEA_AUC_KPI_BADGE_CFG_UNLOCKED_V1';
+  const KPI_BADGE_CFG_PIN = '225588';
+  const KPI_BADGE_MONTH_NAMES = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+
+  function loadKpiBadgeMonths() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KPI_BADGE_MONTHS_KEY);
+      if (raw) {
+        const arr = JSON.parse(raw);
+        if (Array.isArray(arr)) {
+          return Array.from(new Set(arr.map(Number).filter(n => Number.isInteger(n) && n >= 0 && n <= 11))).sort((a, b) => a - b);
+        }
+      }
+    } catch (e) {
+      console.warn('loadKpiBadgeMonths error:', e);
+    }
+    return null; // null = โหมดอัตโนมัติ
+  }
+
+  function getKpiBadgeMonths(curMonthIdx) {
+    if (state.kpiBadgeMonths === undefined) {
+      state.kpiBadgeMonths = loadKpiBadgeMonths();
+    }
+    if (Array.isArray(state.kpiBadgeMonths)) return state.kpiBadgeMonths.slice();
+    const res = [];
+    for (let o = 0; o <= 2; o++) {
+      if (curMonthIdx + o <= 11) res.push(curMonthIdx + o);
+    }
+    if (!res.includes(11)) res.push(11);
+    return res;
+  }
+  window.getKpiBadgeMonths = getKpiBadgeMonths;
+
+  function getKpiBadgeCurMonthIdx() {
+    return (state.filters && typeof state.filters.month === 'number') ? state.filters.month : getLatestAvailableMonthIndex();
+  }
+
+  function getKpiBadgeSavedAt() {
+    try {
+      const saved = localStorage.getItem(STORAGE_KPI_BADGE_SAVED_AT_KEY);
+      if (saved && saved.trim()) return saved.trim();
+    } catch (e) { /* ignore */ }
+    return 'ยังไม่เคยบันทึก (ใช้ค่าอัตโนมัติ)';
+  }
+
+  window.isKpiBadgeCfgUnlocked = function () {
+    try { return sessionStorage.getItem(SESSION_KPI_BADGE_UNLOCK_KEY) === '1'; } catch (e) { return false; }
+  };
+
+  window.setKpiBadgeCfgUnlocked = function (val) {
+    try {
+      if (val) sessionStorage.setItem(SESSION_KPI_BADGE_UNLOCK_KEY, '1');
+      else sessionStorage.removeItem(SESSION_KPI_BADGE_UNLOCK_KEY);
+    } catch (e) { /* ignore */ }
+    const icon = document.getElementById('kpiBadgeCfgLockIcon');
+    if (icon) icon.textContent = val ? '🔓' : '🔒';
+  };
+
+  window.renderKpiBadgeCfgPanel = function () {
+    const pop = document.getElementById('kpiBadgeCfgPopover');
+    if (!pop || pop.style.display === 'none') return;
+    const cur = getKpiBadgeCurMonthIdx();
+    const sel = getKpiBadgeMonths(cur);
+    const isCustom = Array.isArray(state.kpiBadgeMonths);
+
+    const rowsHtml = KPI_BADGE_MONTH_NAMES.map((m, i) => {
+      const on = sel.includes(i);
+      return `
+        <div class="next3m-crit-row kpi-month-row ${on ? 'is-active' : ''}">
+          <label class="next3m-crit-label" for="chkKpiBadgeMonth_${i}">
+            <input type="checkbox" id="chkKpiBadgeMonth_${i}" class="next3m-crit-checkbox" ${on ? 'checked' : ''} onchange="window.handleKpiBadgeMonthChange(${i}, this.checked)">
+            <span class="next3m-crit-name">${m}</span>
+          </label>
+          ${i === cur ? '<span class="badge-five-pct active" title="เดือนที่เลือกในตัวกรอง (ป้ายสีทอง)">ล่าสุด</span>' : ''}
+        </div>
+      `;
+    }).join('');
+
+    pop.innerHTML = `
+      <div class="next3m-config-panel-card kpi-badge-cfg-card">
+        <div class="next3m-config-head">
+          <div class="next3m-config-title-wrap">
+            <div class="next3m-config-title">
+              <span>📅 เลือกเดือนเกณฑ์ KPI ที่แสดง</span>
+            </div>
+            <span class="next3m-config-badge">${isCustom ? 'กำหนดเอง ' + sel.length + '/12' : 'อัตโนมัติ'}</span>
+          </div>
+          <div class="next3m-config-sub">
+            <span>ติ๊กเลือกเดือนที่ต้องการให้แสดงป้าย KPI บนกราฟ</span>
+            <div class="next3m-config-quick-actions">
+              <button type="button" class="btn-quick-config" onclick="window.setAllKpiBadgeMonths('all')" title="แสดงเกณฑ์ KPI ทั้ง 12 เดือน">ทั้งหมด</button>
+              <span style="color:var(--text-dim); font-size:0.7rem;">|</span>
+              <button type="button" class="btn-quick-config" onclick="window.setAllKpiBadgeMonths('none')" title="ไม่แสดงป้ายเกณฑ์ KPI">ไม่เลือก</button>
+              <span style="color:var(--text-dim); font-size:0.7rem;">|</span>
+              <button type="button" class="btn-quick-config" onclick="window.setAllKpiBadgeMonths('auto')" title="กลับเป็นค่าอัตโนมัติ (เดือนที่เลือก + 2 เดือนถัดไป + ธ.ค.)">อัตโนมัติ</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="next3m-config-body kpi-month-grid">${rowsHtml}</div>
+
+        <div class="next3m-config-foot">
+          <button type="button" class="btn-save-target-fivepct" id="btnSaveKpiBadgeMonths" onclick="window.saveKpiBadgeMonthsFromUI()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+              <polyline points="17 21 17 13 7 13 7 21"></polyline>
+              <polyline points="7 3 7 8 15 8"></polyline>
+            </svg>
+            <span id="btnSaveKpiBadgeMonthsText">บันทึกการตั้งค่า (Save)</span>
+          </button>
+
+          <div class="next3m-config-saved-at" id="kpiBadgeCfgSavedAt" title="วัน-เวลาที่บันทึกการตั้งค่าล่าสุด">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="saved-clock-icon">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <span>บันทึกล่าสุด: <strong class="saved-time-highlight" id="txtKpiBadgeSavedAt">${getKpiBadgeSavedAt()}</strong></span>
+          </div>
+
+          <button type="button" class="btn-kpi-badge-hide" onclick="window.hideKpiBadgeCfg()" title="ซ่อนแผงตั้งค่าและล็อก (ต้องใส่รหัสผ่านเพื่อเปิดอีกครั้ง)">
+            🙈 ซ่อน (ล็อก)
+          </button>
+        </div>
+      </div>
+    `;
+  };
+
+  function applyKpiBadgeMonthsToChart() {
+    if (typeof window.renderCriteriaComparisonBar === 'function') {
+      window.renderCriteriaComparisonBar();
+    }
+    window.renderKpiBadgeCfgPanel();
+  }
+
+  window.handleKpiBadgeMonthChange = function (monthIdx, checked) {
+    const cur = getKpiBadgeCurMonthIdx();
+    const set = new Set(getKpiBadgeMonths(cur));
+    if (checked) set.add(monthIdx); else set.delete(monthIdx);
+    state.kpiBadgeMonths = Array.from(set).sort((a, b) => a - b);
+    applyKpiBadgeMonthsToChart();
+  };
+
+  window.setAllKpiBadgeMonths = function (mode) {
+    if (mode === 'all') state.kpiBadgeMonths = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+    else if (mode === 'none') state.kpiBadgeMonths = [];
+    else state.kpiBadgeMonths = null;
+    applyKpiBadgeMonthsToChart();
+  };
+
+  window.saveKpiBadgeMonthsFromUI = function () {
+    try {
+      if (Array.isArray(state.kpiBadgeMonths)) {
+        localStorage.setItem(STORAGE_KPI_BADGE_MONTHS_KEY, JSON.stringify(state.kpiBadgeMonths));
+      } else {
+        localStorage.removeItem(STORAGE_KPI_BADGE_MONTHS_KEY);
+      }
+    } catch (e) {
+      console.warn('saveKpiBadgeMonths error:', e);
+    }
+    const nowStr = formatThaiSaveTimestamp(new Date());
+    try { localStorage.setItem(STORAGE_KPI_BADGE_SAVED_AT_KEY, nowStr); } catch (e) { /* ignore */ }
+
+    const btn = document.getElementById('btnSaveKpiBadgeMonths');
+    const btnText = document.getElementById('btnSaveKpiBadgeMonthsText');
+    if (btn && btnText) {
+      btn.classList.add('is-saved');
+      btnText.textContent = '✓ บันทึกสำเร็จแล้ว';
+      setTimeout(() => {
+        btn.classList.remove('is-saved');
+        btnText.textContent = 'บันทึกการตั้งค่า (Save)';
+      }, 2200);
+    }
+    const savedAtEl = document.getElementById('txtKpiBadgeSavedAt');
+    if (savedAtEl) {
+      savedAtEl.textContent = nowStr;
+      const wrap = document.getElementById('kpiBadgeCfgSavedAt');
+      if (wrap) {
+        wrap.classList.add('just-updated');
+        setTimeout(() => wrap.classList.remove('just-updated'), 2200);
+      }
+    }
+    if (typeof window.showToast === 'function') {
+      window.showToast(`💾 บันทึกเดือนเกณฑ์ KPI ที่แสดงเรียบร้อยแล้ว (${nowStr})`, 'success');
+    }
+  };
+
+  window.openKpiBadgeCfgPopover = function () {
+    const pop = document.getElementById('kpiBadgeCfgPopover');
+    if (!pop) return;
+    pop.style.display = 'block';
+    window.renderKpiBadgeCfgPanel();
+  };
+
+  window.closeKpiBadgeCfgPopover = function () {
+    const pop = document.getElementById('kpiBadgeCfgPopover');
+    if (pop) pop.style.display = 'none';
+  };
+
+  window.hideKpiBadgeCfg = function () {
+    window.closeKpiBadgeCfgPopover();
+    window.setKpiBadgeCfgUnlocked(false);
+    if (typeof window.showToast === 'function') {
+      window.showToast('🔒 ซ่อนและล็อกแผงตั้งค่าเกณฑ์ KPI แล้ว', 'info');
+    }
+  };
+
+  window.toggleKpiBadgeCfg = function () {
+    const pop = document.getElementById('kpiBadgeCfgPopover');
+    if (!pop) return;
+    if (!window.isKpiBadgeCfgUnlocked()) {
+      window.openAdminPinModal('kpi_badge');
+      return;
+    }
+    if (pop.style.display === 'none' || !pop.style.display) window.openKpiBadgeCfgPopover();
+    else window.closeKpiBadgeCfgPopover();
+  };
+
+  // คลิกนอกแผง = ปิดแผง (ไม่ล็อก)
+  document.addEventListener('mousedown', function (e) {
+    const pop = document.getElementById('kpiBadgeCfgPopover');
+    if (!pop || pop.style.display === 'none') return;
+    if (pop.contains(e.target)) return;
+    const btn = document.getElementById('btnKpiBadgeCfg');
+    if (btn && btn.contains(e.target)) return;
+    window.closeKpiBadgeCfgPopover();
+  });
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const icon = document.getElementById('kpiBadgeCfgLockIcon');
+    if (icon) icon.textContent = window.isKpiBadgeCfgUnlocked() ? '🔓' : '🔒';
+  });
+
   function saveTargetFivePctConfig(cfg) {
     try {
       localStorage.setItem(STORAGE_FIVE_PCT_KEY, JSON.stringify(cfg));
@@ -238,12 +469,8 @@
     startApp();
   }
 
-  // ==========================================
   // 1. DATA INITIALIZATION & CLEANING
-  // ==========================================
-  // ==========================================
   // 1. DATA INITIALIZATION & 12-MONTH EXCEL SYNC
-  // ==========================================
   const MONTH_EXCEL_FILES = [
     { monthIndex: 0, shortMonth: 'ม.ค.', monthName: 'มกราคม', filename: '01 รายงาน AUC เดือน 1ม.ค. (3.1 teco).xlsx', targetVar: 'AUC_DATA_JAN', pattern: /1ม\.ค\.|เดือน\s*1\b/i },
     { monthIndex: 1, shortMonth: 'ก.พ.', monthName: 'กุมภาพันธ์', filename: '01 รายงาน AUC เดือน 2ก.พ. (3.1 teco).xlsx', targetVar: 'AUC_DATA_FEB', pattern: /2ก\.พ\.|เดือน\s*2\b/i },
@@ -1422,9 +1649,7 @@
     showToast('รีเซ็ตกอง/กฟฟ. กลับเป็นทุกหน่วยงานเรียบร้อยแล้ว', 'info');
   };
 
-  // ==========================================
   // 2. FILTERING & SEARCH
-  // ==========================================
   function filterData() {
     loadDataForMonth(state.filters.month);
 
@@ -1487,9 +1712,7 @@
     });
   }
 
-  // ==========================================
   // 3. EVENT LISTENERS SETUP
-  // ==========================================
   function setupEventListeners() {
     // Navigation Tabs
     const LOCKED_NAV_TABS = ['tab-analytics', 'tab-warning', 'tab-data-history'];
@@ -2068,9 +2291,7 @@
   }
   window.switchTab = switchTab;
 
-  // ==========================================
   // 4. RENDER ALL COMPONENTS
-  // ==========================================
   function renderAll() {
     renderKpiCards();
     renderProvincesOverview();
@@ -2086,14 +2307,8 @@
     if (window.renderMaterialsTab) window.renderMaterialsTab();
   }
 
-  // ==========================================
   // 4.1 TOP ACTIVE SELECTION STRIP (แถบแสดงค่าการเลือกด้านบน)
-  // ==========================================
-  /**
-   * หาหน่วยการวัดของเกณฑ์วัดแต่ละข้อ: คืนค่า 'job' (งาน) หรือ 'value' (มูลค่า บาท)
-   * อ่านจากหน่วย (unit) ในข้อมูลเดือนที่เลือก และมี fallback ตามชื่อเกณฑ์ (ข้อ 3.x / TECO = งาน)
-   */
-  function getCriteriaUnitKind(crit) {
+    function getCriteriaUnitKind(crit) {
     const sampleRow = (state.allData || []).find(d => d.criteria === crit && !d.isSummary);
     const rawUnit = sampleRow ? (sampleRow.unit || '') : '';
     if (rawUnit.includes('งาน')) return 'job';
@@ -2110,6 +2325,10 @@
     if (critEl) {
       critEl.textContent = isAll ? 'เลือกทั้งหมด (ทุกเกณฑ์วัด)' : crit;
     }
+    const cChartCritEl = document.getElementById('critChartSelCriteriaText');
+    if (cChartCritEl) {
+      cChartCritEl.textContent = isAll ? 'เลือกทั้งหมด (ทุกเกณฑ์วัด)' : crit;
+    }
     const nCritEl = document.getElementById('next3mSelCriteriaText');
     if (nCritEl) {
       const match = crit.match(/^(ข้อ\s*\d+(\.\d+)?)/);
@@ -2122,6 +2341,8 @@
     const unitLabel = isAll ? 'ภาพรวมทั้งหมด (มูลค่า/งาน)' : (sampleRow ? sampleRow.unit : 'มูลค่า (บาท)');
     const unitEl = document.getElementById('topSelUnitText');
     if (unitEl) unitEl.textContent = `(${unitLabel})`;
+    const cChartUnitEl = document.getElementById('critChartSelUnitText');
+    if (cChartUnitEl) cChartUnitEl.textContent = `(${unitLabel})`;
     const nUnitEl = document.getElementById('next3mSelUnitText');
     if (nUnitEl) nUnitEl.textContent = `(${unitLabel})`;
 
@@ -2130,6 +2351,8 @@
     const mName = MONTHS_TH[mIdx] || 'ก.ย.';
     const monthEl = document.getElementById('topSelMonthText');
     if (monthEl) monthEl.textContent = `${mName} 2569`;
+    const cChartMonthEl = document.getElementById('critChartSelMonthText');
+    if (cChartMonthEl) cChartMonthEl.textContent = `${mName} 2569`;
     const nMonthEl = document.getElementById('next3mSelMonthText');
     if (nMonthEl) nMonthEl.textContent = `${mName} 2569`;
 
@@ -2139,6 +2362,10 @@
     const provEl = document.getElementById('topSelProvinceText');
     if (provEl) {
       provEl.textContent = prov === 'ALL' ? 'กฟก.3 (ทั้งหมด)' : prov;
+    }
+    const cChartProvEl = document.getElementById('critChartSelProvinceText');
+    if (cChartProvEl) {
+      cChartProvEl.textContent = prov === 'ALL' ? 'กฟก.3 (ทั้งหมด)' : prov;
     }
     const nProvEl = document.getElementById('next3mSelProvinceText');
     if (nProvEl) {
@@ -2155,6 +2382,16 @@
         offWrap.style.display = 'inline-flex';
       } else {
         offWrap.style.display = 'none';
+      }
+    }
+    const cChartOffWrap = document.getElementById('critChartSelOfficeWrapper');
+    const cChartOffEl = document.getElementById('critChartSelOfficeText');
+    if (cChartOffWrap && cChartOffEl) {
+      if (off && off !== 'ALL') {
+        cChartOffEl.textContent = off;
+        cChartOffWrap.style.display = 'inline-flex';
+      } else {
+        cChartOffWrap.style.display = 'none';
       }
     }
     const nOffWrap = document.getElementById('next3mSelOfficeWrapper');
@@ -2178,6 +2415,16 @@
         searchWrap.style.display = 'inline-flex';
       } else {
         searchWrap.style.display = 'none';
+      }
+    }
+    const cChartSearchWrap = document.getElementById('critChartSelSearchWrapper');
+    const cChartSearchEl = document.getElementById('critChartSelSearchText');
+    if (cChartSearchWrap && cChartSearchEl) {
+      if (search) {
+        cChartSearchEl.textContent = `"${search}"`;
+        cChartSearchWrap.style.display = 'inline-flex';
+      } else {
+        cChartSearchWrap.style.display = 'none';
       }
     }
     const nSearchWrap = document.getElementById('next3mSelSearchWrapper');
@@ -2207,9 +2454,7 @@
     }
   }
 
-  // ==========================================
   // 5. EXECUTIVE KPI CARDS
-  // ==========================================
   function renderKpiCards() {
     // Calculate totals across non-summary rows to avoid double counting
     const rows = state.filteredData.filter(d => !d.isSummary);
@@ -2397,9 +2642,7 @@
     }
   }
 
-  // =========================================================================
   // 5.1.1 EXECUTIVE DONUT CHART: Closed vs Remaining AUC (Compact & Luminous)
-  // =========================================================================
   let lastExecDonutData = { closedVal: 0, remainVal: 0, totalVal: 0, closedJobs: 0, remainJobs: 0, totalJobs: 0 };
 
   function renderExecutiveDonutChart(closedVal, remainVal, totalVal, closedJobs, remainJobs, totalJobs) {
@@ -2617,16 +2860,12 @@
     }
   }
 
-  // =========================================================================
   // 5.2 แผนเป้าหมายปิดงานเพิ่ม 3 เดือนถัดไป (ก.ย. - พ.ย. 69)
   // - เกณฑ์ 1, 2, 5 (มูลค่า): (รวมมูลค่า AUC * % ระดับ 5) - ปิดมูลค่าล่าสุด + 5% ของคงเหลือมูลค่า AUC
   // - เกณฑ์ 3, 4 (จำนวนงาน): (รวมงาน AUC * % ระดับ 5) - ปิดงานล่าสุด + 5% ของคงเหลืองาน AUC
-  // =========================================================================
 
-  // =========================================================================
   // Admin PIN Authorization & Target Cards Lock
   // รหัสผ่าน Admin PIN: '225588'
-  // =========================================================================
   const DEFAULT_ADMIN_PIN = '225588';
 
   // Always sync storage to new PIN if previous default was stored
@@ -2820,6 +3059,9 @@
     if (window.adminPinTargetContext === 'wbs') {
       if (subtitle) subtitle.textContent = 'ปลดล็อกการแก้ไขแผนปิดงานและหมายเหตุ WBS';
       if (desc) desc.innerHTML = 'กรุณากรอกรหัสผ่าน <strong>Admin PIN</strong> เพื่อปลดล็อกการแก้ไขแผนปิดงานและหมายเหตุในตาราง WBS ทุกแถว';
+    } else if (window.adminPinTargetContext === 'kpi_badge') {
+      if (subtitle) subtitle.textContent = 'ตั้งค่าเดือนเกณฑ์ KPI ที่แสดงบนกราฟ % Closed';
+      if (desc) desc.innerHTML = 'กรุณากรอกรหัสผ่านเพื่อเปิดแผงเลือกเดือนเกณฑ์ KPI ที่แสดงบนกราฟแท่ง';
     } else if (window.adminPinTargetContext === 'nav_tabs' || window.adminPinTargetContext === 'nav_lock') {
       const tabNames = {
         'tab-analytics': 'วิเคราะห์เปรียบเทียบ & Timeline',
@@ -2863,9 +3105,24 @@
     const enteredPin = String(input.value || '').trim();
     const currentPin = localStorage.getItem('auc_admin_pin') || DEFAULT_ADMIN_PIN;
 
-    if (enteredPin === currentPin || enteredPin === '225588') {
+    const isKpiBadgeCtx = window.adminPinTargetContext === 'kpi_badge';
+    const isPinOk = isKpiBadgeCtx
+      ? (enteredPin === KPI_BADGE_CFG_PIN)
+      : (enteredPin === currentPin || enteredPin === '225588');
+
+    if (isPinOk) {
       // Success
       window.closeAdminPinModal();
+
+      if (isKpiBadgeCtx) {
+        // Unlock KPI Badge Months Config Panel (รหัสเฉพาะแผงตั้งค่าเดือนเกณฑ์ KPI)
+        window.setKpiBadgeCfgUnlocked(true);
+        window.openKpiBadgeCfgPopover();
+        if (typeof window.showToast === 'function') {
+          window.showToast('🔓 ปลดล็อกแผงตั้งค่าเกณฑ์ KPI สำเร็จ!', 'success');
+        }
+        return;
+      }
 
       if (window.adminPinTargetContext === 'wbs') {
         // Unlock WBS Edit ONLY (Independent from target cards)
@@ -3027,9 +3284,7 @@
     }
   };
 
-  // ==========================================================================
   // TARGET BUFFER CONFIGURATION CARD (แสดงในตำแหน่งกรอบเหลือง ถัดจากการ์ด 3 เดือน)
-  // ==========================================================================
   function renderTargetFivePctConfigCard(fivePctCfg) {
     const rowsHtml = TARGET_FIVE_PCT_ITEMS.map(item => {
       const isAct = isTargetFivePctEnabled(fivePctCfg, item.key);
@@ -4313,10 +4568,7 @@
     `;
   }
 
-  /**
-   * Helper for WBS tab to retrieve KPI Level 5 Target Months for any Criteria
-   */
-  window.getKpiSimulationTargetMonths = function (customCrit) {
+    window.getKpiSimulationTargetMonths = function (customCrit) {
     if (!window.next3mSimulationData) {
       if (typeof renderNext3MonthsProjection === 'function') {
         renderNext3MonthsProjection();
@@ -4380,9 +4632,7 @@
     });
   };
 
-  // ==========================================
   // 5.1 DYNAMIC KPI EVALUATION (จากไฟล์ 02 KPI ปี 2569)
-  // ==========================================
   function matchCriteriaName(target, candidate) {
     if (!target || target === 'ALL' || target === 'เลือกทั้งหมด' || target === 'ทุกเกณฑ์วัด' || target === 'ทั้งหมด') return true;
     if (!candidate) return false;
@@ -4605,9 +4855,7 @@
     };
   }
 
-  // ==========================================
   // 6. PROVINCES OVERVIEW CARDS
-  // ==========================================
   function renderProvincesOverview() {
     const container = document.getElementById('provincesOverviewGrid');
     if (!container) return;
@@ -4692,9 +4940,7 @@
     renderAll();
   };
 
-  // ==========================================
   // 7. CRITERIA BREAKDOWN CARDS (8 ข้อ)
-  // ==========================================
   function renderCriteriaCards() {
     const container = document.getElementById('criteriaOverviewGrid');
     if (!container) return;
@@ -4804,9 +5050,7 @@
     renderAll();
   };
 
-  // ==========================================
   // 8. CHARTS RENDERING (DASHBOARD)
-  // ==========================================
   function renderDashboardCharts() {
     window.__renderDashLog = [];
     try {
@@ -4829,9 +5073,7 @@
     }
   }
 
-  // ==========================================
   // 8b. OFFICE PERCENT BAR CHART (กฟฟ. vs % เกณฑ์ปิดงาน)
-  // ==========================================
 
   // Criteria list for the bar chart dropdown
   const OFFICE_CHART_CRITS = [
@@ -5317,9 +5559,7 @@
     renderBarChartAiAnalysis(selectedCrit, mIdx, level5Target, officeList, isJobUnit);
   }
 
-  // =========================================================================
   // CALCULATION FORMULA & KPI BREAKDOWN CONTROLLER (สูตรการคำนวณ %ปิดงาน และ %KPI)
-  // =========================================================================
 
   let isCalcFormulaCollapsed = true;
 
@@ -5387,9 +5627,7 @@
     }
   }
 
-  // =========================================================================
   // AI EXECUTIVE ANALYSIS FOR FAILING KPI UNITS IN SELECTED CRITERIA (KPI 1 - 4)
-  // =========================================================================
 
   let isBarAiSpeaking = false;
   let lastBarAiTextForCopy = '';
@@ -5869,13 +6107,7 @@
     });
   }
 
-  /**
-   * Helper: Calculate monthly growth (both amount/jobs delta and % delta) for:
-   * 1. Closed AUC (ปิดงานแล้ว) - มูลค่า/จำนวนงานที่เพิ่ม/ลดลงในแต่ละเดือน [เลข 1] และ % [เลข 2]
-   * 2. Total AUC (ภาพรวมมูลค่า/งาน) - มูลค่า/จำนวนงานที่เพิ่ม/ลดลงในแต่ละเดือน [เลข 3] และ % [เลข 4]
-   * across all 12 months with footer row average
-   */
-  function calculateTimelineComprehensiveGrowth(totalValues, closedValues, actualPcts, isJobCrit) {
+    function calculateTimelineComprehensiveGrowth(totalValues, closedValues, actualPcts, isJobCrit) {
     const months = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
     const unit = isJobCrit ? 'งาน' : 'ลบ.';
     const rows = [];
@@ -5929,9 +6161,7 @@
         continue;
       }
 
-      // -------------------------------------------------------------
       // 1. Total AUC (ภาพรวมมูลค่า/งาน): มูลค่าที่เพิ่ม/ลด [เลข 3] และ % [เลข 4]
-      // -------------------------------------------------------------
       let totalValText = '-';
       let totalValCls = 'val-growth-none';
       let totalPctText = '-';
@@ -5989,9 +6219,7 @@
         }
       }
 
-      // -------------------------------------------------------------
       // 2. Closed AUC (ปิดงานแล้ว): มูลค่าปิดงานที่เพิ่ม/ลด [เลข 1] และ % [เลข 2]
-      // -------------------------------------------------------------
       let closedValText = '-';
       let closedValCls = 'val-growth-none';
       let closedPctText = '-';
@@ -6116,12 +6344,7 @@
     };
   }
 
-  /**
-   * Helper: Render growth table on the right side of timeline charts
-   * - mode 'closed': Top table (Month, Closed Value Delta [1], Closed % Delta [2])
-   * - mode 'total': Bottom table (Month, Total AUC Value Delta [3], Total AUC % Delta [4])
-   */
-  function renderTimelineGrowthTable(targetElementId, growthData, options = {}) {
+    function renderTimelineGrowthTable(targetElementId, growthData, options = {}) {
     const wrap = document.getElementById(targetElementId);
     if (!wrap) return;
 
@@ -6768,9 +6991,7 @@
     renderMonthlyTimelineChart();
   };
 
-  // ==========================================
   // 8a.2 MONETARY AMOUNT TIMELINE CHART (จำนวนเงินภาพรวมมูลค่า AUC และปิดงานแล้ว)
-  // ==========================================
   window.setTimelineChartMode = function (mode) {
     state.timelineChartMode = mode;
     const btnPct = document.getElementById('btnTimelineModePct');
@@ -7173,9 +7394,7 @@
     renderMonthlyAmountTimelineChart();
   };
 
-  // ==========================================
   // 8c. AI SMART EXECUTIVE ANALYSIS & INSIGHTS
-  // ==========================================
 
   let isAiSpeaking = false;
   let lastGeneratedAiTextForCopy = '';
@@ -8043,9 +8262,7 @@
     });
   }
 
-  // ==========================================
   // 9. ANALYTICS TAB CHARTS
-  // ==========================================
   function renderAnalyticsCharts() {
     renderRankings();
   }
@@ -8102,11 +8319,7 @@
     return s;
   }
 
-  // ==========================================
-  // ==========================================
-  // ==========================================
   // ROYAL GOLDEN CROWN CELEBRATION FOR CRITERIA > KPI ธ.ค. (มงกุฎทองคำสวยงาม แสดงความสำเร็จ 👑)
-  // ==========================================
   window.CriteriaFireworks = {
     canvas: null,
     ctx: null,
@@ -8477,6 +8690,24 @@
     const targetColors = ['#34D399', '#F472B6', '#38BDF8'];
     const textColors = ['#6EE7B7', '#F9A8D4', '#7DD3FC'];
 
+    // เดือนที่แสดงป้ายเกณฑ์ KPI บนกราฟ (เลือกได้ 12 เดือนจากปุ่ม "เกณฑ์ KPI ที่แสดง")
+    const badgeMonths = getKpiBadgeMonths(curMonthIdx);
+
+    // จัดรูปแบบชื่อเดือนที่รวมป้ายเดียวกัน: เดือนติดกันใช้ขีด (ต.ค.-ธ.ค.) / ไม่ติดกันคั่นด้วยจุลภาค
+    function formatKpiMonthRuns(idxs) {
+      const s = Array.from(new Set(idxs)).sort((a, b) => a - b);
+      if (!s.length) return '';
+      const runs = [];
+      let start = s[0], prev = s[0];
+      for (let i = 1; i <= s.length; i++) {
+        if (s[i] === prev + 1) { prev = s[i]; continue; }
+        runs.push(start === prev ? monthNames[start] : `${monthNames[start]}-${monthNames[prev]}`);
+        start = s[i];
+        prev = s[i];
+      }
+      return runs.join(',');
+    }
+
     // ตรวจสอบว่ามีการเลือกเกณฑ์วัดเฉพาะเจาะจงหรือไม่ เพื่อไฮไลท์เฉพาะแท่งที่เลือก (โดยไม่ทำให้แท่งอื่นจางลง)
     const rawSelCrits = (Array.isArray(state.filters.selectedCriteria) && state.filters.selectedCriteria.length > 0)
       ? state.filters.selectedCriteria
@@ -8548,122 +8779,83 @@
       // คำนวณเส้นและป้ายเป้าหมาย % KPI ระดับ 5 ในแท่งกราฟ แยกอิสระตามประเภทเกณฑ์วัด:
       // - เป้าเดือนล่าสุด: ใช้สีเหลืองทอง (#FFB81C)
       // - เป้าเดือนถัดไป ถึง เดือน ธ.ค.: หาก %ปิดงาน >= KPI ให้ใช้สีเขียว (#10B981), หาก < KPI ให้ใช้สีแดง (#EF4444)
-      const rawBarTargets = [];
+      // เลือกเดือนที่แสดงป้ายเกณฑ์ KPI ได้ทั้ง 12 เดือน (ตั้งค่าจากปุ่ม "เกณฑ์ KPI ที่แสดง")
+      // - เดือนที่เลือกในตัวกรอง: สีเหลืองทอง (#FFB81C)
+      // - เดือนอื่น: หาก %ปิดงาน >= KPI ให้ใช้สีเขียว (#00FF88), หาก < KPI ให้ใช้สีแดง (#FF2D55)
       const targetLatest = getCriteriaTarget(crit, curMonthIdx);
-      if (targetLatest !== null) {
-        rawBarTargets.push({
-          isLatestMonth: true,
-          monthIdx: curMonthIdx,
-          monthName: monthNames[curMonthIdx] || 'ส.ค.',
-          value: targetLatest,
-          color: '#FFB81C',
-          textColor: '#FFD25A'
-        });
-      }
-
-      for (let offset = 1; offset <= 2; offset++) {
-        const nextIdx = curMonthIdx + offset;
-        if (nextIdx <= 11) {
-          const nextTarget = getCriteriaTarget(crit, nextIdx);
-          if (nextTarget !== null) {
-            const isPass = (pct >= (nextTarget - 0.001));
-            rawBarTargets.push({
-              isLatestMonth: false,
-              monthIdx: nextIdx,
-              monthName: monthNames[nextIdx],
-              value: nextTarget,
-              isPass: isPass,
-              color: isPass ? '#00FF88' : '#FF2D55', // สีเขียวทับทิม สว่าง (#00FF88) เมื่อผ่านเกณฑ์, สีแดงทับทิม (#FF2D55) เมื่อต้องเร่งรัด
-              textColor: isPass ? '#E8FFF2' : '#FFE4E8'
-            });
-          }
+      const rawBarTargets = [];
+      badgeMonths.forEach(mIdx => {
+        const tVal = (mIdx === curMonthIdx) ? targetLatest : getCriteriaTarget(crit, mIdx);
+        if (tVal === null) return;
+        if (mIdx === curMonthIdx) {
+          rawBarTargets.push({
+            isLatestMonth: true,
+            monthIdx: mIdx,
+            monthName: monthNames[mIdx] || 'ส.ค.',
+            value: tVal,
+            color: '#FFB81C',
+            textColor: '#FFD25A'
+          });
+        } else {
+          const isPass = (pct >= (tVal - 0.001));
+          rawBarTargets.push({
+            isLatestMonth: false,
+            monthIdx: mIdx,
+            monthName: monthNames[mIdx],
+            value: tVal,
+            isPass: isPass,
+            color: isPass ? '#00FF88' : '#FF2D55', // สีเขียวทับทิม สว่าง (#00FF88) เมื่อผ่านเกณฑ์, สีแดงทับทิม (#FF2D55) เมื่อต้องเร่งรัด
+            textColor: isPass ? '#E8FFF2' : '#FFE4E8'
+          });
         }
-      }
+      });
 
       // เป้าหมายเดือน ธ.ค. (สิ้นปี 2569) - ตรวจสอบว่า % ปิดงาน ชนะ/บรรลุเป้าหมายเดือน ธ.ค. หรือไม่
       const decMonthIdx = 11; // ธ.ค. (index 11, monthNum 12)
       const decTarget = getCriteriaTarget(crit, decMonthIdx);
       const isExceedDecKpi = (!isNoWork && typeof decTarget === 'number' && decTarget > 0 && pct >= (decTarget - 0.001));
 
-      if (decMonthIdx > curMonthIdx + 2) {
-        if (decTarget !== null) {
-          const isPass = (pct >= (decTarget - 0.001));
-          rawBarTargets.push({
-            isLatestMonth: false,
-            monthIdx: decMonthIdx,
-            monthName: 'ธ.ค.',
-            value: decTarget,
-            isPass: isPass,
-            color: isPass ? '#00FF88' : '#FF2D55',
-            textColor: isPass ? '#E8FFF2' : '#FFE4E8'
-          });
-        }
-      }
-
-      // รวมเป้าหมายเดือนถัดไปที่ค่าเท่ากันและสถานะเดียวกันบนแท่งเดียวกัน เพื่อไม่ให้ป้ายซ้อนทับกัน (เป้าเดือนล่าสุดแยกเดี่ยวเป็นสีเหลืองทองเสมอ)
+      // รวมเป้าหมายเดือนอื่นที่ค่าเท่ากันและสถานะเดียวกันบนแท่งเดียวกัน เพื่อไม่ให้ป้ายซ้อนทับกัน (เป้าเดือนที่เลือกแยกเดี่ยวเป็นสีเหลืองทองเสมอ)
       const barTargetLines = [];
       rawBarTargets.forEach(bt => {
         const valStr = `${Number(bt.value).toFixed(2)}%`;
         const existing = !bt.isLatestMonth && barTargetLines.find(x => !x.isLatestMonth && Math.abs(Number(x.value) - Number(bt.value)) < 0.001 && x.isPass === bt.isPass);
         if (existing) {
-          if (!existing.monthNames) existing.monthNames = [existing.monthName];
-          if (!existing.monthNames.includes(bt.monthName)) {
-            existing.monthNames.push(bt.monthName);
+          if (!existing.monthIdxs.includes(bt.monthIdx)) {
+            existing.monthIdxs.push(bt.monthIdx);
           }
-          const mNames = existing.monthNames;
-          if (mNames.includes('ก.ย.') && mNames.includes('ธ.ค.') && mNames.length >= 2) {
-            existing.label = `KPI ก.ย.-ธ.ค. ${valStr}`;
-          } else if (mNames.includes('ต.ค.') && mNames.includes('ธ.ค.') && mNames.length >= 2) {
-            existing.label = `KPI ต.ค.-ธ.ค. ${valStr}`;
-          } else if (mNames.includes('ก.ย.') && mNames.includes('ต.ค.') && mNames.length >= 2) {
-            existing.label = `KPI ก.ย.-ต.ค. ${valStr}`;
-          } else if (mNames.length > 1) {
-            existing.label = `KPI ${mNames.join(', ')} ${valStr}`;
-          }
+          existing.monthNames = existing.monthIdxs.map(i => monthNames[i]);
+          existing.label = `KPI ${formatKpiMonthRuns(existing.monthIdxs)} ${valStr}`;
         } else {
           barTargetLines.push({
             ...bt,
+            monthIdxs: [bt.monthIdx],
             monthNames: [bt.monthName],
             label: `KPI ${bt.monthName} ${valStr}`
           });
         }
       });
 
-      // เป้า KPI ระดับ 5 ใน tooltip สำหรับเดือนล่าสุด, 2 เดือนถัดไป, และเดือน ธ.ค. (สิ้นปี 69)
+      // เป้า KPI ระดับ 5 ใน tooltip ตามเดือนที่เลือกแสดง
       const kpiTargets = [];
-      if (targetLatest !== null) {
-        kpiTargets.push({
-          label: `เป้า ${monthNames[curMonthIdx] || 'ส.ค.'} (ล่าสุด)`,
-          value: `${targetLatest.toFixed(2)}%`,
-          color: '#FFB81C'
-        });
-      }
-
-      for (let offset = 1; offset <= 2; offset++) {
-        const nextIdx = curMonthIdx + offset;
-        if (nextIdx <= 11) {
-          const tVal = getCriteriaTarget(crit, nextIdx);
-          if (tVal !== null) {
-            const isPass = (pct >= (tVal - 0.001));
-            kpiTargets.push({
-              label: `เป้า ${monthNames[nextIdx]} (+${offset})`,
-              value: `${tVal.toFixed(2)}%`,
-              color: isPass ? '#00FF88' : '#FF2D55'
-            });
-          }
-        }
-      }
-
-      if (decMonthIdx > curMonthIdx + 2) {
-        if (decTarget !== null) {
-          const isPass = (pct >= (decTarget - 0.001));
+      badgeMonths.forEach(mIdx => {
+        const tVal = (mIdx === curMonthIdx) ? targetLatest : getCriteriaTarget(crit, mIdx);
+        if (tVal === null) return;
+        if (mIdx === curMonthIdx) {
           kpiTargets.push({
-            label: 'เป้า ธ.ค. (สิ้นปี 69)',
-            value: `${decTarget.toFixed(2)}%`,
+            label: `เป้า ${monthNames[mIdx] || 'ส.ค.'} (ล่าสุด)`,
+            value: `${tVal.toFixed(2)}%`,
+            color: '#FFB81C'
+          });
+        } else {
+          const isPass = (pct >= (tVal - 0.001));
+          kpiTargets.push({
+            label: `เป้า ${monthNames[mIdx]}`,
+            value: `${tVal.toFixed(2)}%`,
             color: isPass ? '#00FF88' : '#FF2D55'
           });
         }
-      }
+      });
 
       // คำนวณจำนวนดาว KPI ระดับ 5: ผ่านเกณฑ์ 1 เดือน ให้ 1 ดาว, 2 เดือน 2 ดาว ตามลำดับ
       // ตรวจสอบตั้งแต่เดือนปัจจุบันจนถึงสิ้นปี (ธ.ค.)
@@ -8698,26 +8890,24 @@
         isSelected: isSelected,
         isDimmed: isDimmed,
         isHighlighted: isHighlighted,
-        targetBenchmark: targetLatest,
-        barTargetLines: barTargetLines,
-        kpiTargets: kpiTargets,
+        targetBenchmark: isNoWork ? null : targetLatest,
+        barTargetLines: isNoWork ? [] : barTargetLines,
+        kpiTargets: isNoWork ? [] : kpiTargets,
         decTarget: decTarget,
         isExceedDecKpi: isExceedDecKpi,
         starCount: starCount,
-        latestMonthName: latestMonthName
+        latestMonthName: latestMonthName,
+        monthYearLabel: `${latestMonthName}69`
       });
     });
 
-    // Update title with actual count of criteria and province/office
+    // Update title with actual count of criteria (active selection strip is rendered on the right of the top header line)
     const titleEl = document.getElementById('criteriaComparisonTitle');
     if (titleEl) {
-      let filterText = '';
-      if (isFilteredOff) {
-        filterText = isFilteredProv ? ` (${provFilter} - ${offFilter})` : ` (${offFilter})`;
-      } else if (isFilteredProv) {
-        filterText = ` (${provFilter})`;
-      }
-      titleEl.innerHTML = `<span class="criteria-title-full">ร้อยละความสำเร็จการปิดงาน (% Closed) แยกตาม ${labels.length} ประเภทเกณฑ์วัด${escapeHtml(filterText)}</span>`;
+      titleEl.innerHTML = `<span class="criteria-title-full">ร้อยละความสำเร็จการปิดงาน (% Closed) แยกตาม ${labels.length} ประเภทเกณฑ์วัด</span>`;
+    }
+    if (typeof updateTopSelectionDisplay === 'function') {
+      updateTopSelectionDisplay();
     }
 
     const cColors = state.chartColors || DEFAULT_CHART_COLORS;
@@ -8765,11 +8955,10 @@
       customLegend: [
         { label: 'KPI ระดับ 5 (ผ่านเป้าหมาย)', color: '#10B981' },
         { label: 'KPI ระดับ 1-4 (ต้องเร่งรัด)', color: '#EF4444' },
-        { label: `เป้า KPI ${latestMonthName} (ล่าสุด)`, color: '#FFB81C' },
-        { label: 'เป้าถัดไป-สิ้นปี (ผ่านเกณฑ์)', color: '#00FF88' },
-        { label: 'เป้าถัดไป-สิ้นปี (ต้องเร่งรัด)', color: '#FF2D55' },
-        { label: '★ ผ่านเกณฑ์สะสม (1 ดาว/เดือน)', color: '#FFD25A' },
-        { label: 'บรรลุเป้าหมาย ธ.ค. (สิ้นปี 69)', color: '#FFD700' }
+        ...(badgeMonths.includes(curMonthIdx) ? [{ label: `เป้า KPI ${latestMonthName} (ล่าสุด)`, color: '#FFB81C' }] : []),
+        { label: 'เป้าเดือนอื่น (ผ่านเกณฑ์)', color: '#00FF88' },
+        { label: 'เป้าเดือนอื่น (ต้องเร่งรัด)', color: '#FF2D55' },
+        { label: 'บรรลุเป้า KPI ธ.ค.69', color: '#FFD700' }
       ],
       onClick: (item) => {
         if (item && item.extra && item.extra.fullTitle && typeof window.selectSidebarCriteria === 'function') {
@@ -8808,6 +8997,9 @@
 
     if (window.CriteriaFireworks && typeof window.CriteriaFireworks.updateTargets === 'function') {
       window.CriteriaFireworks.updateTargets(state.charts.critBar);
+    }
+    if (typeof window.renderKpiBadgeCfgPanel === 'function') {
+      window.renderKpiBadgeCfgPanel();
     }
   }
 
@@ -9003,9 +9195,7 @@
     `).join('');
   }
 
-  // ==========================================
   // 10. DATA TABLE RENDERING & PAGINATION
-  // ==========================================
   function renderTable() {
     const tbody = document.getElementById('aucTableBody');
     if (!tbody) return;
@@ -9148,9 +9338,7 @@
     renderTable();
   };
 
-  // ==========================================
   // 11. DRILL-DOWN MODAL & SCENARIO SIMULATOR
-  // ==========================================
   window.openDrilldownModal = function (recId) {
     const rec = state.allData.find(d => d.id === recId);
     if (!rec) return;
@@ -9267,9 +9455,7 @@
     state.scenarioData = null;
   }
 
-  // ==========================================
   // 12. EARLY WARNING & ACTION CENTER
-  // ==========================================
   function renderEarlyWarning() {
     const container = document.getElementById('earlyWarningList');
     if (!container) return;
@@ -9336,16 +9522,12 @@
     container.innerHTML = html;
   }
 
-  // ==========================================
   // 13. AUC WORKFLOW TRACKER
-  // ==========================================
   function renderWorkflow() {
     // Keep workflow interactive if needed
   }
 
-  // ==========================================
   // 14. EXCEL UPLOAD & CSV EXPORT
-  // ==========================================
   function parseKpiExcelBuffer(buffer) {
     if (!window.XLSX) {
       console.error('XLSX library not loaded');
@@ -9590,9 +9772,7 @@
     showToast('ดาวน์โหลดรายงาน CSV เรียบร้อยแล้ว', 'success');
   }
 
-  // ==========================================
   // 15. THEME & TOAST UTILITIES
-  // ==========================================
   function toggleTheme() {
     const curTheme = document.documentElement.getAttribute('data-theme') || 'dark';
     const newTheme = curTheme === 'dark' ? 'light' : 'dark';
@@ -9687,9 +9867,7 @@
       .replace(/'/g, '&#039;');
   }
 
-  // ==========================================
   // FULLSCREEN CHART EXPANSION
-  // ==========================================
   window.toggleCardFullscreen = function (btn) {
     const card = btn ? btn.closest('.content-card') : document.getElementById('unifiedProjectionOfficeCard');
     if (!card) return;
@@ -9751,14 +9929,7 @@
     }
   });
 
-  /**
-   * ==========================================
-   * RETURN TO NORMAL SCREEN (คืนหน้าจอปกติ)
-   * แสดงเฉพาะหน้าจอขยายเท่านั้น ไม่แสดงในหน้าจอหลัก
-   * เมื่อกด: ย่อขนาดออกจากโหมดเต็มจอ คืนสู่หน้าจอปกติ
-   * ==========================================
-   */
-  window.returnToNormalScreen = function () {
+    window.returnToNormalScreen = function () {
     // 1. Exit fullscreen from table or any card
     const fullTable = document.querySelector('.table-card.is-fullscreen');
     if (fullTable) {
@@ -9802,9 +9973,7 @@
   };
   window.returnToMainScreen = window.returnToNormalScreen;
 
-  // ==========================================
   // 16. COLOR PALETTE & BACKGROUND MANAGER
-  // ==========================================
   const BG_PRESETS = [
     {
       id: 'pea-royal',
@@ -10320,11 +10489,7 @@
     }
   }
 
-  /**
-   * Action: Update to GitHub Desktop
-   * Syncs latest web files from 00AI to C3-auc-dashboard
-   */
-  window.openGitHubDesktopDirect = function () {
+    window.openGitHubDesktopDirect = function () {
     try {
       const link = document.createElement('a');
       link.href = 'x-github-client://openRepo/https://github.com/suphasekC3-OPS/C3-auc-dashboard';

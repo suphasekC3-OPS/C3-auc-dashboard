@@ -1,20 +1,15 @@
-/* ==========================================================================
-   PEA AUC Tracking & Asset Registration Web Application
-   Theme: Provincial Electricity Authority (การไฟฟ้าส่วนภูมิภาค - กฟภ. / กฟก.3)
-   Aesthetics: Official PEA Purple & Gold, Glassmorphism, Luxury Corporate Dashboard
-   ========================================================================== */
-
+/* PEA AUC Dashboard Stylesheet (UTF-8) */
 @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&family=Sarabun:wght@300;400;500;600;700&display=swap');
 
 :root {
-  /* Official PEA Core Purple Palette */
+  
   --pea-purple-950: #12031B;
   --pea-purple-900: #1E062F;
   --pea-purple-850: #2C0A46;
   --pea-purple-800: #3E1060;
   --pea-purple-700: #59257C;
   --pea-purple-600: #682C91;
-  /* Official PEA Brand Purple */
+  
   --pea-purple-500: #863AB8;
   --pea-purple-400: #A855F7;
   --pea-purple-300: #C084FC;
@@ -22,18 +17,18 @@
   --pea-purple-100: #F3E8FF;
   --pea-purple-50: #FAF5FF;
 
-  /* Official PEA Gold / Amber Accent Palette */
+  
   --pea-gold-700: #B45309;
   --pea-gold-600: #D97706;
   --pea-gold-500: #F59E0B;
   --pea-gold-400: #FFB81C;
-  /* Official PEA Gold/Yellow */
+  
   --pea-gold-300: #FCD34D;
   --pea-gold-200: #FDE68A;
   --pea-gold-100: #FEF3C7;
   --pea-gold-50: #FFFBEB;
 
-  /* Status Colors */
+  
   --status-success: #10B981;
   --status-success-bg: rgba(16, 185, 129, 0.15);
   --status-warning: #F59E0B;
@@ -43,18 +38,18 @@
   --status-info: #06B6D4;
   --status-info-bg: rgba(6, 182, 212, 0.15);
 
-  /* Sweet Pink Theme for Job / Task Counts */
+  
   --sweet-pink: #FF79B8;
   --sweet-pink-hover: #FF94C7;
   --sweet-pink-light: rgba(255, 121, 184, 0.16);
   --sweet-pink-border: rgba(255, 121, 184, 0.38);
 
-  /* Golden Yellow Theme for KPI Target */
+  
   --kpi-gold: #FFD25A;
   --kpi-gold-light: rgba(255, 210, 90, 0.15);
   --kpi-gold-border: rgba(255, 210, 90, 0.38);
 
-  /* Theme Tokens (Outermost Background: 50% Lighter Purple Tone) */
+  
   --bg-app: #56247B;
   --bg-gradient: radial-gradient(circle at 15% 15%, #7639A4 0%, #56247B 55%, #3D165B 100%),
     radial-gradient(circle at 85% 85%, rgba(255, 184, 28, 0.12) 0%, transparent 60%);
@@ -92,7 +87,6 @@
   --transition-slow: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Light Mode Overrides (Warm Ivory / Soft White Theme) */
 [data-theme="light"] {
   --bg-app: #FAF8FD;
   --bg-gradient: radial-gradient(circle at 10% 15%, rgba(104, 44, 145, 0.08) 0%, #FAF8FD 50%, #F5EFFC 100%),
@@ -180,7 +174,6 @@
   background: rgba(104, 44, 145, 0.08);
 }
 
-/* Base Styles */
 * {
   margin: 0;
   padding: 0;
@@ -200,7 +193,6 @@ body {
   overflow-x: hidden;
 }
 
-/* Global Scrollbar (ใช้ชุดสีทอง-ชมพู PEA และพื้นม่วงเข้ม) */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -274,16 +266,12 @@ body {
   background: #F3F4F6;
 }
 
-/* App Container */
 .app-wrapper {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
-/* ==========================================================================
-   Sticky Top Section (Header + Navigation Bar Locked)
-   ========================================================================== */
 .sticky-top-section {
   position: sticky;
   top: 0;
@@ -321,7 +309,6 @@ body {
   gap: 1.1rem;
 }
 
-/* Official PEA Emblem Badge */
 .pea-emblem {
   width: 54px;
   height: 54px;
@@ -487,7 +474,6 @@ body {
   transform: translateY(-1px);
 }
 
-/* Navigation Tabs (Pinned/Sticky Row) */
 .nav-tabs-bar {
   background: rgba(22, 6, 36, 0.94);
   backdrop-filter: blur(16px);
@@ -545,9 +531,6 @@ body {
   color: #FFFFFF;
 }
 
-/* ==========================================================================
-   Navigation Tabs Lock Button (ปุ่มล็อค 3 เมนู รหัส PIN 225588)
-   ========================================================================== */
 .btn-nav-tabs-lock {
   display: inline-flex;
   align-items: center;
@@ -590,7 +573,6 @@ body {
   transform: translateY(-1px);
 }
 
-/* Light Theme Support for Lock Button */
 [data-theme="light"] .btn-nav-tabs-lock {
   border-color: rgba(104, 44, 145, 0.45) !important;
   color: var(--pea-purple-800, #4A154B) !important;
@@ -603,7 +585,6 @@ body {
   background: rgba(16, 185, 129, 0.12) !important;
 }
 
-/* Badges on the 3 Locked Tabs */
 .nav-tab-lock-badge {
   display: inline-flex;
   align-items: center;
@@ -626,15 +607,11 @@ body {
   border-color: #F59E0B;
 }
 
-/* When the tabs are unlocked, hide the lock badge */
 .nav-tabs-bar.is-unlocked .nav-tab-lock-badge,
 .nav-tab-btn.is-unlocked .nav-tab-lock-badge {
   display: none !important;
 }
 
-/* ==========================================================================
-   Main Content Layout
-   ========================================================================== */
 .main-container {
   max-width: 1720px;
   margin: 0 auto;
@@ -664,9 +641,6 @@ body {
   }
 }
 
-/* ==========================================================================
-   Month Selector Strip (12 Months Jan - Dec)
-   ========================================================================== */
 .month-selector-card {
   background: var(--surface-card);
   backdrop-filter: blur(14px);
@@ -747,7 +721,6 @@ body {
   box-shadow: 0 2px 8px rgba(168, 85, 247, 0.18);
 }
 
-/* เดือนที่มีข้อมูลรายงานแล้ว (ทำสัญลักษณ์ไฟเขียวที่มุมปุ่ม) */
 .btn-month.has-data {
   border-color: rgba(52, 211, 153, 0.65);
 }
@@ -799,9 +772,6 @@ body {
   }
 }
 
-/* ==========================================================================
-   Month Filter in Left Sidebar
-   ========================================================================== */
 .month-filter-sidebar-group {
   padding-bottom: 0.75rem;
   border-bottom: 1px solid var(--border-subtle);
@@ -891,7 +861,6 @@ body {
   color: #FFFFFF !important;
 }
 
-/* เดือนที่ยังไม่ลงข้อมูล (โชว์อย่างเดียว กดอะไรไม่ได้) */
 .sidebar-filter-card .btn-month:not(.has-data),
 .sidebar-filter-card .btn-month.is-disabled-month,
 .sidebar-filter-card .btn-month[aria-disabled="true"],
@@ -943,10 +912,6 @@ body {
   box-shadow: none !important;
 }
 
-/* ==========================================================================
-/* ==========================================================================
-   Full Width Application Layout (ถอดแถบตัวกรองแนวตั้งด้านข้างออก ให้แสดงผลเต็มจอ)
-   ========================================================================== */
 .app-layout-grid {
   display: block;
   width: 100%;
@@ -956,9 +921,6 @@ body {
   display: none !important;
 }
 
-/* ==========================================================================
-   TOP STICKY FILTER BAR (แถวตัวกรองแนวนอนด้านบน ล็อคติดหน้าจอแสดงไว้ตลอดเวลา - ธีมสดใส & ปุ่มรีเซ็ตสีแดง)
-   ========================================================================== */
 .top-sticky-filter-bar {
   background: linear-gradient(135deg,
       #1E042D 0%,
@@ -980,7 +942,6 @@ body {
   isolation: isolate;
 }
 
-/* พื้นหลังเรืองแสง (Glow Background) - ลูกแสงม่วง/ทองเคลื่อนไหวช้าๆ + เส้นเรืองแสงขอบล่าง */
 .top-sticky-filter-bar::before {
   content: '';
   position: absolute;
@@ -1056,7 +1017,6 @@ body {
     radial-gradient(ellipse 18% 65% at 90% 45%, rgba(244, 114, 182, 0.22) 0%, transparent 70%);
 }
 
-/* ตัวกรองทั้งหมดอยู่บรรทัดเดียว (ไม่ตัดขึ้นบรรทัดใหม่) - ความกว้างเท่ากับตัวอื่น พอดีหน้า ไม่ยื่น */
 .top-filter-inner {
   max-width: 1720px;
   margin: 0 auto;
@@ -1280,9 +1240,6 @@ body {
   text-shadow: none !important;
 }
 
-/* ==========================================================================
-   RESET BUTTON: BURGUNDY PILL (ปุ่มคืนค่าทั้งหมด สีไวน์แดง #6A1B29 ขอบ #A83246 รัศมี 12px)
-   ========================================================================== */
 .btn-reset-filter-top,
 .btn-sidebar-reset,
 .btn-reset-fullscreen {
@@ -1356,9 +1313,6 @@ body {
   box-shadow: 0 4px 12px rgba(153, 27, 27, 0.4) !important;
 }
 
-/* ==========================================================================
-   FILTER ERASER BUTTONS (ปุ่มยางลบ ล้างตัวกรองเฉพาะประเภทเกณฑ์วัด และ จังหวัด/กอง)
-   ========================================================================== */
 .btn-filter-eraser {
   display: inline-flex;
   align-items: center;
@@ -1443,10 +1397,6 @@ body {
   border-color: rgba(147, 51, 234, 0.3);
 }
 
-/* ==========================================================================
-   CRITERIA DROPDOWN (ตัวเลือกเกณฑ์วัด ข้อ 1.1 - 5) - ป้ายหน่วยวัดชิดขวาทุกตัวเลือก
-   - select เดิมซ่อนไว้ (ยังเป็นแหล่งข้อมูลหลัก) / js/criteria_dropdown.js สร้าง UI แทน
-   ========================================================================== */
 .top-filter-select.crit-native-hidden {
   position: absolute !important;
   width: 1px !important;
@@ -1515,7 +1465,6 @@ body {
   border-radius: 6px;
 }
 
-/* ป้ายหน่วยวัด - เปลี่ยนเฉพาะสีพื้นหลัง */
 .crit-unit-pill {
   display: inline-flex;
   align-items: center;
@@ -1548,7 +1497,6 @@ body {
   color: #2A0A4A !important;
 }
 
-/* รายการตัวเลือก (ลอยเหนือเนื้อหา ไม่ถูกตัดโดยแถบตัวกรอง) */
 .crit-dd-panel {
   position: fixed;
   z-index: 100000;
@@ -1596,7 +1544,6 @@ body {
   border-radius: 0;
 }
 
-/* ตอนเลื่อนชี้ (Hover / Focus): ไฮไลต์สีเหมือนตัวกรอง Native อื่นๆ */
 .crit-dd-option:hover,
 .crit-dd-option.focused {
   background-color: #1E90FF;
@@ -1664,7 +1611,6 @@ body {
   font-weight: 500;
 }
 
-/* Month legend subrow (ตามภาพถ่ายตัวกรองข้อมูล จุดเขียว = มีข้อมูลรายงาน) */
 .month-legend-subrow {
   display: flex;
   align-items: center;
@@ -1858,11 +1804,10 @@ body {
 }
 
 .sidebar-filter-card #btnResetFilters {
-  /* Sidebar reset button uses global burgundy pill style */
+  
   cursor: pointer;
 }
 
-/* Sidebar Button Grids & Rows (เกณฑ์วัด & จังหวัด) */
 .sidebar-buttons-grid,
 .sidebar-crit-grid,
 .sidebar-prov-grid {
@@ -1886,12 +1831,6 @@ body {
   min-width: 0;
 }
 
-/* ==========================================================================
-   Unified PEA Royal Purple Button & Chip System
-   (ธีมสีม่วง PEA สม่ำเสมอเหมือนกันทั้งหมด ทั้งเกณฑ์วัด จังหวัด/กอง และหน่วยงาน/กฟฟ.)
-   ========================================================================== */
-
-/* 1. Sidebar Criteria & Province Pills */
 .btn-sidebar-pill {
   background: rgba(147, 51, 234, 0.14);
   border: 1.5px solid rgba(216, 180, 254, 0.35);
@@ -1935,7 +1874,6 @@ body {
   transform: translateY(-1.5px);
 }
 
-/* 1.1 Criteria Buttons in Sidebar (ชื่อเต็ม กระชับ กะทัดรัด สบายตา เรียงแถวละ 1 ข้อ) */
 .sidebar-crit-grid {
   display: flex;
   flex-direction: column;
@@ -1949,7 +1887,7 @@ body {
   min-height: 24px !important;
   padding: 0.18rem 0.4rem !important;
   font-size: 0.725rem !important;
-  /* ปรับขนาดให้พอดี ไม่ล้น ไม่ตกขอบ */
+  
   font-weight: 600 !important;
   line-height: 1.15 !important;
   display: flex !important;
@@ -1993,7 +1931,6 @@ body {
   letter-spacing: -0.01em;
 }
 
-/* 2. Chart Criteria & Province Quick Pills (บนกราฟ - ใช้สีม่วง PEA เดียวกัน) */
 .btn-chart-crit-pill,
 .btn-chart-pill {
   background: rgba(147, 51, 234, 0.14);
@@ -2035,7 +1972,6 @@ body {
   transform: translateY(-1.5px);
 }
 
-/* 3. Header Action Group & Expand Toggle for Office Chips */
 .header-action-group {
   display: flex;
   align-items: center;
@@ -2090,7 +2026,6 @@ body {
   color: #FFFFFF;
 }
 
-/* 4. Sidebar Office Chips Container & Buttons */
 .sidebar-office-chips-group {
   display: flex;
   flex-wrap: wrap;
@@ -2107,7 +2042,6 @@ body {
   max-height: 290px;
 }
 
-/* ชัดเจน สวยงาม เลื่อนดูได้ครอบคลุมทุกหน่วยงาน */
 .sidebar-office-chips-group::-webkit-scrollbar {
   width: 7px;
 }
@@ -2170,7 +2104,6 @@ body {
   transform: translateY(-1px);
 }
 
-/* 5. Light Theme Unified Variants */
 [data-theme="light"] .btn-sidebar-pill,
 [data-theme="light"] .btn-chart-crit-pill,
 [data-theme="light"] .btn-chart-pill,
@@ -2356,10 +2289,6 @@ body {
   padding-left: 2.3rem;
 }
 
-
-/* ==========================================================================
-   Top Active Selection Strip (แถบแสดงค่าการเลือกด้านบน - ใช้ธีมสีทอง PEA Gold ในพื้นหลังสีเดียวกัน)
-   ========================================================================== */
 .top-selection-strip {
   display: flex;
   align-items: center;
@@ -2438,7 +2367,6 @@ body {
   color: var(--pea-gold-300) !important;
 }
 
-/* Light Theme Support */
 [data-theme="light"] .top-selection-strip {
   background: #FFFFFF;
   border: 1px solid rgba(217, 119, 6, 0.3);
@@ -2473,9 +2401,6 @@ body {
   color: #92400E !important;
 }
 
-/* ==========================================================================
-   Executive KPI Dashboard Cards (Top Executive 2-Column Grid)
-   ========================================================================== */
 .top-executive-grid {
   display: grid;
   grid-template-columns: minmax(295px, 20.25%) 1fr;
@@ -2554,9 +2479,6 @@ body {
   font-size: 0.75rem;
 }
 
-/* ==========================================================================
-   Executive Donut & KPI Compact Card (กราฟวงกลมโดนัท: ด้านในแสดง KPI / ด้านนอกแสดงมูลค่าและงาน)
-   ========================================================================== */
 .executive-donut-kpi-card {
   padding: 0.55rem 0.65rem;
   display: flex;
@@ -2706,7 +2628,6 @@ body {
   color: #FECACA;
 }
 
-/* ป้ายสถานะปิดงานใน SAP (CLSD F4 / CLSD F2) - สีเขียวเรืองแสง เด่นชัด แทนคงเหลือ */
 .donut-stat-col.stat-clsd-sap {
   background: linear-gradient(135deg, rgba(0, 255, 136, 0.12) 0%, rgba(5, 46, 28, 0.55) 100%);
   border: 1.5px solid rgba(0, 255, 136, 0.65);
@@ -2773,7 +2694,6 @@ body {
   font-family: var(--font-mono, monospace);
 }
 
-/* บล็อกสถานะแก้ไข (ย้ายมาจากกรอบสี่เหลี่ยมด้านบน มาแสดงที่ตำแหน่งกากบาทให้สวยงามเด่นชัด) */
 .donut-stat-col.stat-edit-status {
   background: linear-gradient(135deg, rgba(30, 41, 59, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%);
   border: 1.5px solid rgba(245, 158, 11, 0.45);
@@ -2864,7 +2784,6 @@ body.theme-light .donut-stat-jobs.badge-jobs-edit-status strong {
   color: #78350F;
 }
 
-/* ป้ายสถานะการ์ดใหม่ (รวมปรับปรุงมูลค่า & งานที่เพิ่มขึ้น) */
 .badge-new-card-pill {
   font-size: 0.65rem;
   font-weight: 800;
@@ -2898,7 +2817,6 @@ body.theme-light .badge-new-card-pill:hover {
   box-shadow: 0 0 10px rgba(5, 150, 105, 0.4);
 }
 
-/* ข้อความวันที่แก้ไขล่าสุดของสถานะ SAP ในหัวการ์ด WBS (ตัวอักษรสีขาวเรียบๆ ไม่มีการ์ดตกแต่ง ขนาดใหญ่ชัดเจน ตามคำสั่งผู้ใช้งาน ข้อ 1) */
 .wbs-sap-date-plain-text {
   font-size: 0.88rem;
   color: #FFFFFF;
@@ -2925,7 +2843,6 @@ body.theme-light .wbs-sap-date-plain-text {
   text-shadow: none;
 }
 
-/* ข้อความวันที่แก้ไขล่าสุดของ สถานะ SAP และ มูลค่า AUC(บาท) ในหัวการ์ด WBS (แสดงเป็นอักษร ไม่มีการ์ด ตามคำสั่งผู้ใช้งาน หมายเลข 1) */
 .wbs-header-dates-plain {
   display: inline-flex;
   align-items: center;
@@ -3007,7 +2924,6 @@ body.theme-light .donut-stat-breakdown-sub {
   border-top-color: rgba(5, 150, 105, 0.35);
 }
 
-/* ข้อความวันที่แก้ไขล่าสุดใต้หัวคอลัมน์สถานะ SAP ในตาราง WBS (ตัวอักษรเรียบๆ ไม่มีการ์ดตกแต่ง ขนาดพอดี) */
 .th-sub-date-text {
   font-size: 0.70rem;
   color: #CBD5E1;
@@ -3326,9 +3242,6 @@ body.theme-light .donut-stat-breakdown-sub {
   word-break: break-word;
 }
 
-/* ==========================================================================
-   Executive Donut Card: ด้านล่างกราฟ แถบ 2 อัน (% ปิดงานมูลค่า AUC และ % ปิดจำนวนงาน) ตามรูป 28
-   ========================================================================== */
 .exec-dual-progress-section {
   display: flex;
   flex-direction: column;
@@ -3402,10 +3315,6 @@ body.theme-light .donut-stat-breakdown-sub {
   letter-spacing: -0.02em;
 }
 
-/* ==========================================================================
-   หน้าภาพรวมผู้บริหาร (Overview / Dashboard): ปรับความยาวการ์ด #executiveDonutKpiCard
-   ลงมาถึงเส้นระดับล่างสุดของการ์ดกราฟ 8 เกณฑ์วัด (#topCriteriaChartCard) และจัดสัดส่วนภายในให้สวยงามลงตัว
-   ========================================================================== */
 #tab-dashboard #executiveDonutKpiCard {
   padding: 0.40rem 0.60rem 0.45rem;
   gap: 0.12rem;
@@ -3853,7 +3762,6 @@ body.theme-light .donut-stat-breakdown-sub {
   --lvl-color: #EF4444;
 }
 
-/* ระดับที่ได้รับ: สว่างเต็มสี มีเรืองแสง */
 .kpi-level-step.active {
   opacity: 1;
   color: #0F0A1E;
@@ -3907,7 +3815,6 @@ body.theme-light .donut-stat-breakdown-sub {
   }
 }
 
-/* Criteria Comparison Chart Card (Full Width Section Below Executive Grid) */
 .top-criteria-chart-card {
   margin-bottom: 0 !important;
   display: flex;
@@ -3921,15 +3828,17 @@ body.theme-light .donut-stat-breakdown-sub {
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: 0.5rem;
 }
 
 .top-criteria-chart-card .card-header .card-title {
   min-width: 0;
-  flex: 1 1 auto;
+  flex: 0 1 auto;
   display: flex;
   align-items: center;
-  gap: 0.65rem;
+  gap: 0.45rem;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .top-criteria-chart-card .card-header .card-title svg {
@@ -3943,8 +3852,9 @@ body.theme-light .donut-stat-breakdown-sub {
   flex-direction: row;
   align-items: center;
   gap: 0.35rem;
-  flex-wrap: wrap;
-  line-height: 1.35;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  line-height: 1.3;
   font-weight: 800;
   letter-spacing: 0.01em;
 }
@@ -3958,8 +3868,148 @@ body.theme-light .donut-stat-breakdown-sub {
   -webkit-text-fill-color: transparent;
   color: #FFD25A;
   filter: drop-shadow(0 2px 8px rgba(255, 184, 28, 0.35));
-  font-size: 1.05rem;
+  font-size: 0.88rem;
   font-weight: 800;
+  white-space: nowrap;
+}
+
+.criteria-chart-top-sel-strip {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  gap: 0.25rem;
+  margin-left: 0;
+  margin-right: auto;
+  flex-shrink: 1;
+  min-width: 0;
+  overflow: hidden;
+  background: rgba(20, 5, 35, 0.72);
+  border: 1px solid rgba(255, 184, 28, 0.42);
+  border-left: 3.5px solid #FFB81C;
+  border-radius: 8px;
+  padding: 0.2rem 0.55rem;
+  font-size: 0.72rem;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.28);
+}
+
+.criteria-chart-top-sel-strip .top-sel-icon-wrap {
+  margin-right: 0.05rem;
+}
+
+.criteria-chart-top-sel-strip .top-sel-label {
+  font-size: 0.71rem;
+  white-space: nowrap;
+}
+
+.criteria-chart-top-sel-strip .top-sel-val-gold {
+  font-size: 0.74rem;
+  white-space: nowrap;
+}
+
+.criteria-chart-top-sel-strip .top-sel-unit-text {
+  font-size: 0.71rem;
+  white-space: nowrap;
+}
+
+.criteria-chart-top-sel-strip .top-sel-divider {
+  font-size: 0.68rem;
+  margin: 0 0.05rem;
+}
+
+[data-theme="light"] .criteria-chart-top-sel-strip {
+  background: #FFFBEB;
+  border: 1px solid rgba(217, 119, 6, 0.4);
+  border-left: 3.5px solid #D97706;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.top-criteria-chart-card {
+  position: relative;
+}
+
+.criteria-hdr-row-break {
+  flex-basis: 100%;
+  height: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.btn-kpi-badge-cfg {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  flex-shrink: 0;
+  white-space: nowrap;
+  background: linear-gradient(135deg, rgba(255, 184, 28, 0.2), rgba(245, 158, 11, 0.12));
+  border: 1px solid rgba(255, 184, 28, 0.55);
+  color: #FDE047;
+  font-size: 0.72rem;
+  font-weight: 700;
+  border-radius: 8px;
+  padding: 0.28rem 0.6rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-kpi-badge-cfg:hover {
+  background: linear-gradient(135deg, rgba(255, 184, 28, 0.38), rgba(245, 158, 11, 0.25));
+  box-shadow: 0 0 12px rgba(255, 184, 28, 0.45);
+  transform: translateY(-1px);
+}
+
+[data-theme="light"] .btn-kpi-badge-cfg {
+  color: #B45309;
+  background: #FEF3C7;
+  border-color: #F59E0B;
+}
+
+.kpi-badge-cfg-popover {
+  position: absolute;
+  top: 3.2rem;
+  right: 1rem;
+  width: 340px;
+  max-width: calc(100% - 2rem);
+  z-index: 60;
+  filter: drop-shadow(0 10px 28px rgba(0, 0, 0, 0.6));
+}
+
+.kpi-badge-cfg-card {
+  padding: 0.65rem 0.75rem !important;
+  gap: 0.5rem !important;
+}
+
+.kpi-badge-cfg-card:hover {
+  transform: none !important;
+}
+
+.kpi-month-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.28rem !important;
+}
+
+.kpi-month-row {
+  min-height: 28px;
+}
+
+.btn-kpi-badge-hide {
+  width: 100%;
+  background: rgba(239, 68, 68, 0.14);
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  color: #FCA5A5;
+  font-size: 0.74rem;
+  font-weight: 700;
+  border-radius: 6px;
+  padding: 0.34rem 0.6rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-kpi-badge-hide:hover {
+  background: rgba(239, 68, 68, 0.3);
+  color: #FFFFFF;
 }
 
 [data-theme="light"] #criteriaComparisonTitle .criteria-title-line1,
@@ -4040,7 +4090,6 @@ body.theme-light .donut-stat-breakdown-sub {
   background: linear-gradient(90deg, #D97706, var(--pea-gold-400));
 }
 
-/* Card 4: % Completion Rate (จัดระยะกระชับ ไม่ให้การ์ดขยายความสูงเกินการ์ดอื่น) */
 .kpi-card.card-gold {
   padding: 0.65rem 0.85rem !important;
   justify-content: flex-start !important;
@@ -4072,7 +4121,6 @@ body.theme-light .donut-stat-breakdown-sub {
   line-height: 1 !important;
 }
 
-/* เพิ่มขนาดตัวเลขอักษร & เปลี่ยนเป็นสีเหลืองทองเงางาม โดยที่การ์ดไม่ขยาย */
 .kpi-card.card-gold .kpi-main-val,
 .kpi-card.card-gold #kpiMainPctClosed,
 .kpi-card.card-gold #kpiJobPctClosed {
@@ -4274,7 +4322,6 @@ body.theme-light .donut-stat-breakdown-sub {
   color: var(--text-dim);
 }
 
-/* Progress bar inside KPI */
 .progress-track {
   width: 100%;
   height: 6px;
@@ -4307,7 +4354,6 @@ body.theme-light .donut-stat-breakdown-sub {
   background: linear-gradient(90deg, #F59E0B, var(--pea-gold-400));
 }
 
-/* ===== แถบคู่ เขียว/แดง (สำเร็จ / คงเหลือ ใน Card 1) ===== */
 .progress-track.progress-track-dual {
   display: flex;
   height: 7px;
@@ -4377,7 +4423,6 @@ body.theme-light .donut-stat-breakdown-sub {
   box-shadow: 0 0 6px rgba(239, 68, 68, 0.6);
 }
 
-/* ===== Card 3: สลับฝั่งแถบสีแดงชิดขวา (Remaining Progress Bar Right-Aligned) ===== */
 .progress-track.track-align-right {
   display: flex;
   justify-content: flex-end;
@@ -4393,7 +4438,6 @@ body.theme-light .donut-stat-breakdown-sub {
   text-align: right;
 }
 
-/* ===== Overlay พลุเฉลิมฉลองเกณฑ์วัดที่ % ปิดงาน > KPI ธ.ค. ===== */
 .criteria-fireworks-overlay {
   position: absolute !important;
   top: 0 !important;
@@ -4404,9 +4448,6 @@ body.theme-light .donut-stat-breakdown-sub {
   z-index: 5 !important;
 }
 
-
-
-/* ===== แถบเหลืองทองแบบมีลวดลาย (การ์ด % ปิดงาน) ===== */
 .progress-track.track-gold-pattern {
   height: 12px;
   background: rgba(255, 196, 0, 0.12);
@@ -4414,17 +4455,16 @@ body.theme-light .donut-stat-breakdown-sub {
   border-radius: var(--radius-full);
   position: relative;
   overflow: visible !important;
-  /* สำคัญ: ให้รถไฟฟ้า กฟภ. วิ่งแล่นอยู่บนแถบได้โดยไม่โดนตัด */
+  
   margin: 0.9rem 0 0.25rem !important;
-  /* เว้นระยะด้านบนให้ตัวรถวิ่งได้อย่างสวยงามโดยไม่ขยายความสูงการ์ด */
+  
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4), 0 0 10px rgba(245, 158, 11, 0.15);
 }
 
-/* แถบ 1: % ปิดงานมูลค่า – ทองเข้ม (Amber Gold) ลายเส้นทแยง */
 .progress-fill.fill-gold-stripe {
   position: relative;
   overflow: visible !important;
-  /* ให้ตัวรถด้านในวิ่งลอยเหนือขอบได้ */
+  
   height: 100%;
   border-radius: var(--radius-full);
   background-color: #D97706;
@@ -4438,7 +4478,6 @@ body.theme-light .donut-stat-breakdown-sub {
   box-shadow: 0 0 8px rgba(245, 158, 11, 0.55);
 }
 
-/* แถบ 2: % ปิดจำนวนงาน – ทองอ่อน (Champagne Gold) ลายจุดเพชร */
 .progress-fill.fill-gold-dots {
   position: relative;
   overflow: visible !important;
@@ -4452,7 +4491,6 @@ body.theme-light .donut-stat-breakdown-sub {
   box-shadow: 0 0 8px rgba(253, 224, 71, 0.5);
 }
 
-/* แถบที่ใช้คำนวณ KPI ตามเกณฑ์ที่เลือก: วิ่งได้ / อีกแถบนิ่งและจางลง */
 .progress-fill.fill-gold-stripe,
 .progress-fill.fill-gold-dots {
   filter: saturate(0.75);
@@ -4474,20 +4512,17 @@ body.theme-light .donut-stat-breakdown-sub {
   animation: goldDotsMove 0.7s linear infinite;
 }
 
-/* ==========================================================================
-   รถไฟฟ้า กฟภ. (PEA EV Service Truck) วิ่งคันเล็กๆ วิ่งแทนไฟ
-   ========================================================================== */
 .pea-ev-runner {
   position: absolute;
   bottom: -3px;
-  /* ล้อรถแตะพอดีบนแถบสีทองเสมือนวิ่งบนถนน */
+  
   left: -40px;
   width: 44px;
   height: 28px;
   pointer-events: auto;
   z-index: 10;
   display: none;
-  /* ซ่อนเป็นค่าเริ่มต้น จะแสดงเมื่อมี class .running */
+  
   cursor: pointer;
   filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.65));
   transition: transform 0.2s ease;
@@ -4498,14 +4533,12 @@ body.theme-light .donut-stat-breakdown-sub {
   filter: drop-shadow(0 4px 10px rgba(255, 184, 28, 0.85));
 }
 
-/* เมื่อแถบมีความกว้าง > 0 และมีคลาส .running ให้รถวิ่งทันที */
 .progress-fill.running .pea-ev-runner,
 .progress-fill-composite.running .pea-ev-runner {
   display: block !important;
   animation: peaCarDriveAcross 3s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
 }
 
-/* ถ้าความกว้างเป็น 0% หรือไม่มีคลาส .running ไม่ต้องแสดงตัวรถ (รถวิ่งเฉพาะแถบที่ตรงตามเกณฑ์วัดที่เลือก) */
 .progress-fill[style*="width: 0%"] .pea-ev-runner,
 .progress-fill[style*="width:0%"] .pea-ev-runner,
 .progress-fill[style*="width: 0.00%"] .pea-ev-runner,
@@ -4537,7 +4570,6 @@ body.theme-light .donut-stat-breakdown-sub {
   -webkit-user-drag: none;
 }
 
-/* ลำแสงไฟหน้ารถ กฟภ. ส่องสว่างไปข้างหน้า (Headlight Beam) */
 .pea-ev-beam {
   position: absolute;
   right: -15px;
@@ -4552,7 +4584,6 @@ body.theme-light .donut-stat-breakdown-sub {
   animation: peaHeadlightPulse 0.8s ease-in-out infinite alternate;
 }
 
-/* ประกายไฟฟ้า / สัญลักษณ์รถไฟฟ้า กฟภ. ⚡ */
 .pea-ev-sparkle {
   position: absolute;
   left: -7px;
@@ -4564,7 +4595,6 @@ body.theme-light .donut-stat-breakdown-sub {
   animation: peaSparkPulse 0.55s ease-in-out infinite alternate;
 }
 
-/* Fallback ในกรณีไม่มี element ใน DOM: ให้ ::after แสดงเป็นรูปรถวิ่ง */
 .progress-fill.running:not(:has(.pea-ev-runner))::after {
   content: '';
   position: absolute;
@@ -4578,7 +4608,6 @@ body.theme-light .donut-stat-breakdown-sub {
   z-index: 10;
 }
 
-/* แอนิเมชันรถไฟฟ้าวิ่งตลอดความยาวของแถบความก้าวหน้า */
 @keyframes peaCarDriveAcross {
   0% {
     left: -42px;
@@ -4605,7 +4634,6 @@ body.theme-light .donut-stat-breakdown-sub {
   }
 }
 
-/* แอนิเมชันรถเด้งเบาๆ ตอนวิ่ง (Joyful Bobbing) */
 @keyframes peaCarBounce {
   0% {
     transform: translateY(0);
@@ -4616,7 +4644,6 @@ body.theme-light .donut-stat-breakdown-sub {
   }
 }
 
-/* แอนิเมชันแสงไฟหน้ารถ */
 @keyframes peaHeadlightPulse {
   0% {
     opacity: 0.6;
@@ -4629,7 +4656,6 @@ body.theme-light .donut-stat-breakdown-sub {
   }
 }
 
-/* แอนิเมชันประกายไฟฟ้าท้ายรถ */
 @keyframes peaSparkPulse {
   0% {
     opacity: 0.4;
@@ -4673,9 +4699,6 @@ body.theme-light .donut-stat-breakdown-sub {
   }
 }
 
-/* ==========================================================================
-   Dashboard Content Grids & Charts
-   ========================================================================== */
 .dashboard-grid-2col {
   display: grid;
   grid-template-columns: 2fr 1fr;
@@ -4735,7 +4758,6 @@ body.theme-light .donut-stat-breakdown-sub {
   gap: 0.5rem;
 }
 
-/* Chart Canvas Container */
 .chart-container {
   position: relative;
   width: 100%;
@@ -4752,7 +4774,6 @@ body.theme-light .donut-stat-breakdown-sub {
   display: block;
 }
 
-/* Office Bar Chart Container - Expanded height to guarantee 100% full visibility of rotated office labels */
 #officePercentChartContainer {
   height: 410px;
   min-height: 360px;
@@ -4763,16 +4784,12 @@ body.theme-light .donut-stat-breakdown-sub {
   width: calc(100% + 1.3rem);
 }
 
-/* Provincial Radar Chart Container */
 #radarProvincialChartContainer {
   height: 480px;
   min-height: 420px;
   flex: 0 0 480px;
 }
 
-/* ==========================================================================
-   Fullscreen Chart Mode & Action Buttons
-   ========================================================================== */
 .btn-fullscreen {
   display: inline-flex;
   align-items: center;
@@ -4867,12 +4884,9 @@ body.has-fullscreen-chart {
   overflow: hidden !important;
 }
 
-/* ==========================================================================
-   Card Header Inline Filter Controls (ตัวกรองบนหัวกราฟ - แสดงเฉพาะโหมดขยายเต็มหน้าจอ Fullscreen)
-   ========================================================================== */
 .card-header-filters {
   display: none !important;
-  /* หน้าแรก/มุมมองปกติ ไม่ต้องโชว์ */
+  
   align-items: center;
   gap: 0.45rem;
   margin-left: auto;
@@ -4979,15 +4993,11 @@ body.has-fullscreen-chart {
   color: #1F2937;
 }
 
-/* ยกเลิกตัวกรองเดิมในหัวการ์ดหรือตารางเมื่อขยายเต็มจอ ตามคำสั่งผู้ใช้ ให้เปลี่ยนเป็นแถบตัวกรองรูป 5 เหมือนกันทั้งหมด */
 .card-header-filters,
 .content-card.is-fullscreen .card-header-filters {
   display: none !important;
 }
 
-/* ==========================================================================
-   Unified Fullscreen Filter Bar (ตามรูป 5 - แสดงบนสุดในทุกหน้าขยายเต็มจอ)
-   ========================================================================== */
 body.has-fullscreen-chart .sticky-top-section,
 body.has-fullscreen-table .sticky-top-section {
   position: static !important;
@@ -5034,20 +5044,17 @@ body.has-fullscreen-table #topStickyFilterBar {
 }
 
 .content-card.is-fullscreen {
-  padding-top: calc(52px + 1.25rem) !important;
+  padding-top: calc(54px + 1.25rem) !important;
 }
 
 .table-card.is-fullscreen {
-  padding-top: calc(52px + 0.85rem) !important;
+  padding-top: calc(54px + 0.65rem) !important;
 }
 
 .table-card.is-fullscreen .wbs-table-active-criteria {
-  display: none !important;
+  display: inline-flex !important;
 }
 
-/* ==========================================================================
-   Return to Normal Screen Button (เธเธธเนเธกเธเธทเธเธซเธเนเธฒเธเธญเธเธเธ•เธด - เนเธชเธ”เธเน€เธเธเธฒเธฐเธซเธเนเธฒเธเธญเธเธขเธฒเธขเน€เธ—เนเธฒเธเธฑเนเธ เนเธกเนเนเธชเธ”เธเนเธเธซเธเนเธฒเธเธญเธซเธฅเธฑเธ)
-   ========================================================================== */
 .btn-return-main-screen,
 #btnReturnNormalScreen,
 #btnReturnMainScreen,
@@ -5055,7 +5062,6 @@ body.has-fullscreen-table #topStickyFilterBar {
   display: none !important;
 }
 
-/* เนเธชเธ”เธเน€เธเธเธฒเธฐเน€เธกเธทเนเธญเธเธขเธฒเธขเน€เธ•เนเธกเธเธญเน€เธ—เนเธฒเธเธฑเนเธ (FullScreen Mode Only) เนเธเนเธ–เธเธ•เธฑเธงเธเธฃเธญเธเธเธเธชเธธเธ” (เธ•เธณเนเธซเธเนเธเธเธฃเธญเธเธชเธตเน€เธซเธฅเธทเธญเธเธ•เธฒเธกเธฃเธนเธ) */
 body.has-fullscreen-table .btn-return-normal-top,
 body.has-fullscreen-chart .btn-return-normal-top {
   display: inline-flex !important;
@@ -5115,7 +5121,6 @@ body.has-fullscreen-chart .btn-return-normal-top {
   }
 }
 
-/* Light Theme support */
 [data-theme="light"] body.has-fullscreen-table .btn-return-normal-top,
 [data-theme="light"] body.has-fullscreen-chart .btn-return-normal-top {
   background: linear-gradient(135deg, #6D28D9 0%, #7C3AED 50%, #9333EA 100%) !important;
@@ -5123,9 +5128,7 @@ body.has-fullscreen-chart .btn-return-normal-top {
   box-shadow: 0 2px 10px rgba(109, 40, 217, 0.35), 0 0 10px rgba(217, 119, 6, 0.35) !important;
   color: #FFFFFF !important;
 }
-/* ==========================================================================
-   Office Ranking Horizontal Cards (Ultra-Readable View)
-   ========================================================================== */
+
 .office-ranking-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
@@ -5283,7 +5286,6 @@ body.has-fullscreen-chart .btn-return-normal-top {
   font-weight: 600;
 }
 
-/* View Mode Segmented Switch */
 .view-mode-switch {
   display: inline-flex;
   background: rgba(15, 3, 25, 0.7);
@@ -5319,9 +5321,6 @@ body.has-fullscreen-chart .btn-return-normal-top {
   box-shadow: 0 2px 8px rgba(168, 85, 247, 0.4);
 }
 
-/* ==========================================================================
-   Provincial Overview Cards
-   ========================================================================== */
 .provinces-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -5396,9 +5395,6 @@ body.has-fullscreen-chart .btn-return-normal-top {
   color: var(--text-main);
 }
 
-/* ==========================================================================
-   Criteria Badges & List View
-   ========================================================================== */
 .criteria-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -5429,9 +5425,6 @@ body.has-fullscreen-chart .btn-return-normal-top {
   margin-bottom: 0.5rem;
 }
 
-/* ==========================================================================
-   Interactive Data Table
-   ========================================================================== */
 .table-card {
   background: var(--surface-card);
   backdrop-filter: blur(16px);
@@ -5442,9 +5435,6 @@ body.has-fullscreen-chart .btn-return-normal-top {
   margin-bottom: 1.5rem;
 }
 
-/* ==========================================================================
-   Table Fullscreen & Table Toolbar Actions
-   ========================================================================== */
 .btn-wbs-clear-table-selections {
   display: inline-flex;
   align-items: center;
@@ -5522,7 +5512,7 @@ body.has-fullscreen-chart .btn-return-normal-top {
   max-height: 100vh !important;
   z-index: 99999 !important;
   margin: 0 !important;
-  padding: 0.85rem 1.25rem 0.65rem 1.25rem !important;
+  padding: calc(54px + 0.65rem) 1.25rem 0.65rem 1.25rem !important;
   border-radius: 0 !important;
   background: #170426 !important;
   background-image: radial-gradient(circle at 50% 15%, #28093E 0%, #170426 65%, #0F021B 100%) !important;
@@ -5539,10 +5529,12 @@ body.has-fullscreen-chart .btn-return-normal-top {
 }
 
 .table-card.is-fullscreen .table-header-bar {
+  position: relative !important;
+  z-index: 500 !important;
   flex-shrink: 0 !important;
-  padding: 0.5rem 0.25rem !important;
+  padding: 0.45rem 0.65rem !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
-  background: transparent !important;
+  background: rgba(255, 255, 255, 0.03) !important;
 }
 
 [data-theme="light"] .table-card.is-fullscreen .table-header-bar {
@@ -5693,7 +5685,6 @@ body.has-fullscreen-table {
   color: var(--pea-gold-300);
 }
 
-/* KPI Score Stars / Badge */
 .kpi-score-badge {
   display: inline-flex;
   align-items: center;
@@ -5740,7 +5731,6 @@ body.has-fullscreen-table {
   border: 1px solid var(--border-subtle);
 }
 
-/* Table Pagination Bar */
 .table-pagination-bar {
   padding: 0.75rem 1.25rem;
   display: flex;
@@ -5858,9 +5848,6 @@ body.has-fullscreen-table {
   color: #94A3B8 !important;
 }
 
-/* ==========================================================================
-   AUC Workflow Tracker (5 Steps)
-   ========================================================================== */
 .workflow-stepper {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -5924,9 +5911,6 @@ body.has-fullscreen-table {
   color: var(--text-dim);
 }
 
-/* ==========================================================================
-   Drilldown Modal & Overlay Modals (รองรับการแสดงผลทับหน้าจอขยาย Fullscreen)
-   ========================================================================== */
 .modal-overlay {
   position: fixed !important;
   inset: 0 !important;
@@ -6021,9 +6005,6 @@ body.has-fullscreen-table {
   gap: 0.75rem;
 }
 
-/* ==========================================================================
-   Toast Notification System
-   ========================================================================== */
 .toast-container {
   position: fixed;
   bottom: 1.5rem;
@@ -6074,9 +6055,6 @@ body.has-fullscreen-table {
   }
 }
 
-/* ==========================================================================
-   Early Warning & Action Item Badges
-   ========================================================================== */
 .alert-card-warning {
   background: rgba(245, 158, 11, 0.12);
   border: 1px solid rgba(245, 158, 11, 0.3);
@@ -6093,9 +6071,6 @@ body.has-fullscreen-table {
   margin-bottom: 1rem;
 }
 
-/* ==========================================================================
-   Office Ranking Grid & Horizontal Cards View
-   ========================================================================== */
 .view-mode-switch {
   display: inline-flex;
   background: rgba(15, 5, 29, 0.6);
@@ -6283,9 +6258,6 @@ body.has-fullscreen-table {
   color: var(--text-muted);
 }
 
-/* ==========================================================================
-   Print / Export Styles
-   ========================================================================== */
 @media print {
   body {
     background: #FFFFFF !important;
@@ -6317,7 +6289,6 @@ body.has-fullscreen-table {
   }
 }
 
-/* Responsive Breakpoints */
 @media (max-width: 1200px) {
   .kpi-cards-grid {
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -6356,10 +6327,6 @@ body.has-fullscreen-table {
     padding: 0.5rem 0.75rem;
   }
 }
-
-/* ==========================================================================
-   COLOR & THEME CUSTOMIZER WIDGET (MOVED TO TOP HEADER)
-   ========================================================================== */
 
 .palette-widget-container {
   position: relative;
@@ -6415,7 +6382,6 @@ body.has-fullscreen-table {
   margin-left: 2px;
 }
 
-/* Expanded Customizer Panel (Opens downwards from Top Header) */
 .palette-panel {
   pointer-events: auto;
   position: absolute;
@@ -6529,7 +6495,6 @@ body.has-fullscreen-table {
   border-radius: 999px;
 }
 
-/* Subtabs */
 .palette-subtabs {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -6592,7 +6557,6 @@ body.has-fullscreen-table {
   margin: 1rem 0;
 }
 
-/* Background Presets Grid */
 .bg-preset-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -6648,7 +6612,6 @@ body.has-fullscreen-table {
   max-width: 100%;
 }
 
-/* Custom Color Controls */
 .custom-color-row {
   display: flex;
   flex-direction: column;
@@ -6728,7 +6691,6 @@ body.has-fullscreen-table {
   text-transform: uppercase;
 }
 
-/* Chart Theme Presets */
 .chart-theme-presets {
   display: flex;
   flex-direction: column;
@@ -6781,7 +6743,6 @@ body.has-fullscreen-table {
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* Custom Chart Colors Grid */
 .custom-color-grid {
   display: flex;
   flex-direction: column;
@@ -6829,7 +6790,6 @@ body.has-fullscreen-table {
   border-radius: 4px;
 }
 
-/* Palette Footer */
 .palette-footer {
   display: flex;
   align-items: center;
@@ -6883,10 +6843,6 @@ body.has-fullscreen-table {
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(104, 44, 145, 0.4);
 }
-
-/* ==========================================================================
-   AI Smart Executive Insights Panel & Analysis Component
-   ========================================================================== */
 
 .btn-pea-ai-tag {
   display: inline-flex;
@@ -6957,7 +6913,6 @@ body.has-fullscreen-table {
   }
 }
 
-/* AI Analysis Container Box */
 .ai-analysis-panel {
   margin-top: 1.15rem;
   background: linear-gradient(135deg, rgba(28, 7, 46, 0.95), rgba(46, 13, 74, 0.92));
@@ -6984,7 +6939,6 @@ body.has-fullscreen-table {
   display: none !important;
 }
 
-/* Header */
 .ai-panel-header {
   display: flex;
   align-items: center;
@@ -7100,7 +7054,6 @@ body.has-fullscreen-table {
   }
 }
 
-/* 4-Card Stats Grid */
 .ai-stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
@@ -7183,7 +7136,6 @@ body.has-fullscreen-table {
   color: var(--text-dim);
 }
 
-/* Tabs Strip */
 .ai-tabs-strip {
   display: flex;
   align-items: center;
@@ -7232,7 +7184,6 @@ body.has-fullscreen-table {
   border-radius: var(--radius-sm) var(--radius-sm) 0 0;
 }
 
-/* Tab Contents */
 .ai-tab-pane {
   display: none;
   animation: fadeIn 0.25s ease-out;
@@ -7242,7 +7193,6 @@ body.has-fullscreen-table {
   display: block;
 }
 
-/* Executive Summary View */
 .ai-summary-box {
   background: rgba(20, 5, 34, 0.5);
   border-left: 4px solid var(--pea-gold-400);
@@ -7289,7 +7239,6 @@ body.has-fullscreen-table {
   flex: 1;
 }
 
-/* Tiered Unit Cards View */
 .ai-tier-section {
   margin-bottom: 1rem;
 }
@@ -7376,7 +7325,6 @@ body.has-fullscreen-table {
   margin-top: 2px;
 }
 
-/* Action Plan Recommendations View */
 .ai-actions-list {
   display: flex;
   flex-direction: column;
@@ -7440,7 +7388,6 @@ body.has-fullscreen-table {
   line-height: 1.55;
 }
 
-/* Trajectory Forecast View */
 .ai-forecast-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -7465,9 +7412,6 @@ body.has-fullscreen-table {
   line-height: 1.6;
 }
 
-/* =========================================================
-   CHART EMBEDDED FILTER & BUTTON TOOLBAR (ตัวกรองและปุ่มเลือกได้บนกราฟ)
-   ========================================================= */
 .chart-embedded-filter-bar {
   background: rgba(26, 11, 46, 0.65);
   border: 1px solid rgba(216, 180, 254, 0.18);
@@ -7576,7 +7520,6 @@ body.has-fullscreen-table {
   color: #EF4444;
 }
 
-/* Quick Pills Row */
 .chart-quick-pills-row {
   display: flex;
   align-items: center;
@@ -7647,7 +7590,6 @@ body.has-fullscreen-table {
   border-color: var(--pea-gold-500);
 }
 
-/* Multi-Select Criteria Quick Pills */
 .chart-crit-pills-row {
   display: flex;
   flex-direction: column;
@@ -7787,9 +7729,6 @@ body.has-fullscreen-table {
   border-color: rgba(100, 116, 139, 0.25) !important;
 }
 
-/* ========================================================
-   Interactive Timeline Legend with Checkboxes (ปุ่มติ๊ก แสดง-ไม่แสดง)
-   ======================================================== */
 .timeline-legend-container {
   background: rgba(22, 8, 38, 0.65);
   border: 1px solid rgba(168, 85, 247, 0.22);
@@ -7933,7 +7872,6 @@ body.has-fullscreen-table {
   color: #9CA3AF;
 }
 
-/* Checkbox inside chip */
 .legend-checkbox {
   width: 14px;
   height: 14px;
@@ -7955,7 +7893,6 @@ body.has-fullscreen-table {
   border: 1.5px solid rgba(255, 255, 255, 0.35);
 }
 
-/* Color bar/line indicator */
 .legend-color-indicator {
   width: 12px;
   height: 4px;
@@ -7977,7 +7914,6 @@ body.has-fullscreen-table {
   letter-spacing: 0.2px;
 }
 
-/* Light Theme overrides for legend chip */
 [data-theme="light"] .timeline-legend-chip {
   background: rgba(255, 255, 255, 0.95);
   border-color: rgba(104, 44, 145, 0.15);
@@ -8003,7 +7939,6 @@ body.has-fullscreen-table {
   border-color: #9CA3AF;
 }
 
-/* Active Criteria & Area Info Strip for Timeline (แสดงแบบที่ผู้ใช้ต้องการ - วงที่ 1) */
 .timeline-active-info-strip {
   display: flex;
   align-items: center;
@@ -8079,7 +8014,6 @@ body.has-fullscreen-table {
   box-shadow: 0 1px 4px rgba(245, 158, 11, 0.2);
 }
 
-/* KPI Target Badge in Legend (วงที่ 2: แสดงค่ากราฟตลอด ไม่ต้องมีปุ่มติ๊ก) */
 .timeline-legend-kpi-badge {
   display: inline-flex;
   align-items: center;
@@ -8105,9 +8039,6 @@ body.has-fullscreen-table {
   box-shadow: 0 2px 6px rgba(245, 158, 11, 0.1);
 }
 
-/* ========================================================
-   Bar Chart AI Analysis Panel for Failing KPI Units (KPI 1 - 4)
-   ======================================================== */
 .bar-ai-analysis-panel {
   margin-top: 1.15rem;
   background: linear-gradient(135deg, rgba(28, 7, 46, 0.96), rgba(48, 12, 74, 0.94));
@@ -8197,7 +8128,6 @@ body.has-fullscreen-table {
   line-height: 1.4;
 }
 
-/* Individual Failing Unit Cards Grid */
 .failing-units-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
@@ -8328,7 +8258,6 @@ body.has-fullscreen-table {
   margin-top: 0.15rem;
 }
 
-/* Target Action Box */
 .target-action-box {
   display: flex;
   align-items: flex-start;
@@ -8362,7 +8291,6 @@ body.has-fullscreen-table {
   color: #78350F;
 }
 
-/* AI Directive Box */
 .ai-recommendation-box {
   background: rgba(147, 51, 234, 0.1);
   border: 1px solid rgba(168, 85, 247, 0.25);
@@ -8397,7 +8325,6 @@ body.has-fullscreen-table {
   color: #374151;
 }
 
-/* Success celebratory banner when 0 failing units */
 .all-passed-card {
   display: flex;
   align-items: center;
@@ -8430,7 +8357,6 @@ body.has-fullscreen-table {
   color: #065F46;
 }
 
-/* Count badge on button */
 .ai-warning-count-dot {
   font-size: 0.68rem;
   font-weight: 800;
@@ -8447,9 +8373,6 @@ body.has-fullscreen-table {
   color: #6EE7B7;
 }
 
-/* ==========================================================================
-   TOP BAR: UPDATE EXCEL BUTTON & LIVE PROGRESS STYLING
-   ========================================================================== */
 .btn-update-excel {
   background: linear-gradient(135deg, #10B981 0%, #059669 60%, #047857 100%);
   color: #FFFFFF !important;
@@ -8512,7 +8435,6 @@ body.has-fullscreen-table {
   color: #A7F3D0;
 }
 
-/* Modal Dialog for Excel Update */
 .excel-modal-dialog {
   max-width: 680px;
   width: 95%;
@@ -8585,7 +8507,6 @@ body.has-fullscreen-table {
   gap: 1.15rem;
 }
 
-/* Progress Card & Tap % */
 .excel-progress-card {
   background: rgba(10, 3, 15, 0.7);
   border: 1px solid rgba(16, 185, 129, 0.3);
@@ -8649,7 +8570,6 @@ body.has-fullscreen-table {
   letter-spacing: -0.02em;
 }
 
-/* Progress Bar Track (Tap %) */
 .excel-progress-track {
   width: 100%;
   height: 20px;
@@ -8720,7 +8640,6 @@ body.has-fullscreen-table {
   color: var(--text-dim);
 }
 
-/* File items list */
 .excel-files-container {
   background: rgba(20, 6, 30, 0.55);
   border: 1px solid var(--border-subtle);
@@ -8836,7 +8755,6 @@ body.has-fullscreen-table {
   color: #9CA3AF;
 }
 
-/* Local Notice Box */
 .excel-local-notice {
   background: rgba(245, 158, 11, 0.1);
   border: 1px solid rgba(245, 158, 11, 0.4);
@@ -8866,7 +8784,6 @@ body.has-fullscreen-table {
   line-height: 1.45;
 }
 
-/* Modal Footer */
 .excel-modal-footer {
   border-top: 1px solid rgba(255, 255, 255, 0.09);
   padding: 1rem 1.4rem;
@@ -8886,7 +8803,6 @@ body.has-fullscreen-table {
   gap: 0.6rem;
 }
 
-/* Light Theme Adaptations */
 [data-theme="light"] .excel-modal-dialog {
   background: #FFFFFF;
   border-color: #10B981;
@@ -8938,9 +8854,6 @@ body.has-fullscreen-table {
   border-top-color: rgba(0, 0, 0, 0.08);
 }
 
-/* ========================================================
-   Next 3 Months Target Projection Section (แผนเป้าหมายปิดงานเพิ่ม 3 เดือนถัดไป)
-   ======================================================== */
 .next3m-formula-strip {
   display: flex;
   flex-wrap: wrap;
@@ -9075,9 +8988,6 @@ body.has-fullscreen-table {
   border-top: 3px solid #9333EA;
 }
 
-/* ==========================================================================
-   TARGET CARD +5% CONFIGURATION PANEL (ตำแหน่งกรอบเหลือง)
-   ========================================================================== */
 .next3m-config-panel-card {
   position: relative;
   border: 2.2px solid transparent;
@@ -9418,7 +9328,6 @@ body.has-fullscreen-table {
   color: #D97706;
 }
 
-/* Animations for Neon Gradient Border and Clock */
 @keyframes neonBorderShift {
   0% {
     background-position: 0 0, 0% 50%;
@@ -9632,7 +9541,6 @@ body.has-fullscreen-table {
   min-width: 0;
 }
 
-/* Next 3M Calculation Source Breakdown */
 .next3m-calc-source {
   margin-top: 0.4rem;
   padding: 0.4rem 0.48rem;
@@ -9873,9 +9781,6 @@ body.has-fullscreen-table {
   box-shadow: 0 2px 6px rgba(16, 185, 129, 0.2);
 }
 
-/* ========================================================
-   NEXT 3M HEADER INLINE SELECTION STRIP (แถบตัวกรองในบรรทัดเดียวกับ Header)
-   ======================================================== */
 .next3m-card-inline-title {
   font-size: 0.92rem;
   font-weight: 700;
@@ -9932,9 +9837,6 @@ body.has-fullscreen-table {
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
 }
 
-/* ========================================================
-   NEXT 3M / 4M HORIZONTAL BAR CHART COMPONENT
-   ======================================================== */
 .next3m-chart-card {
   background: linear-gradient(135deg, rgba(28, 8, 48, 0.85), rgba(42, 12, 68, 0.7));
   border: 1.5px solid rgba(168, 85, 247, 0.35);
@@ -10018,7 +9920,6 @@ body.has-fullscreen-table {
   border-color: #7E22CE;
 }
 
-/* SECTION 1: SINGLE HORIZONTAL MULTI-SEGMENT BAR */
 .next3m-single-bar-wrap {
   background: rgba(15, 3, 25, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -10130,7 +10031,7 @@ body.has-fullscreen-table {
   flex-grow: 1;
   clip-path: polygon(0% 0%, calc(100% - 18px) 0%, 100% 50%, calc(100% - 18px) 100%, 0% 100%, 18px 50%);
   margin-left: -15px;
-  /* Creates a 3px gap (18px clip - 15px margin = 3px gap) */
+  
 }
 
 .single-bar-segment:first-child {
@@ -10150,8 +10051,6 @@ body.has-fullscreen-table {
   padding-left: 15px;
   padding-right: 15px;
 }
-
-/* border-right removed for clip-path */
 
 .single-bar-segment:hover {
   filter: brightness(1.15) contrast(1.05);
@@ -10192,7 +10091,6 @@ body.has-fullscreen-table {
   align-items: center;
 }
 
-/* มูลค่า/งาน ที่ต้องปิดเพิ่ม (Overview): ป้ายพื้นหลังสีแดงเรืองแสงสวยงาม ตัวเลขเด่นชัด */
 .single-bar-segment:not(:has(.seg-status)) .seg-amt {
   display: inline-flex;
   align-items: center;
@@ -10234,8 +10132,6 @@ body.has-fullscreen-table {
   letter-spacing: 0.02em;
 }
 
-/* สีโดดเด่น คมชัด เปล่งประกาย (Vibrant & Luminous Gradients) */
-/* เซกเมนต์ที่ 1: สีชมพูพาสเทลหวานๆ (Sweet Pastel Rose-Pink) คมชัด อ่านง่าย */
 .single-bar-segment.seg-1 {
   background: linear-gradient(135deg, #EC4899 0%, #F472B6 45%, #FBCFE8 100%);
   box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.6);
@@ -10255,7 +10151,6 @@ body.has-fullscreen-table {
   box-shadow: 0 2px 5px rgba(40, 5, 25, 0.4);
 }
 
-/* เซกเมนต์ที่ 2: สีน้ำเงิน (Royal / Deep Blue) คมชัด สดใส สง่างาม */
 .single-bar-segment.seg-2 {
   background: linear-gradient(135deg, #1E40AF 0%, #2563EB 35%, #3B82F6 70%, #93C5FD 100%);
   box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.6);
@@ -10275,7 +10170,6 @@ body.has-fullscreen-table {
   box-shadow: 0 2px 5px rgba(15, 23, 42, 0.4);
 }
 
-/* เซกเมนต์ที่ 3: สีชาไทยพาสเทล (Creamy Pastel Thai Milk Tea) นุ่มนวล สวยงาม อ่านง่าย */
 .single-bar-segment.seg-3 {
   background: linear-gradient(135deg, #D97742 0%, #EE965B 38%, #F7B787 72%, #FDE2C8 100%);
   box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.65);
@@ -10316,7 +10210,6 @@ body.has-fullscreen-table {
   border-radius: 3px;
 }
 
-/* SECTION 2: MONTHLY HORIZONTAL BARS */
 .next3m-bars-list {
   display: flex;
   flex-direction: column;
@@ -10587,11 +10480,6 @@ body.has-fullscreen-table {
   }
 }
 
-/* =========================================================================
-   NEXT 3-MONTH PROJECTION: METRIC TOGGLE & UNIFIED CARD
-   ========================================================================= */
-
-/* Metric toggle buttons inside header */
 .next3m-metric-toggle-wrap {
   display: inline-flex;
   align-items: center;
@@ -10640,9 +10528,6 @@ body.has-fullscreen-table {
   color: #FFFFFF;
 }
 
-/* ==========================================================================
-   UNIFIED PROJECTION & OFFICE BAR CARD (ให้อยู่หน้าจอเดียวกัน ปรับไม่ให้ย้อนทับกัน)
-   ========================================================================== */
 .unified-projection-office-card {
   padding: 0.95rem 1.25rem 1.15rem;
   margin-bottom: 0 !important;
@@ -10659,7 +10544,6 @@ body.has-fullscreen-table {
   height: auto;
 }
 
-/* Top Section: Projection 3-Month Targets */
 .unified-card-top-section {
   position: relative;
   width: 100%;
@@ -10678,7 +10562,6 @@ body.has-fullscreen-table {
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
 }
 
-/* Luminous Elegant Divider: เส้นแบ่งสัดส่วน ปรับไม่ให้ย้อนทับกัน */
 .unified-card-divider {
   height: 1px;
   width: 100%;
@@ -10704,7 +10587,6 @@ body.has-fullscreen-table {
   box-shadow: 0 0 6px rgba(147, 51, 234, 0.15);
 }
 
-/* Bottom Section: 34-Office Bar Chart */
 .unified-card-bottom-section {
   position: relative;
   width: 100%;
@@ -10717,7 +10599,6 @@ body.has-fullscreen-table {
   padding-bottom: 0.3rem;
 }
 
-/* Fullscreen Mode Handling: แสดงทั้งกราฟแนวนอนและกราฟแท่ง 34 กฟฟ. ด้านล่าง */
 .unified-projection-office-card.is-fullscreen .unified-card-top-section {
   display: block !important;
   flex-shrink: 0;
@@ -10753,9 +10634,6 @@ body.has-fullscreen-table {
   }
 }
 
-/* ========================================================
-   Timeline View Mode Tabs & Monetary Amount Chart
-   ======================================================== */
 .timeline-view-mode-bar {
   display: flex;
   align-items: center;
@@ -10880,9 +10758,6 @@ body.has-fullscreen-table {
   letter-spacing: 0.2px;
 }
 
-/* ========================================================
-   Timeline Monthly Growth Table (ด้านขวาของกราฟ Timeline 2 คอลัมน์ ม.ค.-ธ.ค. & ค่าเฉลี่ย)
-   ======================================================== */
 .timeline-chart-flex-row {
   display: flex;
   align-items: stretch;
@@ -11083,9 +10958,6 @@ body.has-fullscreen-table {
   }
 }
 
-/* ========================================================
-   Next 3M Fullscreen Stats Strip (ยกเลิกและปิดการแสดงผลตามคำสั่งผู้ใช้งาน)
-   ======================================================== */
 .next3m-fullscreen-stats-strip,
 .unified-projection-office-card.is-fullscreen .next3m-fullscreen-stats-strip,
 .content-card.is-fullscreen .next3m-fullscreen-stats-strip,
@@ -11152,9 +11024,6 @@ body.has-fullscreen-table {
   color: rgba(104, 44, 145, 0.35);
 }
 
-/* ==========================================================================
-   WBS Remaining Jobs Tracking Tab (แท็บรายการ WBS คงเหลือ)
-   ========================================================================== */
 .wbs-banner-card {
   background: var(--surface-card);
   backdrop-filter: blur(16px);
@@ -11324,7 +11193,6 @@ body.has-fullscreen-table {
   color: #047857;
 }
 
-/* 4 Stats Cards Grid */
 .wbs-stats-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -11442,7 +11310,6 @@ body.has-fullscreen-table {
   border: 1px solid rgba(245, 158, 11, 0.4);
 }
 
-/* WBS Code Cell with Copy Button */
 .wbs-code-cell {
   display: flex;
   align-items: center;
@@ -11480,7 +11347,6 @@ body.has-fullscreen-table {
   color: var(--pea-gold-400);
 }
 
-/* Table Badges */
 .badge-criteria-pill {
   display: inline-block;
   padding: 2px 8px;
@@ -11549,7 +11415,6 @@ body.has-fullscreen-table {
   flex-shrink: 0;
 }
 
-/* Pagination Buttons */
 .wbs-page-btn {
   padding: 0.35rem 0.65rem;
   border-radius: var(--radius-sm);
@@ -11581,7 +11446,6 @@ body.has-fullscreen-table {
   cursor: not-allowed;
 }
 
-/* Active Criteria Badge above WBS Table (เกณฑ์วัดแสดงด้านบนแทนคอลัมน์ในตาราง) */
 .wbs-table-active-criteria {
   display: inline-flex;
   align-items: center;
@@ -11632,9 +11496,6 @@ body.has-fullscreen-table {
   margin-left: auto;
 }
 
-/* ==========================================================================
-   WBS COLUMN VISIBILITY SELECTOR DROPDOWN (เมนูเลือกแสดงคอลัมน์)
-   ========================================================================== */
 .wbs-col-dropdown-wrap {
   position: relative;
   display: inline-block;
@@ -11751,7 +11612,6 @@ body.has-fullscreen-table {
   font-size: 0.75rem;
 }
 
-/* Presets bar */
 .col-presets-bar {
   display: flex;
   align-items: center;
@@ -11780,7 +11640,6 @@ body.has-fullscreen-table {
   color: #FFFFFF;
 }
 
-/* Search inside column dropdown */
 .col-search-box {
   position: relative;
   margin-bottom: 0.6rem;
@@ -11821,7 +11680,6 @@ body.has-fullscreen-table {
   padding-right: 0.25rem;
 }
 
-/* Category header inside column list */
 .col-group-header {
   display: flex;
   align-items: center;
@@ -11916,7 +11774,6 @@ body.has-fullscreen-table {
   border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
-/* แท็กไฟล์ 05 CN41 วันเริ่มบัญชี: สีฟ้าไซแอน/เทอร์ควอยซ์สดใส ไม่ซ้ำกับไฟล์อื่นและไม่เหมือนไฟล์ 06 */
 .col-tag-05 {
   background: rgba(6, 182, 212, 0.22);
   color: #22D3EE;
@@ -11929,7 +11786,6 @@ body.has-fullscreen-table {
   border-color: #22D3EE;
 }
 
-/* แท็กไฟล์ 06 CN41 ล่าสุด: สีส้มทองอำพัน */
 .col-tag-06-cn41 {
   background: rgba(245, 158, 11, 0.2);
   color: #FBBF24;
@@ -11942,7 +11798,6 @@ body.has-fullscreen-table {
   border-color: #FBBF24;
 }
 
-/* แท็กไฟล์ 07 พัสดุค้างเบิก CN52N: สีส้มทองอำพันสดใส มีพื้นหลังเหมือนเดิมสวยงาม */
 .col-tag-07 {
   background: rgba(245, 158, 11, 0.2);
   color: #FBBF24;
@@ -11967,7 +11822,6 @@ body.has-fullscreen-table {
   border-color: #F472B6;
 }
 
-/* แท็ก G-Sheet แผนงานแล้วเสร็จ */
 .col-tag-sheet,
 .col-tag-06 {
   background: rgba(168, 85, 247, 0.2);
@@ -12049,7 +11903,6 @@ body.has-fullscreen-table {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
-/* สถานะ SAP: CLSD สีเขียว (Green) */
 .badge-sap-short.badge-sap-clsd,
 .badge-sap-status.badge-sap-clsd {
   background: rgba(16, 185, 129, 0.18);
@@ -12057,7 +11910,6 @@ body.has-fullscreen-table {
   border: 1px solid rgba(16, 185, 129, 0.45);
 }
 
-/* สถานะ SAP: TECO สีเหลืองทอง (Golden Yellow) */
 .badge-sap-short.badge-sap-teco,
 .badge-sap-status.badge-sap-teco {
   background: rgba(245, 158, 11, 0.20);
@@ -12065,7 +11917,6 @@ body.has-fullscreen-table {
   border: 1px solid rgba(245, 158, 11, 0.50);
 }
 
-/* สถานะ SAP: REL สีแดง (Red) */
 .badge-sap-short.badge-sap-rel,
 .badge-sap-status.badge-sap-rel {
   background: rgba(239, 68, 68, 0.20);
@@ -12073,7 +11924,6 @@ body.has-fullscreen-table {
   border: 1px solid rgba(239, 68, 68, 0.50);
 }
 
-/* Light Theme Overrides */
 [data-theme="light"] .badge-sap-short.badge-sap-clsd,
 [data-theme="light"] .badge-sap-status.badge-sap-clsd {
   background: #ECFDF5;
@@ -12095,9 +11945,6 @@ body.has-fullscreen-table {
   border-color: #FCA5A5;
 }
 
-/* =====================================================================
-   WBS SAP Status Summary Section (Horizontal Badges / Stat Cards Strip)
-   ===================================================================== */
 .wbs-sap-summary-wrap {
   margin-bottom: 1.25rem;
   background: var(--bg-card, rgba(26, 16, 44, 0.75));
@@ -12109,7 +11956,6 @@ body.has-fullscreen-table {
   transition: all 0.25s ease;
 }
 
-/* Integrated inside WBS Chart Card (กรอบสีน้ำเงินตามที่ผู้ใช้กำหนด) */
 .wbs-sap-summary-integrated {
   margin-bottom: 0.75rem;
   background: rgba(15, 6, 28, 0.42);
@@ -12237,7 +12083,6 @@ body.has-fullscreen-table {
   border-color: rgba(168, 85, 247, 0.18);
 }
 
-/* แถบปุ่มล้างข้อมูลเฉพาะ Checkbox ใต้การ์ดสรุปสถานะ SAP ตามกรอบสีแดงของผู้ใช้งาน */
 .wbs-sap-summary-footer-bar {
   display: flex;
   justify-content: flex-end;
@@ -12529,7 +12374,6 @@ body.has-fullscreen-table {
   box-shadow: 0 0 10px currentColor;
 }
 
-/* Dimmed state for unselected cards when filter is active */
 .wbs-sap-card.is-dimmed {
   opacity: 0.45;
   filter: saturate(0.6) brightness(0.85);
@@ -12543,9 +12387,6 @@ body.has-fullscreen-table {
   border-color: rgba(255, 255, 255, 0.35) !important;
 }
 
-/* =====================================================================
-   WBS SAP Card Checkmark Pill / Tick Button (ปุ่มติ๊กถูกขนาดกะทัดรัด ไม่โดนบัง)
-   ===================================================================== */
 .wbs-sap-card-check-pill {
   display: inline-flex;
   align-items: center;
@@ -12575,7 +12416,6 @@ body.has-fullscreen-table {
   line-height: 1;
 }
 
-/* Inactive State: Sleek compact circle with subtle check */
 .wbs-sap-card-check-pill.is-inactive {
   background: rgba(255, 255, 255, 0.06);
   color: rgba(255, 255, 255, 0.38);
@@ -12589,7 +12429,6 @@ body.has-fullscreen-table {
   transform: scale(1.08);
 }
 
-/* Active State: Vibrant glowing circular button with crisp white tick icon */
 .wbs-sap-card-check-pill.is-active {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
   border-width: 1.3px;
@@ -12629,7 +12468,6 @@ body.has-fullscreen-table {
   box-shadow: 0 0 8px rgba(239, 68, 68, 0.75);
 }
 
-/* Light Theme Check Pill & Active Cards */
 [data-theme="light"] .wbs-sap-card.card-all.active {
   background: linear-gradient(180deg, #E0F2FE 0%, #BAE6FD 100%) !important;
   border-color: #0284C7 !important;
@@ -12741,7 +12579,6 @@ body.has-fullscreen-table {
   white-space: nowrap;
 }
 
-/* Light Theme Overrides for SAP Summary Section */
 [data-theme="light"] .wbs-sap-summary-wrap {
   background: #FFFFFF;
   border-color: rgba(147, 51, 234, 0.2);
@@ -12787,10 +12624,6 @@ body.has-fullscreen-table {
   color: #B45309;
 }
 
-/* =====================================================================
-   WBS SAP Status Summary Card - Checkbox Selection Sub-Box
-   (กล่องข้อมูลที่เลือก Checkbox ด้านล่างการ์ด อักษรสีฟ้า + พื้นหลังสีพิเศษตามสีสถานะ SAP)
-   ===================================================================== */
 .wbs-sap-card {
   min-width: 165px;
   display: flex;
@@ -12824,7 +12657,6 @@ body.has-fullscreen-table {
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ภาวะปกติ (Idle / ค่าเริ่มต้น): สีพื้นหลังใสๆ สบายตา ตามสีสถานะ SAP เต็มพื้นที่การ์ดส่วนที่เลือก */
 .wbs-sap-card-cb-box.cat-all {
   background: linear-gradient(180deg, rgba(56, 189, 248, 0.12) 0%, rgba(14, 165, 233, 0.08) 100%);
   border-top: 1px solid rgba(56, 189, 248, 0.35);
@@ -12845,7 +12677,6 @@ body.has-fullscreen-table {
   border-top: 1px solid rgba(248, 113, 113, 0.35);
 }
 
-/* ล็อค 2 บรรทัดตายตัว: บรรทัดที่ 1 = บรรทัดจำนวนงาน */
 .wbs-sap-cb-row-jobs {
   display: flex;
   justify-content: space-between;
@@ -12862,7 +12693,7 @@ body.has-fullscreen-table {
   gap: 0.25rem;
   font-weight: 700;
   color: #38BDF8;
-  /* อักษรสีฟ้า */
+  
   letter-spacing: 0.01em;
   font-size: 0.72rem;
   flex-shrink: 0;
@@ -12875,14 +12706,13 @@ body.has-fullscreen-table {
 .wbs-sap-cb-count {
   font-weight: 700;
   color: #38BDF8;
-  /* อักษรสีฟ้า */
+  
   font-size: 0.76rem;
   white-space: nowrap;
   text-align: right;
   flex-shrink: 0;
 }
 
-/* ล็อค 2 บรรทัดตายตัว: บรรทัดที่ 2 = บรรทัดมูลค่า (ตัวเลขไม่โดนบัง แสดงเต็มจำนวน) */
 .wbs-sap-cb-row-auc {
   display: flex;
   justify-content: space-between;
@@ -12896,7 +12726,7 @@ body.has-fullscreen-table {
 .wbs-sap-cb-auc-lbl {
   font-size: 0.64rem;
   color: #7DD3FC;
-  /* ฟ้าอ่อน */
+  
   opacity: 0.9;
   white-space: nowrap;
   flex-shrink: 0;
@@ -12907,7 +12737,7 @@ body.has-fullscreen-table {
   font-size: 0.8rem;
   font-weight: 700;
   color: #38BDF8;
-  /* อักษรสีฟ้า */
+  
   text-shadow: 0 0 10px rgba(56, 189, 248, 0.45);
   white-space: nowrap;
   letter-spacing: -0.01em;
@@ -12915,7 +12745,6 @@ body.has-fullscreen-table {
   overflow: hidden;
 }
 
-/* เมื่อมีรายการเลือก (Has Selection): ปรับสีพื้นหลังที่เลือกให้ "สีใสๆ สว่าง ไม่ทึบ" (Bright Translucent Glassy Glow) */
 .wbs-sap-card-cb-box.has-selection.cat-all {
   background: linear-gradient(180deg, rgba(56, 189, 248, 0.25) 0%, rgba(14, 165, 233, 0.16) 100%);
   border-top: 1.5px solid #38BDF8;
@@ -12972,7 +12801,6 @@ body.has-fullscreen-table {
   text-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
 }
 
-/* Light Theme Overrides */
 [data-theme="light"] .wbs-sap-card-cb-box.cat-all {
   background: linear-gradient(180deg, rgba(224, 242, 254, 0.65) 0%, rgba(186, 230, 253, 0.75) 100%);
   border-top-color: #7DD3FC;
@@ -12997,7 +12825,7 @@ body.has-fullscreen-table {
 [data-theme="light"] .wbs-sap-cb-count,
 [data-theme="light"] .wbs-sap-cb-auc-val {
   color: #0284C7;
-  /* สีฟ้าสดใสในโหมดสว่าง */
+  
   text-shadow: none !important;
 }
 
@@ -13029,9 +12857,6 @@ body.has-fullscreen-table {
   border-top-color: #DC2626;
 }
 
-/* =====================================================================
-   WBS Selected Items Summary Card (ต่อจากแถวสรุปสถานะ SAP)
-   ===================================================================== */
 .wbs-selected-summary-wrap {
   margin-bottom: 1.25rem;
   background: var(--bg-card, rgba(26, 16, 44, 0.85));
@@ -13287,7 +13112,6 @@ body.has-fullscreen-table {
   transition: width 0.3s ease;
 }
 
-/* Checkbox inside statusSap cell */
 .wbs-sap-cell-wrap {
   display: inline-flex;
   align-items: center;
@@ -13301,7 +13125,7 @@ body.has-fullscreen-table {
   height: 17px;
   cursor: pointer;
   accent-color: #0284C7 !important;
-  /* เปลี่ยนจากพื้นม่วง (#A855F7) เป็นพื้นฟ้าตามคำสั่งผู้ใช้งาน */
+  
   border-radius: 4px;
   transition: transform 0.15s ease;
   vertical-align: middle;
@@ -13317,7 +13141,6 @@ body.has-fullscreen-table {
   accent-color: #0284C7 !important;
 }
 
-/* Checked row subtle blue highlight */
 tr.wbs-row-checked {
   background: rgba(2, 132, 199, 0.09) !important;
 }
@@ -13334,7 +13157,6 @@ tr.wbs-row-checked:hover {
   background: rgba(2, 132, 199, 0.15) !important;
 }
 
-/* Light Theme Overrides for Selected Summary Card */
 [data-theme="light"] .wbs-selected-summary-wrap {
   background: #FFFFFF;
   border-color: rgba(147, 51, 234, 0.25);
@@ -13391,12 +13213,6 @@ tr.wbs-row-checked:hover {
   accent-color: #0284C7 !important;
 }
 
-/* ==========================================================================
-   WBS TABLE FLOATING SELECTION CARD (มุมขวาด้านล่าง บนตารางตลอด พื้นสีฟ้า)
-   - แสดงจำนวนงาน และมูลค่า AUC ตามไฟล์ 06 สำหรับรายการที่เลือกใน Checkbox
-   - ลอยอยู่มุมขวาล่างของตารางตลอดเวลา (Sticky / Absolute over table)
-   - พื้นสีฟ้าหรูหรา ขนาดกะทัดรัด พอดีสวยงาม
-   ========================================================================== */
 .wbs-table-floating-selection {
   position: absolute;
   right: 16px;
@@ -13501,14 +13317,14 @@ tr.wbs-row-checked:hover {
 }
 
 .wbs-floating-target-icon {
-  font-size: 0.78rem;
+  font-size: 0.90rem;
   line-height: 1;
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.35));
 }
 
 .wbs-floating-target-label {
-  font-size: 0.76rem;
-  font-weight: 600;
+  font-size: 0.88rem;
+  font-weight: 700;
   color: #F0F9FF;
   letter-spacing: 0.2px;
   white-space: nowrap;
@@ -13516,42 +13332,37 @@ tr.wbs-row-checked:hover {
 
 .wbs-floating-target-month {
   display: inline-block;
-  padding: 1px 7px;
+  padding: 2px 8px;
   border-radius: 5px;
   background: linear-gradient(135deg, #DB2777 0%, #EC4899 35%, #F472B6 80%, #F9A8D4 100%);
   border: 1.5px solid #FFD700;
   color: #FFFFFF;
   font-weight: 850;
-  font-size: 0.77rem;
+  font-size: 0.88rem;
   letter-spacing: 0.2px;
   text-shadow: 0 1.5px 3px rgba(0, 0, 0, 0.9), 0 0 2px rgba(0, 0, 0, 0.85);
   box-shadow: 0 0 8px rgba(255, 215, 0, 0.55), 0 1px 4px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.65);
   transition: background 0.25s ease, box-shadow 0.25s ease;
 }
 
-/* สีพื้นหลังป้ายเดือนในการ์ดลอย ตรงกับเป้าหมายเดือนที่เลือกในแถบลูกศร (รูปที่ 4) */
-/* เซกเมนต์ที่ 1 (ต.ค.): สีชมพูสดใส */
 .wbs-floating-target-month.target-seg-1 {
   background: linear-gradient(135deg, #DB2777 0%, #EC4899 30%, #F472B6 70%, #FBCFE8 100%);
   text-shadow: 0 1.5px 3px rgba(80, 7, 36, 0.95), 0 0 2px rgba(0, 0, 0, 0.9);
   box-shadow: 0 0 8px rgba(255, 215, 0, 0.6), 0 1px 4px rgba(80, 7, 36, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 
-/* เซกเมนต์ที่ 2 (พ.ย.): สีน้ำเงินเข้ม (Royal / Deep Blue) */
 .wbs-floating-target-month.target-seg-2 {
   background: linear-gradient(135deg, #1E3A8A 0%, #1D4ED8 25%, #2563EB 65%, #60A5FA 100%);
   text-shadow: 0 1.5px 3px rgba(15, 23, 42, 0.95), 0 0 2px rgba(0, 0, 0, 0.9);
   box-shadow: 0 0 8px rgba(255, 215, 0, 0.6), 0 1px 4px rgba(15, 23, 42, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 
-/* เซกเมนต์ที่ 3 (ธ.ค.): สีชาไทยพาสเทลขอบทอง (Creamy Pastel Thai Milk Tea) */
 .wbs-floating-target-month.target-seg-3 {
   background: linear-gradient(135deg, #C86432 0%, #D97742 30%, #EE965B 68%, #F7B787 100%);
   text-shadow: 0 1.5px 3px rgba(67, 20, 7, 0.95), 0 0 2px rgba(0, 0, 0, 0.9);
   box-shadow: 0 0 9px rgba(255, 215, 0, 0.7), 0 1px 4px rgba(67, 20, 7, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
-/* เซกเมนต์ที่ 4 (อื่นๆ): สีม่วงสด */
 .wbs-floating-target-month.target-seg-4 {
   background: linear-gradient(135deg, #5B21B6 0%, #7C3AED 30%, #9333EA 70%, #C084FC 100%);
   text-shadow: 0 1.5px 3px rgba(46, 16, 101, 0.95), 0 0 2px rgba(0, 0, 0, 0.9);
@@ -13581,14 +13392,15 @@ tr.wbs-row-checked:hover {
 }
 
 .wbs-floating-target-mb {
-  font-size: 0.74rem;
+  font-size: 0.88rem;
   font-weight: 800;
   color: #FFFFFF;
-  background: rgba(220, 38, 38, 0.88);
-  border: 1px solid rgba(254, 202, 202, 0.8);
-  padding: 1px 6px;
-  border-radius: 5px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  background: rgba(220, 38, 38, 0.92);
+  border: 1px solid rgba(254, 202, 202, 0.85);
+  padding: 2px 8px;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
 }
 
 .wbs-floating-sel-row.top {
@@ -13709,28 +13521,33 @@ tr.wbs-row-checked:hover {
 }
 
 .wbs-floating-sel-clear {
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+  border: 1px solid rgba(254, 202, 202, 0.85);
   color: #FFFFFF;
   border-radius: 6px;
-  font-size: 0.70rem;
-  font-weight: 600;
-  padding: 1px 7px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 1px 8px;
   cursor: pointer;
   transition: all 0.15s ease;
   line-height: 1.4;
   margin-left: 4px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
 }
 
 .wbs-floating-sel-clear:hover:not(:disabled) {
-  background: #EF4444;
-  border-color: #EF4444;
+  background: linear-gradient(135deg, #F87171 0%, #EF4444 100%);
+  border-color: #FFFFFF;
   color: #FFFFFF;
   transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.65);
 }
 
 .wbs-floating-sel-clear:disabled {
-  opacity: 0.45;
+  background: rgba(220, 38, 38, 0.88);
+  border-color: rgba(254, 202, 202, 0.75);
+  color: rgba(255, 255, 255, 0.92);
+  opacity: 0.85;
   cursor: not-allowed;
   pointer-events: none;
 }
@@ -13753,7 +13570,7 @@ tr.wbs-row-checked:hover {
   font-size: 0.92rem;
   font-weight: 800;
   color: #FEF08A;
-  /* ตัวเลขสีทอง/เหลืองสว่าง โดดเด่นบนพื้นสีฟ้า */
+  
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
@@ -13763,24 +13580,17 @@ tr.wbs-row-checked:hover {
   color: #E0F2FE;
 }
 
-/* Light Mode Overrides */
 [data-theme="light"] .wbs-floating-sel-card {
   background: linear-gradient(135deg, #0284C7 0%, #0369A1 100%);
   border-color: #38BDF8;
   box-shadow: 0 4px 16px rgba(2, 132, 199, 0.38);
 }
 
-/* ==========================================================================
-   WBS KPI LEVEL 5 TARGET COMPARISON SECTION (กราฟแนวนอน 2 ชั้น)
-   - กราฟบน: เป้าหมายที่ต้องปิดเพิ่ม (รูป 22)
-   - กราฟล่าง: ปิดงาน SAP CLSD F4/F2 + ผลรวมที่เลือกจาก Checkbox (รูป 23)
-   ========================================================================== */
 .wbs-target-comparison-wrap {
   margin-top: 0.25rem;
   margin-bottom: 1.25rem;
 }
 
-/* WBS Target Comparison Unified Grid (ผสานการ์ดสรุปภาพรวมมูลค่า & งาน รูปที่ 15 ฝั่งซ้าย และการ์ดเปรียบเทียบ KPI ฝั่งขวา) */
 .wbs-comparison-unified-grid {
   display: flex;
   align-items: stretch;
@@ -13964,7 +13774,6 @@ tr.wbs-row-checked:hover {
   gap: 0.35rem;
 }
 
-/* คอนเทนเนอร์ฝั่งขวาของหัวการ์ดกราฟ WBS (รวมแถบที่มาไฟล์ และปุ่มแอ็กชันขวาสุด) */
 .wbs-chart-header-actions-area {
   display: flex;
   align-items: center;
@@ -13982,7 +13791,6 @@ tr.wbs-row-checked:hover {
   margin-left: auto;
 }
 
-/* แถบแสดงที่มาไฟล์ และวันที่แก้ไขล่าสุด ของ สถานะ SAP & มูลค่า AUC บนหัวการ์ดกราฟ WBS */
 .wbs-chart-header-source-strip {
   display: flex;
   align-items: center;
@@ -14012,7 +13820,6 @@ tr.wbs-row-checked:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
 
-/* 1. สถานะ SAP (โทนม่วง/น้ำเงิน สอดคล้องกับไฟล์ 04 ZBUDR064) */
 .wbs-src-chip.chip-sap-status {
   background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(109, 40, 217, 0.28) 100%);
   border: 1px solid rgba(167, 139, 250, 0.45);
@@ -14034,7 +13841,6 @@ tr.wbs-row-checked:hover {
   font-weight: 600;
 }
 
-/* 2. มูลค่า AUC เริ่มต้น (ไฟล์ 05 WBS CN41 วันเริ่มบัญชี 14 ต.ค. 69) - สีฟ้า Cyan เด่นชัด ไม่ซ้ำกับไฟล์อื่นและไม่เหมือนไฟล์ 06 */
 .wbs-src-chip.chip-auc-init {
   background: linear-gradient(135deg, rgba(8, 145, 178, 0.22) 0%, rgba(6, 182, 212, 0.3) 100%);
   border: 1px solid rgba(34, 211, 238, 0.55);
@@ -14074,7 +13880,6 @@ tr.wbs-row-checked:hover {
   color: #155E75;
 }
 
-/* 3. มูลค่า AUC ล่าสุด (ไฟล์ 06 CN41 ล่าสุด 22 ต.ค. 69) */
 .wbs-src-chip.chip-auc-value {
   background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(217, 119, 6, 0.28) 100%);
   border: 1px solid rgba(251, 191, 36, 0.45);
@@ -14100,7 +13905,6 @@ tr.wbs-row-checked:hover {
   font-size: 0.8rem;
 }
 
-/* ปุ่มเลือกการ์ดทุกสถานะ บนขวาของการ์ดกราฟแท่ง WBS */
 .btn-wbs-card-select-all {
   display: inline-flex;
   align-items: center;
@@ -14137,7 +13941,6 @@ tr.wbs-row-checked:hover {
   box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.45), 0 4px 14px rgba(14, 165, 233, 0.6);
 }
 
-/* ปุ่มล้างข้อมูล บนสุดขวามือของการ์ด สีแดงเด่นชัด */
 .btn-wbs-card-clear {
   display: inline-flex;
   align-items: center;
@@ -14185,7 +13988,6 @@ tr.wbs-row-checked:hover {
   font-weight: 700;
 }
 
-/* Month Selection Strip */
 .wbs-kpi-month-selector-strip {
   display: flex;
   align-items: center;
@@ -14277,8 +14079,6 @@ tr.wbs-row-checked:hover {
   padding-right: 15px;
 }
 
-/* Gradients from รูป 31 (Luminous & Vibrant Gradients) */
-/* เซกเมนต์ที่ 1 (WBS): สีชมพูพาสเทลหวานๆ (Sweet Pastel Rose-Pink) */
 .btn-wbs-kpi-month.m-seg-1 .btn-wbs-kpi-inner {
   background: linear-gradient(135deg, #EC4899 0%, #F472B6 45%, #FBCFE8 100%);
 }
@@ -14296,7 +14096,6 @@ tr.wbs-row-checked:hover {
   box-shadow: 0 2px 5px rgba(40, 5, 25, 0.4);
 }
 
-/* เซกเมนต์ที่ 2 (WBS): สีน้ำเงิน (Royal / Deep Blue) */
 .btn-wbs-kpi-month.m-seg-2 .btn-wbs-kpi-inner {
   background: linear-gradient(135deg, #1E40AF 0%, #2563EB 30%, #3B82F6 68%, #93C5FD 100%);
 }
@@ -14314,7 +14113,6 @@ tr.wbs-row-checked:hover {
   box-shadow: 0 2px 5px rgba(15, 23, 42, 0.4);
 }
 
-/* เซกเมนต์ที่ 3 (WBS): สีชาไทยพาสเทล (Creamy Pastel Thai Milk Tea) */
 .btn-wbs-kpi-month.m-seg-3 .btn-wbs-kpi-inner {
   background: linear-gradient(135deg, #D97742 0%, #EE965B 38%, #F7B787 72%, #FDE2C8 100%);
 }
@@ -14336,13 +14134,11 @@ tr.wbs-row-checked:hover {
   background: linear-gradient(135deg, #7C3AED 0%, #9333EA 45%, #C084FC 100%);
 }
 
-/* Inactive button state: Softened so the active button commands full focus */
 .btn-wbs-kpi-month:not(.active) {
   opacity: 0.68;
   filter: saturate(0.85) brightness(0.86);
 }
 
-/* 1. ขณะลากเมาส์ไปชี้: สว่างขึ้น พร้อมเส้นขอบเรืองแสงนวลตา */
 .btn-wbs-kpi-month:not(.active):hover:not(:disabled) {
   opacity: 0.95;
   filter: saturate(1.1) brightness(1.05);
@@ -14356,13 +14152,12 @@ tr.wbs-row-checked:hover {
   filter: brightness(1.12);
 }
 
-/* 2. ตอนเลือก (Active): ปุ่มโดดเด่น ลอย 3D (Elevated) ขอบเป็นไฟวิ่งสวยงามสะดุดตา (Running Light Border) */
 .btn-wbs-kpi-month.active {
   opacity: 1 !important;
   z-index: 30;
   padding: 3.5px;
   transform: translateY(-3.5px) scale(1.02);
-  /* Multi-stop High-Intensity White-Gold Diamond Running Beams */
+  
   background: linear-gradient(105deg,
       #FFA000 0%,
       #FFD700 15%,
@@ -14400,7 +14195,6 @@ tr.wbs-row-checked:hover {
   box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.85), inset 0 -2.5px 6px rgba(0, 0, 0, 0.45);
 }
 
-/* Active Segment Rich Luminous Gradients */
 .btn-wbs-kpi-month.active.m-seg-1 .btn-wbs-kpi-inner {
   background: linear-gradient(135deg, #DB2777 0%, #EC4899 30%, #F472B6 70%, #FBCFE8 100%);
 }
@@ -14498,7 +14292,6 @@ tr.wbs-row-checked:hover {
   box-shadow: 0 0 8px rgba(255, 255, 255, 0.35), 0 2px 6px rgba(0, 0, 0, 0.45);
 }
 
-/* มูลค่า/งาน ที่ต้องปิดเพิ่ม (WBS): ป้ายพื้นหลังสีแดงเรืองแสงสวยงาม ตัวเลขเด่นชัด */
 .btn-wbs-kpi-month:not(.is-achieved) .m-amt {
   display: inline-flex;
   align-items: center;
@@ -14530,7 +14323,6 @@ tr.wbs-row-checked:hover {
   font-family: inherit;
 }
 
-/* 1. บรรลุเป้า: พื้นเขียวเรืองแสงนีออนมรกต อักษรเขียวป่าเข้มลึกตัดกันคมชัด */
 .btn-wbs-kpi-month .m-achieved-pill {
   display: inline-flex;
   align-items: center;
@@ -14547,7 +14339,6 @@ tr.wbs-row-checked:hover {
   letter-spacing: 0.02em;
 }
 
-/* 2. แสดงกำลังเลือก: พื้นสีใหม่สีทองคำขาวเรืองแสง (White-Gold Halo) โดดเด่นสะดุดตา อักษรม่วงเข้มคมชัดสวยงาม */
 .btn-wbs-kpi-month .m-active-dot {
   display: inline-flex;
   align-items: center;
@@ -14615,7 +14406,6 @@ tr.wbs-row-checked:hover {
   transform: none;
 }
 
-/* KPI Comparison Main Grid (Left: 2-layer Bars, Right: Outcome Panel) */
 .wbs-kpi-main-grid {
   display: flex;
   align-items: stretch;
@@ -14634,7 +14424,6 @@ tr.wbs-row-checked:hover {
   }
 }
 
-/* 2-Layer Horizontal Bars Box */
 .wbs-kpi-bars-box {
   flex: 1;
   min-width: 0;
@@ -14837,7 +14626,6 @@ body.theme-light .bar-sap-date-plain:hover {
   color: #FFD25A;
 }
 
-/* มูลค่า/งาน CLSD F4 / F2: ใช้สีเขียว */
 .sap-text {
   color: #34D399;
   font-weight: 800;
@@ -14846,7 +14634,6 @@ body.theme-light .bar-sap-date-plain:hover {
   letter-spacing: 0.2px;
 }
 
-/* ส่วนที่เลือก: ตัวเลขใช้สีฟ้า สดใสเรืองแสง */
 .selected-text {
   color: #00E5FF;
   font-weight: 800;
@@ -14855,7 +14642,6 @@ body.theme-light .bar-sap-date-plain:hover {
   letter-spacing: 0.2px;
 }
 
-/* ตัวเลขรวม: ใช้สีเขียวอร่ามเรืองแสง */
 .progress-text {
   color: #00FF88;
   font-weight: 800;
@@ -14864,7 +14650,6 @@ body.theme-light .bar-sap-date-plain:hover {
   letter-spacing: 0.2px;
 }
 
-/* ปุ่มล้างข้อมูล (WBS KPI Clear Selection Button) */
 .btn-wbs-kpi-clear {
   display: inline-flex;
   align-items: center;
@@ -14960,8 +14745,6 @@ body.theme-light .bar-sap-date-plain:hover {
   text-overflow: ellipsis;
 }
 
-/* Dynamic Month Target Fill Colors (แสดงสีกราฟตามเป้าหมายเดือนที่เลือก ตามคำสั่งผู้ใช้งาน) */
-/* เดือนที่ 1 (ต.ค. 69): สีชมพูพาสเทลสดใส (Pink Pastel) */
 .fill-target.target-seg-1,
 .fill-target.target-m-10 {
   background: linear-gradient(90deg, #BE185D 0%, #DB2777 25%, #EC4899 65%, #F472B6 100%);
@@ -14974,7 +14757,6 @@ body.theme-light .bar-sap-date-plain:hover {
   text-shadow: 0 1.5px 3px rgba(80, 7, 36, 0.95), 0 0 2px rgba(0, 0, 0, 0.9);
 }
 
-/* เดือนที่ 2 (พ.ย. 69): สีน้ำเงิน (Royal / Deep Blue) */
 .fill-target.target-seg-2,
 .fill-target.target-m-11 {
   background: linear-gradient(90deg, #1E3A8A 0%, #1E40AF 25%, #2563EB 65%, #60A5FA 100%);
@@ -14987,7 +14769,6 @@ body.theme-light .bar-sap-date-plain:hover {
   text-shadow: 0 1.5px 3px rgba(15, 23, 42, 0.95), 0 0 2px rgba(0, 0, 0, 0.9);
 }
 
-/* เดือนที่ 3 (ธ.ค. 69): สีชาไทยพาสเทล (Creamy Pastel Thai Milk Tea) */
 .fill-target.target-seg-3,
 .fill-target.target-m-12 {
   background: linear-gradient(90deg, #C86432 0%, #D97742 28%, #EE965B 65%, #F7B787 100%);
@@ -15000,7 +14781,6 @@ body.theme-light .bar-sap-date-plain:hover {
   text-shadow: 0 1.5px 3px rgba(67, 20, 7, 0.95), 0 0 2px rgba(0, 0, 0, 0.9);
 }
 
-/* เดือนที่ 4 (ม.ค. หรืออื่นๆ): สีม่วงพาสเทล (Purple / Violet) */
 .fill-target.target-seg-4 {
   background: linear-gradient(90deg, #5B21B6 0%, #7C3AED 25%, #9333EA 65%, #C084FC 100%);
   box-shadow: 0 0 16px rgba(147, 51, 234, 0.55), inset 0 1px 1px rgba(255, 255, 255, 0.5);
@@ -15018,7 +14798,6 @@ body.theme-light .bar-sap-date-plain:hover {
   margin-bottom: 2rem;
 }
 
-/* Target Line Marker: ยกเลิกแท่งสีเหลืองทองตามคำสั่งผู้ใช้งาน (ใช้เสาธงสีทองและน้องสว่างแทนที่แท่งเดิม) */
 .target-marker-line {
   position: absolute;
   top: 0;
@@ -15036,16 +14815,12 @@ body.theme-light .bar-sap-date-plain:hover {
   animation: none;
 }
 
-/* ลำแสงไฟวิ่งและแท่งเดิม: ซ่อนและยกเลิกตามคำสั่งผู้ใช้งาน */
 .target-marker-beam,
 .target-marker-beam::before,
 .target-marker-beam::after {
   display: none !important;
 }
 
-/* ==========================================================================
-   คนขับรถ กฟภ. (น้องสว่าง) ชักธงสีทอง แทนที่แท่งสีเหลืองทองเดิม ไม่บังอักษร
-   ========================================================================== */
 .pea-victory-hoist-wrapper {
   position: absolute;
   bottom: -2px;
@@ -15067,7 +14842,6 @@ body.theme-light .bar-sap-date-plain:hover {
   filter: drop-shadow(0 0 16px rgba(255, 215, 0, 0.95));
 }
 
-/* เสาธงสีทอง ทำหน้าที่เป็นเส้นบอกระดับเป้าหมายแทนแท่งสีเหลืองทองเดิม */
 .pea-gold-flagpole {
   position: absolute;
   left: 50%;
@@ -15081,7 +14855,6 @@ body.theme-light .bar-sap-date-plain:hover {
   z-index: 2;
 }
 
-/* หัวยอดเสาธงสีทองทรงกลม (Finial) */
 .pea-flagpole-finial {
   position: absolute;
   top: -6px;
@@ -15103,7 +14876,6 @@ body.theme-light .bar-sap-date-plain:hover {
   filter: drop-shadow(0 0 4px #FDE047);
 }
 
-/* ผืนธงสีทองโบกสะบัด ชักธงขึ้นสู่ยอดเสา (Golden Flag) - ขนาดกระชับพอดี ไม่บังอักษร */
 .pea-gold-flag-banner {
   position: absolute;
   left: calc(50% + 1px);
@@ -15118,7 +14890,6 @@ body.theme-light .bar-sap-date-plain:hover {
   pointer-events: none;
 }
 
-/* สถานะบรรลุเป้าหมาย (is-achieved): ชักธงขึ้นสู่ยอดเสาสูงสุด พร้อมสะบัดเร็วขึ้นเรืองแสงสีทอง */
 .pea-victory-hoist-wrapper.is-achieved .pea-gold-flag-banner {
   bottom: 22px;
   animation: goldFlagFlutterFast 1.2s ease-in-out infinite;
@@ -15132,7 +14903,6 @@ body.theme-light .bar-sap-date-plain:hover {
   overflow: visible;
 }
 
-/* เชือกชักธงสีทอง */
 .pea-flag-rope {
   position: absolute;
   left: 50%;
@@ -15145,7 +14915,6 @@ body.theme-light .bar-sap-date-plain:hover {
   z-index: 1;
 }
 
-/* ตัวคนขับรถ กฟภ. (น้องสว่าง) ยืนข้างเสาธงบนแถบกราฟ */
 .pea-flag-driver-mascot {
   position: absolute;
   right: calc(50% + 2px);
@@ -15169,7 +14938,6 @@ body.theme-light .bar-sap-date-plain:hover {
   overflow: visible;
 }
 
-/* เมื่อเป้าหมายอยู่ใกล้ขอบขวา (targetBarPct > 82): พลิกให้ธงสะบัดเข้าด้านใน (ซ้าย) เพื่อไม่ล้นขอบจอ */
 .pea-victory-hoist-wrapper.align-inward .pea-gold-flag-banner {
   left: auto;
   right: calc(50% + 1px);
@@ -15188,12 +14956,10 @@ body.theme-light .bar-sap-date-plain:hover {
   transform: scaleX(-1);
 }
 
-/* เอาป้ายความสำเร็จออกตามคำสั่งผู้ใช้งาน */
 .pea-victory-badge {
   display: none !important;
 }
 
-/* Keyframe Animations */
 @keyframes goldFlagFlutter {
 
   0%,
@@ -15310,7 +15076,6 @@ body.theme-light .bar-sap-date-plain:hover {
   }
 }
 
-
 @keyframes targetLineBeamAscend {
   0% {
     bottom: -24px;
@@ -15359,7 +15124,6 @@ body.theme-light .bar-sap-date-plain:hover {
   }
 }
 
-/* ป้ายบอกเส้นเป้าหมาย (ย้ายมาด้านล่างกราฟ ตามคำสั่งผู้ใช้งาน) */
 .target-marker-label {
   position: absolute;
   top: calc(100% + 5px);
@@ -15429,7 +15193,6 @@ body.theme-light .bar-sap-date-plain:hover {
   min-width: 30px;
 }
 
-/* Comparison Outcome Column (Right side vertical panel) */
 .wbs-kpi-outcome-col {
   width: 260px;
   flex-shrink: 0;
@@ -15556,7 +15319,6 @@ body.theme-light .bar-sap-date-plain:hover {
   text-shadow: 0 0 14px rgba(0, 255, 136, 0.6);
 }
 
-
 .outcome-col-footer {
   display: flex;
   flex-direction: column;
@@ -15600,7 +15362,6 @@ body.theme-light .bar-sap-date-plain:hover {
   box-shadow: 0 0 8px rgba(239, 68, 68, 0.7);
 }
 
-/* Fallback Banner for backwards compatibility */
 .wbs-kpi-status-banner {
   display: flex;
   align-items: center;
@@ -15612,7 +15373,6 @@ body.theme-light .bar-sap-date-plain:hover {
   transition: all 0.3s ease;
 }
 
-/* Light Mode Overrides for WBS Target Comparison */
 [data-theme="light"] .wbs-kpi-comparison-card {
   background: #FFFFFF;
   border-color: rgba(147, 51, 234, 0.32);
@@ -15764,7 +15524,6 @@ body.theme-light .bar-sap-date-plain:hover {
   background: #E2E8F0;
 }
 
-/* Light Theme Overrides */
 [data-theme="light"] .btn-wbs-col-toggle {
   background: #FFFFFF;
   border-color: rgba(147, 51, 234, 0.35);
@@ -15814,9 +15573,6 @@ body.theme-light .bar-sap-date-plain:hover {
   color: #111827;
 }
 
-/* ========================================================
-   WBS TABLE COLUMN DRAG & DROP & REORDER CONTROLS
-   ======================================================== */
 .data-table th.th-draggable {
   cursor: grab;
   position: relative;
@@ -15907,7 +15663,6 @@ body.theme-light .bar-sap-date-plain:hover {
   pointer-events: none;
 }
 
-/* Dragging visual indicators on table headers */
 .data-table th.th-dragging {
   opacity: 0.35;
   background: rgba(134, 58, 184, 0.25) !important;
@@ -15924,7 +15679,6 @@ body.theme-light .bar-sap-date-plain:hover {
   background: rgba(56, 189, 248, 0.14) !important;
 }
 
-/* Column Panel View Mode Switcher */
 .col-view-mode-bar {
   display: flex;
   gap: 4px;
@@ -16030,7 +15784,6 @@ body.theme-light .bar-sap-date-plain:hover {
   border-bottom: 2px solid #38BDF8 !important;
 }
 
-/* Light Theme Overrides for Reordering Controls */
 [data-theme="light"] .data-table th.th-drag-over-left {
   box-shadow: inset 4px 0 0 0 #0284C7, 0 0 10px rgba(2, 132, 199, 0.25) !important;
   background: rgba(2, 132, 199, 0.1) !important;
@@ -16087,7 +15840,6 @@ body.theme-light .bar-sap-date-plain:hover {
   color: #4B5563;
 }
 
-/* WBS Visual Analytics Chart Controls & Tooltip */
 .btn-chart-mode {
   background: transparent;
   border: none;
@@ -16130,7 +15882,6 @@ body.theme-light .bar-sap-date-plain:hover {
   display: none !important;
 }
 
-/* Horizontal scrollbar styling for offices chart */
 .chart-container::-webkit-scrollbar {
   height: 6px;
 }
@@ -16162,10 +15913,6 @@ body.theme-light .bar-sap-date-plain:hover {
   background: rgba(104, 44, 145, 0.7);
 }
 
-/* ==========================================================================
-   LEFT-SIDE TABLE SCROLLBAR (สไลด์เลื่อนข้อมูลตารางขึ้น-ลง ฝั่งซ้ายสุด)
-   ========================================================================== */
-
 .wbs-table-scroll-wrapper {
   display: flex;
   flex-direction: row;
@@ -16182,7 +15929,6 @@ body.theme-light .bar-sap-date-plain:hover {
   border-bottom-color: rgba(0, 0, 0, 0.08);
 }
 
-/* Scrollbar column pinned on the leftmost edge of the table */
 .wbs-left-scrollbar {
   width: 22px;
   min-width: 22px;
@@ -16214,7 +15960,6 @@ body.theme-light .bar-sap-date-plain:hover {
   border-right-color: rgba(104, 44, 145, 0.35);
 }
 
-/* Up/Down and Top/Bottom jump buttons on table left scrollbar */
 .btn-wbs-scrollbar-step {
   width: 17px;
   height: 17px;
@@ -16272,7 +16017,6 @@ body.theme-light .bar-sap-date-plain:hover {
   transform: scale(0.92);
 }
 
-/* Track */
 .wbs-left-scrollbar-track {
   flex: 1;
   width: 8px;
@@ -16294,7 +16038,6 @@ body.theme-light .bar-sap-date-plain:hover {
   background: rgba(255, 255, 255, 0.12);
 }
 
-/* Thumb */
 .wbs-left-scrollbar-thumb {
   position: absolute;
   top: 0;
@@ -16335,7 +16078,6 @@ body.theme-light .bar-sap-date-plain:hover {
   pointer-events: none;
 }
 
-/* The table container inside scroll wrapper */
 .wbs-table-scroll-wrapper .table-responsive {
   flex: 1 1 0%;
   min-width: 0;
@@ -16344,14 +16086,11 @@ body.theme-light .bar-sap-date-plain:hover {
   overflow-x: auto;
 }
 
-/* ==========================================================================
-   เอาปุ่มสไลด์ด้านขวาออก (ซ่อน Vertical Scrollbar ฝั่งขวา เหลือเฉพาะสไลด์ฝั่งซ้าย)
-   ========================================================================== */
 .wbs-table-scroll-wrapper .table-responsive::-webkit-scrollbar {
   width: 0px !important;
-  /* ปิดสไลด์ด้านขวาไม่ให้แสดงผล */
+  
   height: 12px !important;
-  /* คงความสูงสไลด์ด้านล่างไว้ */
+  
 }
 
 .wbs-table-scroll-wrapper .table-responsive::-webkit-scrollbar:vertical {
@@ -16369,9 +16108,6 @@ body.theme-light .bar-sap-date-plain:hover {
   visibility: hidden !important;
 }
 
-/* ==========================================================================
-   สไลด์ด้านล่าง (Horizontal Scrollbar) ใช้ชุดสีทอง-ชมพู PEA เหมือนสไลด์ด้านซ้าย
-   ========================================================================== */
 .wbs-table-scroll-wrapper .table-responsive::-webkit-scrollbar:horizontal {
   height: 12px !important;
 }
@@ -16406,7 +16142,6 @@ body.theme-light .bar-sap-date-plain:hover {
   filter: brightness(1.25);
 }
 
-/* ปุ่มลูกศรหัว-ท้ายของสไลด์ด้านล่าง */
 .wbs-table-scroll-wrapper .table-responsive::-webkit-scrollbar-button:horizontal {
   background: rgba(24, 6, 38, 0.95);
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -16423,7 +16158,6 @@ body.theme-light .bar-sap-date-plain:hover {
   display: none;
 }
 
-/* Light Theme for Horizontal Scrollbar */
 [data-theme="light"] .wbs-table-scroll-wrapper .table-responsive::-webkit-scrollbar-thumb:horizontal {
   background: linear-gradient(90deg, #F59E0B 0%, #EC4899 50%, #7C3AED 100%);
   border-color: #F3F4F6;
@@ -16439,7 +16173,6 @@ body.theme-light .bar-sap-date-plain:hover {
   display: none;
 }
 
-/* Sticky headers inside scroll wrapper */
 .wbs-table-scroll-wrapper .data-table thead tr:first-child th,
 .wbs-table-scroll-wrapper .data-table thead tr.wbs-header-row th {
   position: sticky;
@@ -16456,7 +16189,6 @@ body.theme-light .bar-sap-date-plain:hover {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
 }
 
-/* แถวบนสุด (Top Summary Row) ตรึงไว้ตลอดใต้ Header ไม่เลื่อนหายตามปุ่มสไลด์ */
 .wbs-table-scroll-wrapper .data-table thead tr.wbs-summary-row-top th,
 .wbs-table-scroll-wrapper .data-table thead tr.wbs-summary-row-top td,
 .wbs-table-scroll-wrapper .data-table tr.wbs-summary-row-top th,
@@ -16476,7 +16208,6 @@ body.theme-light .bar-sap-date-plain:hover {
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12);
 }
 
-/* Fullscreen mode support */
 .table-card.is-fullscreen .wbs-table-scroll-wrapper {
   flex: 1 1 0% !important;
   min-height: 0 !important;
@@ -16503,13 +16234,6 @@ body.theme-light .bar-sap-date-plain:hover {
   height: 100% !important;
 }
 
-/* ==========================================================================
-   WBS Master Table: Summary Rows (ผลรวมสะสม และ ค่าเฉลี่ย % สีทองเด่นชัด)
-   1. cn41ActualCost: แสดงผลรวมสะสมมูลค่า AUC
-   2. pctMatWithdraw, pctExpenseWithdraw: แสดงค่าเฉลี่ย %
-   3. แสดงทั้ง แถวบนสุด (Top Row) และ แถวล่างสุด (Bottom Row)
-   4. อักษรสีทอง เด่นชัด หรูหรา ชัดเจน
-   ========================================================================== */
 .wbs-summary-row {
   background: linear-gradient(90deg, rgba(255, 184, 28, 0.16) 0%, rgba(104, 44, 145, 0.42) 50%, rgba(255, 184, 28, 0.16) 100%) !important;
   font-weight: 700;
@@ -16525,21 +16249,18 @@ body.theme-light .bar-sap-date-plain:hover {
   vertical-align: middle !important;
 }
 
-/* แถวบนสุด (Top Row) */
 .wbs-summary-row.wbs-summary-row-top td {
   border-top: 2px solid var(--pea-gold-400, #FFB81C) !important;
   border-bottom: 2px solid rgba(255, 184, 28, 0.45) !important;
   background-color: #27093f !important;
 }
 
-/* แถวล่างสุด (Bottom Row) */
 .wbs-summary-row.wbs-summary-row-bottom td {
   border-top: 2px solid rgba(255, 184, 28, 0.45) !important;
   border-bottom: 2px solid var(--pea-gold-400, #FFB81C) !important;
   background-color: #27093f !important;
 }
 
-/* Sticky Footer สำหรับตาราง WBS */
 #wbsTableFoot {
   position: sticky;
   bottom: 0;
@@ -16558,7 +16279,6 @@ body.theme-light .bar-sap-date-plain:hover {
   background-color: #230839 !important;
 }
 
-/* Gold Text Styling - เด่นชัด อักษรสีทอง */
 .wbs-summary-badge {
   display: inline-flex;
   align-items: center;
@@ -16624,7 +16344,6 @@ body.theme-light .bar-sap-date-plain:hover {
   font-weight: 600;
 }
 
-/* Header Summary Metrics (ปรับระดับเมนูด้านบน th ให้บนสุดเสมอกันทั้งหมด) */
 .wbs-table-scroll-wrapper .data-table thead th,
 .wbs-table-scroll-wrapper .data-table thead tr.wbs-header-row th {
   vertical-align: top !important;
@@ -16635,7 +16354,7 @@ body.theme-light .bar-sap-date-plain:hover {
   display: flex;
   flex-direction: column;
   justify-content: flex-start !important;
-  /* ระดับเมนูบนสุดเหมือนกันทั้งหมด */
+  
   min-height: 48px;
   gap: 4px;
   width: 100%;
@@ -16651,7 +16370,7 @@ body.theme-light .bar-sap-date-plain:hover {
 
 .th-label-text {
   color: #FFFFFF !important;
-  /* เมนูสีขาว ชัดเจน เด่นชัด */
+  
   font-weight: 700;
 }
 
@@ -16782,7 +16501,6 @@ body.theme-light .bar-sap-date-plain:hover {
   line-height: 1.25;
 }
 
-/* Light Theme Overrides for Header Metrics */
 [data-theme="light"] .th-header-gold-pill {
   color: #92400E !important;
   background: rgba(245, 158, 11, 0.16);
@@ -16807,7 +16525,6 @@ body.theme-light .bar-sap-date-plain:hover {
   border-color: rgba(217, 119, 6, 0.5);
 }
 
-/* Cell Stacked: ป้ายประเภท (รวม / เฉลี่ย) อยู่ด้านบน ตัวเลขอยู่ด้านล่าง */
 .wbs-summary-cell-stacked {
   display: inline-flex;
   flex-direction: column;
@@ -16831,7 +16548,6 @@ body.theme-light .bar-sap-date-plain:hover {
   text-transform: uppercase;
 }
 
-/* Light Theme Styling */
 [data-theme="light"] .wbs-summary-cell-type {
   color: #78350F !important;
   background: rgba(245, 158, 11, 0.22);
@@ -16895,7 +16611,6 @@ body.theme-light .bar-sap-date-plain:hover {
   color: #78350F !important;
 }
 
-/* WBS Offices Bar Chart Container (สมส่วน กะทัดรัด ความสูงกราฟไม่มาก และแสดงผลชัดเจน) */
 #wbsOfficesChartContainer {
   min-height: 260px;
   max-height: 340px;
@@ -16909,10 +16624,6 @@ body.theme-light .bar-sap-date-plain:hover {
   max-width: none !important;
   display: block;
 }
-
-/* ==========================================================================
-   CALCULATION FORMULA & KPI BREAKDOWN PANEL (สูตรการคำนวณ %ปิดงาน และ %KPI)
-   ========================================================================== */
 
 .btn-formula-tag {
   display: inline-flex;
@@ -16953,7 +16664,6 @@ body.theme-light .bar-sap-date-plain:hover {
   display: inline-block;
 }
 
-/* Formula Container Panel */
 .calc-formula-panel {
   margin: 0.65rem 0 1rem 0;
   background: linear-gradient(135deg, rgba(26, 7, 43, 0.97), rgba(42, 10, 68, 0.95));
@@ -17063,7 +16773,6 @@ body.theme-light .bar-sap-date-plain:hover {
   color: #92400E;
 }
 
-/* Hide calculation button */
 .btn-hide-formula {
   display: inline-flex;
   align-items: center;
@@ -17100,7 +16809,6 @@ body.theme-light .bar-sap-date-plain:hover {
   color: #FFFFFF;
 }
 
-/* Formula Grid */
 .calc-formula-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
@@ -17231,7 +16939,6 @@ body.theme-light .bar-sap-date-plain:hover {
   color: #374151;
 }
 
-/* Mathematical formula box with fractions */
 .calc-formula-box {
   background: rgba(0, 0, 0, 0.55);
   border: 1.5px solid rgba(255, 184, 28, 0.35);
@@ -17393,7 +17100,6 @@ body.theme-light .bar-sap-date-plain:hover {
   color: #4B5563;
 }
 
-/* Targets Table */
 .calc-targets-table-wrapper {
   overflow-x: auto;
   border-radius: 8px;
@@ -17481,7 +17187,6 @@ body.theme-light .bar-sap-date-plain:hover {
   color: #B45309 !important;
 }
 
-/* Rules Grid (Card 3) */
 .kpi-criteria-rules-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -17579,9 +17284,6 @@ body.theme-light .bar-sap-date-plain:hover {
   color: #7E22CE;
 }
 
-/* ==========================================================================
-   DATA HISTORY & AUDIT LOG & MODEL VIEW STYLES
-   ========================================================================== */
 .data-history-wrapper {
   display: flex;
   flex-direction: column;
@@ -17683,7 +17385,6 @@ body.theme-light .bar-sap-date-plain:hover {
   flex-wrap: wrap;
 }
 
-/* 4 Top Stat Cards */
 .dh-stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -17749,7 +17450,6 @@ body.theme-light .bar-sap-date-plain:hover {
   margin-top: 0.2rem;
 }
 
-/* View Mode Selector */
 .dh-view-selector {
   display: flex;
   gap: 0.5rem;
@@ -17821,7 +17521,6 @@ body.theme-light .bar-sap-date-plain:hover {
   }
 }
 
-/* Interactive Diagram Flow */
 .dh-diagram-card {
   background: rgba(22, 6, 38, 0.7);
   border: 1px solid rgba(168, 85, 247, 0.25);
@@ -17985,7 +17684,6 @@ body.theme-light .bar-sap-date-plain:hover {
   flex-shrink: 0;
 }
 
-/* File Cards Grid */
 .dh-section-header {
   display: flex;
   justify-content: space-between;
@@ -18191,7 +17889,6 @@ body.theme-light .bar-sap-date-plain:hover {
   gap: 0.55rem;
 }
 
-/* Timeline & Log View Styles */
 .dh-toolbar-card {
   background: rgba(22, 6, 38, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -18261,7 +17958,6 @@ body.theme-light .bar-sap-date-plain:hover {
   color: var(--pea-gold-400, #FBBF24);
 }
 
-/* Timeline Components */
 .dh-timeline-container {
   display: flex;
   flex-direction: column;
@@ -18481,7 +18177,6 @@ body.theme-light .bar-sap-date-plain:hover {
   border: 1px solid rgba(16, 185, 129, 0.2);
 }
 
-/* Storage Table Elements */
 .dh-storage-table td {
   padding: 0.75rem 0.85rem;
   vertical-align: middle;
@@ -18507,7 +18202,6 @@ body.theme-light .bar-sap-date-plain:hover {
   border: 1px solid rgba(59, 130, 246, 0.3);
 }
 
-/* Model View Modal Styling */
 .dh-model-modal-dialog {
   max-width: 860px;
   width: 92%;
@@ -18709,9 +18403,6 @@ body.theme-light .bar-sap-date-plain:hover {
   gap: 0.75rem;
 }
 
-/* ==========================================================================
-   WBS Master Table: SAP Status Multi-select Dropdown Filter in Table Header
-   ========================================================================== */
 .th-header-sap-dropdown {
   display: inline-flex;
   align-items: center;
@@ -18821,7 +18512,6 @@ body.theme-light .bar-sap-date-plain:hover {
   transform: rotate(180deg);
 }
 
-/* Popover Floating Panel */
 .wbs-sap-dropdown-panel {
   position: fixed;
   z-index: 99999;
@@ -18970,7 +18660,6 @@ body.theme-light .bar-sap-date-plain:hover {
   box-shadow: 0 0 10px rgba(37, 99, 235, 0.5);
 }
 
-/* Light Theme Overrides */
 [data-theme="light"] .th-sap-dropdown-btn {
   background: rgba(234, 179, 8, 0.16);
   border-color: rgba(180, 83, 9, 0.4);
@@ -19047,7 +18736,6 @@ body.theme-light .bar-sap-date-plain:hover {
   color: #64748B;
 }
 
-/* Live Google Sheet Multi-Tab Sync & Edit Note UI */
 .btn-wbs-sync-sheet {
   display: inline-flex;
   align-items: center;
@@ -19085,7 +18773,6 @@ body.theme-light .bar-sap-date-plain:hover {
   }
 }
 
-/* WBS Inline Edit Button (🔒 Default / ✏️ Unlocked) in Plan Close & Note Cells */
 .btn-wbs-inline-edit {
   display: inline-flex;
   align-items: center;
@@ -19158,7 +18845,6 @@ body.theme-light .bar-sap-date-plain:hover {
   border-color: #F59E0B;
 }
 
-/* WBS Not Found in Google Sheet Cell Styling */
 .badge-plan-not-found {
   display: inline-flex;
   align-items: center;
@@ -19178,9 +18864,6 @@ body.theme-light .bar-sap-date-plain:hover {
   color: #FFFFFF !important;
 }
 
-/* ==========================================================================
-   WBS Executive Card Redesign (Bar Graphs for Total, Closed & Extended Added Segments)
-   ========================================================================== */
 .wbs-metric-card-box {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -19219,7 +18902,7 @@ body.theme-light .bar-sap-date-plain:hover {
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 0.74rem;
+  font-size: 0.88rem;
   font-weight: 750;
   color: #E2E8F0;
   white-space: nowrap;
@@ -19228,7 +18911,7 @@ body.theme-light .bar-sap-date-plain:hover {
 }
 
 .wbs-box-title-wrap .box-icon {
-  font-size: 0.85rem;
+  font-size: 1rem;
 }
 
 .wbs-card-metric-job-badge {
@@ -19240,7 +18923,7 @@ body.theme-light .bar-sap-date-plain:hover {
   border-radius: 6px;
   padding: 2px 7px;
   font-size: 0.78rem;
-  /* เพิ่มขนาดอักษรในกรอบเหลืองตามคำสั่งผู้ใช้งาน */
+  
   font-weight: 750;
   color: #F8FAFC;
   white-space: nowrap;
@@ -19283,7 +18966,7 @@ body.theme-light .bar-sap-date-plain:hover {
 }
 
 .wbs-val-prefix {
-  font-size: 0.60rem;
+  font-size: 0.74rem;
   font-weight: 600;
   color: #94A3B8;
   white-space: nowrap;
@@ -19292,8 +18975,8 @@ body.theme-light .bar-sap-date-plain:hover {
 
 .wbs-val-number {
   font-family: 'Outfit', -apple-system, sans-serif;
-  font-size: 0.63rem;
-  /* กรอบแดง ลดขนาดอักษรตามคำสั่งผู้ใช้งาน */
+  font-size: 0.82rem;
+  
   font-weight: 800;
   letter-spacing: -0.015em;
   color: #FFB81C;
@@ -19309,7 +18992,7 @@ body.theme-light .bar-sap-date-plain:hover {
 
 .wbs-val-mb-pill {
   font-size: 0.76rem;
-  /* เพิ่มขนาดอักษรในกรอบเหลืองตามคำสั่งผู้ใช้งาน */
+  
   font-weight: 800;
   color: #FDE047;
   background: rgba(255, 184, 28, 0.18);
@@ -19331,7 +19014,6 @@ body.theme-light .bar-sap-date-plain:hover {
   border-color: rgba(52, 211, 153, 0.4);
 }
 
-/* แท่งกราฟ Bar Graph สไตล์ที่วงกลม */
 .wbs-segment-track {
   width: 100%;
   height: 9px;
@@ -19381,7 +19063,7 @@ body.theme-light .bar-sap-date-plain:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.67rem;
+  font-size: 0.80rem;
   color: #CBD5E1;
   padding-top: 1px;
 }
@@ -19405,7 +19087,6 @@ body.theme-light .bar-sap-date-plain:hover {
   text-shadow: 0 0 8px rgba(0, 229, 255, 0.6);
 }
 
-/* Composite Progress Bar (สำหรับ % ปิดงาน ที่มีส่วนเพิ่มสีต่างออกไป) */
 .progress-fill-composite {
   display: flex;
   height: 100%;
@@ -19479,7 +19160,7 @@ body.theme-light .bar-sap-date-plain:hover {
 }
 
 .wbs-pct-breakdown-tag {
-  font-size: 0.66rem !important;
+  font-size: 0.82rem !important;
   color: #FFFFFF !important;
   font-weight: 700;
   display: inline-flex;
@@ -19501,7 +19182,6 @@ body.theme-light .bar-sap-date-plain:hover {
   box-shadow: 0 0 6px rgba(0, 255, 136, 0.35);
 }
 
-/* ข้อกำหนด: จำนวนงาน / มูลค่า / % เดิม ให้ใช้สีขาวทั้งหมด (Item 3) */
 #wbsKpiTotalBaseSubText,
 #wbsKpiBaseClosedDetail,
 #wbsKpiBaseClosedDetail strong,
@@ -19526,9 +19206,6 @@ body.theme-light .wbs-pct-breakdown-tag {
   text-shadow: none !important;
 }
 
-/* ==========================================================================
-   Admin PIN Authorization Modal & Button
-   ========================================================================== */
 .admin-pin-dialog {
   max-width: 440px !important;
   background: linear-gradient(145deg, rgba(28, 8, 45, 0.98), rgba(15, 3, 25, 0.98)) !important;
@@ -19594,7 +19271,6 @@ body.theme-light .wbs-pct-breakdown-tag {
   box-shadow: 0 0 10px rgba(16, 185, 129, 0.3) !important;
 }
 
-/* WBS Edit Lock Button in Toolbar (ไว้บนขวา และเหลืออันเดียว) */
 .btn-wbs-lock {
   display: inline-flex;
   align-items: center;
@@ -19631,7 +19307,6 @@ body.theme-light .wbs-pct-breakdown-tag {
   transform: translateY(-1px);
 }
 
-/* Light Theme support */
 [data-theme="light"] .btn-wbs-lock {
   border-color: rgba(104, 44, 145, 0.4) !important;
   color: var(--pea-purple-800) !important;
@@ -19644,7 +19319,6 @@ body.theme-light .wbs-pct-breakdown-tag {
   background: rgba(16, 185, 129, 0.1) !important;
 }
 
-/* Inline row button when locked (Default state) */
 .btn-wbs-inline-edit.is-locked {
   background: rgba(245, 158, 11, 0.14) !important;
   border: 1px solid rgba(245, 158, 11, 0.4) !important;
@@ -19681,7 +19355,6 @@ body.theme-light .wbs-pct-breakdown-tag {
   background: rgba(245, 158, 11, 0.22) !important;
 }
 
-/* WBS Header Lock / Unlock Badge Button (วางใต้ชื่อคอลัมน์ แผนปิดงาน และ หมายเหตุ) */
 .th-header-lock-badge {
   display: inline-flex;
   align-items: center;
@@ -19727,7 +19400,6 @@ body.theme-light .wbs-pct-breakdown-tag {
   letter-spacing: 0.01em;
 }
 
-/* Header Lock Button When Unlocked (Admin) */
 .btn-th-wbs-lock.admin-unlocked {
   color: #34D399;
   background: rgba(16, 185, 129, 0.15);
@@ -19742,7 +19414,6 @@ body.theme-light .wbs-pct-breakdown-tag {
   box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
 }
 
-/* Light Theme Support for Header Lock Button */
 [data-theme="light"] .btn-th-wbs-lock {
   color: #B45309;
   background: rgba(245, 158, 11, 0.12);
@@ -19768,9 +19439,6 @@ body.theme-light .wbs-pct-breakdown-tag {
   color: #044E39;
 }
 
-/* ==========================================================================
-   Executive Overview Cards (เมนูภาพรวมผู้บริหาร - ปรับสีขอบการ์ดตามรูป 13)
-   ========================================================================== */
 #tab-dashboard .executive-donut-kpi-card,
 #tab-dashboard .top-criteria-chart-card,
 #tab-dashboard .unified-projection-office-card,
@@ -19798,12 +19466,10 @@ body.theme-light .wbs-pct-breakdown-tag {
   z-index: 5;
 }
 
-/* Left Sidebar Card Specific Rainbow Gradient (ตามการ์ดซ้ายรูป 13: ทอง -> เขียว -> ชมพู) */
 #tab-dashboard .executive-donut-kpi-card::before {
   background: linear-gradient(90deg, #FFB81C 0%, #10B981 50%, #EC4899 100%) !important;
 }
 
-/* แถบเลือกด้านบนฝั่งซ้าย (#topSelectionStrip) ปรับขอบทองให้เข้าชุดกัน */
 #tab-dashboard .top-selection-strip {
   position: relative;
   overflow: hidden;
@@ -19826,7 +19492,6 @@ body.theme-light .wbs-pct-breakdown-tag {
   z-index: 5;
 }
 
-/* Fullscreen Mode Overrides (ไม่ให้ขอบหรือแถบสีแสดงในโหมดเต็มจอ) */
 #tab-dashboard .content-card.is-fullscreen,
 #tab-dashboard .top-criteria-chart-card.is-fullscreen,
 #tab-dashboard .unified-projection-office-card.is-fullscreen {
@@ -19841,7 +19506,6 @@ body.theme-light .wbs-pct-breakdown-tag {
   display: none !important;
 }
 
-/* ป้องกัน inner card ใน projection section */
 #next3mProjectionSection .content-card {
   background: transparent !important;
   border: none !important;
@@ -19852,7 +19516,6 @@ body.theme-light .wbs-pct-breakdown-tag {
   display: none !important;
 }
 
-/* Light Theme Support */
 [data-theme="light"] #tab-dashboard .executive-donut-kpi-card,
 [data-theme="light"] #tab-dashboard .top-criteria-chart-card,
 [data-theme="light"] #tab-dashboard .unified-projection-office-card,
@@ -19869,16 +19532,11 @@ body.theme-light .wbs-pct-breakdown-tag {
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06) !important;
 }
 
-/* ==========================================================================
-   WBS DATA TABLE: COMPACT & FULLSCREEN FITTING (แสดงครบทั้ง 10 คอลัมน์ ไม่ล้นขอบ)
-   ========================================================================== */
-
 #wbsDataTable {
   width: 100% !important;
   table-layout: auto !important;
 }
 
-/* ปรับ Padding หัวตารางและแถวข้อมูลให้กระชับ ไม่ดันล้นจอ */
 .wbs-table-scroll-wrapper .data-table th,
 .wbs-table-scroll-wrapper .data-table thead tr.wbs-header-row th {
   padding: 0.52rem 0.45rem !important;
@@ -19890,7 +19548,6 @@ body.theme-light .wbs-pct-breakdown-tag {
   font-size: 0.835rem !important;
 }
 
-/* คอลัมน์ 'ที่' (id column) - ลดขนาดกะทัดรัด ล็อคความกว้าง 38px */
 #wbsDataTable th[data-col-id="id"],
 #wbsDataTable td:first-child,
 #wbsDataTable th:first-child {
@@ -19924,7 +19581,6 @@ body.theme-light .wbs-pct-breakdown-tag {
   margin-right: 1px !important;
 }
 
-/* ปิด pseudo-element ::after ของ sort-active เพื่อไม่ให้มีลูกศรซ้ำซ้อนด้านล่าง */
 #wbsDataTable th.sort-active::after,
 .wbs-table-scroll-wrapper .data-table th.sort-active::after,
 .wbs-header-row th.sort-active::after {
@@ -19932,7 +19588,6 @@ body.theme-light .wbs-pct-breakdown-tag {
   content: '' !important;
 }
 
-/* ปรับขนาด Badge และตัวเลขใน Header ให้กระชับ สวยงาม สมส่วน */
 .wbs-table-scroll-wrapper .th-header-gold-pill {
   padding: 1px 5px !important;
   font-size: 0.72rem !important;
@@ -19962,7 +19617,6 @@ body.theme-light .wbs-pct-breakdown-tag {
   font-size: 0.72rem !important;
 }
 
-/* กระชับ Badge ในแถวข้อมูล */
 .badge-sap-short {
   padding: 2px 5px !important;
   font-size: 0.74rem !important;
@@ -19973,11 +19627,6 @@ body.theme-light .wbs-pct-breakdown-tag {
   font-size: 0.78rem !important;
 }
 
-/* ==========================================================================
-   PRESENTATION POINTER WIDGET & EFFECTS (ระบบพอยน์เตอร์นำเสนอ)
-   ========================================================================== */
-
-/* 1. Header Widget Button */
 .presenter-pointer-widget {
   position: relative;
   display: inline-flex;
@@ -20072,7 +19721,6 @@ body.theme-light .wbs-pct-breakdown-tag {
   transform: rotate(180deg);
 }
 
-/* 2. Dropdown Menu */
 .presenter-pointer-menu {
   display: none;
   position: absolute;
@@ -20342,7 +19990,6 @@ body.theme-light .wbs-pct-breakdown-tag {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
-/* 3. On-Screen Pointer Visuals */
 .presenter-pointer-dot {
   position: fixed;
   top: 0;
@@ -20369,16 +20016,15 @@ body.theme-light .wbs-pct-breakdown-tag {
   display: none;
 }
 
-/* Solid Red Circle Point Mode (จุดกลมแดงทึบ) */
 .presenter-pointer-dot.mode-red-solid .pointer-solid-red {
   display: block;
   width: 18px;
   height: 18px;
   border-radius: 50%;
   background-color: #EF4444;
-  /* สีแดงสดทึบ 100% */
+  
   border: 2px solid #FFFFFF;
-  /* ขอบขาวคมชัด อ่านง่ายบนทุกพื้นหลัง */
+  
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.55);
   transform: translate(-50%, -50%);
 }
@@ -20392,7 +20038,6 @@ body.theme-light .wbs-pct-breakdown-tag {
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
 }
 
-/* Red Laser Mode */
 .presenter-pointer-dot.mode-laser .pointer-laser-core {
   display: block;
   width: 15px;
@@ -20416,7 +20061,6 @@ body.theme-light .wbs-pct-breakdown-tag {
   }
 }
 
-/* Neon Green Laser Mode */
 .presenter-pointer-dot.mode-green-dot .pointer-laser-core {
   display: block;
   width: 15px;
@@ -20440,7 +20084,6 @@ body.theme-light .wbs-pct-breakdown-tag {
   }
 }
 
-/* Cyan Halo Ring Mode */
 .presenter-pointer-dot.mode-halo .pointer-laser-core {
   display: block;
   width: 6px;
@@ -20478,14 +20121,12 @@ body.theme-light .wbs-pct-breakdown-tag {
   }
 }
 
-/* Gold Arrow Mode */
 .presenter-pointer-dot.mode-gold-arrow .pointer-arrow-svg {
   display: block;
   transform: translate(-2px, -2px);
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 12px rgba(251, 191, 36, 0.75));
 }
 
-/* Spotlight Mode Dot */
 .presenter-pointer-dot.mode-spotlight .pointer-laser-core {
   display: block;
   width: 8px;
@@ -20516,7 +20157,6 @@ body.theme-light .wbs-pct-breakdown-tag {
   }
 }
 
-/* 4. Spotlight Screen Overlay */
 .presenter-spotlight-overlay {
   position: fixed;
   inset: 0;
@@ -20527,7 +20167,6 @@ body.theme-light .wbs-pct-breakdown-tag {
   transition: opacity 0.25s ease;
 }
 
-/* 5. Click Ripple Waves */
 .presenter-click-ripple {
   position: fixed;
   pointer-events: none;
@@ -20583,7 +20222,6 @@ body.theme-light .wbs-pct-breakdown-tag {
   box-shadow: 0 0 16px rgba(255, 255, 255, 0.9);
 }
 
-/* 6. Quick Floating Status Bar */
 .presenter-floating-bar {
   position: fixed;
   bottom: 24px;
@@ -20646,7 +20284,6 @@ body.theme-light .wbs-pct-breakdown-tag {
   border-color: #EF4444;
 }
 
-/* 7. Hide System Mouse Cursor when custom pointer replaces it */
 body.pointer-mode-red-solid,
 body.pointer-mode-red-solid * {
   cursor: none !important;
@@ -20667,7 +20304,6 @@ body.pointer-mode-gold * {
   cursor: none !important;
 }
 
-/* Materials tab dedicated sub-filter bar - Sticky & Glowing Purple Gradient */
 .mat-sub-filter-bar {
   position: -webkit-sticky;
   position: sticky;
@@ -20793,7 +20429,6 @@ body.pointer-mode-gold * {
   transform: scale(1.1);
 }
 
-/* Materials Sub-Filter Reset Button (ปุ่มล้างตัวกรองรายการพัสดุ: ไวน์แดง/คริมสัน หรูหราเข้าชุด) */
 .mat-sf-reset {
   display: inline-flex;
   align-items: center;
@@ -20871,7 +20506,6 @@ body.pointer-mode-gold * {
   box-shadow: 0 4px 12px rgba(225, 29, 72, 0.35);
 }
 
-/* ===== Dropdown SAP Status in Materials Filter Bar ===== */
 .mat-sf-group.mat-sf-sap-wrap {
   position: relative;
   flex: 0 1 auto;
@@ -20914,7 +20548,6 @@ body.pointer-mode-gold * {
 }
 [data-theme="light"] .mat-sf-sap-btn { color: #3b1a57; }
 
-/* ===== เธเธฃเธฒเธเนเธเธงเธเธญเธ เธเธฃเธดเธกเธฒเธ“เธเนเธฒเธเน€เธเธดเธเธ•เธฒเธกเธเนเธญเธเธงเธฒเธกเธงเธฑเธชเธ”เธธ (เน€เธกเธเธนเธฃเธฒเธขเธเธฒเธฃเธเธฑเธชเธ”เธธ) ===== */
 .mat-charts-split-row {
   display: flex;
   gap: 0.85rem;
@@ -20938,12 +20571,48 @@ body.pointer-mode-gold * {
   border-radius: 14px;
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
-.mat-hchart-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 1rem; margin-bottom: 0.5rem; }
-.mat-hchart-title { display: flex; flex-wrap: wrap; align-items: center; gap: 0.45rem; font-size: 0.95rem; font-weight: 800; color: #fff; }
+.mat-top-file-dates-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex: 0 0 100%;
+  width: 100%;
+  gap: 0.55rem;
+  margin: -0.15rem 0 -0.15rem 0;
+  padding: 0 0 0.2rem 0;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.16);
+  background: transparent;
+  white-space: nowrap;
+  user-select: none;
+  pointer-events: none;
+  cursor: default;
+}
+[data-theme="light"] .mat-top-file-dates-bar {
+  border-bottom-color: rgba(124, 58, 237, 0.2);
+}
+.mat-hchart-head { display: flex; flex-direction: column; align-items: stretch; gap: 0.45rem; margin-bottom: 0.5rem; }
+.mat-hchart-top-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.45rem; width: 100%; }
+.mat-hchart-title { display: flex; flex-wrap: wrap; align-items: center; gap: 0.45rem; font-size: 0.95rem; font-weight: 800; color: #fff; min-width: 0; flex: 1 1 auto; }
+.mat-hchart-fdate-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #E2E8F0;
+  cursor: default;
+  pointer-events: none;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.65);
+}
+.mat-hchart-fdate-item strong { color: #FDE047; font-weight: 700; }
+.mat-hchart-fdate-sep { color: rgba(255, 255, 255, 0.35); font-size: 0.8rem; font-weight: 600; }
+[data-theme="light"] .mat-hchart-fdate-item { color: #334155; text-shadow: none; }
+[data-theme="light"] .mat-hchart-fdate-item strong { color: #B45309; }
+[data-theme="light"] .mat-hchart-fdate-sep { color: rgba(0, 0, 0, 0.25); }
 .mat-hchart-ico { font-size: 1.05rem; }
 .mat-hchart-sub { font-size: 0.74rem; font-weight: 700; color: #FFB81C; background: rgba(255, 184, 28, 0.12); border: 1px solid rgba(255, 184, 28, 0.4); padding: 1px 9px; border-radius: 999px; }
 .mat-hchart-sub:empty { display: none; }
-.mat-hchart-legend { display: flex; flex-wrap: wrap; gap: 0.35rem 1rem; font-size: 0.78rem; font-weight: 700; color: rgba(255, 255, 255, 0.9); }
+.mat-hchart-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem 1rem; font-size: 0.78rem; font-weight: 700; color: rgba(255, 255, 255, 0.9); width: 100%; }
 .mat-hchart-lg { display: inline-flex; align-items: center; gap: 0.35rem; }
 .mat-hchart-lg em { font-style: normal; font-weight: 600; color: rgba(255, 255, 255, 0.55); }
 .lg-dot { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
@@ -21194,6 +20863,7 @@ body.pointer-mode-gold * {
 }
 
 .mat-hchart-track {
+
   position: relative;
   display: flex;
   align-items: center;
@@ -21275,9 +20945,7 @@ body.pointer-mode-gold * {
 .mat-hchart-val .val-lightgreen { color: #BBF7D0; font-weight: 800; }
 .mat-hchart-val .val-stock-total { color: #6EE7B7; font-weight: 800; font-size: 0.68rem; margin-left: 4px; }
 .mat-hchart-val .val-stock-zero { color: rgba(255, 255, 255, 0.35); font-style: normal; font-size: 0.68rem; }
-/* =====================================================================
-   Standalone Warehouse Card (เธเธฒเธฃเนเธ”เน€เธ”เธตเนเธขเธงเนเธงเนเธเธงเธฒเธชเธธเธ” เน€เธฅเธตเธขเธเนเธเธเธฃเธนเธ 30)
-   ===================================================================== */
+
 .mat-wh-standalone-card {
   flex: 0 0 345px;
   width: 345px;
@@ -21359,7 +21027,6 @@ body.pointer-mode-gold * {
   font-size: 0.74rem;
 }
 
-/* Selected material text at top of warehouse card (แสดงครบถ้วน ไม่ตัดคำ) */
 .mat-wh-selected-mat-box {
   background: rgba(254, 240, 138, 0.09);
   border-bottom: 1px solid rgba(254, 240, 138, 0.25);
@@ -21396,7 +21063,6 @@ body.pointer-mode-gold * {
   letter-spacing: 0.01em;
 }
 
-/* Selection Ball / Indicator over each table */
 .mat-wh-box-indicator {
   height: 26px;
   min-height: 26px;
@@ -21451,7 +21117,6 @@ body.pointer-mode-gold * {
   border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-/* 2. Side-by-Side Warehouse Tables */
 .mat-wh-tables-row {
   display: flex;
   width: 100%;
@@ -21563,7 +21228,6 @@ body.pointer-mode-gold * {
   vertical-align: middle;
 }
 
-/* 2-row Warehouse identifier in table cell */
 .mat-wh-cell-2rows {
   display: flex;
   flex-direction: column;
@@ -21597,7 +21261,6 @@ body.pointer-mode-gold * {
   line-height: 1.2;
 }
 
-/* Footer Total Row */
 .mat-wh-table tfoot tr {
   font-weight: 900;
 }
@@ -21633,7 +21296,6 @@ body.pointer-mode-gold * {
   letter-spacing: -0.01em;
 }
 
-/* Colored Bottom Bars */
 .mat-wh-bot-bar {
   display: none;
 }
@@ -21648,9 +21310,6 @@ body.pointer-mode-gold * {
   border-radius: 0 4px 4px 0;
 }
 
-/* =====================================================================
-   Toolbar WBS Scope & HasMat Filter Pills (3-row compact card)
-   ===================================================================== */
 .mat-sf-wbs-stats-wrapper {
   display: flex !important;
   align-items: center !important;
@@ -21796,7 +21455,6 @@ body.pointer-mode-gold * {
   transform: translateY(-1px);
 }
 
-/* 1. Scope All - Royal PEA Gold */
 .mat-scope-btn.btn-scope-all {
   background: linear-gradient(135deg, rgba(255, 184, 28, 0.18) 0%, rgba(180, 83, 9, 0.28) 100%);
   border: 1.5px solid rgba(255, 184, 28, 0.55);
@@ -21814,7 +21472,6 @@ body.pointer-mode-gold * {
   box-shadow: 0 0 14px rgba(245, 158, 11, 0.65);
 }
 
-/* 2. Has Materials - Radiant Emerald */
 .mat-scope-btn.btn-scope-hasmat {
   background: linear-gradient(135deg, rgba(16, 185, 129, 0.18) 0%, rgba(5, 150, 105, 0.28) 100%);
   border: 1.5px solid rgba(52, 211, 153, 0.55);
@@ -21832,7 +21489,6 @@ body.pointer-mode-gold * {
   box-shadow: 0 0 14px rgba(16, 185, 129, 0.65);
 }
 
-/* 3. No Materials - Sunset Coral Alert */
 .mat-scope-btn.btn-scope-nomat {
   background: linear-gradient(135deg, rgba(239, 68, 68, 0.18) 0%, rgba(249, 115, 22, 0.26) 100%);
   border: 1.5px solid rgba(251, 146, 60, 0.55);
@@ -21850,7 +21506,6 @@ body.pointer-mode-gold * {
   box-shadow: 0 0 14px rgba(239, 68, 68, 0.65);
 }
 
-/* Warehouse Widget Enhancements (Typography & Visual Polish) */
 .wh-code-pill {
   display: inline-block;
   padding: 1px 6px;
@@ -21889,7 +21544,6 @@ body.pointer-mode-gold * {
   font-size: 0.88rem;
 }
 
-/* Light Theme Support */
 [data-theme="light"] .mat-hchart-card {
   background: linear-gradient(160deg, #FFFFFF 0%, #F6F0FB 100%);
   border-color: rgba(104, 44, 145, 0.3);

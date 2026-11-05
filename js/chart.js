@@ -390,7 +390,7 @@ class PeaChart {
         }
 
         // Draw benchmark line notch on bar if ext.targetBenchmark is set and requested
-        if (options.showBenchmarkNotch && ext && typeof ext.targetBenchmark === 'number' && ext.targetBenchmark > 0) {
+        if (options.showBenchmarkNotch && ext && !isNoWork && typeof ext.targetBenchmark === 'number' && ext.targetBenchmark > 0) {
           const tY = pad.top + plotH - (Math.min(ext.targetBenchmark, maxVal) / maxVal) * plotH;
           ctx.save();
           ctx.strokeStyle = '#FDE047';
@@ -406,7 +406,7 @@ class PeaChart {
 
         // Draw independent target lines & badges on each bar (per criteria)
         let hasDrawnUnifiedKpi = false;
-        if (ext && Array.isArray(ext.barTargetLines) && ext.barTargetLines.length > 0 && height > 25) {
+        if (ext && !isNoWork && Array.isArray(ext.barTargetLines) && ext.barTargetLines.length > 0 && height > 25) {
           const barTargets = ext.barTargetLines.map(tl => {
             const targetVal = Number(tl.value);
             const targetY = pad.top + plotH - (Math.min(targetVal, maxVal) / maxVal) * plotH;
@@ -746,35 +746,6 @@ class PeaChart {
                 starY = pillY - 2.5;
               }
               ctx.restore();
-
-              // วาดดาว KPI ระดับ 5 เหนือป้าย % ปิดงาน ("ไว้ด้านบน %ปิดงาน")
-              // ผ่านเกณฑ์ KPI 1 เดือน ให้ 1 ดาว, 2 เดือน ให้ 2 ดาว ตามลำดับ
-              let starCount = (ext && typeof ext.starCount === 'number') ? ext.starCount : 0;
-              if (starCount === 0 && isGoodKpi && !isNoWork) {
-                starCount = 1;
-              }
-              if (starCount > 0 && !isNoWork) {
-                const starStr = '★'.repeat(starCount);
-                const maxW = Math.max(26, currentBarW - 4);
-                const rawSize = starCount >= 4 ? 10.5 : (starCount === 3 ? 12 : 13.5);
-                const starFSize = Math.min(rawSize, Math.max(9, maxW / (starCount * 1.12)));
-
-                ctx.save();
-                if (isDimmed) {
-                  ctx.globalAlpha = 0.20;
-                }
-                ctx.font = `900 ${starFSize}px 'Prompt', 'Sarabun', sans-serif`;
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'bottom';
-
-                // Sharp foreground highlight with clean drop shadow
-                ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
-                ctx.shadowBlur = 2;
-                ctx.shadowOffsetY = 1;
-                ctx.fillStyle = '#FFF8C7';
-                ctx.fillText(starStr, centerX, starY);
-                ctx.restore();
-              }
             }
           }
         }
@@ -863,32 +834,6 @@ class PeaChart {
               ctx.fillText(valText, pillX + pillW / 2, pillY + kpiH / 2 + 0.5);
 
               starY = pillY - 2.5;
-            }
-
-            // วาดดาว KPI ระดับ 5 เหนือป้าย % ปิดงาน ("ไว้ด้านบน %ปิดงาน")
-            // ผ่านเกณฑ์ KPI 1 เดือน ให้ 1 ดาว, 2 เดือน ให้ 2 ดาว ตามลำดับ
-            let starCount = (ext && typeof ext.starCount === 'number') ? ext.starCount : 0;
-            if (starCount === 0 && isGoodKpi && !isNoWork) {
-              starCount = 1;
-            }
-            if (starCount > 0 && !isNoWork) {
-              const starStr = '★'.repeat(starCount);
-              const maxW = Math.max(26, currentBarW - 4);
-              const rawSize = starCount >= 4 ? 10.5 : (starCount === 3 ? 12 : 13.5);
-              const starFSize = Math.min(rawSize, Math.max(9, maxW / (starCount * 1.12)));
-
-              ctx.save();
-              ctx.font = `900 ${starFSize}px 'Prompt', 'Sarabun', sans-serif`;
-              ctx.textAlign = 'center';
-              ctx.textBaseline = 'bottom';
-
-              // Sharp foreground highlight with clean drop shadow
-              ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
-              ctx.shadowBlur = 2;
-              ctx.shadowOffsetY = 1;
-              ctx.fillStyle = '#FFF8C7';
-              ctx.fillText(starStr, centerX, starY);
-              ctx.restore();
             }
           } else {
             // Compact font size calculated from bar width to guarantee zero horizontal collision
@@ -1011,16 +956,16 @@ class PeaChart {
           }
           ctx.setLineDash([]);
 
-          // เพิ่มขนาดอักษร "บรรลุเป้าหมาย" ให้ใหญ่คมชัดสมดุลกับตัวเลข % ด้านล่าง และจำกัดความกว้างตาม groupW ไม่ให้ซ้อนทับแท่งข้างเคียงเด็ดขาด
-          const achieveText = 'บรรลุเป้าหมาย';
-          let fSize = currentBarW < 45 ? 13.0 : (currentBarW < 65 ? 15.2 : (currentBarW < 90 ? 17.0 : 18.5));
+          // เพิ่มขนาดอักษร "บรรลุเป้า KPI ธ.ค.69" ให้ใหญ่คมชัดสมดุลกับตัวเลข % ด้านล่าง และจำกัดความกว้างตาม groupW ไม่ให้ซ้อนทับแท่งข้างเคียงเด็ดขาด
+          const achieveText = 'บรรลุเป้า KPI ธ.ค.69';
+          let fSize = currentBarW < 45 ? 11.5 : (currentBarW < 65 ? 13.0 : (currentBarW < 90 ? 14.2 : 15.2));
           ctx.font = `800 ${fSize}px 'Prompt', 'Sarabun', sans-serif`;
           let textW = ctx.measureText(achieveText).width;
-          // เว้นช่องว่างแนวนอนระหว่างแท่งอย่างน้อย 20px เสมอ (รวมพื้นที่ประกายเพชรด้านข้างแล้วไม่ชนกัน 100%)
-          const safeHorizontalLimit = Math.max(36, groupW - 20);
-          const maxTextW = Math.min(safeHorizontalLimit, Math.max(currentBarW + 18, 86));
+          // เว้นช่องว่างแนวนอนระหว่างแท่งอย่างเหมาะสม (รวมพื้นที่ประกายเพชรด้านข้างแล้วไม่ชนกัน 100%)
+          const safeHorizontalLimit = Math.max(44, groupW - 10);
+          const maxTextW = Math.min(safeHorizontalLimit, Math.max(currentBarW + 24, 114));
           if (textW > maxTextW) {
-            fSize = Math.max(10.0, fSize * (maxTextW / textW));
+            fSize = Math.max(9.5, fSize * (maxTextW / textW));
             ctx.font = `800 ${fSize}px 'Prompt', 'Sarabun', sans-serif`;
             textW = ctx.measureText(achieveText).width;
           }

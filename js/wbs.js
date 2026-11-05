@@ -1033,27 +1033,8 @@
 
     cardsHtml += `</div>`;
 
-    // แถบปุ่มล้างข้อมูลเฉพาะ Checkbox ใต้การ์ดสรุปสถานะ SAP วางชิดขวาตามคำสั่งผู้ใช้งาน
-    const selCheckboxCount = wbsState.selectedWbs ? wbsState.selectedWbs.size : 0;
-    const hasCheckboxSelection = selCheckboxCount > 0;
-
-    const footerHtml = `
-      <div class="wbs-sap-summary-footer-bar">
-        <button type="button" class="btn-clear-wbs-checkbox ${hasCheckboxSelection ? 'active' : ''}" id="wbsCheckboxClearBtn"
-          onclick="window.clearWbsCheckboxSelection()"
-          ${hasCheckboxSelection ? '' : 'disabled'}
-          title="${hasCheckboxSelection ? 'ล้างข้อมูลที่เลือกจาก Check Box' : 'ยังไม่มีรายการที่เลือกจาก Check Box'}">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
-            <polyline points="3 6 5 6 21 6"></polyline>
-            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-          </svg>
-          <span>ล้างข้อมูลที่เลือกจาก Check Box</span>
-        </button>
-      </div>
-    `;
-
-    // ประกอบโครงสร้าง: หัวข้อสรุป + การ์ดสถานะ + ปุ่มล้างข้อมูลที่เลือกใต้การ์ด
-    container.innerHTML = headerHtml + cardsHtml + footerHtml;
+    // ประกอบโครงสร้าง: หัวข้อสรุป + การ์ดสถานะ (นำปุ่มล้างข้อมูลที่เลือกจาก Check Box ออกตามคำสั่งผู้ใช้งาน)
+    container.innerHTML = headerHtml + cardsHtml;
 
     // Update select all button active state on top header
     const selectAllBtn = document.getElementById('wbsOfficeChartSelectAllBtn');
@@ -2565,7 +2546,7 @@
               </div>
               <div class="wbs-box-sub">
                 <span id="wbsKpiTotalBaseSubText" style="color: #FFFFFF; font-weight: 700;">เดิม 0.00 ลบ.</span>
-                <span id="wbsKpiTotalIncSubText" style="color: #F59E0B; font-weight: 700;">ส่วนต่าง: 0.00 ฿</span>
+                <span id="wbsKpiTotalIncSubText" style="color: #F59E0B; font-weight: 700;">ส่วนต่าง: 0.00 ลบ.</span>
               </div>
             </div>
 
@@ -3062,7 +3043,8 @@
     }
     if (totalIncSub) {
       totalIncSub.style.color = incColor;
-      totalIncSub.innerHTML = `ส่วนต่าง: <strong>${s}${totalCostInc.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ฿</strong>`;
+      totalIncSub.innerHTML = `ส่วนต่าง: <strong>${s}${(totalCostInc / 1e6).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ลบ.</strong>`;
+      totalIncSub.title = `ส่วนต่างจริง: ${s}${totalCostInc.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ฿`;
     }
     if (totalSegBase && totalSegInc) {
       totalSegBase.style.width = 'calc(100% - 24px)';
@@ -3070,7 +3052,7 @@
       totalSegInc.style.background = totalCostInc < 0
         ? 'linear-gradient(90deg, #F59E0B, #EF4444)'
         : 'linear-gradient(90deg, #10B981, #00FF88)';
-      totalSegInc.title = `ส่วนเพิ่ม/ลด: ${s}${totalCostInc.toLocaleString('th-TH', { minimumFractionDigits: 2 })} ฿`;
+      totalSegInc.title = `ส่วนเพิ่ม/ลด: ${s}${(totalCostInc / 1e6).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ลบ. (${s}${totalCostInc.toLocaleString('th-TH', { minimumFractionDigits: 2 })} ฿)`;
     }
 
     // 6.2 ส่วนมูลค่าปิดงาน (แสดง ส่วนที่เลือก เป็นสีฟ้า ทั้งมูลค่าและจำนวนงาน ตามคำสั่งผู้ใช้งาน)
