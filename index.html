@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="th" data-theme="dark">
 
 <head>
@@ -8,7 +8,7 @@
   <meta name="description"
     content="ระบบสารสนเทศและแดชบอร์ดติดตามงานก่อสร้างและขึ้นทะเบียนทรัพย์สิน AUC การไฟฟ้าส่วนภูมิภาค เขต 3 (ภาคกลาง)">
   <link rel="icon" type="image/svg+xml" href="assets/pea_logo.svg">
-  <link rel="stylesheet" href="css/styles.css?v=20261105_1640">
+  <link rel="stylesheet" href="css/styles.css?v=20261106_1235">
 
 </head>
 
@@ -2121,9 +2121,16 @@
                       <div class="wbs-floating-target-badge">
                         <span class="wbs-floating-drag-grip" title="คลิกและลากเพื่อย้ายตำแหน่ง">⋮⋮</span>
                         <span class="wbs-floating-target-icon">🎯</span>
-                        <span class="wbs-floating-target-label">เป้าหมายเดือน <strong
-                            class="wbs-floating-target-month target-seg-1"
-                            id="wbsFloatingTargetMonth">ต.ค.</strong>:</span>
+                        <span class="wbs-floating-target-label">เป้าหมายเดือน</span>
+                        <select class="wbs-floating-target-month-select target-seg-1" id="wbsFloatingTargetMonthSelect"
+                          onchange="window.setWbsKpiTargetMonth(Number(this.value), true)"
+                          onclick="event.stopPropagation();"
+                          title="คลิกเพื่อเลือกเปลี่ยนเดือนเป้าหมาย">
+                          <option value="10">ต.ค.</option>
+                          <option value="11">พ.ย.</option>
+                          <option value="12">ธ.ค.</option>
+                        </select>
+                        <strong class="wbs-floating-target-month target-seg-1" id="wbsFloatingTargetMonth" style="display:none;">ต.ค.</strong>
                       </div>
                       <div class="wbs-floating-target-val-wrap">
                         <span class="wbs-floating-target-mb" id="wbsFloatingTargetMb">(0.00 ลบ.)</span>
@@ -2881,13 +2888,13 @@
   <script src="js/kpi_matrix.js?v=20261003_0930"></script>
   <script src="js/chart.js?v=20261105_1139"></script>
   <script src="js/data_wbs.js?v=20261105_1640"></script>
-  <script src="js/wbs.js?v=20261105_1640"></script>
+  <script src="js/wbs.js?v=20261106_1235"></script>
   <script src="js/data_materials_07.js?v=20261105_1437"></script>
   <script src="js/data_materials_08.js?v=20261105_1454"></script>
   <script src="js/materials.js?v=20261105_1640"></script>
   <script charset="utf-8" src="js/data_history_archive.js?v=20261105_1514"></script>
   <script src="js/office_dd.js?v=20261105_1620"></script>
-  <script charset="utf-8" src="js/data_history.js?v=20261105_1640"></script>
+  <script charset="utf-8" src="js/data_history.js?v=20261106_1235"></script>
   <script src="js/app.js?v=20261105_1139"></script>
   <script src="js/criteria_dropdown.js?v=20261017_2055"></script>
   <script src="js/presentation_pointer.js?v=20261027_1435"></script>

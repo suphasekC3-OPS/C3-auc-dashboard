@@ -1984,7 +1984,7 @@
     if (!availableMonths.length) return null;
 
     const selectableMonths = availableMonths.filter(m => !m.isAchieved);
-    const isCurrentValid = wbsState.kpiTargetMonth && selectableMonths.some(m => m.monthNum === wbsState.kpiTargetMonth);
+    const isCurrentValid = wbsState.kpiTargetMonth && availableMonths.some(m => m.monthNum === wbsState.kpiTargetMonth);
 
     if (!isCurrentValid) {
       wbsState.kpiTargetMonth = selectableMonths.length ? selectableMonths[0].monthNum : (availableMonths[0] ? availableMonths[0].monthNum : null);
@@ -2015,6 +2015,7 @@
     // แถวบนสุด: เป้าหมายเดือนที่เลือก (คงเหลือเลข ลบ./งาน)
     const targetRowEl = document.getElementById('wbsFloatingTargetRow');
     const targetMonthEl = document.getElementById('wbsFloatingTargetMonth');
+    const targetMonthSelectEl = document.getElementById('wbsFloatingTargetMonthSelect');
     const targetMbEl = document.getElementById('wbsFloatingTargetMb');
 
     // แถวล่างสุด: ต้องปิดอีก ... ลบ.
@@ -2037,6 +2038,21 @@
       if (targetMonthEl) {
         targetMonthEl.textContent = selectedMonth.shortName || 'ต.ค.';
         targetMonthEl.className = `wbs-floating-target-month target-seg-${selectedMonth.segIndex || 1} target-m-${selectedMonth.monthNum || 10}`;
+      }
+      if (targetMonthSelectEl) {
+        const targetMonths = (typeof window.getKpiSimulationTargetMonths === 'function')
+          ? window.getKpiSimulationTargetMonths(currentCrit)
+          : [];
+        const availableMonths = (targetMonths || []).filter(m => m.hasTarget !== false);
+        let optsHtml = '';
+        availableMonths.forEach((m) => {
+          const isSel = (m.monthNum === selectedMonth.monthNum);
+          optsHtml += `<option value="${m.monthNum}" ${isSel ? 'selected' : ''}>${m.shortName}</option>`;
+        });
+        targetMonthSelectEl.innerHTML = optsHtml;
+        targetMonthSelectEl.value = String(selectedMonth.monthNum);
+        targetMonthSelectEl.className = `wbs-floating-target-month-select target-seg-${selectedMonth.segIndex || 1} target-m-${selectedMonth.monthNum || 10}`;
+        targetMonthSelectEl.title = `คลิกเพื่อเลือกเปลี่ยนเดือนเป้าหมาย (ปัจจุบัน: ${selectedMonth.fullName || selectedMonth.shortName})`;
       }
       const targetAmt = Math.max(0, Number(selectedMonth.amt) || 0);
       const isVal = selectedMonth.unit === 'val';
@@ -2219,8 +2235,8 @@
     }
 
     el.addEventListener('pointerdown', (e) => {
-      // Do not drag if clicking the clear button or hide button
-      if (e.target && (e.target.closest('#wbsFloatingSelClearBtn') || e.target.closest('#wbsFloatingHideBtn') || e.target.closest('.wbs-floating-hide-btn'))) return;
+      // Do not drag if clicking the clear button, hide button, or target month select dropdown
+      if (e.target && (e.target.closest('#wbsFloatingSelClearBtn') || e.target.closest('#wbsFloatingHideBtn') || e.target.closest('.wbs-floating-hide-btn') || e.target.closest('#wbsFloatingTargetMonthSelect') || e.target.closest('.wbs-floating-target-month-select'))) return;
       if (e.button !== 0) return; // Only primary mouse button
 
       isDragging = true;
@@ -2287,7 +2303,7 @@
 
     // Double click to reset to default position
     el.addEventListener('dblclick', (e) => {
-      if (e.target && (e.target.closest('#wbsFloatingSelClearBtn') || e.target.closest('#wbsFloatingHideBtn') || e.target.closest('.wbs-floating-hide-btn'))) return;
+      if (e.target && (e.target.closest('#wbsFloatingSelClearBtn') || e.target.closest('#wbsFloatingHideBtn') || e.target.closest('.wbs-floating-hide-btn') || e.target.closest('#wbsFloatingTargetMonthSelect') || e.target.closest('.wbs-floating-target-month-select'))) return;
       resetFloatingCardPosition();
     });
 
@@ -2447,7 +2463,7 @@
     }
 
     const selectableMonths = availableMonths.filter(m => !m.isAchieved);
-    const isCurrentValid = wbsState.kpiTargetMonth && selectableMonths.some(m => m.monthNum === wbsState.kpiTargetMonth);
+    const isCurrentValid = wbsState.kpiTargetMonth && availableMonths.some(m => m.monthNum === wbsState.kpiTargetMonth);
 
     if (!isCurrentValid) {
       wbsState.kpiTargetMonth = selectableMonths.length ? selectableMonths[0].monthNum : (availableMonths[0] ? availableMonths[0].monthNum : null);
@@ -3428,7 +3444,7 @@
     }
   };
 
-  window.setWbsKpiTargetMonth = function (mNum) {
+  window.setWbsKpiTargetMonth = function (mNum, forceSelect) {
     const globalState = window.state || {};
     const globalFilters = globalState.filters || {};
     const currentCrit = globalFilters.criteria || (document.getElementById('filterCriteria') ? document.getElementById('filterCriteria').value : 'ALL');
@@ -3436,7 +3452,7 @@
       ? window.getKpiSimulationTargetMonths(currentCrit)
       : [];
     const targetM = (targetMonths || []).find(m => m.monthNum === mNum);
-    if (targetM && targetM.isAchieved) return; // Month already achieved, cannot select per requirement 2
+    if (!forceSelect && targetM && targetM.isAchieved) return; // Month already achieved, cannot select from button unless forced
 
     wbsState.kpiTargetMonth = mNum;
     const sapFiltered = getFilteredWbsData(false, true, true, true);

@@ -580,6 +580,22 @@
    */
   const BASE_AUDIT_LOGS = [
     {
+      id: 'log_000_wbs_floating_dropdown_and_enlarge_card',
+      timestamp: '2026-11-06 12:35:00',
+      timestampTh: '6 พ.ย. 2569, 12:35 น.',
+      type: 'EDIT',
+      typeBadge: 'Dropdown เดือนเป้าหมาย & ขยายขนาดการ์ด',
+      badgeClass: 'badge-type-edit',
+      title: 'เพิ่มปุ่ม Dropdown เลือกเดือนเป้าหมายในการ์ดลอยสีฟ้า พร้อมขยายขนาดการ์ดและตัวอักษรทุกแถวให้ใหญ่ขึ้นชัดเจน',
+      targetSubject: '#wbsTableFloatingSelection, #wbsFloatingTargetMonthSelect, .wbs-floating-sel-card ในหน้า WBS คงเหลือ (index.html, css/styles.css, js/wbs.js)',
+      storageFile: 'index.html, css/styles.css, js/wbs.js, js/data_history.js',
+      changeSummary: 'เพิ่มปุ่ม dropdown ให้เลือกเปลี่ยนเดือนเป้าหมาย (ต.ค./พ.ย./ธ.ค.) ได้โดยตรงบนการ์ดลอยสีฟ้า พร้อมซิงก์กับการ์ดภาพรวม KPI และขยายขนาดการ์ดลอยสีฟ้า ปรับเพิ่มขนาดตัวอักษรและป้ายตัวเลขทุกแถวให้โดดเด่น โดยเฉพาะตัวเลขยอดคงเหลือต้องปิดอีก (.wbs-floating-remain-val)',
+      details: '1) ใน index.html: เพิ่ม <select id="wbsFloatingTargetMonthSelect"> แสดงเดือนเป้าหมายพร้อม icon dropdown; 2) ใน js/wbs.js: อัปเดต getWbsSelectedTargetMonthInfo, updateWbsFloatingSelection, setWbsKpiTargetMonth และ initDraggableFloatingCard ให้รองรับการเลือกเดือนเป้าหมายผ่าน dropdown และซิงก์ข้อมูลสองทิศทาง; 3) ใน css/styles.css: กำหนดสไตล์ .wbs-floating-target-month-select สวยงามด้วย gradient ตาม segment และลูกศร SVG สีทอง, ขยายขนาดการ์ด .wbs-floating-sel-card (min-width: 320px, padding: 11px 16px), เพิ่มขนาดฟอนต์ทุกแถว (เป้าหมายเดือน, Checkbox, มูลค่า AUC, และยอดคงเหลือต้องปิดอีก 1.25rem); 4) อัปเดต Version Cache Busters',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "เพิ่มปุ่ม dropdown เลือกเดือนเป้าหมายได้" และ "เพิ่มการ์ดให้ใหญ่ขึ้น และขนาดอักษร"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง'
+    },
+    {
       id: 'log_000_wbs_floating_card_relocate_top_left',
       timestamp: '2026-11-05 16:40:00',
       timestampTh: '5 พ.ย. 2569, 16:40 น.',
