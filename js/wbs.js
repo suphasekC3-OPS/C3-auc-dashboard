@@ -268,6 +268,7 @@
     selectedWbs: new Set(),
     selectionCriteriaKey: '',
     selectionInitialized: false,
+    lastFilterSignature: '',
     kpiTargetMonth: null, // selected month number (e.g. 10 for ต.ค.)
     sortCol: 'statusSap',
     sortAsc: true,
@@ -373,6 +374,55 @@
     if (/\b(teco|rel|clsd|crtd)\b/i.test(t)) return true;
     if (/^(d\d|f\d|e\d|b\d)\b/i.test(t)) return true;
     return false;
+  }
+
+  /**
+   * Helper: สร้าง Signature รวมของตัวกรองทั้งหมดที่ส่งผลต่อตาราง WBS
+   * ตามคำสั่งผู้ใช้งาน: "ให้ล้างค่าที่เลือกปุ่ม check box หลังจากเปลี่ยนตัวกรองใหม่ ทุกครั้ง"
+   * ครอบคลุมทั้งตัวกรองแถบด้านบน (เดือน, เกณฑ์วัด, พื้นที่, กอง/กฟฟ., ค้นหา)
+   * และตัวกรองในตาราง WBS (งบ, กฟฟ., ช่างคุมงาน, งวดบัญชี, ค้นหา, การ์ดสถานะ SAP, หัวตารางสถานะ SAP/งวดบัญชี)
+   */
+  function getWbsFilterSignature() {
+    const globalState = window.state || {};
+    const globalFilters = globalState.filters || {};
+
+    const monthEl = document.getElementById('filterMonth');
+    const critEl = document.getElementById('filterCriteria');
+    const provEl = document.getElementById('filterProvince');
+    const offEl = document.getElementById('filterOffice');
+    const searchEl = document.getElementById('searchInput');
+
+    const topMonth = (globalFilters.month !== undefined && globalFilters.month !== null)
+      ? String(globalFilters.month)
+      : (monthEl ? String(monthEl.value) : '');
+    const topCrit = (globalFilters.criteria !== undefined && globalFilters.criteria !== null)
+      ? String(globalFilters.criteria)
+      : (critEl ? String(critEl.value) : 'ALL');
+    const topProv = (globalFilters.province !== undefined && globalFilters.province !== null)
+      ? String(globalFilters.province)
+      : (provEl ? String(provEl.value) : 'ALL');
+    const topOff = (globalFilters.office !== undefined && globalFilters.office !== null)
+      ? String(globalFilters.office)
+      : (offEl ? String(offEl.value) : 'ALL');
+    const topSearch = ((globalFilters.search !== undefined && globalFilters.search !== null)
+      ? String(globalFilters.search)
+      : (searchEl ? String(searchEl.value) : '')).trim().toLowerCase();
+
+    const localSearch = (wbsState.search || '').trim().toLowerCase();
+    const localBudget = wbsState.budget || 'ALL';
+    const localOffice = wbsState.office || 'ALL';
+    const localEng = wbsState.engineer || 'ALL';
+    const localPlanClose = wbsState.planClose || 'ALL';
+    const localSap = wbsState.sapStatus || 'ALL';
+    const selSap = Array.from(wbsState.selectedSapStatuses || []).sort().join('|');
+    const tblSap = Array.from(wbsState.tableSapStatuses || []).sort().join('|');
+    const tblPlan = Array.from(wbsState.tablePlanCloseStatuses || []).sort().join('|');
+
+    return [
+      topMonth, topCrit, topProv, topOff, topSearch,
+      localSearch, localBudget, localOffice, localEng, localPlanClose,
+      localSap, selSap, tblSap, tblPlan
+    ].join(':::');
   }
 
   /**
@@ -611,11 +661,21 @@
     const currentCrit = globalFilters.criteria || (document.getElementById('filterCriteria') ? document.getElementById('filterCriteria').value : 'ALL');
     const excludedSap = getExcludedSapForCriteria(currentCrit);
 
-    // Auto-initialize or reset selection when criteria changes (Default: ทุกช่องไม่ถูกเลือก Unchecked)
-    if (!wbsState.selectionInitialized || wbsState.selectionCriteriaKey !== currentCrit) {
-      wbsState.selectedWbs.clear();
+    // Auto-initialize or reset selection when ANY filter changes (Default: ทุกช่องไม่ถูกเลือก Unchecked)
+    // ตามคำสั่งผู้ใช้งาน: "ให้ล้างค่าที่เลือกปุ่ม check box หลังจากเปลี่ยนตัวกรองใหม่ ทุกครั้ง"
+    const currentFilterSig = getWbsFilterSignature();
+    if (!wbsState.selectionInitialized) {
+      if (wbsState.selectedWbs) wbsState.selectedWbs.clear();
       wbsState.selectionInitialized = true;
+      wbsState.lastFilterSignature = currentFilterSig;
       wbsState.selectionCriteriaKey = currentCrit;
+    } else if (wbsState.lastFilterSignature !== currentFilterSig) {
+      if (wbsState.selectedWbs && wbsState.selectedWbs.size > 0) {
+        wbsState.selectedWbs.clear();
+      }
+      wbsState.lastFilterSignature = currentFilterSig;
+      wbsState.selectionCriteriaKey = currentCrit;
+      wbsState.page = 1;
     }
 
     // 1. Update Navigation Tab Badge
@@ -6093,13 +6153,7 @@
     const allBtns = card.querySelectorAll('.btn-wbs-fullscreen, .btn-fullscreen');
     allBtns.forEach(b => {
       if (isFull) {
-        b.setAttribute('title', 'ย่อขนาดปกติ (ESC)');
-        b.innerHTML = `
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M4 14h6m0 0v6m0-6L3 21m17-7h-6m0 0v6m0-6l7 7M4 10h6m0 0V4m0 6L3 3m17 7h-6m0 0V4m0 6l7-7"></path>
-          </svg>
-          <span>ย่อขนาด</span>
-        `;
+        b.setAttribute('title', 'กดคืนหน้าจอปกติ (ESC)');
       } else {
         b.setAttribute('title', 'ขยายตารางเต็มหน้าจอ');
         b.innerHTML = `
@@ -6112,7 +6166,7 @@
     });
 
     if (window.showToast) {
-      window.showToast(isFull ? 'ขยายตารางเต็มหน้าจอแล้ว (กด ESC เพื่อย่อ)' : 'ย่อตารางเป็นขนาดปกติแล้ว', 'info');
+      window.showToast(isFull ? 'ขยายตารางเต็มหน้าจอแล้ว (กด คืนหน้าจอปกติ หรือ ESC เพื่อย่อ)' : 'ย่อตารางเป็นขนาดปกติแล้ว', 'info');
     }
 
     setTimeout(() => {
@@ -6150,10 +6204,15 @@
       }
       const fullTable = document.querySelector('.table-card.is-fullscreen');
       if (fullTable) {
-        const btn = fullTable.querySelector('.btn-wbs-fullscreen, .btn-fullscreen');
-        if (btn && window.toggleTableFullscreen) {
-          window.toggleTableFullscreen(btn);
+        if (typeof window.returnToNormalScreen === 'function') {
+          window.returnToNormalScreen();
+        } else {
+          const btn = fullTable.querySelector('.btn-wbs-fullscreen, .btn-fullscreen');
+          if (btn && window.toggleTableFullscreen) {
+            window.toggleTableFullscreen(btn);
+          }
         }
+        return;
       }
     }
   });
@@ -6741,6 +6800,7 @@
       if (wbsState.tablePlanCloseStatuses) wbsState.tablePlanCloseStatuses.clear();
       if (wbsState.selectedWbs) wbsState.selectedWbs.clear();
       wbsState.selectionCriteriaKey = '';
+      wbsState.lastFilterSignature = '';
       wbsState.page = 1;
       const sInput = document.getElementById('wbsTableSearchInput');
       if (sInput) sInput.value = '';

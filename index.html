@@ -639,16 +639,6 @@
             </svg>
             <span>คืนค่าทั้งหมด</span>
           </button>
-
-          <!-- 7. ปุ่มคืนหน้าจอปกติ (แสดงเฉพาะในหน้าจอขยายเต็มจอเท่านั้น ไม่แสดงในหน้าจอหลัก) สีสวยงามหรูหรา -->
-          <button type="button" class="btn btn-sm btn-return-normal-top" id="btnTopReturnNormalScreen"
-            onclick="window.returnToNormalScreen()" title="กดเพื่อคืนหน้าจอปกติ (ออกจากหน้าจอขยายเต็มจอ)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
-              stroke-linecap="round" stroke-linejoin="round">
-              <path d="M4 14h6m0 0v6m0-6L3 21m17-7h-6m0 0v6m0-6l7 7M4 10h6m0 0V4m0 6L3 3m17 7h-6m0 0V4m0 6l7-7"></path>
-            </svg>
-            <span>คืนหน้าจอปกติ</span>
-          </button>
         </div>
       </div>
     </div>
@@ -1822,17 +1812,17 @@
             <div class="table-card" id="wbsTableCard">
               <!-- แถวบนสุดของตาราง WBS: รวมเกณฑ์วัด (ซ้าย) และแถบเครื่องมือ/ปุ่มควบคุม (ขวา) ในแถวเดียวกัน -->
               <div class="wbs-table-top-meta-bar table-header-bar"
-                style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.65rem; padding:0.55rem 0.95rem; border-bottom:1px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.02); border-radius:var(--radius-md, 10px) var(--radius-md, 10px) 0 0;">
+                style="display:flex; justify-content:space-between; align-items:center; flex-wrap:nowrap; gap:0.65rem; padding:0.55rem 0.95rem; border-bottom:1px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.02); border-radius:var(--radius-md, 10px) var(--radius-md, 10px) 0 0; overflow-x:auto; overflow-y:hidden; white-space:nowrap;">
                 <!-- ฝั่งซ้าย: ประเภทเกณฑ์วัด -->
-                <div class="wbs-table-active-criteria" id="wbsTableActiveCriteria" title="ประเภทเกณฑ์วัดที่กำลังแสดงผล">
+                <div class="wbs-table-active-criteria" id="wbsTableActiveCriteria" title="ประเภทเกณฑ์วัดที่กำลังแสดงผล" style="flex-shrink:0; white-space:nowrap;">
                   <span class="criteria-tag-icon">📌</span>
                   <span class="criteria-tag-label">เกณฑ์วัด:</span>
                   <strong class="criteria-tag-val" id="wbsTableActiveCriteriaVal">ข้อ 1.1 งบ C.1 ก่อน 69</strong>
                 </div>
 
-                <!-- ฝั่งขวา: แถบเครื่องมือจัดการข้อมูลและตัวเลือกตาราง (ชิดขวา) -->
+                <!-- ฝั่งขวา: แถบเครื่องมือจัดการข้อมูลและตัวเลือกตาราง (ชิดขวา ห้ามขึ้นบรรทัดใหม่) -->
                 <div class="wbs-table-toolbar-actions"
-                  style="display:flex; align-items:center; gap:0.55rem; flex-wrap:wrap; justify-content:flex-end;">
+                  style="display:flex; align-items:center; gap:0.5rem; flex-wrap:nowrap; justify-content:flex-end; flex-shrink:0; white-space:nowrap; margin-left:auto;">
                   <!-- ปุ่มส่งออก WBS (CSV) -->
                   <button type="button" class="btn btn-gold btn-sm" id="btnExportWbsCsv"
                     onclick="window.exportWbsToCsv()"
@@ -1953,7 +1943,7 @@
                     <span>ล้างตัวเลือกทั้งหมดในตารางนี้</span>
                   </button>
 
-                  <!-- ปุ่มขยายเต็มหน้าจอ (Fullscreen Table Toggle) -->
+                  <!-- ปุ่มขยายเต็มหน้าจอ (แสดงเฉพาะในโหมดปกติ ไม่แสดงตอนขยายเต็มจอ) -->
                   <button type="button" class="btn-wbs-fullscreen" id="btnWbsTableFullscreen"
                     onclick="window.toggleTableFullscreen(this)" title="ขยายตารางเต็มหน้าจอ">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1964,13 +1954,12 @@
                     <span>ขยายเต็มจอ</span>
                   </button>
 
-                  <!-- ปุ่มคืนหน้าจอปกติ (แสดงเฉพาะในหน้าจอขยายเต็มจอเท่านั้น ไม่แสดงในหน้าจอหลัก) -->
-                  <button type="button" class="btn-return-main-screen" id="btnReturnNormalScreen"
-                    onclick="window.returnToNormalScreen()" title="กดเพื่อคืนหน้าจอปกติ (ออกจากหน้าจอขยาย)">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                      stroke-width="2.3">
-                      <path d="M4 14h6m0 0v6m0-6L3 21m17-7h-6m0 0v6m0-6l7 7M4 10h6m0 0V4m0 6L3 3m17 7h-6m0 0V4m0 6l7-7">
-                      </path>
+                  <!-- ปุ่มคืนหน้าจอปกติ (แสดงเฉพาะในหน้าจอขยายเต็มจอเท่านั้น แทนที่ปุ่มย่อขนาดเดิม สไตล์แคปซูลสีม่วงทองหรูหรา ไม่ขึ้นบรรทัดใหม่) -->
+                  <button type="button" class="btn btn-sm btn-return-normal-top" id="btnReturnNormalScreen"
+                    onclick="window.returnToNormalScreen()" title="กดเพื่อคืนหน้าจอปกติ (ออกจากหน้าจอขยายเต็มจอ)">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+                      stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M4 14h6m0 0v6m0-6L3 21m17-7h-6m0 0v6m0-6l7 7M4 10h6m0 0V4m0 6L3 3m17 7h-6m0 0V4m0 6l7-7"></path>
                     </svg>
                     <span>คืนหน้าจอปกติ</span>
                   </button>
@@ -2888,13 +2877,13 @@
   <script src="js/kpi_matrix.js?v=20261003_0930"></script>
   <script src="js/chart.js?v=20261105_1139"></script>
   <script src="js/data_wbs.js?v=20261105_1640"></script>
-  <script src="js/wbs.js?v=20261106_1235"></script>
+  <script src="js/wbs.js?v=20261106_2045"></script>
   <script src="js/data_materials_07.js?v=20261105_1437"></script>
   <script src="js/data_materials_08.js?v=20261105_1454"></script>
   <script src="js/materials.js?v=20261105_1640"></script>
   <script charset="utf-8" src="js/data_history_archive.js?v=20261105_1514"></script>
   <script src="js/office_dd.js?v=20261105_1620"></script>
-  <script charset="utf-8" src="js/data_history.js?v=20261106_1235"></script>
+  <script charset="utf-8" src="js/data_history.js?v=20261106_2045"></script>
   <script src="js/app.js?v=20261105_1139"></script>
   <script src="js/criteria_dropdown.js?v=20261017_2055"></script>
   <script src="js/presentation_pointer.js?v=20261027_1435"></script>

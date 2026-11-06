@@ -580,6 +580,22 @@
    */
   const BASE_AUDIT_LOGS = [
     {
+      id: 'log_000_wbs_clear_checkbox_on_filter_change',
+      timestamp: '2026-11-06 20:45:00',
+      timestampTh: '6 พ.ย. 2569, 20:45 น.',
+      type: 'EDIT',
+      typeBadge: 'ล้าง Checkbox เมื่อเปลี่ยนตัวกรอง',
+      badgeClass: 'badge-type-edit',
+      title: 'ปรับปรุงระบบให้ล้างค่าที่เลือกในปุ่ม Checkbox อัตโนมัติทุกครั้งเมื่อมีการเปลี่ยนตัวกรองใหม่',
+      targetSubject: 'Checkbox ตาราง WBS และการ์ดลอยสีฟ้า (#wbsTableFloatingSelection, wbsState.selectedWbs) ในหน้า WBS (js/wbs.js)',
+      storageFile: 'js/wbs.js, js/data_history.js, index.html',
+      changeSummary: 'เพิ่มฟังก์ชัน getWbsFilterSignature() เพื่อตรวจจับการเปลี่ยนตัวกรองทุกประเภท (เดือน, เกณฑ์วัด, พื้นที่, กอง/กฟฟ., คำค้นหา, งบ, ช่างคุมงาน, งวดบัญชี, สถานะ SAP) หากตัวกรองเปลี่ยนไป จะทำการล้างค่ารายการที่เลือกใน Checkbox และรีเซ็ตการ์ดลอยสีฟ้าเป็น 0 งาน (0.00 ลบ.) อัตโนมัติทันที',
+      details: '1) ใน js/wbs.js: สร้างฟังก์ชัน getWbsFilterSignature() และเพิ่ม wbsState.lastFilterSignature เพื่อเปรียบเทียบสถานะตัวกรองทั้งแถบด้านบนและในตาราง WBS; 2) ใน renderWbsTab(): หากตัวกรองถูกเปลี่ยนแปลง จะเรียก wbsState.selectedWbs.clear() เพื่อปลด Checkbox ทุกแถว, ปลด Master Header Checkbox และอัปเดตการ์ดลอยสีฟ้าให้กลับเป็นค่าเริ่มต้น 0 งานทันที; 3) อัปเดต Version Cache Busters',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "ให้ล้างค่าที่เลือกปุ่ม check box หลังจากเปลี่ยนตัวกรองใหม่ ทุกครั้ง"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง'
+    },
+    {
       id: 'log_000_wbs_floating_dropdown_and_enlarge_card',
       timestamp: '2026-11-06 12:35:00',
       timestampTh: '6 พ.ย. 2569, 12:35 น.',

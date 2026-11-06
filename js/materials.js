@@ -993,9 +993,10 @@
               <span>ขยายเต็มจอ</span>
             </button>
 
-            <button type="button" class="btn-return-main-screen" id="btnMatReturnNormalScreen"
-              onclick="if(window.returnToNormalScreen)window.returnToNormalScreen();else window.toggleTableFullscreen(this);" title="กดเพื่อคืนหน้าจอปกติ">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+            <button type="button" class="btn btn-sm btn-return-normal-top" id="btnMatReturnNormalScreen"
+              onclick="if(window.returnToNormalScreen)window.returnToNormalScreen();else window.toggleTableFullscreen(this);" title="กดเพื่อคืนหน้าจอปกติ (ออกจากหน้าจอขยายเต็มจอ)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+                stroke-linecap="round" stroke-linejoin="round">
                 <path d="M4 14h6m0 0v6m0-6L3 21m17-7h-6m0 0v6m0-6l7 7M4 10h6m0 0V4m0 6L3 3m17 7h-6m0 0V4m0 6l7-7"></path>
               </svg>
               <span>คืนหน้าจอปกติ</span>
@@ -3123,7 +3124,7 @@
     if (e.key === 'Enter') {
       e.preventDefault();
       const first = document.querySelector('#matWbsDropdownList .mat-desc-dd-item:not(.is-all)') ||
-                    document.querySelector('#matWbsDropdownList .mat-desc-dd-item');
+        document.querySelector('#matWbsDropdownList .mat-desc-dd-item');
       if (first) first.click();
     }
   };

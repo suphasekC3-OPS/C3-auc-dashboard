@@ -5063,7 +5063,9 @@ body.has-fullscreen-table #topStickyFilterBar {
 }
 
 body.has-fullscreen-table .btn-return-normal-top,
-body.has-fullscreen-chart .btn-return-normal-top {
+body.has-fullscreen-chart .btn-return-normal-top,
+body.has-fullscreen-table #btnReturnNormalScreen,
+.table-card.is-fullscreen #btnReturnNormalScreen {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -5078,6 +5080,7 @@ body.has-fullscreen-chart .btn-return-normal-top {
   cursor: pointer !important;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
   white-space: nowrap !important;
+  flex-shrink: 0 !important;
   box-shadow: 0 2px 10px rgba(147, 51, 234, 0.55), 0 0 12px rgba(255, 215, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
   line-height: 1.2 !important;
@@ -5535,6 +5538,8 @@ body.has-fullscreen-chart .btn-return-normal-top {
   padding: 0.45rem 0.65rem !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
   background: rgba(255, 255, 255, 0.03) !important;
+  flex-wrap: nowrap !important;
+  white-space: nowrap !important;
 }
 
 [data-theme="light"] .table-card.is-fullscreen .table-header-bar {
@@ -5583,15 +5588,9 @@ body.has-fullscreen-chart .btn-return-normal-top {
   border-top: 1px solid rgba(0, 0, 0, 0.08) !important;
 }
 
-.table-card.is-fullscreen .btn-wbs-fullscreen {
-  background: rgba(239, 68, 68, 0.2) !important;
-  border-color: rgba(239, 68, 68, 0.5) !important;
-  color: #F87171 !important;
-}
-
-.table-card.is-fullscreen .btn-wbs-fullscreen:hover {
-  background: rgba(239, 68, 68, 0.4) !important;
-  color: #FFFFFF !important;
+.table-card.is-fullscreen .btn-wbs-fullscreen,
+body.has-fullscreen-table .btn-wbs-fullscreen {
+  display: none !important;
 }
 
 body.has-fullscreen-table {
@@ -11487,13 +11486,27 @@ body.has-fullscreen-table {
   color: #B45309;
 }
 
+.wbs-table-top-meta-bar {
+  flex-wrap: nowrap !important;
+  white-space: nowrap !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+}
+
 .wbs-table-toolbar-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.55rem;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  margin-left: auto;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  flex-wrap: nowrap !important;
+  white-space: nowrap !important;
+  justify-content: flex-end !important;
+  flex-shrink: 0 !important;
+  margin-left: auto !important;
+}
+
+.wbs-table-toolbar-actions > * {
+  flex-shrink: 0 !important;
+  white-space: nowrap !important;
 }
 
 .wbs-col-dropdown-wrap {
