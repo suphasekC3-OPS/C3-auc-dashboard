@@ -580,6 +580,22 @@
    */
   const BASE_AUDIT_LOGS = [
     {
+      id: 'log_000_wbs_remove_sap_cyan_cb_and_proportion_chart',
+      timestamp: '2026-11-07 14:15:00',
+      timestampTh: '7 พ.ย. 2569, 14:15 น.',
+      type: 'EDIT',
+      typeBadge: 'ปรับโฉมการ์ด SAP & กราฟแท่ง',
+      badgeClass: 'badge-type-edit',
+      title: 'นำแถบแสดงยอดที่เลือกสีฟ้า (ติ๊กตาราง) ออกจากการ์ดสรุปสถานะ SAP ทุกใบ และปรับสัดส่วนกราฟแท่งหน่วยงานให้สมส่วนสวยงาม',
+      targetSubject: 'การ์ดสรุปสถานะ SAP (#wbsSapSummarySection, .wbs-sap-card) และกราฟแท่ง กอง/กฟฟ. ที่มีงาน WBS คงเหลือ (#wbsOfficesBarChart)',
+      storageFile: 'js/wbs.js, css/styles.css, index.html, js/data_history.js',
+      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน: 1) นำกล่องแถบสีฟ้าแสดงยอดที่เลือก (.wbs-sap-card-cb-box: "ติ๊กตาราง X งาน / มูลค่า ฿X") ออกจากการ์ดสรุปสถานะ SAP ทุกใบ (ทั้งการ์ด "ทั้งหมด" และการ์ดสถานะรายตัวทุกใบ) พร้อมปรับสัดส่วนการ์ดให้กะทัดรัด สมมาตร และสะอาดตา 2) ปรับสัดส่วนกราฟแท่งหน่วยงาน (drawTopOfficesCanvas) ด้วย Adaptive Strictly-Monotonic Scale ความสูงพื้นที่วาด 242px และขยายขอบล่างอัตโนมัติไม่ให้ชื่อ กฟฟ. ถูกตัดขอบ',
+      details: '1) ใน js/wbs.js (renderWbsSapSummary): ลบโครงสร้าง HTML .wbs-sap-card-cb-box ออกจากทั้งการ์ดรวม "ทั้งหมด" และการ์ดแยกตามสถานะ SAP ทุกใบ 2) ใน js/wbs.js (drawTopOfficesCanvas & renderTopOfficesChart): เพิ่ม plotHBase เป็น 242px, ปรับ niceMax และใช้สเกลยกกำลังแบบรักษาลำดับความสูงจริง (scaleGamma 0.58-0.88) ให้สอดคล้องกับเส้นกริดแกน Y เพื่อให้แท่งหน่วยงานลำดับรองมีความสูงสมดุลอ่านรหัสสถานะได้ชัดเจน และคำนวณ pad.bottom / pad.left แบบไดนามิกไม่ให้ชื่อหน่วยงานยาวถูกตัดขอบ 3) ใน css/styles.css & index.html: ล้าง CSS .wbs-sap-card-cb-box ที่ไม่ใช้งานออก ปรับ padding .wbs-sap-card-main-info ให้สมมาตร ปลดเพดาน max-height: 340px ของ #wbsOfficesChartContainer และอัปเดต Cache Busters เป็น ?v=20261107_1415',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "เอาที่เลือก สีฟ้า ออกทั้งหมดทุกการ์ด และปรับขนาดกราฟให้สมส่วน สวยงาม"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง'
+    },
+    {
       id: 'log_000_wbs_replace_shrink_with_return_normal_nowrap',
       timestamp: '2026-11-07 13:35:00',
       timestampTh: '7 พ.ย. 2569, 13:35 น.',

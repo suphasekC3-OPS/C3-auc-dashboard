@@ -985,24 +985,6 @@
             <span class="wbs-sap-auc-val">฿${allAucFmt}</span>
           </div>
         </div>
-
-        <!-- กล่องข้อมูลที่เลือก Checkbox ด้านล่างการ์ด (ล็อค 2 บรรทัด: บรรทัดจำนวนงาน, บรรทัดมูลค่า ไม่แสดง % ตัวเลขไม่โดนบัง) -->
-        <div class="wbs-sap-card-cb-box cat-all ${hasAllSelection ? 'has-selection' : 'no-selection'}"
-          title="รายการที่เลือก Checkbox ทั้งหมด: ${totalSelectedJobs.toLocaleString('th-TH')} งาน | มูลค่า ฿${allSelectedAucFmt} บาท">
-          <div class="wbs-sap-cb-row-jobs">
-            <span class="wbs-sap-cb-tag">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                <polyline points="20 6 9 17 4 12"></polyline>
-              </svg>
-              ติ๊กตาราง
-            </span>
-            <span class="wbs-sap-cb-count">${totalSelectedJobs.toLocaleString('th-TH')} งาน</span>
-          </div>
-          <div class="wbs-sap-cb-row-auc">
-            <span class="wbs-sap-cb-auc-lbl">มูลค่า</span>
-            <span class="wbs-sap-cb-auc-val">฿${allSelectedAucFmt}</span>
-          </div>
-        </div>
       </div>
     `;
 
@@ -1099,24 +1081,6 @@
             <div class="wbs-sap-card-auc">
               <span class="wbs-sap-auc-label">มูลค่า AUC</span>
               <span class="wbs-sap-auc-val">฿${aucFmt}</span>
-            </div>
-          </div>
-
-          <!-- กล่องข้อมูลที่เลือก Checkbox ด้านล่างการ์ด (ล็อค 2 บรรทัด: บรรทัดจำนวนงาน, บรรทัดมูลค่า ไม่แสดง % ตัวเลขไม่โดนบัง) -->
-          <div class="wbs-sap-card-cb-box ${cbCatCls} ${hasStatusSelection ? 'has-selection' : 'no-selection'}"
-            title="สถานะ ${escapeHtml(item.status)} ที่เลือก Checkbox ในตาราง: ${item.selectedCount.toLocaleString('th-TH')} งาน | มูลค่า ฿${statusSelectedAucFmt} บาท">
-            <div class="wbs-sap-cb-row-jobs">
-              <span class="wbs-sap-cb-tag">
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                  <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
-                ติ๊กตาราง
-              </span>
-              <span class="wbs-sap-cb-count">${item.selectedCount.toLocaleString('th-TH')} งาน</span>
-            </div>
-            <div class="wbs-sap-cb-row-auc">
-              <span class="wbs-sap-cb-auc-lbl">มูลค่า</span>
-              <span class="wbs-sap-cb-auc-val">฿${statusSelectedAucFmt}</span>
             </div>
           </div>
         </div>
@@ -5275,8 +5239,8 @@
       canvas.addEventListener('mousemove', function (e) {
         if (!activeWbsTopOffices.length) return;
         const rect = canvas.getBoundingClientRect();
-        const padLeft = 42;
-        const padRight = 16;
+        const padLeft = canvas._wbsPadLeft || 46;
+        const padRight = canvas._wbsPadRight || 18;
         const plotW = rect.width - padLeft - padRight;
         const slotW = plotW / activeWbsTopOffices.length;
         const mouseX = e.clientX - rect.left;
@@ -5299,8 +5263,8 @@
       canvas.addEventListener('click', function (e) {
         if (!activeWbsTopOffices.length) return;
         const rect = canvas.getBoundingClientRect();
-        const padLeft = 42;
-        const padRight = 16;
+        const padLeft = canvas._wbsPadLeft || 46;
+        const padRight = canvas._wbsPadRight || 18;
         const plotW = rect.width - padLeft - padRight;
         const slotW = plotW / activeWbsTopOffices.length;
         const mouseX = e.clientX - rect.left;
@@ -5356,30 +5320,38 @@
     const dpr = window.devicePixelRatio || 1;
     const container = canvas.parentElement;
     const containerW = container ? container.getBoundingClientRect().width : 800;
-    const height0 = 296; // ความสูงกราฟสมส่วน สวยงาม กว้างและชัดเจน
+    const height0 = 330; // ความสูงกราฟสมส่วน สวยงาม กว้างและชัดเจน
 
     const count = (data || []).length;
     const fitOnePage = mode !== 'grouped';
     const minSlotW = mode === 'grouped' ? 60 : 48;
-    const pad = { top: 26, right: 16, bottom: 52, left: 42 };
+    const pad = { top: 28, right: 18, bottom: 58, left: 46 };
     const slotEst = (containerW - pad.left - pad.right) / Math.max(count, 1);
-    const dense = fitOnePage && slotEst < 44;
-    const labelAngleDeg = dense ? -58 : -28;
-    const labelFontPx = dense ? 10 : 10.5;
+    const dense = fitOnePage && (slotEst < 56 || count > 18);
+    const labelAngleDeg = dense ? -52 : -28;
+    const labelFontPx = dense ? 10.2 : 10.8;
 
-    if (dense) {
-      // คำนวณพื้นที่ด้านล่างให้พอดีกับชื่อหน่วยงาน
-      ctx.font = `500 ${labelFontPx}px Prompt, sans-serif`;
+    if (count > 0) {
+      // คำนวณพื้นที่ด้านล่างและด้านซ้ายให้พอดีกับชื่อหน่วยงานที่ยาวที่สุดโดยไม่ถูกตัดขอบ
+      ctx.font = `600 ${labelFontPx + 0.3}px Prompt, sans-serif`;
+      const rad = Math.abs(labelAngleDeg) * Math.PI / 180;
       const maxLabelW = Math.max(...data.map(o => ctx.measureText(o.office || '').width), 0);
-      pad.bottom = Math.min(84, Math.ceil(maxLabelW * Math.sin(Math.abs(labelAngleDeg) * Math.PI / 180)) + 16);
+      pad.bottom = Math.min(118, Math.max(56, Math.ceil(maxLabelW * Math.sin(rad)) + 22));
+      const firstLabelW = ctx.measureText(data[0].office || '').width;
+      const firstLeftReach = Math.ceil(firstLabelW * Math.cos(rad)) - Math.floor(slotEst * 0.45);
+      if (firstLeftReach > pad.left - 8) {
+        pad.left = Math.min(72, Math.max(46, firstLeftReach + 10));
+      }
     }
-    const plotHBase = 196; // ความสูงพื้นที่วาดกราฟกะทัดรัด สมส่วน ชัดเจน
-    const height = dense ? pad.top + plotHBase + pad.bottom : height0;
+    const plotHBase = 242; // ความสูงพื้นที่วาดกราฟสมส่วน มองเห็นรหัสสถานะและตัวเลขในแต่ละแท่งชัดเจน
+    const height = dense ? pad.top + plotHBase + pad.bottom : Math.max(height0, pad.top + plotHBase + pad.bottom);
 
     const minRequiredW = pad.left + pad.right + Math.max(count, 1) * minSlotW;
     const width = fitOnePage ? containerW : Math.max(containerW, minRequiredW);
 
-    canvas._wbsPlotBottom = height - pad.bottom + 10;
+    canvas._wbsPadLeft = pad.left;
+    canvas._wbsPadRight = pad.right;
+    canvas._wbsPlotBottom = height - pad.bottom + 12;
 
     canvas.width = width * dpr;
     canvas.height = height * dpr;
@@ -5409,34 +5381,56 @@
       maxVal = Math.max(...data.map(o => o.total), 1);
     }
 
-    const minTotal = Math.min(...data.map(o => o.total), 1);
-    const maxTotal = Math.max(...data.map(o => o.total), 1);
+    const sortedTotals = data.map(o => o.total).sort((a, b) => a - b);
+    const minTotal = sortedTotals.length ? Math.max(sortedTotals[0], 1) : 1;
+    const maxTotal = sortedTotals.length ? Math.max(sortedTotals[sortedTotals.length - 1], 1) : 1;
+    const medianTotal = sortedTotals.length ? Math.max(sortedTotals[Math.floor(sortedTotals.length / 2)], 1) : 1;
 
-    const stepBase = maxVal <= 30 ? 10 : (maxVal <= 100 ? 25 : (maxVal <= 250 ? 50 : 100));
-    const niceMax = Math.ceil((maxVal * 1.12) / stepBase) * stepBase || stepBase;
+    const stepBase = maxVal <= 20 ? 5 : (maxVal <= 60 ? 10 : (maxVal <= 150 ? 25 : (maxVal <= 450 ? 50 : 100)));
+    const niceMax = Math.ceil((maxVal * 1.06) / stepBase) * stepBase || stepBase;
 
-    // 1. Draw Grid Lines & Y-Axis Scale
+    // Adaptive Strictly-Monotonic Scale: ปรับสมดุลสัดส่วนเมื่อมีแท่งสูงสุดโดดกว่าค่ากลางมาก (เช่น 365 เทียบกับค่ากลาง 42)
+    // โดยรักษาความสูงลดหลั่นตามจำนวนงานจริงแบบ 100% Strictly Monotonic และตรงกับเส้นแกน Y ทุกจุด
+    const skewRatio = maxTotal / medianTotal;
+    const scaleGamma = (mode === 'stacked' && count > 4)
+      ? (skewRatio > 3.5 ? 0.58 : (skewRatio > 2.2 ? 0.72 : 0.88))
+      : 1.0;
+
+    const valToPlotRatio = (v) => {
+      if (v <= 0) return 0;
+      return Math.pow(Math.min(v, niceMax) / niceMax, scaleGamma);
+    };
+
+    // 1. Draw Grid Lines & Y-Axis Scale (สอดคล้องกับสเกลความสูงแท่งจริง)
     ctx.save();
-    ctx.strokeStyle = isLight ? 'rgba(104, 44, 145, 0.14)' : 'rgba(168, 85, 247, 0.12)';
+    ctx.strokeStyle = isLight ? 'rgba(104, 44, 145, 0.14)' : 'rgba(168, 85, 247, 0.14)';
     ctx.lineWidth = 1;
     ctx.setLineDash([3, 3]);
     ctx.font = '600 10.5px Prompt, sans-serif';
-    ctx.fillStyle = isLight ? '#6B7280' : '#A692BA';
+    ctx.fillStyle = isLight ? '#6B7280' : '#B8A5CC';
     ctx.textAlign = 'right';
     ctx.textBaseline = 'middle';
 
-    const gridSteps = 2; // 0%, 50%, 100%
-    for (let s = 0; s <= gridSteps; s++) {
-      const y = pad.top + plotH - (s / gridSteps) * plotH;
-      const val = Math.round((s / gridSteps) * niceMax);
+    let yTicks;
+    if (scaleGamma < 0.99 && niceMax >= 40) {
+      const roundStep = niceMax <= 100 ? 10 : (niceMax <= 250 ? 25 : 50);
+      const t1 = Math.max(roundStep, Math.round((niceMax * Math.pow(0.32, 1 / scaleGamma)) / roundStep) * roundStep);
+      const t2 = Math.max(t1 + roundStep, Math.round((niceMax * Math.pow(0.66, 1 / scaleGamma)) / roundStep) * roundStep);
+      yTicks = [0, t1, Math.min(t2, niceMax - roundStep), niceMax].filter((v, idx, arr) => v >= 0 && v <= niceMax && arr.indexOf(v) === idx);
+    } else {
+      yTicks = [0, Math.round(niceMax * 0.5), niceMax].filter((v, idx, arr) => arr.indexOf(v) === idx);
+    }
+
+    yTicks.forEach(val => {
+      const y = pad.top + plotH - valToPlotRatio(val) * plotH;
 
       ctx.beginPath();
       ctx.moveTo(pad.left, y);
       ctx.lineTo(width - pad.right, y);
       ctx.stroke();
 
-      ctx.fillText(val.toLocaleString('th-TH'), pad.left - 5, y);
-    }
+      ctx.fillText(val.toLocaleString('th-TH'), pad.left - 6, y);
+    });
     ctx.restore();
 
     // 2. Draw Office Bars
@@ -5448,7 +5442,7 @@
       if (mode === 'stacked') {
         // --- STACKED BAR MODE ---
         // ปรับความกว้างแท่งกราฟให้สมส่วน มีพื้นที่เพียงพอสำหรับแสดงรหัสสถานะ SAP ประโยคท้าย และตัวเลขจำนวนงานในบรรทัดเดียว
-        const barW = Math.max(26, Math.min(44, Math.round(slotW * 0.70)));
+        const barW = Math.min(Math.max(14, Math.floor(slotW - 5)), Math.max(24, Math.min(46, Math.round(slotW * 0.76))));
         const barX = centerX - barW / 2;
 
         // 1. Gather all active SAP status segments for this office
@@ -5482,22 +5476,22 @@
           ctx.restore();
         }
 
-        // 6. ไล่ความสูงกราฟแท่งตามสัดส่วนจำนวนงานจริงอย่างแม่นยำ (Strict Proportional & Monotonic)
-        // รับประกัน: หน่วยงานที่งานเยอะสุดจะต้องมีความสูงกราฟมากสุดเสมอ และลดหลั่นลงมาตามจำนวนงานอย่างแม่นยำ
-        const maxBarH = plotH - 16;
-        const minBarH = 20; // งาน 1 งานมีความสูง 20px พอดีสำหรับแสดงข้อความสถานะและจำนวนงาน
-        let totalBarH = minBarH;
-        if (maxTotal > minTotal) {
-          const t = (off.total - minTotal) / (maxTotal - minTotal);
-          totalBarH = minBarH + t * (maxBarH - minBarH);
-        } else {
-          totalBarH = (maxBarH + minBarH) / 2;
+        // 6. ไล่ความสูงกราฟแท่งตามสัดส่วนจำนวนงานจริงอย่างแม่นยำ (Strict Monotonic & Balanced Proportions)
+        const minBarH = 20;
+        const minRawH = valToPlotRatio(minTotal) * plotH;
+        const maxRawH = Math.min(plotH - 6, valToPlotRatio(maxTotal) * plotH);
+        const curRawH = Math.min(plotH - 6, valToPlotRatio(off.total) * plotH);
+        let totalBarH = curRawH;
+        if (maxTotal > minTotal && minRawH < minBarH) {
+          totalBarH = minBarH + ((curRawH - minRawH) / Math.max(1e-6, maxRawH - minRawH)) * Math.max(0, maxRawH - minBarH);
+        } else if (maxTotal === minTotal) {
+          totalBarH = Math.max(minBarH, curRawH);
         }
 
         // จัดสรรความสูงของแต่ละเซกเมนต์สถานะ SAP ในแท่งด้วยอัลกอริทึม Water-filling:
         // ให้เซกเมนต์ขนาดใหญ่มีสัดส่วนตรงตามจำนวนงานจริง และทุกเซกเมนต์มีพื้นที่พอแสดงรหัสสถานะ SAP
         if (off.total > 0 && segments.length > 0) {
-          allocateSegmentHeights(segments, totalBarH, 13.5);
+          allocateSegmentHeights(segments, totalBarH, 14);
         }
 
         let curBaseY = pad.top + plotH;
