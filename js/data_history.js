@@ -580,6 +580,22 @@
    */
   const BASE_AUDIT_LOGS = [
     {
+      id: 'log_000_wbs_replace_shrink_with_return_normal_nowrap',
+      timestamp: '2026-11-07 13:35:00',
+      timestampTh: '7 พ.ย. 2569, 13:35 น.',
+      type: 'EDIT',
+      typeBadge: 'แทนที่ปุ่มคืนหน้าจอปกติ & ล็อกบรรทัด',
+      badgeClass: 'badge-type-edit',
+      title: 'เอาปุ่มย่อขนาดออก และย้ายปุ่ม "คืนหน้าจอปกติ" สีม่วงทองมาแทนที่ในแถบเครื่องมือตาราง พร้อมล็อกตำแหน่งห้ามขึ้นบรรทัดใหม่',
+      targetSubject: 'แถบเครื่องมือตาราง WBS (.wbs-table-top-meta-bar, .wbs-table-toolbar-actions, #btnReturnNormalScreen) และแถบตัวกรองบนสุด (#topStickyFilterBar)',
+      storageFile: 'index.html, css/styles.css, js/wbs.js, js/materials.js, js/data_history.js',
+      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน: 1) นำปุ่ม #btnTopReturnNormalScreen ออกจากแถบตัวกรองด้านบนสุด 2) ยกเลิกปุ่ม "ย่อขนาด" เดิมในโหมดขยายเต็มจอ และนำปุ่มแคปซูลสีม่วงอเมทิสต์ขอบทอง "คืนหน้าจอปกติ" (#btnReturnNormalScreen) มาแสดงแทนที่ตำแหน่งขวาสุดของแถบเครื่องมือตาราง 3) ล็อกตำแหน่งปุ่มและแถบเครื่องมือด้วย flex-wrap: nowrap และ flex-shrink: 0 ป้องกันการขึ้นบรรทัดใหม่อย่างเด็ดขาด พร้อมคง overflow: visible เพื่อให้เมนูเลือกคอลัมน์เปิดใช้งานได้สมบูรณ์',
+      details: '1) ใน index.html: ลบปุ่ม #btnTopReturnNormalScreen ออกจาก #topStickyFilterBar, ปรับคลาส #btnReturnNormalScreen เป็น btn btn-sm btn-return-normal-top วางท้าย .wbs-table-toolbar-actions แทนที่ปุ่มย่อขนาดเมื่ออยู่ในโหมดเต็มจอ และอัปเดต Cache Busters เป็น ?v=20261107_1335 2) ใน css/styles.css: ซ่อน .btn-wbs-fullscreen เมื่อตารางอยู่ในโหมดขยายเต็มจอ (.table-card.is-fullscreen / body.has-fullscreen-table), แสดง #btnReturnNormalScreen ด้วยสไตล์แคปซูลสีม่วงทองพรีเมียม และกำหนด .wbs-table-top-meta-bar / .wbs-table-toolbar-actions ให้เป็น flex-wrap: nowrap !important; white-space: nowrap !important; flex-shrink: 0 !important; 3) ใน js/wbs.js & js/materials.js: ปรับ toggleTableFullscreen() และปุ่ม ESC ให้เรียก window.returnToNormalScreen() อย่างสมบูรณ์',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "เอาปุ่มย่อขนาดออก และเอาปุ่มคืนหน้าจอปกติ ไปแทนที่ และfix ตำแหน่งไว้ ห้ามขึ้นบรรทัดใหม่"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง'
+    },
+    {
       id: 'log_000_wbs_clear_checkbox_on_filter_change',
       timestamp: '2026-11-06 20:45:00',
       timestampTh: '6 พ.ย. 2569, 20:45 น.',

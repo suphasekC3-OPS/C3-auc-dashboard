@@ -5069,9 +5069,9 @@ body.has-fullscreen-table #btnReturnNormalScreen,
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  gap: 0.42rem !important;
-  padding: 0.28rem 0.95rem !important;
-  font-size: 0.88rem !important;
+  gap: 0.4rem !important;
+  padding: 0.32rem 0.85rem !important;
+  font-size: 0.83rem !important;
   font-weight: 800 !important;
   border-radius: 12px !important;
   background: linear-gradient(135deg, #7C3AED 0%, #9333EA 45%, #C026D3 100%) !important;
@@ -5125,7 +5125,9 @@ body.has-fullscreen-table #btnReturnNormalScreen,
 }
 
 [data-theme="light"] body.has-fullscreen-table .btn-return-normal-top,
-[data-theme="light"] body.has-fullscreen-chart .btn-return-normal-top {
+[data-theme="light"] body.has-fullscreen-chart .btn-return-normal-top,
+[data-theme="light"] body.has-fullscreen-table #btnReturnNormalScreen,
+[data-theme="light"] .table-card.is-fullscreen #btnReturnNormalScreen {
   background: linear-gradient(135deg, #6D28D9 0%, #7C3AED 50%, #9333EA 100%) !important;
   border: 1.5px solid #D97706 !important;
   box-shadow: 0 2px 10px rgba(109, 40, 217, 0.35), 0 0 10px rgba(217, 119, 6, 0.35) !important;
@@ -11489,14 +11491,22 @@ body.has-fullscreen-table {
 .wbs-table-top-meta-bar {
   flex-wrap: nowrap !important;
   white-space: nowrap !important;
-  overflow-x: auto !important;
-  overflow-y: hidden !important;
+  overflow: visible !important;
+  gap: 0.45rem !important;
+}
+
+.wbs-table-top-meta-bar .wbs-table-active-criteria {
+  flex: 0 1 auto !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
 }
 
 .wbs-table-toolbar-actions {
   display: flex !important;
   align-items: center !important;
-  gap: 0.5rem !important;
+  gap: 0.42rem !important;
   flex-wrap: nowrap !important;
   white-space: nowrap !important;
   justify-content: flex-end !important;
@@ -11557,6 +11567,7 @@ body.has-fullscreen-table {
   z-index: 150;
   width: 400px;
   max-width: 92vw;
+  white-space: normal;
   background: rgba(26, 6, 42, 0.98);
   border: 1.5px solid rgba(216, 180, 254, 0.35);
   border-radius: 12px;

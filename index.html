@@ -8,7 +8,7 @@
   <meta name="description"
     content="ระบบสารสนเทศและแดชบอร์ดติดตามงานก่อสร้างและขึ้นทะเบียนทรัพย์สิน AUC การไฟฟ้าส่วนภูมิภาค เขต 3 (ภาคกลาง)">
   <link rel="icon" type="image/svg+xml" href="assets/pea_logo.svg">
-  <link rel="stylesheet" href="css/styles.css?v=20261106_1235">
+  <link rel="stylesheet" href="css/styles.css?v=20261107_1335">
 
 </head>
 
@@ -478,7 +478,7 @@
               <polyline points="12 12 12 14 14 15"></polyline>
             </svg>
             <span>ประวัติการนำเข้า & แก้ไขข้อมูล</span>
-            <span class="tab-badge" id="dataHistoryBadge" style="background:#8B5CF6; color:#fff; font-weight:700;">5
+            <span class="tab-badge" id="dataHistoryBadge" style="background:#8B5CF6; color:#fff; font-weight:700;">7
               พ.ย.</span>
             <span class="nav-tab-lock-badge" title="เมนูนี้ถูกล็อค (ต้องใช้รหัส Admin PIN)">🔒</span>
           </button>
@@ -1812,9 +1812,9 @@
             <div class="table-card" id="wbsTableCard">
               <!-- แถวบนสุดของตาราง WBS: รวมเกณฑ์วัด (ซ้าย) และแถบเครื่องมือ/ปุ่มควบคุม (ขวา) ในแถวเดียวกัน -->
               <div class="wbs-table-top-meta-bar table-header-bar"
-                style="display:flex; justify-content:space-between; align-items:center; flex-wrap:nowrap; gap:0.65rem; padding:0.55rem 0.95rem; border-bottom:1px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.02); border-radius:var(--radius-md, 10px) var(--radius-md, 10px) 0 0; overflow-x:auto; overflow-y:hidden; white-space:nowrap;">
+                style="display:flex; justify-content:space-between; align-items:center; flex-wrap:nowrap; gap:0.45rem; padding:0.5rem 0.85rem; border-bottom:1px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.02); border-radius:var(--radius-md, 10px) var(--radius-md, 10px) 0 0; overflow:visible; white-space:nowrap;">
                 <!-- ฝั่งซ้าย: ประเภทเกณฑ์วัด -->
-                <div class="wbs-table-active-criteria" id="wbsTableActiveCriteria" title="ประเภทเกณฑ์วัดที่กำลังแสดงผล" style="flex-shrink:0; white-space:nowrap;">
+                <div class="wbs-table-active-criteria" id="wbsTableActiveCriteria" title="ประเภทเกณฑ์วัดที่กำลังแสดงผล" style="flex:0 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
                   <span class="criteria-tag-icon">📌</span>
                   <span class="criteria-tag-label">เกณฑ์วัด:</span>
                   <strong class="criteria-tag-val" id="wbsTableActiveCriteriaVal">ข้อ 1.1 งบ C.1 ก่อน 69</strong>
@@ -1822,7 +1822,7 @@
 
                 <!-- ฝั่งขวา: แถบเครื่องมือจัดการข้อมูลและตัวเลือกตาราง (ชิดขวา ห้ามขึ้นบรรทัดใหม่) -->
                 <div class="wbs-table-toolbar-actions"
-                  style="display:flex; align-items:center; gap:0.5rem; flex-wrap:nowrap; justify-content:flex-end; flex-shrink:0; white-space:nowrap; margin-left:auto;">
+                  style="display:flex; align-items:center; gap:0.42rem; flex-wrap:nowrap; justify-content:flex-end; flex-shrink:0; white-space:nowrap; margin-left:auto;">
                   <!-- ปุ่มส่งออก WBS (CSV) -->
                   <button type="button" class="btn btn-gold btn-sm" id="btnExportWbsCsv"
                     onclick="window.exportWbsToCsv()"
@@ -2877,14 +2877,14 @@
   <script src="js/kpi_matrix.js?v=20261003_0930"></script>
   <script src="js/chart.js?v=20261105_1139"></script>
   <script src="js/data_wbs.js?v=20261105_1640"></script>
-  <script src="js/wbs.js?v=20261106_2045"></script>
+  <script src="js/wbs.js?v=20261107_1335"></script>
   <script src="js/data_materials_07.js?v=20261105_1437"></script>
   <script src="js/data_materials_08.js?v=20261105_1454"></script>
-  <script src="js/materials.js?v=20261105_1640"></script>
+  <script src="js/materials.js?v=20261107_1335"></script>
   <script charset="utf-8" src="js/data_history_archive.js?v=20261105_1514"></script>
   <script src="js/office_dd.js?v=20261105_1620"></script>
-  <script charset="utf-8" src="js/data_history.js?v=20261106_2045"></script>
-  <script src="js/app.js?v=20261105_1139"></script>
+  <script charset="utf-8" src="js/data_history.js?v=20261107_1335"></script>
+  <script src="js/app.js?v=20261107_1335"></script>
   <script src="js/criteria_dropdown.js?v=20261017_2055"></script>
   <script src="js/presentation_pointer.js?v=20261027_1435"></script>
 </body>
