@@ -580,6 +580,38 @@
    */
   const BASE_AUDIT_LOGS = [
     {
+      id: 'log_000_wbs_remove_pagesize_always_show_all',
+      timestamp: '2026-11-07 16:56:00',
+      timestampTh: '7 พ.ย. 2569, 16:56 น.',
+      type: 'EDIT',
+      typeBadge: 'แสดงตาราง WBS ทั้งหมดตลอด',
+      badgeClass: 'badge-type-edit',
+      title: 'นำตัวเลือก "แถวต่อหน้า" ออก และกำหนดให้ตาราง WBS แสดงรายการทั้งหมดตลอดเวลา',
+      targetSubject: 'แถบเครื่องมือตาราง WBS (.wbs-table-toolbar-actions) และระบบแสดงผลแถวตาราง WBS (js/wbs.js)',
+      storageFile: 'index.html, js/wbs.js, js/data_history.js',
+      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน: นำป้ายและเมนูตัวเลือก "แถวต่อหน้า" (#wbsPageSizeSelect) ออกจากแถบเครื่องมือเหนือตาราง WBS และปรับระบบตาราง WBS ให้แสดงข้อมูลที่ผ่านการกรองทั้งหมดครบทุกรายการตลอดเวลาโดยไม่แบ่งหน้า',
+      details: '1) ใน index.html: ลบบล็อก label "แถวต่อหน้า:" และ <select id="wbsPageSizeSelect"> ออกจาก .wbs-table-toolbar-actions พร้อมอัปเดต Cache Busters เป็น ?v=20261107_1656 2) ใน js/wbs.js: กำหนดค่าเริ่มต้น wbsState.pageSize = 999999, ปรับ renderWbsTable() ให้แสดง sortedData ทั้งหมดในหน้าเดียวเสมอ และอัปเดตข้อความท้ายตาราง (#wbsPaginationInfoText) ให้แสดงจำนวนรายการทั้งหมดที่กำลังแสดงผล',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "เอาออก แสดงทั้งหมดตลอด"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง'
+    },
+    {
+      id: 'log_000_wbs_enlarge_left_kpi_card_proportioned',
+      timestamp: '2026-11-07 16:45:00',
+      timestampTh: '7 พ.ย. 2569, 16:45 น.',
+      type: 'EDIT',
+      typeBadge: 'ขยายการ์ดภาพรวมซ้าย WBS',
+      badgeClass: 'badge-type-edit',
+      title: 'ขยายขนาดการ์ด "ภาพรวมมูลค่า & งาน AUC" ด้านซ้ายในแท็บ WBS ให้กว้างขึ้นและปรับสัดส่วนองค์ประกอบภายในให้สมดุลสวยงาม',
+      targetSubject: 'การ์ดภาพรวมด้านซ้ายในแท็บ WBS (.wbs-side-summary-col, #wbsExecutiveDonutKpiCard, .wbs-metric-card-box)',
+      storageFile: 'css/styles.css, js/wbs.js, index.html, js/data_history.js',
+      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน: ขยายความกว้างคอลัมน์การ์ดซ้าย "ภาพรวมมูลค่า & งาน AUC" จากเดิม 355px เป็นสัดส่วน 29.5% (min-width: 425px, max-width: 500px) ตามกรอบวงแดงที่ผู้ใช้งานระบุ พร้อมปรับขนาดตัวอักษรหัวข้อ ยอดมูลค่าหลัก ป้ายจำนวนงาน แท่งกราฟย่อย และเปอร์เซ็นต์ปิดงานให้ใหญ่ขึ้น คมชัด และสมส่วนกับการ์ดเปรียบเทียบเป้าหมาย KPI ด้านขวาในทุกความละเอียดหน้าจอ',
+      details: '1) ใน css/styles.css: ปรับ .wbs-side-summary-col เป็น flex: 0 0 29.5%; width: 29.5%; min-width: 425px; max-width: 500px; และปรับ padding ของ .wbs-side-kpi-card เป็น 0.9rem 1.05rem; ขยายตัวเลขหลัก .wbs-val-number จาก 0.82rem เป็น 1.16rem, หัวข้อ .exec-summary-title เป็น 1.04rem, ป้าย .wbs-val-mb-pill เป็น 0.88rem, แท่ง .wbs-segment-track สูง 11px และส่วน .exec-dual-progress-section (.exec-progress-big-val 1.52rem, .wbs-pct-breakdown-tag 0.90rem) พร้อมเพิ่ม Responsive @media (max-width: 1680px) สำหรับแถบปุ่มเลือกเดือนด้านขวาไม่ให้ล้นขอบจอ 2) ใน js/wbs.js: จัดแถวหัวการ์ด #wbsExecutiveDonutKpiCard และล้าง inline style ที่บีบขนาดเดิมออก 3) อัปเดต Cache Busters ใน index.html เป็น ?v=20261107_1653',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "ปรับขนาดการ์ดวงแดงให้ใหญ่ขึ้น และสมส่วน"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง'
+    },
+    {
       id: 'log_000_wbs_remove_sap_cyan_cb_and_proportion_chart',
       timestamp: '2026-11-07 14:15:00',
       timestampTh: '7 พ.ย. 2569, 14:15 น.',

@@ -13444,10 +13444,10 @@ tr.wbs-row-checked:hover {
 }
 
 .wbs-side-summary-col {
-  width: 355px;
-  min-width: 330px;
-  max-width: 370px;
-  flex-shrink: 0;
+  flex: 0 0 29.5%;
+  width: 29.5%;
+  min-width: 425px;
+  max-width: 500px;
   display: flex;
 }
 
@@ -13460,12 +13460,40 @@ tr.wbs-row-checked:hover {
   justify-content: space-between;
   margin-bottom: 0 !important;
   background: linear-gradient(135deg, rgba(30, 9, 50, 0.96) 0%, rgba(18, 4, 30, 0.98) 100%);
-  border: 1.5px solid rgba(255, 184, 28, 0.38);
+  border: 1.5px solid rgba(255, 184, 28, 0.42);
   border-radius: var(--radius-lg, 16px);
-  padding: 0.85rem 0.80rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), 0 0 20px rgba(104, 44, 145, 0.2);
+  padding: 0.9rem 1.05rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), 0 0 20px rgba(104, 44, 145, 0.22);
   position: relative;
   overflow: hidden;
+}
+
+#wbsExecutiveDonutKpiCard .exec-donut-top-summary {
+  margin-bottom: 0.45rem;
+  padding-bottom: 0.42rem;
+  border-bottom: 1px solid rgba(216, 180, 254, 0.18);
+}
+
+#wbsExecutiveDonutKpiCard #wbsKpiCard1ScopeBadge {
+  font-size: 0.82rem;
+  padding: 0.18rem 0.58rem;
+  font-weight: 800;
+}
+
+#wbsExecutiveDonutKpiCard .exec-summary-title {
+  font-size: 1.04rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  letter-spacing: -0.01em;
+}
+
+[data-theme="light"] #wbsExecutiveDonutKpiCard .exec-summary-title {
+  color: #111827;
+}
+
+#wbsExecutiveDonutKpiCard #wbsKpiSapDateText {
+  font-size: 0.80rem;
+  margin-left: auto;
 }
 
 .wbs-side-summary-col .wbs-side-kpi-card::before {
@@ -13505,13 +13533,15 @@ tr.wbs-row-checked:hover {
   margin-bottom: 0 !important;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1280px) {
   .wbs-comparison-unified-grid {
     flex-direction: column;
   }
 
   .wbs-side-summary-col {
+    flex: 1 1 auto;
     width: 100%;
+    min-width: 0;
     max-width: none;
   }
 }
@@ -13859,7 +13889,7 @@ tr.wbs-row-checked:hover {
   display: flex;
   align-items: center;
   flex: 1;
-  min-width: 640px;
+  min-width: 0;
   height: 44px;
   background: rgba(10, 3, 20, 0.9);
   border: 1.5px solid rgba(255, 255, 255, 0.22);
@@ -13900,12 +13930,12 @@ tr.wbs-row-checked:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.45rem;
+  gap: 0.35rem;
   width: 100%;
   height: 100%;
-  padding: 0 20px 0 24px;
+  padding: 0 14px 0 18px;
   box-sizing: border-box;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 700;
   color: #FFFFFF;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
@@ -14251,6 +14281,62 @@ tr.wbs-row-checked:hover {
   transform: none;
 }
 
+@media (max-width: 1680px) {
+  .wbs-kpi-comparison-card {
+    padding: 1rem 1.05rem;
+  }
+
+  .wbs-kpi-month-selector-strip {
+    padding: 0.45rem 0.55rem;
+    gap: 0.4rem;
+  }
+
+  .wbs-kpi-month-label {
+    font-size: 0.75rem;
+    gap: 0.25rem;
+  }
+
+  .btn-wbs-kpi-inner {
+    padding: 0 8px 0 14px;
+    gap: 0.22rem;
+  }
+
+  .btn-wbs-kpi-month:first-child .btn-wbs-kpi-inner {
+    padding-left: 10px;
+  }
+
+  .btn-wbs-kpi-month:last-child .btn-wbs-kpi-inner {
+    padding-right: 10px;
+  }
+
+  .btn-wbs-kpi-month .m-title {
+    font-size: 0.84rem;
+  }
+
+  .btn-wbs-kpi-month.active .m-title {
+    font-size: 0.90rem;
+  }
+
+  .btn-wbs-kpi-month .m-kpi-badge {
+    font-size: 0.68rem;
+    padding: 1px 4px;
+  }
+
+  .btn-wbs-kpi-month:not(.is-achieved) .m-amt,
+  .btn-wbs-kpi-month.active:not(.is-achieved) .m-amt,
+  .btn-wbs-kpi-month.is-achieved .m-amt {
+    font-size: 0.74rem;
+    padding: 1px 5px;
+  }
+
+  .btn-wbs-kpi-month .m-active-dot,
+  .btn-wbs-kpi-month .m-achieved-pill {
+    font-size: 0.68rem;
+    padding: 2px 6px;
+    gap: 0.22rem;
+  }
+}
+
 .wbs-kpi-main-grid {
   display: flex;
   align-items: stretch;
@@ -14402,14 +14488,15 @@ body.theme-light .bar-sap-date-plain:hover {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
 }
 
 .bar-stat-group {
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: 0.28rem;
   flex-wrap: nowrap;
+  white-space: nowrap;
 }
 
 .bar-stat-divider {
@@ -18712,27 +18799,27 @@ body.theme-light .bar-sap-date-plain:hover {
 
 .wbs-metric-card-box {
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 12px;
-  padding: 0.55rem 0.60rem;
-  margin-bottom: 0.55rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 13px;
+  padding: 0.62rem 0.85rem;
+  margin-bottom: 0.48rem;
   transition: all 0.25s ease;
 }
 
 .wbs-metric-card-box:hover {
   background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 184, 28, 0.35);
+  border-color: rgba(255, 184, 28, 0.38);
 }
 
 .wbs-metric-card-box.box-total {
-  border-left: 3.5px solid #FFB81C;
-  background: linear-gradient(135deg, rgba(255, 184, 28, 0.09) 0%, rgba(30, 9, 50, 0.65) 100%);
+  border-left: 4px solid #FFB81C;
+  background: linear-gradient(135deg, rgba(255, 184, 28, 0.1) 0%, rgba(30, 9, 50, 0.68) 100%);
 }
 
 .wbs-metric-card-box.box-closed {
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-left: 3.5px solid #10B981;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(30, 9, 50, 0.65) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-left: 4px solid #10B981;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.07) 0%, rgba(30, 9, 50, 0.68) 100%);
   box-shadow: none;
 }
 
@@ -18740,36 +18827,35 @@ body.theme-light .bar-sap-date-plain:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 4px;
-  margin-bottom: 0.2rem;
+  gap: 8px;
+  margin-bottom: 0.32rem;
 }
 
 .wbs-box-title-wrap {
   display: flex;
   align-items: center;
-  gap: 4px;
-  font-size: 0.88rem;
-  font-weight: 750;
-  color: #E2E8F0;
+  gap: 6px;
+  font-size: 0.98rem;
+  font-weight: 800;
+  color: #F1F5F9;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .wbs-box-title-wrap .box-icon {
-  font-size: 1rem;
+  font-size: 1.08rem;
 }
 
 .wbs-card-metric-job-badge {
   display: inline-flex;
   align-items: center;
-  gap: 3px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  border-radius: 6px;
-  padding: 2px 7px;
-  font-size: 0.78rem;
-  
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 7px;
+  padding: 3px 10px;
+  font-size: 0.86rem;
   font-weight: 750;
   color: #F8FAFC;
   white-space: nowrap;
@@ -18778,14 +18864,14 @@ body.theme-light .bar-sap-date-plain:hover {
 }
 
 .wbs-card-metric-job-badge strong {
-  font-size: 0.82rem;
+  font-size: 0.94rem;
   font-weight: 850;
   color: #FFD25A;
 }
 
 .wbs-card-metric-job-badge.badge-green {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.24);
   color: #F8FAFC;
 }
 
@@ -18797,8 +18883,8 @@ body.theme-light .bar-sap-date-plain:hover {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 4px;
-  margin: 0.10rem 0 0.35rem;
+  gap: 8px;
+  margin: 0.12rem 0 0.3rem;
   width: 100%;
   box-sizing: border-box;
   overflow: hidden;
@@ -18807,24 +18893,23 @@ body.theme-light .bar-sap-date-plain:hover {
 .wbs-val-main-group {
   display: flex;
   align-items: baseline;
-  gap: 3px;
+  gap: 6px;
   min-width: 0;
 }
 
 .wbs-val-prefix {
-  font-size: 0.74rem;
-  font-weight: 600;
-  color: #94A3B8;
+  font-size: 0.84rem;
+  font-weight: 650;
+  color: #CBD5E1;
   white-space: nowrap;
   flex-shrink: 0;
 }
 
 .wbs-val-number {
   font-family: 'Outfit', -apple-system, sans-serif;
-  font-size: 0.82rem;
-  
+  font-size: 1.16rem;
   font-weight: 800;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.01em;
   color: #FFB81C;
   line-height: 1.15;
   white-space: nowrap;
@@ -18837,20 +18922,19 @@ body.theme-light .bar-sap-date-plain:hover {
 }
 
 .wbs-val-mb-pill {
-  font-size: 0.76rem;
-  
+  font-size: 0.88rem;
   font-weight: 800;
   color: #FDE047;
   background: rgba(255, 184, 28, 0.18);
   border: 1px solid rgba(255, 184, 28, 0.45);
-  padding: 2px 6px;
-  border-radius: 6px;
+  padding: 3px 10px;
+  border-radius: 7px;
   white-space: nowrap;
   letter-spacing: -0.01em;
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
-  gap: 3px;
+  gap: 4px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
 }
 
@@ -18862,13 +18946,13 @@ body.theme-light .bar-sap-date-plain:hover {
 
 .wbs-segment-track {
   width: 100%;
-  height: 9px;
+  height: 11px;
   background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 9999px;
   display: flex;
   overflow: hidden;
-  margin: 0.3rem 0 0.25rem;
+  margin: 0.38rem 0 0.35rem;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
@@ -18909,15 +18993,15 @@ body.theme-light .bar-sap-date-plain:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.80rem;
+  font-size: 0.88rem;
   color: #CBD5E1;
-  padding-top: 1px;
+  padding-top: 2px;
 }
 
 .wbs-box-sub.sub-stacked {
   flex-direction: column;
   align-items: stretch;
-  gap: 2px;
+  gap: 4px;
 }
 
 .wbs-box-sub-row {
@@ -19005,14 +19089,41 @@ body.theme-light .bar-sap-date-plain:hover {
   }
 }
 
+#wbsExecutiveDonutKpiCard .exec-dual-progress-section {
+  margin-top: 0.18rem;
+  padding-top: 0.45rem;
+  gap: 0.48rem;
+  border-top: 1px solid rgba(216, 180, 254, 0.16);
+}
+
+#wbsExecutiveDonutKpiCard .exec-progress-block {
+  gap: 0.14rem;
+  margin-bottom: 0;
+}
+
+#wbsExecutiveDonutKpiCard .exec-progress-label-wrap {
+  font-size: 0.92rem;
+  gap: 0.42rem;
+}
+
+#wbsExecutiveDonutKpiCard .exec-progress-big-val {
+  font-size: 1.52rem;
+  line-height: 1.08;
+}
+
+#wbsExecutiveDonutKpiCard .progress-track {
+  height: 11px;
+  margin-top: 2px;
+}
+
 .wbs-pct-breakdown-tag {
-  font-size: 0.82rem !important;
+  font-size: 0.90rem !important;
   color: #FFFFFF !important;
   font-weight: 700;
   display: inline-flex;
   align-items: center;
-  gap: 3px;
-  letter-spacing: -0.015em;
+  gap: 4px;
+  letter-spacing: -0.01em;
   white-space: nowrap;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
 }

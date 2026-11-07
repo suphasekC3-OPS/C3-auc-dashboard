@@ -273,7 +273,7 @@
     sortCol: 'statusSap',
     sortAsc: true,
     page: 1,
-    pageSize: 25,
+    pageSize: 999999, // แสดงรายการทั้งหมดตลอดตามคำสั่งผู้ใช้งาน
     visibleColumns: loadVisibleColumns(),
     columnOrder: loadColumnOrder(),
     colViewMode: 'order', // 'order' (ลำดับการแสดง)
@@ -2652,18 +2652,16 @@
 
     container.innerHTML = `
       <div class="wbs-comparison-unified-grid">
-        <!-- Left Column: ภาพรวมมูลค่า & งาน AUC (ตามรูปที่ 15: กว้างเท่าเดิม ปรับความสูงเท่ากับการ์ดเปรียบเทียบ) -->
+        <!-- Left Column: ภาพรวมมูลค่า & งาน AUC (ขยายขนาดการ์ดและตัวอักษรให้ใหญ่ขึ้น สมส่วนกับการ์ดเปรียบเทียบด้านขวา) -->
         <div class="wbs-side-summary-col">
           <div class="content-card executive-donut-kpi-card wbs-side-kpi-card wbs-new-combined-kpi-card" id="wbsExecutiveDonutKpiCard">
             <!-- แถบหัวการ์ด -->
-            <div class="exec-donut-top-summary" style="margin-bottom: 0.40rem; padding-bottom: 0.35rem; border-bottom: 1px solid rgba(216, 180, 254, 0.14);">
-              <div class="exec-summary-title-row" style="display: flex; align-items: center; justify-content: space-between;">
-                <div style="display: flex; align-items: center; gap: 6px;">
+            <div class="exec-donut-top-summary">
+              <div class="exec-summary-title-row" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 5px 10px;">
+                <div style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                   <span class="badge-pea-tag" id="wbsKpiCard1ScopeBadge">กฟก.3</span>
-                  <span class="exec-summary-title" style="font-size: 0.92rem; color: #FFFFFF; font-weight: 800;">ภาพรวมมูลค่า & งาน AUC</span>
+                  <span class="exec-summary-title">ภาพรวมมูลค่า & งาน AUC</span>
                 </div>
-              </div>
-              <div style="display: flex; justify-content: flex-end; margin-top: 3px;">
                 <span class="wbs-sap-date-plain-text" id="wbsKpiSapDateText" onclick="if(window.openDhModelModal)window.openDhModelModal('src_04')" title="ข้อมูลสถานะ SAP จากไฟล์ 04 ZBUDR064 แก้ไขล่าสุด: 5 พ.ย. 2569 (คลิกเพื่อดูผัง Model View)">สถานะ SAP แก้ไขล่าสุดวันที่ 5 พ.ย. 69</span>
               </div>
             </div>
@@ -2738,12 +2736,12 @@
             </div>
 
             <!-- ส่วนที่ 3: % ปิดงานมูลค่า AUC และ % ปิดจำนวนงาน (ส่วนที่เพิ่มขึ้นใช้แท่งกราฟสีต่างออกไป) -->
-            <div class="exec-dual-progress-section" style="margin-top: 0.30rem;">
+            <div class="exec-dual-progress-section">
               <!-- แถบ 1: % ปิดงานมูลค่า AUC -->
-              <div class="exec-progress-block" style="margin-bottom: 0.55rem;">
+              <div class="exec-progress-block">
                 <div class="exec-progress-head-row">
                   <div class="exec-progress-label-wrap">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
                       <circle cx="12" cy="12" r="10"></circle>
                       <polyline points="12 6 12 12 16 14"></polyline>
                     </svg>
@@ -2780,7 +2778,7 @@
               <div class="exec-progress-block">
                 <div class="exec-progress-head-row">
                   <div class="exec-progress-label-wrap">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
                       <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
                       <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
                       <polyline points="9 14 11 16 15 12"></polyline>
@@ -4369,22 +4367,19 @@
         tfoot.style.display = 'none';
       }
       if (rangeEl) rangeEl.textContent = '0 - 0';
-      renderPaginationControls(0, 0);
+      renderPaginationControls(0, 0, 0);
       return;
     }
 
-    // Pagination slice
-    const pageSize = Number(wbsState.pageSize) || 25;
-    const totalPages = Math.ceil(totalFiltered / pageSize);
-    if (wbsState.page > totalPages) wbsState.page = totalPages || 1;
-    if (wbsState.page < 1) wbsState.page = 1;
-
-    const startIdx = (wbsState.page - 1) * pageSize;
-    const endIdx = Math.min(startIdx + pageSize, totalFiltered);
-    const pageItems = sortedData.slice(startIdx, endIdx);
+    // แสดงรายการทั้งหมดตลอดตามคำสั่งผู้ใช้งาน (ไม่จำกัดจำนวนแถวต่อหน้า)
+    wbsState.page = 1;
+    const totalPages = 1;
+    const startIdx = 0;
+    const endIdx = totalFiltered;
+    const pageItems = sortedData;
 
     if (rangeEl) {
-      rangeEl.textContent = `${(startIdx + 1).toLocaleString('th-TH')} - ${endIdx.toLocaleString('th-TH')}`;
+      rangeEl.textContent = `1 - ${endIdx.toLocaleString('th-TH')}`;
     }
 
     // ลบแถวสรุปบนสุดออก (เอาออก 2 แถว ตามที่ผู้ใช้สั่ง โดยย้ายตัวเลขไปรวมกับเมนูหัวตารางด้านบนแล้ว)
@@ -4665,7 +4660,7 @@
       tfoot.style.display = 'none';
     }
 
-    renderPaginationControls(totalPages, wbsState.page);
+    renderPaginationControls(totalPages, wbsState.page, totalFiltered);
 
     // Refresh left scrollbar position & floating selection badge
     setTimeout(() => {
@@ -4678,12 +4673,16 @@
   /**
    * Render Pagination Buttons
    */
-  function renderPaginationControls(totalPages, currentPage) {
+  function renderPaginationControls(totalPages, currentPage, totalCount) {
     const controls = document.getElementById('wbsPaginationControls');
     const infoText = document.getElementById('wbsPaginationInfoText');
 
     if (infoText) {
-      infoText.textContent = totalPages > 0 ? `หน้า ${currentPage} จากทั้งหมด ${totalPages} หน้า` : 'ไม่มีหน้า';
+      if (typeof totalCount === 'number') {
+        infoText.textContent = totalCount > 0 ? `แสดงทั้งหมด ${totalCount.toLocaleString('th-TH')} รายการ` : 'ไม่พบรายการ';
+      } else {
+        infoText.textContent = totalPages > 0 ? `หน้า ${currentPage} จากทั้งหมด ${totalPages} หน้า` : 'ไม่มีหน้า';
+      }
     }
 
     if (!controls) return;
@@ -6732,15 +6731,8 @@
       });
     }
 
-    // 4. Page Size Dropdown
-    const pSelect = document.getElementById('wbsPageSizeSelect');
-    if (pSelect) {
-      pSelect.addEventListener('change', (e) => {
-        wbsState.pageSize = Number(e.target.value) || 25;
-        wbsState.page = 1;
-        renderWbsTab();
-      });
-    }
+    // 4. บังคับแสดงทั้งหมดตลอด (นำตัวเลือกแถวต่อหน้าออกตามคำสั่งผู้ใช้งาน)
+    wbsState.pageSize = 999999;
 
     // 5. Connect to Top Global Filter Controls
     const topCrit = document.getElementById('filterCriteria');
