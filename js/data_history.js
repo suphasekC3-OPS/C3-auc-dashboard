@@ -95,10 +95,10 @@
       groupNo: '04',
       name: '04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx',
       category: 'SAP ZBUDR064 & Costs',
-      importDate: '2026-11-05 14:09:31',
-      importDateTh: '5 พ.ย. 2569, 14:09 น.',
-      lastModifiedTh: '5 พ.ย. 2569, 14:09 น. (ไฟล์ล่าสุด)',
-      sizeText: '936.8 KB',
+      importDate: '2026-11-11 08:26:41',
+      importDateTh: '11 พ.ย. 2569, 08:26 น.',
+      lastModifiedTh: '11 พ.ย. 2569, 08:26 น. (ไฟล์ล่าสุด)',
+      sizeText: '936.5 KB',
       recordCount: 2083,
       status: 'active',
       statusText: 'ผสานข้อมูลสำเร็จ',
@@ -469,7 +469,7 @@
       role: 'จัดเก็บข้อมูลหลักงาน WBS (ไฟล์ 03 + 04 + 05 + 06 + Google Sheet)',
       recordsCount: '2,083 รายการ (41 คอลัมน์)',
       fileSize: '2.42 MB',
-      updatedAt: '5 พ.ย. 2569, 14:18 น.',
+      updatedAt: '11 พ.ย. 2569, 08:38 น.',
       status: '100% ฐานข้อมูลอัปเดตล่าสุด',
       variable: 'window.AUC_WBS_REMAINING_DATA'
     },
@@ -479,7 +479,7 @@
       role: 'ตรรกะคำนวณตัวกรอง, ค้นหาสถานะ SAP, จัดกลุ่มสรุปผล',
       recordsCount: '7,440 บรรทัดคำสั่ง',
       fileSize: '338 KB',
-      updatedAt: '5 พ.ย. 2569, 14:20 น.',
+      updatedAt: '11 พ.ย. 2569, 08:38 น.',
       status: 'อัปเดตล่าสุดวันนี้',
       variable: 'window.renderWbsTab, getFilteredWbsData'
     },
@@ -579,6 +579,22 @@
    * System Pre-defined Audit & Modification Log Entries
    */
   const BASE_AUDIT_LOGS = [
+    {
+      id: 'log_000_update_wbs_file_04_nov11',
+      timestamp: '2026-11-11 08:38:00',
+      timestampTh: '11 พ.ย. 2569, 08:38 น.',
+      type: 'IMPORT',
+      typeBadge: 'อัปเดตไฟล์ 04 WBS (11 พ.ย. 69)',
+      badgeClass: 'badge-type-import',
+      title: 'นำเข้าและผสานข้อมูลใหม่จากไฟล์ 04 WBS ZBUDR064 ล่าสุด วันที่ 11 พ.ย. 2569 เข้าสู่ฐานข้อมูลหลัก (js/data_wbs.js)',
+      targetSubject: 'ฐานข้อมูลรวมงาน WBS คงเหลือ (js/data_wbs.js) และป้ายแสดงวันที่แก้ไขล่าสุดของไฟล์ 04 สถานะ SAP ทุกตำแหน่งในหน้าเว็บ',
+      storageFile: 'js/data_wbs.js, js/wbs.js, js/materials.js, js/data_history.js, index.html',
+      changeSummary: 'อัปเดตข้อมูลไฟล์ 04 (04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx แก้ไขล่าสุด 11 พ.ย. 2569, 08:26 น., ต้นฉบับ 4,589 รายการ WBS) จับคู่ WBS คงเหลือครบ 2,083 งาน (100%, มูลค่า AUC รวม 643,201,468.93 บาท) มีการเปลี่ยนแปลงสถานะ SAP ย่อ 221 งาน (สถานะเต็ม 229 งาน), % เบิกพัสดุ 151 งาน และ % เบิก คชจ. 775 งาน ส่งผลให้ยอดงานปิดแล้ว CLSD F4 เพิ่มขึ้นจาก 252 งาน (65,716,895.63 บาท) เป็น 329 งาน (76,625,924.17 บาท; เพิ่มขึ้น +77 งาน / +10.91 ล้านบาท) พร้อมอัปเดตป้ายวันที่แก้ไขล่าสุดของไฟล์ 04 เป็น "11 พ.ย. 69" ครบทุกจุด',
+      details: '1) คำนวณและเติมสูตรคอลัมน์ X (% เบิกพัสดุ = IFERROR((M2/T2),0)) และคอลัมน์ Y (% เบิก คชจ. = IF(V2=0,0,IFERROR(R2/V2,0))) ในไฟล์ 04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx (ขนาด 936.5 KB) 2) ผสานข้อมูลทั้ง 25 ฟิลด์ของไฟล์ 04 เข้าสู่ js/data_wbs.js (ครบ 2,083 รายการ): สถานะเปลี่ยนเป็น CLSD F4 เพิ่ม 77 งาน (จาก TECO D2 40 งาน, TECO D3 26 งาน, CLSD F2 2 งาน, TECO F2 2 งาน, REL C9 2 งาน, REL D1 2 งาน, REL C1 1 งาน, REL D2 1 งาน, TECO F0 1 งาน) และเปลี่ยนเป็น TECO D2 เพิ่ม 95 งาน (จาก REL C1 55 งาน, REL D1 31 งาน, REL C3 9 งาน) 3) อัปเดตวันที่แก้ไขล่าสุดของไฟล์ 04 สถานะ SAP เป็น "11 พ.ย. 69" ใน #wbsHeaderDatesPlain, .th-sub-date-text, #wbsKpiSapDateText, .bar-sap-date-plain, .pill-file-04, แท็บรายการพัสดุ (#matChartFile04Date, SAP 04, หัวคอลัมน์ตารางพัสดุ), DATA_SOURCE_CATALOG (src_04), SYSTEM_STORAGE_FILES และ #dataHistoryBadge; อัปเดต Cache Busters เป็น ?v=20261111_0838',
+      sourceFile: '04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx (แก้ไขล่าสุด 11 พ.ย. 2569, 08:26 น.)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'สูง'
+    },
     {
       id: 'log_000_wbs_remove_pagesize_always_show_all',
       timestamp: '2026-11-07 16:56:00',
@@ -2638,7 +2654,7 @@
           <div class="dh-stat-card">
             <div class="dh-stat-icon" style="background:rgba(139,92,246,0.15); color:#A78BFA;">📅</div>
             <div class="dh-stat-body">
-              <div class="dh-stat-val">5 พ.ย. 2569</div>
+              <div class="dh-stat-val">11 พ.ย. 2569</div>
               <div class="dh-stat-label">นำเข้าข้อมูล WBS &amp; พัสดุล่าสุด</div>
               <div class="dh-stat-sub">2,083 รายการ WBS (ผสานไฟล์ 03, 04, 05, 06, 07, 08)</div>
             </div>
@@ -2647,9 +2663,9 @@
           <div class="dh-stat-card">
             <div class="dh-stat-icon" style="background:rgba(245,158,11,0.15); color:#FBBF24;">🛠️</div>
             <div class="dh-stat-body">
-              <div class="dh-stat-val">5 พ.ย. 2569</div>
+              <div class="dh-stat-val">11 พ.ย. 2569</div>
               <div class="dh-stat-label">แก้ไขข้อมูล / ตัวกรองล่าสุด</div>
-              <div class="dh-stat-sub">อัปเดตฐานข้อมูลไฟล์ 04, 06, 07 และ 08 ล่าสุด</div>
+              <div class="dh-stat-sub">อัปเดตฐานข้อมูลไฟล์ 04 ZBUDR064 ล่าสุด (11 พ.ย. 69)</div>
             </div>
           </div>
 
@@ -2726,7 +2742,7 @@
                   <div class="dh-flow-node" onclick="window.openModelViewModal('src_04', 'source')">
                     <div class="dh-node-badge" style="background:#8B5CF6;">ไฟล์ 04</div>
                     <div class="dh-node-title">ZBUDR064 (%พัสดุ/สถานะ SAP)</div>
-                    <div class="dh-node-meta">นำเข้า: 5 พ.ย. 69 • 936.8 KB</div>
+                    <div class="dh-node-meta">นำเข้า: 11 พ.ย. 69 • 936.5 KB</div>
                   </div>
                   <div class="dh-flow-node" onclick="window.openModelViewModal('src_06', 'source')">
                     <div class="dh-node-badge" style="background:#F59E0B;">ไฟล์ 06</div>
