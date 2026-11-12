@@ -95,10 +95,10 @@
       groupNo: '04',
       name: '04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx',
       category: 'SAP ZBUDR064 & Costs',
-      importDate: '2026-11-11 08:26:41',
-      importDateTh: '11 พ.ย. 2569, 08:26 น.',
-      lastModifiedTh: '11 พ.ย. 2569, 08:26 น. (ไฟล์ล่าสุด)',
-      sizeText: '936.5 KB',
+      importDate: '2026-11-12 09:33:29',
+      importDateTh: '12 พ.ย. 2569, 09:33 น.',
+      lastModifiedTh: '12 พ.ย. 2569, 09:33 น. (ไฟล์ล่าสุด)',
+      sizeText: '936.3 KB',
       recordCount: 2083,
       status: 'active',
       statusText: 'ผสานข้อมูลสำเร็จ',
@@ -140,7 +140,7 @@
       columns: [
         'cn41Cost05 (ต้นทุนจริง วันเริ่มบัญชี 14 ต.ค. 69)',
         'cn41CostInc (มูลค่าAUCที่เพิ่มขึ้น = ไฟล์ 06 - ไฟล์ 05)',
-        'cn41ActualCost (ต้นทุนจริง ไฟล์ 06 ล่าสุด 5 พ.ย. 69)'
+        'cn41ActualCost (ต้นทุนจริง ไฟล์ 06 ล่าสุด 12 พ.ย. 69)'
       ],
       sampleProvider: () => (window.AUC_WBS_REMAINING_DATA || []).slice(0, 5).map(r => ({
         'WBS': r.wbs,
@@ -153,12 +153,12 @@
     {
       id: 'src_06',
       groupNo: '06',
-      name: '06 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 5 พย 69.xlsx',
+      name: '06 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 12 พย 69.xlsx',
       category: 'SAP CN41 AUC Values (Latest)',
-      importDate: '2026-11-05 14:14:11',
-      importDateTh: '5 พ.ย. 2569, 14:14 น.',
-      lastModifiedTh: '5 พ.ย. 2569, 14:14 น. (ไฟล์ล่าสุด)',
-      sizeText: '338.0 KB',
+      importDate: '2026-11-12 09:18:45',
+      importDateTh: '12 พ.ย. 2569, 09:18 น.',
+      lastModifiedTh: '12 พ.ย. 2569, 09:18 น. (ไฟล์ล่าสุด)',
+      sizeText: '338.1 KB',
       recordCount: 2083,
       status: 'active',
       statusText: 'ผสานข้อมูลสำเร็จ',
@@ -166,7 +166,7 @@
       storageVar: 'window.AUC_WBS_REMAINING_DATA.cn41ActualCost',
       icon: '📑',
       badgeColor: '#F59E0B',
-      description: 'รายงาน SAP CN41 ระบุต้นทุนจริงและมูลค่า AUC สะสม (บาท) ของแต่ละโครงการ สำหรับวิเคราะห์มูลค่าสินทรัพย์ระหว่างก่อสร้าง ล่าสุด 5 พ.ย. 69 ยอดรวม 643,201,468.93 บาท',
+      description: 'รายงาน SAP CN41 ระบุต้นทุนจริงและมูลค่า AUC สะสม (บาท) ของแต่ละโครงการ สำหรับวิเคราะห์มูลค่าสินทรัพย์ระหว่างก่อสร้าง ล่าสุด 12 พ.ย. 69 ยอดรวม 674,569,401.91 บาท',
       columns: [
         'cn41ActualCost (มูลค่า AUC บาท)', 'cn41ObjDesc (ออบเจคโครงการ)', 'cn41Level (ระดับ)',
         'cn41Currency (สกุลเงิน THB)', 'cn41Row (ลำดับแถว)'
@@ -469,7 +469,7 @@
       role: 'จัดเก็บข้อมูลหลักงาน WBS (ไฟล์ 03 + 04 + 05 + 06 + Google Sheet)',
       recordsCount: '2,083 รายการ (41 คอลัมน์)',
       fileSize: '2.42 MB',
-      updatedAt: '11 พ.ย. 2569, 08:38 น.',
+      updatedAt: '12 พ.ย. 2569, 09:36 น.',
       status: '100% ฐานข้อมูลอัปเดตล่าสุด',
       variable: 'window.AUC_WBS_REMAINING_DATA'
     },
@@ -479,7 +479,7 @@
       role: 'ตรรกะคำนวณตัวกรอง, ค้นหาสถานะ SAP, จัดกลุ่มสรุปผล',
       recordsCount: '7,440 บรรทัดคำสั่ง',
       fileSize: '338 KB',
-      updatedAt: '11 พ.ย. 2569, 08:38 น.',
+      updatedAt: '12 พ.ย. 2569, 09:36 น.',
       status: 'อัปเดตล่าสุดวันนี้',
       variable: 'window.renderWbsTab, getFilteredWbsData'
     },
@@ -579,6 +579,38 @@
    * System Pre-defined Audit & Modification Log Entries
    */
   const BASE_AUDIT_LOGS = [
+    {
+      id: 'log_000_update_wbs_file_04_nov12',
+      timestamp: '2026-11-12 09:36:00',
+      timestampTh: '12 พ.ย. 2569, 09:36 น.',
+      type: 'IMPORT',
+      typeBadge: 'อัปเดตไฟล์ 04 WBS (12 พ.ย. 69)',
+      badgeClass: 'badge-type-import',
+      title: 'นำเข้าและผสานข้อมูลใหม่จากไฟล์ 04 WBS ZBUDR064 ล่าสุด วันที่ 12 พ.ย. 2569 เข้าสู่ฐานข้อมูลหลัก (js/data_wbs.js)',
+      targetSubject: 'ฐานข้อมูลรวมงาน WBS คงเหลือ (js/data_wbs.js) และป้ายแสดงวันที่แก้ไขล่าสุดของไฟล์ 04 สถานะ SAP ทุกตำแหน่งในหน้าเว็บ',
+      storageFile: 'js/data_wbs.js, js/wbs.js, js/materials.js, js/data_history.js, index.html',
+      changeSummary: 'อัปเดตข้อมูลไฟล์ 04 (04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx แก้ไขล่าสุด 12 พ.ย. 2569, 09:33 น., ขนาด 936.3 KB, ต้นฉบับ 4,589 รายการ WBS) จับคู่ WBS คงเหลือครบ 2,083 งาน (100%, มูลค่า AUC รวม 674,569,401.91 บาท) มีการเปลี่ยนแปลงสถานะ SAP ย่อ 70 งาน (สถานะเต็ม 71 งาน), % เบิกพัสดุ 71 งาน และ % เบิก คชจ. 11 งาน ส่งผลให้ยอดงานปิดแล้ว CLSD F4 เพิ่มขึ้นจาก 329 งาน (76,677,395.43 บาท) เป็น 361 งาน (84,293,873.76 บาท; เพิ่มขึ้น +32 งาน / +7,616,478.33 บาท) พร้อมอัปเดตป้ายวันที่แก้ไขล่าสุดของไฟล์ 04 เป็น "12 พ.ย. 69" ครบทุกจุด',
+      details: '1) คำนวณและเติมสูตรคอลัมน์ X (% เบิกพัสดุ = IFERROR((M2/T2),0)) และคอลัมน์ Y (% เบิก คชจ. = IF(V2=0,0,IFERROR(R2/V2,0))) ในไฟล์ 04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx (ขนาด 936.3 KB) 2) ผสานข้อมูลทั้ง 25 ฟิลด์ของไฟล์ 04 เข้าสู่ js/data_wbs.js (ครบ 2,083 รายการ): สถานะเปลี่ยนเป็น CLSD F4 เพิ่ม 32 งาน (จาก TECO D2 14 งาน, TECO D3 14 งาน, TECO F2 2 งาน, CLSD F2 1 งาน, TECO F4 1 งาน), เปลี่ยนเป็น CLSD F2 เพิ่ม 9 งาน (จาก TECO D2 6 งาน, REL D1 2 งาน, REL D2 1 งาน) และขยับเป็น TECO D2 เพิ่ม 22 งาน (จาก REL C3 9 งาน, REL C1 7 งาน, REL D1 6 งาน) 3) อัปเดตวันที่แก้ไขล่าสุดของไฟล์ 04 สถานะ SAP เป็น "12 พ.ย. 69" ใน #wbsHeaderDatesPlain, .th-sub-date-text, #wbsKpiSapDateText, .bar-sap-date-plain, .pill-file-04, แท็บรายการพัสดุ (#matChartFile04Date, SAP 04, หัวคอลัมน์ตารางพัสดุ), DATA_SOURCE_CATALOG (src_04), SYSTEM_STORAGE_FILES และผัง Model View; อัปเดต Cache Busters เป็น ?v=20261112_0936',
+      sourceFile: '04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx (แก้ไขล่าสุด 12 พ.ย. 2569, 09:33 น.)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'สูง'
+    },
+    {
+      id: 'log_000_update_wbs_file_06_nov12',
+      timestamp: '2026-11-12 09:22:00',
+      timestampTh: '12 พ.ย. 2569, 09:22 น.',
+      type: 'IMPORT',
+      typeBadge: 'อัปเดตไฟล์ 06 CN41 (12 พ.ย. 69)',
+      badgeClass: 'badge-type-import',
+      title: 'นำเข้าและผสานข้อมูลใหม่จากไฟล์ 06 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 12 พ.ย. 2569 เข้าสู่ฐานข้อมูลหลัก (js/data_wbs.js)',
+      targetSubject: 'ฐานข้อมูลรวมงาน WBS คงเหลือ (js/data_wbs.js) และป้ายแสดงวันที่แก้ไขล่าสุดของไฟล์ 06 มูลค่า AUC(บาท) ทุกตำแหน่งในหน้าเว็บ',
+      storageFile: 'js/data_wbs.js, js/wbs.js, js/data_history.js, index.html',
+      changeSummary: 'อัปเดตข้อมูลไฟล์ 06 (06 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 12 พย 69.xlsx แก้ไขล่าสุด 12 พ.ย. 2569, 09:18 น., ขนาด 338.1 KB, ต้นฉบับ 4,589 รายการ WBS) จับคู่ WBS คงเหลือครบ 2,083 งาน (100%) มีการเปลี่ยนแปลงมูลค่า AUC รวม 1,404 งาน ส่งผลให้มูลค่า AUC รวมทั้งระบบปรับจาก 643,201,468.93 บาท เป็น 674,569,401.91 บาท (เพิ่มขึ้นสุทธิ +31,367,932.98 บาท; เทียบกับฐานวันเริ่มบัญชี 14 ต.ค. ไฟล์ 05 เพิ่มขึ้น +31,328,301.98 บาท) และมูลค่า AUC ของงานปิดแล้ว CLSD F4 (329 งาน) ปรับจาก 76,625,924.17 บาท เป็น 76,677,395.43 บาท (+51,471.26 บาท) พร้อมอัปเดตป้ายวันที่แก้ไขล่าสุดของไฟล์ 06 เป็น "12 พ.ย. 69" ครบทุกจุด',
+      details: '1) ผสานฟิลด์ cn41Row, cn41Level, cn41ObjDesc, cn41ActualCost, cn41Currency และคำนวณ cn41CostInc (ไฟล์ 06 - ไฟล์ 05) ใหม่ครบทั้ง 2,083 รายการใน js/data_wbs.js 2) อัปเดตวันที่แก้ไขล่าสุดของไฟล์ 06 มูลค่า AUC(บาท) เป็น "12 พ.ย. 69" ใน #wbsHeaderDatesPlain, .th-sub-date-text (ใต้หัวคอลัมน์ มูลค่า AUC(บาท)), .pill-file-05, DATA_SOURCE_CATALOG (src_06), SYSTEM_STORAGE_FILES, ผัง Model View และป้าย #dataHistoryBadge บนแถบเมนู; อัปเดต Cache Busters เป็น ?v=20261112_0922',
+      sourceFile: '06 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 12 พย 69.xlsx (แก้ไขล่าสุด 12 พ.ย. 2569, 09:18 น.)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'สูง'
+    },
     {
       id: 'log_000_update_wbs_file_04_nov11',
       timestamp: '2026-11-11 08:38:00',
@@ -2654,7 +2686,7 @@
           <div class="dh-stat-card">
             <div class="dh-stat-icon" style="background:rgba(139,92,246,0.15); color:#A78BFA;">📅</div>
             <div class="dh-stat-body">
-              <div class="dh-stat-val">11 พ.ย. 2569</div>
+              <div class="dh-stat-val">12 พ.ย. 2569</div>
               <div class="dh-stat-label">นำเข้าข้อมูล WBS &amp; พัสดุล่าสุด</div>
               <div class="dh-stat-sub">2,083 รายการ WBS (ผสานไฟล์ 03, 04, 05, 06, 07, 08)</div>
             </div>
@@ -2663,9 +2695,9 @@
           <div class="dh-stat-card">
             <div class="dh-stat-icon" style="background:rgba(245,158,11,0.15); color:#FBBF24;">🛠️</div>
             <div class="dh-stat-body">
-              <div class="dh-stat-val">11 พ.ย. 2569</div>
+              <div class="dh-stat-val">12 พ.ย. 2569</div>
               <div class="dh-stat-label">แก้ไขข้อมูล / ตัวกรองล่าสุด</div>
-              <div class="dh-stat-sub">อัปเดตฐานข้อมูลไฟล์ 04 ZBUDR064 ล่าสุด (11 พ.ย. 69)</div>
+              <div class="dh-stat-sub">อัปเดตฐานข้อมูลไฟล์ 04 ZBUDR064 และไฟล์ 06 CN41 ล่าสุด (12 พ.ย. 69)</div>
             </div>
           </div>
 
@@ -2742,12 +2774,12 @@
                   <div class="dh-flow-node" onclick="window.openModelViewModal('src_04', 'source')">
                     <div class="dh-node-badge" style="background:#8B5CF6;">ไฟล์ 04</div>
                     <div class="dh-node-title">ZBUDR064 (%พัสดุ/สถานะ SAP)</div>
-                    <div class="dh-node-meta">นำเข้า: 11 พ.ย. 69 • 936.5 KB</div>
+                    <div class="dh-node-meta">นำเข้า: 12 พ.ย. 69 • 936.3 KB</div>
                   </div>
                   <div class="dh-flow-node" onclick="window.openModelViewModal('src_06', 'source')">
                     <div class="dh-node-badge" style="background:#F59E0B;">ไฟล์ 06</div>
                     <div class="dh-node-title">CN41 (มูลค่า AUC บาท)</div>
-                    <div class="dh-node-meta">นำเข้า: 5 พ.ย. 69 • 338.0 KB</div>
+                    <div class="dh-node-meta">นำเข้า: 12 พ.ย. 69 • 338.1 KB</div>
                   </div>
                   <div class="dh-flow-node" onclick="window.openModelViewModal('src_07', 'source')">
                     <div class="dh-node-badge" style="background:#0EA5E9;">ไฟล์ 07</div>
