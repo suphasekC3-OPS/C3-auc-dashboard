@@ -95,10 +95,10 @@
       groupNo: '04',
       name: '04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx',
       category: 'SAP ZBUDR064 & Costs',
-      importDate: '2026-11-12 09:33:29',
-      importDateTh: '12 พ.ย. 2569, 09:33 น.',
-      lastModifiedTh: '12 พ.ย. 2569, 09:33 น. (ไฟล์ล่าสุด)',
-      sizeText: '936.3 KB',
+      importDate: '2026-11-12 15:41:30',
+      importDateTh: '12 พ.ย. 2569, 15:41 น.',
+      lastModifiedTh: '12 พ.ย. 2569, 15:41 น. (ไฟล์ล่าสุด)',
+      sizeText: '431.0 KB',
       recordCount: 2083,
       status: 'active',
       statusText: 'ผสานข้อมูลสำเร็จ',
@@ -153,12 +153,12 @@
     {
       id: 'src_06',
       groupNo: '06',
-      name: '06 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 12 พย 69.xlsx',
+      name: '06 WBS CN41 มูลค่า AUC วันดึงข้อมูลล่าสุด.xlsx',
       category: 'SAP CN41 AUC Values (Latest)',
-      importDate: '2026-11-12 09:18:45',
-      importDateTh: '12 พ.ย. 2569, 09:18 น.',
-      lastModifiedTh: '12 พ.ย. 2569, 09:18 น. (ไฟล์ล่าสุด)',
-      sizeText: '338.1 KB',
+      importDate: '2026-11-12 15:52:16',
+      importDateTh: '12 พ.ย. 2569, 15:52 น.',
+      lastModifiedTh: '12 พ.ย. 2569, 15:52 น. (ไฟล์ล่าสุด)',
+      sizeText: '159.1 KB',
       recordCount: 2083,
       status: 'active',
       statusText: 'ผสานข้อมูลสำเร็จ',
@@ -579,6 +579,134 @@
    * System Pre-defined Audit & Modification Log Entries
    */
   const BASE_AUDIT_LOGS = [
+    {
+      id: 'log_auto_src_04_20261112_162645',
+      timestamp: '2026-11-12 16:26:45',
+      timestampTh: '12 พ.ย. 2569, 16:26 น.',
+      type: 'IMPORT',
+      typeBadge: 'อัปเดตไฟล์ 04 WBS (12 พ.ย. 69)',
+      badgeClass: 'badge-type-import',
+      title: 'นำเข้าและอัปเดตข้อมูลไฟล์ 04 WBS ZBUDR064 ล่าสุด วันที่ 12 พ.ย. 2569',
+      targetSubject: 'ฐานข้อมูลหลักและป้ายแสดงวันที่แก้ไขล่าสุดทุกตำแหน่งในหน้าเว็บ',
+      storageFile: 'js/data_wbs.js, js/wbs.js, js/materials.js, js/data_history.js, index.html',
+      changeSummary: 'อัปเดตไฟล์ 04 (12 พ.ย. 2569, 15:41 น.): สถานะเปลี่ยน 0 งาน (%เบิกพัสดุเปลี่ยน 0 งาน, %คชจ.เปลี่ยน 0 งาน) | CLSD F4: เดิม 374 -> ใหม่ 374 งาน (+0 งาน, รวม 88,208,463.37 บาท)',
+      details: '==========================================================================\n🟣 สรุปความแตกต่าง ไฟล์ 04 WBS (ZBUDR064) | ประมวลผลเมื่อ 12 พ.ย. 2569, 16:26 น.\n==========================================================================\n• ไฟล์ที่นำเข้า : 04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx (แก้ไขล่าสุด: 12 พ.ย. 2569, 15:41 น., ขนาด 431.0 KB)\n• ยอดงานปิดแล้ว (CLSD F4) : เดิม 374 งาน (88,208,463.37 บาท) -> ใหม่ 374 งาน (88,208,463.37 บาท) [+0 งาน / +0.00 บาท]\n• จำนวนงานที่สถานะ SAP เปลี่ยนแปลง : 0 งาน\n• จำนวนงานที่ % เบิกพัสดุ เปลี่ยนแปลง : 0 งาน | % เบิก คชจ. เปลี่ยนแปลง : 0 งาน | คชจ.หน้างานเปลี่ยน : 0 งาน\n• รายละเอียดสถานะ SAP : ไม่มีการเปลี่ยนแปลงสถานะจากไฟล์ก่อนหน้า (ข้อมูลเป็นปัจจุบันแล้ว)\n',
+      sourceFile: '04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx (แก้ไขล่าสุด 12 พ.ย. 2569, 15:41 น.)',
+      author: 'ระบบอัปเดตอัตโนมัติ (Auto Updater)',
+      impactLevel: 'สูง'
+    },
+    {
+      id: 'log_auto_src_04_20261112_162030',
+      timestamp: '2026-11-12 16:20:30',
+      timestampTh: '12 พ.ย. 2569, 16:20 น.',
+      type: 'IMPORT',
+      typeBadge: 'อัปเดตไฟล์ 04 WBS (12 พ.ย. 69)',
+      badgeClass: 'badge-type-import',
+      title: 'นำเข้าและอัปเดตข้อมูลไฟล์ 04 WBS ZBUDR064 ล่าสุด วันที่ 12 พ.ย. 2569',
+      targetSubject: 'ฐานข้อมูลหลักและป้ายแสดงวันที่แก้ไขล่าสุดทุกตำแหน่งในหน้าเว็บ',
+      storageFile: 'js/data_wbs.js, js/wbs.js, js/materials.js, js/data_history.js, index.html',
+      changeSummary: 'อัปเดตไฟล์ 04 (12 พ.ย. 2569, 15:41 น.): สถานะเปลี่ยน 0 งาน | CLSD F4 รวม 374 งาน (88,208,463.37 บาท)',
+      details: 'อัปเดตอัตโนมัติผ่านโปรแกรม 2_อัปเดตข้อมูลเข้าแดชบอร์ด_Auto.bat (คำนวณสูตร ผสานข้อมูล อัปเดตวันที่ทุกจุด และบันทึกประวัติอัตโนมัติ)',
+      sourceFile: '04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx (แก้ไขล่าสุด 12 พ.ย. 2569, 15:41 น.)',
+      author: 'ระบบอัปเดตอัตโนมัติ (Auto Updater)',
+      impactLevel: 'สูง'
+    },
+    {
+      id: 'log_auto_src_04_20261112_162015',
+      timestamp: '2026-11-12 16:20:15',
+      timestampTh: '12 พ.ย. 2569, 16:20 น.',
+      type: 'IMPORT',
+      typeBadge: 'อัปเดตไฟล์ 04 WBS (12 พ.ย. 69)',
+      badgeClass: 'badge-type-import',
+      title: 'นำเข้าและอัปเดตข้อมูลไฟล์ 04 WBS ZBUDR064 ล่าสุด วันที่ 12 พ.ย. 2569',
+      targetSubject: 'ฐานข้อมูลหลักและป้ายแสดงวันที่แก้ไขล่าสุดทุกตำแหน่งในหน้าเว็บ',
+      storageFile: 'js/data_wbs.js, js/wbs.js, js/materials.js, js/data_history.js, index.html',
+      changeSummary: 'อัปเดตไฟล์ 04 (12 พ.ย. 2569, 15:41 น.): สถานะเปลี่ยน 0 งาน | CLSD F4 รวม 374 งาน (88,208,463.37 บาท)',
+      details: 'อัปเดตอัตโนมัติผ่านโปรแกรม 2_อัปเดตข้อมูลเข้าแดชบอร์ด_Auto.bat (คำนวณสูตร ผสานข้อมูล อัปเดตวันที่ทุกจุด และบันทึกประวัติอัตโนมัติ)',
+      sourceFile: '04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx (แก้ไขล่าสุด 12 พ.ย. 2569, 15:41 น.)',
+      author: 'ระบบอัปเดตอัตโนมัติ (Auto Updater)',
+      impactLevel: 'สูง'
+    },
+    {
+      id: 'log_auto_src_06_20261112_161956',
+      timestamp: '2026-11-12 16:19:56',
+      timestampTh: '12 พ.ย. 2569, 16:19 น.',
+      type: 'IMPORT',
+      typeBadge: 'อัปเดตไฟล์ 06 CN41 (12 พ.ย. 69)',
+      badgeClass: 'badge-type-import',
+      title: 'นำเข้าและอัปเดตข้อมูลไฟล์ 06 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 12 พ.ย. 2569',
+      targetSubject: 'ฐานข้อมูลหลักและป้ายแสดงวันที่แก้ไขล่าสุดทุกตำแหน่งในหน้าเว็บ',
+      storageFile: 'js/data_wbs.js, js/wbs.js, js/data_history.js, index.html',
+      changeSummary: 'อัปเดตไฟล์ 06 (06 WBS CN41 มูลค่า AUC วันดึงข้อมูลล่าสุด.xlsx, 12 พ.ย. 2569, 15:52 น.): มูลค่าเปลี่ยน 0 งาน | มูลค่า AUC รวม 674,581,358.28 บาท',
+      details: 'อัปเดตอัตโนมัติผ่านโปรแกรม 2_อัปเดตข้อมูลเข้าแดชบอร์ด_Auto.bat (คำนวณสูตร ผสานข้อมูล อัปเดตวันที่ทุกจุด และบันทึกประวัติอัตโนมัติ)',
+      sourceFile: '06 WBS CN41 มูลค่า AUC วันดึงข้อมูลล่าสุด.xlsx (แก้ไขล่าสุด 12 พ.ย. 2569, 15:52 น.)',
+      author: 'ระบบอัปเดตอัตโนมัติ (Auto Updater)',
+      impactLevel: 'สูง'
+    },
+    {
+      id: 'log_auto_src_06_20261112_161547',
+      timestamp: '2026-11-12 16:15:47',
+      timestampTh: '12 พ.ย. 2569, 16:15 น.',
+      type: 'IMPORT',
+      typeBadge: 'อัปเดตไฟล์ 06 CN41 (12 พ.ย. 69)',
+      badgeClass: 'badge-type-import',
+      title: 'นำเข้าและอัปเดตข้อมูลไฟล์ 06 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 12 พ.ย. 2569',
+      targetSubject: 'ฐานข้อมูลหลักและป้ายแสดงวันที่แก้ไขล่าสุดทุกตำแหน่งในหน้าเว็บ',
+      storageFile: 'js/data_wbs.js, js/wbs.js, js/data_history.js, index.html',
+      changeSummary: 'อัปเดตไฟล์ 06 (06 WBS CN41 มูลค่า AUC วันดึงข้อมูลล่าสุด.xlsx, 12 พ.ย. 2569, 15:52 น.): มูลค่าเปลี่ยน 3 งาน | มูลค่า AUC รวม 674,581,358.28 บาท',
+      details: 'อัปเดตอัตโนมัติผ่านโปรแกรม 2_อัปเดตข้อมูลเข้าแดชบอร์ด_Auto.bat (คำนวณสูตร ผสานข้อมูล อัปเดตวันที่ทุกจุด และบันทึกประวัติอัตโนมัติ)',
+      sourceFile: '06 WBS CN41 มูลค่า AUC วันดึงข้อมูลล่าสุด.xlsx (แก้ไขล่าสุด 12 พ.ย. 2569, 15:52 น.)',
+      author: 'ระบบอัปเดตอัตโนมัติ (Auto Updater)',
+      impactLevel: 'สูง'
+    },
+    {
+      id: 'log_000_fix_button2_bom_and_click_handler',
+      timestamp: '2026-11-12 15:59:00',
+      timestampTh: '12 พ.ย. 2569, 15:59 น.',
+      type: 'CONFIG',
+      typeBadge: 'แก้ไขปุ่มที่ 2 กดเปิดได้ 100%',
+      badgeClass: 'badge-type-config',
+      title: 'แก้ไขสคริปต์ปุ่มที่ 1 และปุ่มที่ 2 ให้บันทึกด้วยรหัส UTF-8 with BOM และรองรับการคลิกปุ่มใน Windows PowerShell 5.1',
+      targetSubject: 'โปรแกรมปุ่มที่ 1 (1_เปิด_SAP_ดึงข้อมูล.bat / sap_launcher.ps1) และปุ่มที่ 2 (2_อัปเดตข้อมูลเข้าแดชบอร์ด_Auto.bat / dashboard_auto_updater.ps1)',
+      storageFile: 'scratch/dashboard_auto_updater.ps1, scratch/sap_launcher.ps1, 1_เปิด_SAP_ดึงข้อมูล.bat, 2_อัปเดตข้อมูลเข้าแดชบอร์ด_Auto.bat',
+      changeSummary: 'แก้ไขปัญหาปุ่มที่ 2 กดไม่ขึ้นจากรหัสไฟล์ UTF-8 ที่ไม่มี BOM ทำให้ PowerShell 5.1 แปลอักษรไทยผิดพลาด พร้อมปรับตัวแปร $this ใน Add_Click ให้กดทำงานได้ทุกปุ่ม',
+      details: '1. บันทึกไฟล์ .ps1 ทั้งหมดเป็น UTF-8 with BOM (239,187,191) เพื่อให้ Windows PowerShell 5.1 อ่านภาษาไทยและสัญลักษณ์ได้โดยไม่มี Syntax Error (0 Parse Errors)\n2. แก้ไข Event Handler Add_Click ให้ใช้ $this แทน param($sender, $e) เพื่อให้ส่งค่า Tag ของแต่ละปุ่มได้อย่างถูกต้อง\n3. เพิ่มคำสั่ง pushd "%~dp0" ในไฟล์ .bat ทั้ง 2 ปุ่ม และปรับ sapshcut.exe ให้เปิดหน้าต่าง SAP ใหม่ได้แม้เปิดหน้าจออื่นค้างไว้',
+      sourceFile: 'คำสั่งผู้ใช้งาน (ปุ่ม 2 กดไม่ขึ้นเพราะอะไร)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'สูง'
+    },
+    {
+      id: 'log_000_wbs_kpi_card_gold_dates_add_auc_file06',
+      timestamp: '2026-11-12 15:50:00',
+      timestampTh: '12 พ.ย. 2569, 15:50 น.',
+      type: 'EDIT',
+      typeBadge: 'สีทองอร่าม & เพิ่มวันที่มูลค่า AUC',
+      badgeClass: 'badge-type-edit',
+      title: 'เปลี่ยนสีอักษรวันที่แก้ไขล่าสุดในการ์ดภาพรวมด้านซ้ายเป็นสีทองอร่าม และเพิ่มบรรทัดแสดงวันที่แก้ไขล่าสุดของมูลค่า AUC (ไฟล์ 06) ใต้สถานะ SAP',
+      targetSubject: 'ส่วนหัวการ์ดภาพรวมมูลค่า & งาน AUC ด้านซ้ายในแท็บ WBS (#wbsExecutiveDonutKpiCard, #wbsKpiSapDateText, #wbsKpiAucDateText, .wbs-sap-date-plain-text)',
+      storageFile: 'js/wbs.js, css/styles.css, scratch/dashboard_auto_updater.ps1, index.html, js/data_history.js',
+      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน: 1) เปลี่ยนสีตัวอักษรวันที่แก้ไขล่าสุดที่มุมขวาบนของการ์ด "ภาพรวมมูลค่า & งาน AUC" จากสีขาวเป็นสีทองอร่าม (#FFD700 พร้อมเงาเรืองแสงสีทอง) 2) เพิ่มบรรทัด "มูลค่า AUC แก้ไขล่าสุดวันที่ 12 พ.ย. 69" (#wbsKpiAucDateText อ้างอิงไฟล์ 06 CN41) แสดงซ้อนอยู่ด้านล่างบรรทัด "สถานะ SAP แก้ไขล่าสุดวันที่ 12 พ.ย. 69" พร้อมเชื่อมต่อกับสคริปต์ Auto Updater',
+      details: '1) ใน js/wbs.js: สร้าง .wbs-kpi-card-dates-stack จัดวาง #wbsKpiSapDateText (บรรทัดบน) และ #wbsKpiAucDateText (บรรทัดล่าง: "มูลค่า AUC แก้ไขล่าสุดวันที่ 12 พ.ย. 69" คลิกเปิดผัง Model View src_06 ได้) 2) ใน css/styles.css: ปรับสี .wbs-sap-date-plain-text, #wbsKpiSapDateText และ #wbsKpiAucDateText เป็นสีทองอร่าม #FFD700 พร้อม text-shadow สีทอง (และสีทองอำพัน #B45309 ในโหมดสว่าง) 3) อัปเดต scratch/dashboard_auto_updater.ps1 และ Cache Busters เป็น ?v=20261112_1550',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "วงแดง เปลี่ยนสีอักษร ทองอร่าม และเพิ่มสถานะ มูลค่า AUC ไฟล์06 ด้วย ใหเอยู่ด้านล่างสถานะ SAP"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ'
+    },
+    {
+      id: 'log_000_create_sap_launcher_and_4btn_auto_updater',
+      timestamp: '2026-11-12 15:38:00',
+      timestampTh: '12 พ.ย. 2569, 15:38 น.',
+      type: 'CONFIG',
+      typeBadge: 'สร้างระบบปุ่มลัด SAP & อัปเดต 4 ไฟล์ Auto',
+      badgeClass: 'badge-type-config',
+      title: 'สร้างชุดโปรแกรม GUI ปุ่มที่ 1 (1_เปิด_SAP_ดึงข้อมูล.bat) และปุ่มที่ 2 (2_อัปเดตข้อมูลเข้าแดชบอร์ด_Auto.bat แยก 4 ปุ่มตามไฟล์ที่นำเข้า)',
+      targetSubject: 'ระบบเครื่องมืออัตโนมัติ (1_เปิด_SAP_ดึงข้อมูล.bat, 2_อัปเดตข้อมูลเข้าแดชบอร์ด_Auto.bat, scratch/sap_launcher.ps1, scratch/dashboard_auto_updater.ps1)',
+      storageFile: '1_เปิด_SAP_ดึงข้อมูล.bat, 2_อัปเดตข้อมูลเข้าแดชบอร์ด_Auto.bat, scratch/sap_launcher.ps1, scratch/dashboard_auto_updater.ps1, js/data_history.js',
+      changeSummary: 'สร้างเครื่องมือ GUI 2 ปุ่มหลักสำหรับผู้ใช้งาน: 1) 1_เปิด_SAP_ดึงข้อมูล.bat สำหรับคัดลอกรหัส WBS ทั้ง 2,083 งานเข้า Clipboard อัตโนมัติพร้อมปุ่มกดเปิด ZBUDR064, CN41, CN52N, MB52 ผ่าน sapshcut.exe 2) 2_อัปเดตข้อมูลเข้าแดชบอร์ด_Auto.bat แสดงหน้าต่าง GUI แยก 4 ปุ่มตามไฟล์นำเข้า (ไฟล์ 04 ZBUDR064, ไฟล์ 06 CN41, ไฟล์ 07 CN52N, ไฟล์ 08 MB52) และปุ่มอัปเดตรวมทั้ง 4 ไฟล์ พร้อมคำนวณสูตรและอัปเดตวันที่แก้ไขล่าสุดบนหน้าเว็บทุกจุดอัตโนมัติ',
+      details: '1) ใน scratch/sap_launcher.ps1: ใช้ Windows Forms (UTF-8 BOM, -STA) คัดลอก WBS 2,083 รายการเข้า Clipboard ทันทีที่เปิด และสั่งรัน sapshcut.exe ไปยังเซิร์ฟเวอร์ PED Client 400 2) ใน scratch/dashboard_auto_updater.ps1: แยกฟังก์ชัน Invoke-UpdateFile04, Invoke-UpdateFile06, Invoke-UpdateFile07, Invoke-UpdateFile08 แสดงชื่อไฟล์และเวลาแก้ไขล่าสุดบนปุ่มแต่ละปุ่ม คำนวณสูตรคอลัมน์ X/Y ในไฟล์ 04 อัปเดต js/data_wbs.js, js/data_materials_07.js, js/data_materials_08.js และอัปเดตวันที่แก้ไขล่าสุดพร้อม Cache Busters ใน index.html, js/wbs.js, js/materials.js อัตโนมัติ',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "ต้องการให้สร้าง ปุ่มที่ 2 โดยมี 4 ปุ่ม ตามไฟล์ที่นำเข้า"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง'
+    },
     {
       id: 'log_000_update_wbs_file_04_nov12',
       timestamp: '2026-11-12 09:36:00',
@@ -2774,12 +2902,12 @@
                   <div class="dh-flow-node" onclick="window.openModelViewModal('src_04', 'source')">
                     <div class="dh-node-badge" style="background:#8B5CF6;">ไฟล์ 04</div>
                     <div class="dh-node-title">ZBUDR064 (%พัสดุ/สถานะ SAP)</div>
-                    <div class="dh-node-meta">นำเข้า: 12 พ.ย. 69 • 936.3 KB</div>
+                    <div class="dh-node-meta">นำเข้า: 12 พ.ย. 69 • 431.0 KB</div>
                   </div>
                   <div class="dh-flow-node" onclick="window.openModelViewModal('src_06', 'source')">
                     <div class="dh-node-badge" style="background:#F59E0B;">ไฟล์ 06</div>
                     <div class="dh-node-title">CN41 (มูลค่า AUC บาท)</div>
-                    <div class="dh-node-meta">นำเข้า: 12 พ.ย. 69 • 338.1 KB</div>
+                    <div class="dh-node-meta">นำเข้า: 12 พ.ย. 69 • 159.1 KB</div>
                   </div>
                   <div class="dh-flow-node" onclick="window.openModelViewModal('src_07', 'source')">
                     <div class="dh-node-badge" style="background:#0EA5E9;">ไฟล์ 07</div>

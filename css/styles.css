@@ -2819,27 +2819,28 @@ body.theme-light .badge-new-card-pill:hover {
 
 .wbs-sap-date-plain-text {
   font-size: 0.88rem;
-  color: #FFFFFF;
+  color: #FFD700;
   font-weight: 700;
   letter-spacing: 0.015em;
   background: none !important;
   border: none !important;
   box-shadow: none !important;
   padding: 0 !important;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.45), 0 1px 3px rgba(0, 0, 0, 0.85);
   cursor: pointer;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.2s ease, filter 0.2s ease;
   white-space: nowrap;
 }
 
 .wbs-sap-date-plain-text:hover {
-  opacity: 0.85;
+  opacity: 0.92;
+  filter: brightness(1.12);
   text-decoration: underline;
 }
 
 [data-theme="light"] .wbs-sap-date-plain-text,
 body.theme-light .wbs-sap-date-plain-text {
-  color: #334155;
+  color: #B45309;
   text-shadow: none;
 }
 
@@ -13491,9 +13492,18 @@ tr.wbs-row-checked:hover {
   color: #111827;
 }
 
-#wbsExecutiveDonutKpiCard #wbsKpiSapDateText {
+#wbsExecutiveDonutKpiCard #wbsKpiSapDateText,
+#wbsExecutiveDonutKpiCard #wbsKpiAucDateText {
   font-size: 0.80rem;
-  margin-left: auto;
+  color: #FFD700 !important;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.45), 0 1px 3px rgba(0, 0, 0, 0.85);
+  line-height: 1.3;
+}
+
+[data-theme="light"] #wbsExecutiveDonutKpiCard #wbsKpiSapDateText,
+[data-theme="light"] #wbsExecutiveDonutKpiCard #wbsKpiAucDateText {
+  color: #B45309 !important;
+  text-shadow: none;
 }
 
 .wbs-side-summary-col .wbs-side-kpi-card::before {

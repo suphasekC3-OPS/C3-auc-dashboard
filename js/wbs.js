@@ -756,10 +756,10 @@
         📋 <strong>03 WBSงานคงเหลือเดือนล่าสุด.xlsx:</strong> 23 ต.ค. 2569, 08:04 น.
       </span>
       <span class="wbs-pill pill-file pill-file-04" onclick="if(window.openDhModelModal)window.openDhModelModal('src_04')" title="วันที่/เวลา นำเข้าข้อมูล: 12 พ.ย. 2569, 09:33 น. (ไฟล์ 04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx)">
-        ⚡ <strong>04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx:</strong> 12 พ.ย. 2569, 09:33 น.
+        ⚡ <strong>04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx:</strong> 12 พ.ย. 2569, 15:41 น.
       </span>
       <span class="wbs-pill pill-file pill-file-05" onclick="if(window.openDhModelModal)window.openDhModelModal('src_06')" title="วันที่/เวลา นำเข้าข้อมูล: 12 พ.ย. 2569, 09:18 น. (ไฟล์ 06 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 12 พย 69.xlsx)">
-        📑 <strong>06 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 12 พย 69:</strong> 12 พ.ย. 2569, 09:18 น.
+        📑 <strong>06 WBS CN41 มูลค่า AUC วันดึงข้อมูลล่าสุด:</strong> 12 พ.ย. 2569, 15:52 น.
       </span>
       <span class="wbs-pill pill-file pill-file-06" onclick="if(window.openDhModelModal)window.openDhModelModal('src_sheet')" title="วันที่/เวลา ซิงค์ข้อมูล: 22 ต.ค. 2569, 17:23 น. (Google Sheet แผนงานแล้วเสร็จ ออนไลน์)">
         📊 <strong>Google Sheet แผนงานแล้วเสร็จ:</strong> 22 ต.ค. 2569 (Live API)
@@ -2657,12 +2657,15 @@
           <div class="content-card executive-donut-kpi-card wbs-side-kpi-card wbs-new-combined-kpi-card" id="wbsExecutiveDonutKpiCard">
             <!-- แถบหัวการ์ด -->
             <div class="exec-donut-top-summary">
-              <div class="exec-summary-title-row" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 5px 10px;">
+              <div class="exec-summary-title-row" style="display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 4px 10px;">
                 <div style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                   <span class="badge-pea-tag" id="wbsKpiCard1ScopeBadge">กฟก.3</span>
                   <span class="exec-summary-title">ภาพรวมมูลค่า & งาน AUC</span>
                 </div>
-                <span class="wbs-sap-date-plain-text" id="wbsKpiSapDateText" onclick="if(window.openDhModelModal)window.openDhModelModal('src_04')" title="ข้อมูลสถานะ SAP จากไฟล์ 04 ZBUDR064 แก้ไขล่าสุด: 12 พ.ย. 2569 (คลิกเพื่อดูผัง Model View)">สถานะ SAP แก้ไขล่าสุดวันที่ 12 พ.ย. 69</span>
+                <div class="wbs-kpi-card-dates-stack" style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px; margin-left: auto;">
+                  <span class="wbs-sap-date-plain-text" id="wbsKpiSapDateText" onclick="if(window.openDhModelModal)window.openDhModelModal('src_04')" title="ข้อมูลสถานะ SAP จากไฟล์ 04 ZBUDR064 แก้ไขล่าสุด: 12 พ.ย. 2569 (คลิกเพื่อดูผัง Model View)">สถานะ SAP แก้ไขล่าสุดวันที่ 12 พ.ย. 69</span>
+                  <span class="wbs-sap-date-plain-text" id="wbsKpiAucDateText" onclick="if(window.openDhModelModal)window.openDhModelModal('src_06')" title="ข้อมูลมูลค่า AUC จากไฟล์ 06 CN41 แก้ไขล่าสุด: 12 พ.ย. 2569 (คลิกเพื่อดูผัง Model View)">มูลค่า AUC แก้ไขล่าสุดวันที่ 12 พ.ย. 69</span>
+                </div>
               </div>
             </div>
 
