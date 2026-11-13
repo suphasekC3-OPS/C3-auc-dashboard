@@ -8,7 +8,7 @@
   <meta name="description"
     content="ระบบสารสนเทศและแดชบอร์ดติดตามงานก่อสร้างและขึ้นทะเบียนทรัพย์สิน AUC การไฟฟ้าส่วนภูมิภาค เขต 3 (ภาคกลาง)">
   <link rel="icon" type="image/svg+xml" href="assets/pea_logo.svg">
-  <link rel="stylesheet" href="css/styles.css?v=20261113_1020">
+  <link rel="stylesheet" href="css/styles.css?v=20261113_1148">
 
 </head>
 
@@ -72,7 +72,7 @@
               </svg>
               <span style="display:flex; flex-direction:column; align-items:flex-start; text-align:left;">
                 <span id="githubBtnTitle" style="font-size:0.84rem; font-weight:700; color:#f0f6fc;">Update to Github</span>
-                <span id="githubLastUpdateText" data-epoch="1794540216485" style="font-size:0.67rem; font-weight:500; color:#FDE047; opacity:0.95;">อัปเดตล่าสุด: 13 พ.ย. 69, 10:23 น.</span>
+                <span id="githubLastUpdateText" data-epoch="1794545668759" style="font-size:0.67rem; font-weight:500; color:#FDE047; opacity:0.95;">อัปเดตล่าสุด: 13 พ.ย. 69, 11:54 น.</span>
               </span>
             </button>
 
@@ -358,7 +358,7 @@
               <polyline points="12 12 12 14 14 15"></polyline>
             </svg>
             <span>ประวัติการนำเข้า & แก้ไขข้อมูล</span>
-            <span class="tab-badge" id="dataHistoryBadge" style="background:#8B5CF6; color:#fff; font-weight:700;">12 พ.ย.</span>
+            <span class="tab-badge" id="dataHistoryBadge" style="background:#8B5CF6; color:#fff; font-weight:700;">13 พ.ย.</span>
             <span class="nav-tab-lock-badge" title="เมนูนี้ถูกล็อค (ต้องใช้รหัส Admin PIN)">🔒</span>
           </button>
 
@@ -1635,16 +1635,16 @@
                 <div class="wbs-header-dates-plain" id="wbsHeaderDatesPlain">
                   <div class="wbs-hdr-date-col" onclick="if(window.openDhModelModal)window.openDhModelModal('src_04')"
                     style="cursor:pointer;"
-                    title="ข้อมูลสถานะ SAP จากไฟล์ 04 ZBUDR064 แก้ไขล่าสุด: 12 พ.ย. 2569 (คลิกเพื่อดูผัง Model View)">
+                    title="ข้อมูลสถานะ SAP จากไฟล์ 04 ZBUDR064 แก้ไขล่าสุด: 13 พ.ย. 2569 (คลิกเพื่อดูผัง Model View)">
                     <span class="wbs-hdr-date-title">สถานะ SAP</span>
-                    <span class="wbs-hdr-date-sub">แก้ไขล่าสุด: 12 พ.ย. 69</span>
+                    <span class="wbs-hdr-date-sub">แก้ไขล่าสุด: 13 พ.ย. 69</span>
                   </div>
                   <div class="wbs-hdr-date-divider"></div>
                   <div class="wbs-hdr-date-col" onclick="if(window.openDhModelModal)window.openDhModelModal('src_06')"
                     style="cursor:pointer;"
-                    title="ข้อมูลมูลค่า AUC จากไฟล์ 06 CN41 แก้ไขล่าสุด: 12 พ.ย. 2569 (คลิกเพื่อดูผัง Model View)">
+                    title="ข้อมูลมูลค่า AUC จากไฟล์ 06 CN41 แก้ไขล่าสุด: 13 พ.ย. 2569 (คลิกเพื่อดูผัง Model View)">
                     <span class="wbs-hdr-date-title">มูลค่า AUC(บาท)</span>
-                    <span class="wbs-hdr-date-sub">แก้ไขล่าสุด: 12 พ.ย. 69</span>
+                    <span class="wbs-hdr-date-sub">แก้ไขล่าสุด: 13 พ.ย. 69</span>
                   </div>
                 </div>
 
@@ -1693,12 +1693,23 @@
               <!-- แถวบนสุดของตาราง WBS: รวมเกณฑ์วัด (ซ้าย) และแถบเครื่องมือ/ปุ่มควบคุม (ขวา) ในแถวเดียวกัน -->
               <div class="wbs-table-top-meta-bar table-header-bar"
                 style="display:flex; justify-content:space-between; align-items:center; flex-wrap:nowrap; gap:0.45rem; padding:0.5rem 0.85rem; border-bottom:1px solid rgba(255,255,255,0.08); background:rgba(255,255,255,0.02); border-radius:var(--radius-md, 10px) var(--radius-md, 10px) 0 0; overflow:visible; white-space:nowrap;">
-                <!-- ฝั่งซ้าย: ประเภทเกณฑ์วัด -->
-                <div class="wbs-table-active-criteria" id="wbsTableActiveCriteria" title="ประเภทเกณฑ์วัดที่กำลังแสดงผล"
-                  style="flex:0 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
-                  <span class="criteria-tag-icon">📌</span>
-                  <span class="criteria-tag-label">เกณฑ์วัด:</span>
-                  <strong class="criteria-tag-val" id="wbsTableActiveCriteriaVal">ข้อ 1.1 งบ C.1 ก่อน 69</strong>
+                <!-- ฝั่งซ้าย: ประเภทเกณฑ์วัด + ปุ่มย่อการ์ดเป้าหมาย (เมื่อซ่อนการ์ดลอย) -->
+                <div style="display:flex; align-items:center; gap:0.55rem; min-width:0; flex:0 1 auto;">
+                  <div class="wbs-table-active-criteria" id="wbsTableActiveCriteria" title="ประเภทเกณฑ์วัดที่กำลังแสดงผล"
+                    style="flex:0 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+                    <span class="criteria-tag-icon">📌</span>
+                    <span class="criteria-tag-label">เกณฑ์วัด:</span>
+                    <strong class="criteria-tag-val" id="wbsTableActiveCriteriaVal">ข้อ 1.1 งบ C.1 ก่อน 69</strong>
+                  </div>
+
+                  <!-- Mini Floating Badge เมื่อซ่อนการ์ดลอยสีฟ้า (ย้ายมาอยู่แถบบนข้างเกณฑ์วัด ไม่บังหัวตาราง) -->
+                  <button type="button" class="wbs-floating-mini-pill" id="wbsFloatingMiniPill" style="display:none;"
+                    onclick="window.toggleWbsFloatingCard(true, event)"
+                    title="คลิกเพื่อแสดงการ์ดลอยสีฟ้า (เป้าหมายเดือน/Checkbox)">
+                    <span class="mini-icon">🎯</span>
+                    <span class="mini-text">การ์ดเป้าหมาย</span>
+                    <span class="mini-badge" id="wbsFloatingMiniCount" style="display:none;">0</span>
+                  </button>
                 </div>
 
                 <!-- ฝั่งขวา: แถบเครื่องมือจัดการข้อมูลและตัวเลือกตาราง (ชิดขวา ห้ามขึ้นบรรทัดใหม่) -->
@@ -2044,15 +2055,6 @@
                     </div>
                   </div>
                 </div>
-
-                <!-- Mini Floating Badge เมื่อซ่อนการ์ดลอยสีฟ้า (คลิกเพื่อแสดงการ์ดลอยกลับมา) -->
-                <button type="button" class="wbs-floating-mini-pill" id="wbsFloatingMiniPill" style="display:none;"
-                  onclick="window.toggleWbsFloatingCard(true, event)"
-                  title="คลิกเพื่อแสดงการ์ดลอยสีฟ้า (เป้าหมายเดือน/Checkbox)">
-                  <span class="mini-icon">🎯</span>
-                  <span class="mini-text">การ์ดเป้าหมาย</span>
-                  <span class="mini-badge" id="wbsFloatingMiniCount" style="display:none;">0</span>
-                </button>
               </div>
 
               <!-- Pagination Footer -->
@@ -2741,14 +2743,14 @@
   <script src="js/data_sep.js?v=20261022_2315"></script>
   <script src="js/kpi_matrix.js?v=20261003_0930"></script>
   <script src="js/chart.js?v=20261105_1139"></script>
-  <script src="js/data_wbs.js?v=20261112_1626"></script>
-  <script src="js/wbs.js?v=20261112_1626"></script>
+  <script src="js/data_wbs.js?v=20261113_1030"></script>
+  <script src="js/wbs.js?v=20261113_1148"></script>
   <script src="js/data_materials_07.js?v=20261112_1626"></script>
   <script src="js/data_materials_08.js?v=20261112_1626"></script>
   <script src="js/materials.js?v=20261112_1626"></script>
   <script charset="utf-8" src="js/data_history_archive.js?v=20261105_1514"></script>
   <script src="js/office_dd.js?v=20261105_1620"></script>
-  <script charset="utf-8" src="js/data_history.js?v=20261113_1020"></script>
+  <script charset="utf-8" src="js/data_history.js?v=20261113_1148"></script>
   <script src="js/app.js?v=20261113_1020"></script>
   <script src="js/criteria_dropdown.js?v=20261017_2055"></script>
 </body>
