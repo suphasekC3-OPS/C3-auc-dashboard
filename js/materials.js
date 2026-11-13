@@ -3571,11 +3571,18 @@
     }
   });
 
-  // Initialize preferences & badge on load
+  // Initialize preferences & badge during browser idle time so startup paint is not blocked by 75k-row hydration
   initColumnPrefs();
+  const scheduleMatBadgeInit = () => {
+    if (typeof window.requestIdleCallback === 'function') {
+      window.requestIdleCallback(() => updateMaterialsNavBadge(), { timeout: 900 });
+    } else {
+      setTimeout(updateMaterialsNavBadge, 450);
+    }
+  };
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => setTimeout(updateMaterialsNavBadge, 120));
+    document.addEventListener('DOMContentLoaded', scheduleMatBadgeInit);
   } else {
-    setTimeout(updateMaterialsNavBadge, 120);
+    scheduleMatBadgeInit();
   }
 })();

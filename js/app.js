@@ -447,7 +447,11 @@
       applyTheme();
       initColorPaletteManager();
       updateStickyHeaderHeight();
-      window.addEventListener('resize', updateStickyHeaderHeight);
+      let resizeHeaderTimer = null;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeHeaderTimer);
+        resizeHeaderTimer = setTimeout(updateStickyHeaderHeight, 120);
+      });
       initData();
       initBarChartCriteriaDropdown();
       setupEventListeners();
@@ -455,9 +459,6 @@
         window.updateNavTabsLockUI();
       }
       renderAll();
-      if (window.renderDataHistoryTab) {
-        window.renderDataHistoryTab();
-      }
     } catch (err) {
       console.error('App initialization error:', err);
     }
@@ -2263,6 +2264,20 @@
     }
   }
 
+  const _dirtyTabs = new Set();
+
+  function updateCriticalCountBadgeOnly() {
+    let count = 0;
+    const all = state.allData || [];
+    for (let i = 0; i < all.length; i++) {
+      const d = all[i];
+      if (!d.isSummary && (Number(d.totalValue) > 0 || Number(d.totalJobs) > 0) && (d.kpiScore <= 2 || d.remainingValue > 8000000)) {
+        count++;
+      }
+    }
+    setElemText('criticalCountBadge', count);
+  }
+
   function switchTab(tabId, bypassAuth = false) {
     const LOCKED_NAV_TABS = ['tab-analytics', 'tab-warning', 'tab-data-history'];
     if (!bypassAuth && LOCKED_NAV_TABS.includes(tabId) && !window.isNavTabsAuthenticated()) {
@@ -2278,31 +2293,80 @@
       p.classList.toggle('active', p.id === tabId);
     });
 
-    // Re-render charts on tab switch to ensure proper canvas layout
+    // Pause background canvas sparkle RAF loop whenever leaving dashboard tab
+    if (tabId !== 'tab-dashboard' && typeof BarSparkleManager !== 'undefined' && BarSparkleManager.stop) {
+      BarSparkleManager.stop();
+    }
+
+    // Re-render charts / lazy-dirty tab content on tab switch
     setTimeout(() => {
-      if (tabId === 'tab-dashboard') renderDashboardCharts();
-      if (tabId === 'tab-analytics') renderAnalyticsCharts();
+      if (tabId === 'tab-dashboard') {
+        renderDashboardCharts();
+      }
+      if (tabId === 'tab-analytics') {
+        _dirtyTabs.delete('tab-analytics');
+        renderAnalyticsCharts();
+      }
+      if (tabId === 'tab-table' && _dirtyTabs.has('tab-table')) {
+        _dirtyTabs.delete('tab-table');
+        renderTable();
+      }
+      if (tabId === 'tab-warning' && _dirtyTabs.has('tab-warning')) {
+        _dirtyTabs.delete('tab-warning');
+        renderEarlyWarning();
+      }
+      if (tabId === 'tab-workflow' && _dirtyTabs.has('tab-workflow')) {
+        _dirtyTabs.delete('tab-workflow');
+        renderWorkflow();
+      }
       if (tabId === 'tab-wbs') {
         if (window.renderWbsTab) window.renderWbsTab();
       }
       if (tabId === 'tab-materials' && window.renderMaterialsTab) window.renderMaterialsTab();
       if (tabId === 'tab-data-history' && window.renderDataHistoryTab) window.renderDataHistoryTab();
-    }, 50);
+    }, 32);
   }
   window.switchTab = switchTab;
 
-  // 4. RENDER ALL COMPONENTS
+  // 4. RENDER ALL COMPONENTS (Lazy-skip inactive tabs via _dirtyTabs)
   function renderAll() {
+    const activeTab = state.activeTab || 'tab-dashboard';
     renderKpiCards();
     renderProvincesOverview();
     renderCriteriaCards();
     renderDashboardCharts();
-    renderAnalyticsCharts();
-    renderTable();
-    renderEarlyWarning();
-    renderWorkflow();
     renderAiAnalysis();
     syncChartFilterUI();
+
+    if (activeTab === 'tab-analytics') {
+      _dirtyTabs.delete('tab-analytics');
+      renderAnalyticsCharts();
+    } else {
+      _dirtyTabs.add('tab-analytics');
+    }
+
+    if (activeTab === 'tab-table') {
+      _dirtyTabs.delete('tab-table');
+      renderTable();
+    } else {
+      _dirtyTabs.add('tab-table');
+    }
+
+    if (activeTab === 'tab-warning') {
+      _dirtyTabs.delete('tab-warning');
+      renderEarlyWarning();
+    } else {
+      _dirtyTabs.add('tab-warning');
+      updateCriticalCountBadgeOnly();
+    }
+
+    if (activeTab === 'tab-workflow') {
+      _dirtyTabs.delete('tab-workflow');
+      renderWorkflow();
+    } else {
+      _dirtyTabs.add('tab-workflow');
+    }
+
     if (window.renderWbsTab) window.renderWbsTab();
     if (window.renderMaterialsTab) window.renderMaterialsTab();
   }
@@ -8367,6 +8431,7 @@
 
     updateTargets(chart) {
       this.init();
+      this.initVisibilityHook();
       this.resize();
 
       if (!chart || !chart.renderedBars || !chart.renderedBars.length) {
@@ -8425,10 +8490,15 @@
     },
 
     start() {
-      if (this.animId) return;
-      let lastTime = performance.now();
+      if (this.animId || !this.targets.length) return;
+      if (document.hidden) return;
+      if (typeof state !== 'undefined' && state.activeTab && state.activeTab !== 'tab-dashboard') return;
+
       const loop = (now) => {
-        lastTime = now;
+        if (document.hidden || (typeof state !== 'undefined' && state.activeTab && state.activeTab !== 'tab-dashboard')) {
+          this.animId = null;
+          return;
+        }
         this.render(now);
 
         if (this.targets.length > 0) {
@@ -8445,6 +8515,18 @@
         cancelAnimationFrame(this.animId);
         this.animId = null;
       }
+    },
+
+    initVisibilityHook() {
+      if (this._visHooked) return;
+      this._visHooked = true;
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          this.stop();
+        } else if (typeof state !== 'undefined' && (!state.activeTab || state.activeTab === 'tab-dashboard') && this.targets.length > 0) {
+          this.start();
+        }
+      });
     },
 
     roundRect(ctx, x, y, w, h, r) {

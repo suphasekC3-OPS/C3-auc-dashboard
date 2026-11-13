@@ -425,8 +425,23 @@
     ].join(':::');
   }
 
+  let _wbsDataVersion = 1;
+  let _wbsFilterCacheBaseKey = '';
+  const _wbsFilterCache = new Map();
+  let _lastRenderedWbsSig = '';
+  let _lastRenderedWbsVersion = -1;
+  let _wbsTableRenderToken = 0;
+  let _wbsTableRafId = 0;
+
+  function invalidateWbsFilterCache() {
+    _wbsDataVersion++;
+    _wbsFilterCacheBaseKey = '';
+    _wbsFilterCache.clear();
+  }
+
   /**
    * Get filtered WBS records based on both Top Global Filters and In-table Filters
+   * (Cached per render/filter state so 5 downstream queries reuse 1 base scan)
    */
   function getFilteredWbsData(skipLocalOffice = false, skipLocalSap = false, skipTableSap = false, skipTablePlanClose = false) {
     const rawData = window.AUC_WBS_REMAINING_DATA;
@@ -436,10 +451,15 @@
     const globalState = window.state || {};
     const globalFilters = globalState.filters || {};
 
-    const topCrit = globalFilters.criteria || (document.getElementById('filterCriteria') ? document.getElementById('filterCriteria').value : 'ALL');
-    const topProv = globalFilters.province || (document.getElementById('filterProvince') ? document.getElementById('filterProvince').value : 'ALL');
-    const topOff = globalFilters.office || (document.getElementById('filterOffice') ? document.getElementById('filterOffice').value : 'ALL');
-    const topSearch = (globalFilters.search !== undefined ? globalFilters.search : (document.getElementById('searchInput') ? document.getElementById('searchInput').value : '')).trim().toLowerCase();
+    const critEl = document.getElementById('filterCriteria');
+    const provEl = document.getElementById('filterProvince');
+    const offEl = document.getElementById('filterOffice');
+    const searchEl = document.getElementById('searchInput');
+
+    const topCrit = globalFilters.criteria || (critEl ? critEl.value : 'ALL');
+    const topProv = globalFilters.province || (provEl ? provEl.value : 'ALL');
+    const topOff = globalFilters.office || (offEl ? offEl.value : 'ALL');
+    const topSearch = (globalFilters.search !== undefined ? globalFilters.search : (searchEl ? searchEl.value : '')).trim().toLowerCase();
 
     // Local WBS Sub-filters
     const localSearch = (wbsState.search || '').trim().toLowerCase();
@@ -447,114 +467,123 @@
     const localOffice = skipLocalOffice ? 'ALL' : (wbsState.office || 'ALL');
     const localEng = wbsState.engineer || 'ALL';
     const localPlanClose = wbsState.planClose || 'ALL';
+    const isNoteVisible = !!(wbsState.visibleColumns && wbsState.visibleColumns['note']);
 
-    return rawData.filter(item => {
-      // 1. Top Criteria Filter
-      if (topCrit !== 'ALL' && topCrit !== 'เลือกทั้งหมด' && !matchesCriteria(item.criteria, topCrit)) {
-        return false;
-      }
+    const baseKey = [
+      _wbsDataVersion, rawData.length, topCrit, topProv, topOff, topSearch,
+      localSearch, localBudget, localEng, localPlanClose, isNoteVisible ? 1 : 0
+    ].join('||');
 
-      // 2. Top Province Filter
-      if (topProv !== 'ALL' && item.province !== topProv) {
-        return false;
-      }
+    if (_wbsFilterCacheBaseKey !== baseKey) {
+      _wbsFilterCache.clear();
+      _wbsFilterCacheBaseKey = baseKey;
+    }
 
-      // 3. Top Office Filter
-      if (topOff !== 'ALL' && item.office !== topOff) {
-        return false;
-      }
+    const useSelSap = !skipLocalSap && wbsState.selectedSapStatuses && wbsState.selectedSapStatuses.size > 0;
+    const useLocalSap = !skipLocalSap && !useSelSap && wbsState.sapStatus && wbsState.sapStatus !== 'ALL';
+    const useTblSap = !skipTableSap && wbsState.tableSapStatuses && wbsState.tableSapStatuses.size > 0;
+    const useTblPlan = !skipTablePlanClose && wbsState.tablePlanCloseStatuses && wbsState.tablePlanCloseStatuses.size > 0;
 
-      // 4. Global Search Filter
-      if (topSearch) {
-        const isStatusTerm = isStatusKeyword(topSearch);
-        const isNoteVisible = wbsState.visibleColumns && wbsState.visibleColumns['note'];
-        const matchGlobal =
-          (item.wbs && item.wbs.toLowerCase().includes(topSearch)) ||
-          (item.description && item.description.toLowerCase().includes(topSearch)) ||
-          (item.statusSap && item.statusSap.toLowerCase().includes(topSearch)) ||
-          (item.office && item.office.toLowerCase().includes(topSearch)) ||
-          (item.province && item.province.toLowerCase().includes(topSearch)) ||
-          (item.engineer && item.engineer.toLowerCase().includes(topSearch)) ||
-          (item.department && item.department.toLowerCase().includes(topSearch)) ||
-          (item.criteria && item.criteria.toLowerCase().includes(topSearch)) ||
-          (item.budget && item.budget.toLowerCase().includes(topSearch)) ||
-          (item.planClose && item.planClose.toLowerCase().includes(topSearch)) ||
-          (!isStatusTerm && isNoteVisible && item.note && item.note.toLowerCase().includes(topSearch));
-        if (!matchGlobal) return false;
-      }
+    const fullKey = [
+      baseKey,
+      localOffice,
+      useSelSap ? Array.from(wbsState.selectedSapStatuses).sort().join('|') : (useLocalSap ? wbsState.sapStatus : 'SAP_ALL'),
+      useTblSap ? Array.from(wbsState.tableSapStatuses).sort().join('|') : 'TSAP_ALL',
+      useTblPlan ? Array.from(wbsState.tablePlanCloseStatuses).sort().join('|') : 'TPLAN_ALL'
+    ].join('##');
 
-      // 5. Local In-Table Budget Filter
-      if (localBudget !== 'ALL') {
-        if (localBudget === 'C.1' && !item.budget.includes('C.1')) return false;
-        if (localBudget === 'C02.2' && !item.budget.includes('C02')) return false;
-        if (localBudget === 'I' && (item.budget !== 'I' && !item.budget.includes('I'))) return false;
-        if (localBudget === 'P' && (item.budget !== 'P' && !item.budget.includes('P'))) return false;
-      }
+    if (_wbsFilterCache.has(fullKey)) {
+      return _wbsFilterCache.get(fullKey);
+    }
 
-      // 5.1 Local In-Table Office Filter
+    let baseFiltered = _wbsFilterCache.get('__BASE__');
+    if (!baseFiltered) {
+      const hasTopCrit = topCrit !== 'ALL' && topCrit !== 'เลือกทั้งหมด';
+      const hasTopProv = topProv !== 'ALL';
+      const hasTopOff = topOff !== 'ALL';
+      const isTopStatusTerm = topSearch ? isStatusKeyword(topSearch) : false;
+      const isLocalStatusTerm = localSearch ? isStatusKeyword(localSearch) : false;
+
+      baseFiltered = rawData.filter(item => {
+        if (hasTopCrit && !matchesCriteria(item.criteria, topCrit)) return false;
+        if (hasTopProv && item.province !== topProv) return false;
+        if (hasTopOff && item.office !== topOff) return false;
+
+        if (topSearch) {
+          const matchGlobal =
+            (item.wbs && item.wbs.toLowerCase().includes(topSearch)) ||
+            (item.description && item.description.toLowerCase().includes(topSearch)) ||
+            (item.statusSap && item.statusSap.toLowerCase().includes(topSearch)) ||
+            (item.office && item.office.toLowerCase().includes(topSearch)) ||
+            (item.province && item.province.toLowerCase().includes(topSearch)) ||
+            (item.engineer && item.engineer.toLowerCase().includes(topSearch)) ||
+            (item.department && item.department.toLowerCase().includes(topSearch)) ||
+            (item.criteria && item.criteria.toLowerCase().includes(topSearch)) ||
+            (item.budget && item.budget.toLowerCase().includes(topSearch)) ||
+            (item.planClose && item.planClose.toLowerCase().includes(topSearch)) ||
+            (!isTopStatusTerm && isNoteVisible && item.note && item.note.toLowerCase().includes(topSearch));
+          if (!matchGlobal) return false;
+        }
+
+        if (localBudget !== 'ALL') {
+          if (localBudget === 'C.1' && !item.budget.includes('C.1')) return false;
+          if (localBudget === 'C02.2' && !item.budget.includes('C02')) return false;
+          if (localBudget === 'I' && (item.budget !== 'I' && !item.budget.includes('I'))) return false;
+          if (localBudget === 'P' && (item.budget !== 'P' && !item.budget.includes('P'))) return false;
+        }
+
+        if (localEng !== 'ALL' && item.engineer !== localEng) return false;
+
+        if (localPlanClose !== 'ALL') {
+          const p = (item.planClose || '').trim();
+          if (localPlanClose === 'NOT_IN_SHEET') {
+            if (!item.notFoundInSheet) return false;
+          } else if (localPlanClose === 'EMPTY') {
+            if (p) return false;
+          } else {
+            if (!p.includes(localPlanClose)) return false;
+          }
+        }
+
+        if (localSearch) {
+          const matchLocal =
+            (item.wbs && item.wbs.toLowerCase().includes(localSearch)) ||
+            (item.description && item.description.toLowerCase().includes(localSearch)) ||
+            (item.statusSap && item.statusSap.toLowerCase().includes(localSearch)) ||
+            (item.engineer && item.engineer.toLowerCase().includes(localSearch)) ||
+            (item.department && item.department.toLowerCase().includes(localSearch)) ||
+            (item.office && item.office.toLowerCase().includes(localSearch)) ||
+            (item.province && item.province.toLowerCase().includes(localSearch)) ||
+            (item.criteria && item.criteria.toLowerCase().includes(localSearch)) ||
+            (item.budget && item.budget.toLowerCase().includes(localSearch)) ||
+            (item.planClose && item.planClose.toLowerCase().includes(localSearch)) ||
+            (!isLocalStatusTerm && isNoteVisible && item.note && item.note.toLowerCase().includes(localSearch));
+          if (!matchLocal) return false;
+        }
+
+        return true;
+      });
+      _wbsFilterCache.set('__BASE__', baseFiltered);
+    }
+
+    if (localOffice === 'ALL' && !useSelSap && !useLocalSap && !useTblSap && !useTblPlan) {
+      _wbsFilterCache.set(fullKey, baseFiltered);
+      return baseFiltered;
+    }
+
+    const result = baseFiltered.filter(item => {
       if (localOffice !== 'ALL' && item.office !== localOffice) {
         return false;
       }
 
-      // 6. Local In-Table Engineer Filter
-      if (localEng !== 'ALL' && item.engineer !== localEng) {
-        return false;
-      }
-
-      // 7. Local In-Table Plan Close Filter (File 06)
-      if (localPlanClose !== 'ALL') {
-        const p = (item.planClose || '').trim();
-        if (localPlanClose === 'NOT_IN_SHEET') {
-          if (!item.notFoundInSheet) return false;
-        } else if (localPlanClose === 'EMPTY') {
-          if (p) return false;
-        } else {
-          if (!p.includes(localPlanClose)) return false;
-        }
-      }
-
-      // 8. Local In-Table Search Filter
-      if (localSearch) {
-        const isStatusTerm = isStatusKeyword(localSearch);
-        const isNoteVisible = wbsState.visibleColumns && wbsState.visibleColumns['note'];
-        const matchLocal =
-          (item.wbs && item.wbs.toLowerCase().includes(localSearch)) ||
-          (item.description && item.description.toLowerCase().includes(localSearch)) ||
-          (item.statusSap && item.statusSap.toLowerCase().includes(localSearch)) ||
-          (item.engineer && item.engineer.toLowerCase().includes(localSearch)) ||
-          (item.department && item.department.toLowerCase().includes(localSearch)) ||
-          (item.office && item.office.toLowerCase().includes(localSearch)) ||
-          (item.province && item.province.toLowerCase().includes(localSearch)) ||
-          (item.criteria && item.criteria.toLowerCase().includes(localSearch)) ||
-          (item.budget && item.budget.toLowerCase().includes(localSearch)) ||
-          (item.planClose && item.planClose.toLowerCase().includes(localSearch)) ||
-          (!isStatusTerm && isNoteVisible && item.note && item.note.toLowerCase().includes(localSearch));
-        if (!matchLocal) return false;
-      }
-
-      // 9. Local In-Table SAP Status Filter (From Clicking SAP Summary Cards) - รองรับหลายสถานะพร้อมกัน
-      if (!skipLocalSap && wbsState.selectedSapStatuses && wbsState.selectedSapStatuses.size > 0) {
+      if (useSelSap || useLocalSap || useTblSap) {
         const itemSap = item.statusSap || formatSapStatusShort(item.status);
-        if (!wbsState.selectedSapStatuses.has(itemSap)) {
-          return false;
-        }
-      } else if (!skipLocalSap && wbsState.sapStatus && wbsState.sapStatus !== 'ALL') {
-        const itemSap = item.statusSap || formatSapStatusShort(item.status);
-        if (itemSap !== wbsState.sapStatus) {
-          return false;
-        }
+        if (useSelSap && !wbsState.selectedSapStatuses.has(itemSap)) return false;
+        if (useLocalSap && itemSap !== wbsState.sapStatus) return false;
+        if (useTblSap && !wbsState.tableSapStatuses.has(itemSap)) return false;
       }
 
-      // 10. Table Header Multi-select SAP Dropdown Filter (กรองเฉพาะในตาราง WBS หน้านั้นเท่านั้น)
-      if (!skipTableSap && wbsState.tableSapStatuses && wbsState.tableSapStatuses.size > 0) {
-        const itemSap = item.statusSap || formatSapStatusShort(item.status);
-        if (!wbsState.tableSapStatuses.has(itemSap)) {
-          return false;
-        }
-      }
-
-      // 11. Table Header Multi-select Plan Close (งวดบัญชี) Dropdown Filter (กรองเฉพาะในตาราง WBS หน้านั้นเท่านั้น)
-      if (!skipTablePlanClose && wbsState.tablePlanCloseStatuses && wbsState.tablePlanCloseStatuses.size > 0) {
+      if (useTblPlan) {
         const itemPlan = (item.planClose && item.planClose.trim()) ? item.planClose.trim() : 'EMPTY';
         if (!wbsState.tablePlanCloseStatuses.has(itemPlan)) {
           return false;
@@ -563,6 +592,9 @@
 
       return true;
     });
+
+    _wbsFilterCache.set(fullKey, result);
+    return result;
   }
 
   /**
@@ -631,7 +663,7 @@
   /**
    * Main Render Function for WBS Tab
    */
-  function renderWbsTab() {
+  function renderWbsTab(forceRender = false) {
     const rawData = window.AUC_WBS_REMAINING_DATA;
     if (!rawData || !Array.isArray(rawData)) {
       console.warn('WBS Data not loaded yet.');
@@ -646,12 +678,6 @@
         }
       });
     }
-
-    const baseFiltered = getFilteredWbsData(true, true, true, true);
-    const sapFiltered = getFilteredWbsData(false, true, true, true);
-    const filtered = getFilteredWbsData(false, false, true, true);
-    const tableFiltered = getFilteredWbsData(false, false, false, false);
-    const sorted = sortWbsData(tableFiltered);
 
     // Get current criteria & determine excluded closed SAP status:
     // เกณฑ์วัดข้อ 1, 2, 3, 5: ยกเว้น CLSD F4
@@ -678,11 +704,28 @@
       wbsState.page = 1;
     }
 
+    const filtered = getFilteredWbsData(false, false, true, true);
+
     // 1. Update Navigation Tab Badge
     const tabBadge = document.getElementById('wbsTabTotalBadge');
     if (tabBadge) {
       tabBadge.textContent = filtered.length.toLocaleString('th-TH');
     }
+
+    // Lazy defer heavy DOM/Chart render when WBS tab is not active
+    const wbsPane = document.getElementById('tab-wbs');
+    if (!forceRender && wbsPane && !wbsPane.classList.contains('active')) {
+      wbsState._dirtyRender = true;
+      return;
+    }
+    wbsState._dirtyRender = false;
+    _lastRenderedWbsSig = currentFilterSig;
+    _lastRenderedWbsVersion = _wbsDataVersion;
+
+    const baseFiltered = getFilteredWbsData(true, true, true, true);
+    const sapFiltered = getFilteredWbsData(false, true, true, true);
+    const tableFiltered = getFilteredWbsData(false, false, false, false);
+    const sorted = sortWbsData(tableFiltered);
 
     // 2. Update Top Active Filter Pills Banner
     renderActiveFilterPills(filtered);
@@ -1209,14 +1252,23 @@
     renderWbsSapSummary(sapFiltered, wbsState.sapStatus);
     updateWbsFloatingSelection();
 
-    // Update master header checkbox state if present
+    // Update master header checkbox state if present (zero temporary array allocation)
     const masterCb = document.getElementById('wbsMasterHeaderCb');
     if (masterCb && filtered.length > 0) {
-      const checkable = filtered.filter(i => {
-        const sap = i.statusSap || formatSapStatusShort(i.status);
-        return !isWbsItemExcludedFromCheckbox(sap, currentCrit);
-      });
-      masterCb.checked = checkable.length > 0 && checkable.every(i => wbsState.selectedWbs.has(i.wbs));
+      let hasCheckable = false;
+      let allChecked = true;
+      for (let i = 0; i < filtered.length; i++) {
+        const item = filtered[i];
+        const sap = item.statusSap || formatSapStatusShort(item.status);
+        if (!isWbsItemExcludedFromCheckbox(sap, currentCrit)) {
+          hasCheckable = true;
+          if (!wbsState.selectedWbs.has(item.wbs)) {
+            allChecked = false;
+            break;
+          }
+        }
+      }
+      masterCb.checked = hasCheckable && allChecked;
     }
   };
 
@@ -2687,9 +2739,10 @@
                   <span class="badge-pea-tag" id="wbsKpiCard1ScopeBadge">กฟก.3</span>
                   <span class="exec-summary-title">ภาพรวมมูลค่า & งาน AUC</span>
                 </div>
-                <div class="wbs-kpi-card-dates-stack" style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px; margin-left: auto;">
-                  <span class="wbs-sap-date-plain-text" id="wbsKpiSapDateText" onclick="if(window.openDhModelModal)window.openDhModelModal('src_04')" title="ข้อมูลสถานะ SAP จากไฟล์ 04 ZBUDR064 แก้ไขล่าสุด: 13 พ.ย. 2569 (คลิกเพื่อดูผัง Model View)">สถานะ SAP แก้ไขล่าสุดวันที่ 13 พ.ย. 69</span>
-                  <span class="wbs-sap-date-plain-text" id="wbsKpiAucDateText" onclick="if(window.openDhModelModal)window.openDhModelModal('src_06')" title="ข้อมูลมูลค่า AUC จากไฟล์ 06 CN41 แก้ไขล่าสุด: 13 พ.ย. 2569 (คลิกเพื่อดูผัง Model View)">มูลค่า AUC แก้ไขล่าสุดวันที่ 13 พ.ย. 69</span>
+                <div class="wbs-kpi-card-dates-stack" style="display: flex; flex-direction: row; flex-wrap: nowrap; align-items: center; justify-content: flex-end; gap: 5px; margin-left: auto; width: 100%; white-space: nowrap;">
+                  <span class="wbs-sap-date-plain-text" id="wbsKpiSapDateText" onclick="if(window.openDhModelModal)window.openDhModelModal('src_04')" title="ข้อมูลสถานะ SAP จากไฟล์ 04 ZBUDR064 แก้ไขล่าสุด: 13 พ.ย. 2569 เวลา 10:14 น. (คลิกเพื่อดูผัง Model View)">สถานะ SAP Update 13/11/69 10:14 น.</span>
+                  <span class="wbs-kpi-date-sep" aria-hidden="true">|</span>
+                  <span class="wbs-sap-date-plain-text" id="wbsKpiAucDateText" onclick="if(window.openDhModelModal)window.openDhModelModal('src_06')" title="ข้อมูลมูลค่า AUC จากไฟล์ 06 CN41 แก้ไขล่าสุด: 13 พ.ย. 2569 เวลา 10:25 น. (คลิกเพื่อดูผัง Model View)">มูลค่า AUC Update 13/11/69 10:25 น.</span>
                 </div>
               </div>
             </div>
@@ -3504,44 +3557,86 @@
       window.renderExecutiveDonutChart();
     }
 
-    // 6.5 อัปเดตกล่องแสดงวิธีคำนวณ % ปิดงานมูลค่า AUC และ % ปิดจำนวนงาน (เปิด-ปิดได้ด้วยปุ่ม #btnToggleWbsKpiFormula)
+    // 6.5 อัปเดตกล่องแสดงวิธีคำนวณ % ปิดงานมูลค่า AUC และ % ปิดจำนวนงาน (สูตร 3 รายการ: %เดิม, %+SAP, %ใหม่ เปิด-ปิดได้ด้วยปุ่ม #btnToggleWbsKpiFormula)
     const valFormulaBox = document.getElementById('wbsKpiValFormulaBox');
     const jobFormulaBox = document.getElementById('wbsKpiJobFormulaBox');
     const fmtMb = (v) => (v / 1e6).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const fmtBaht = (v) => Number(v || 0).toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const fmtInt = (v) => Number(v || 0).toLocaleString('th-TH');
     const showFormulaNow = (() => {
       try { return localStorage.getItem('AUC_WBS_KPI_SHOW_FORMULA_V1') === '1'; } catch (_) { return false; }
     })();
 
     if (valFormulaBox) {
-      const baseOnNewTotalPct = netTotalVal > 0 ? (baseClosedVal / netTotalVal) * 100 : 0;
-      const selTerm = selectedCheckboxAuc > 0 ? ` + <span style="color:#00E5FF;">เลือก +${selectedIncPctVal.toFixed(2)}%</span>` : '';
-      const selAmtTerm = selectedCheckboxAuc > 0 ? ` + <span style="color:#00E5FF;">+${fmtMb(selectedCheckboxAuc)}</span>` : '';
-      const sapAmtTerm = clsdSapAuc > 0 ? ` + <span style="color:#00FF88;">+${fmtMb(clsdSapAuc)}</span>` : '';
+      const sapPlusAmt = clsdSapAuc > 0 ? `+${fmtMb(clsdSapAuc)}` : fmtMb(clsdSapAuc);
+      const sapPlusPct = sapIncPctVal > 0 ? `+${sapIncPctVal.toFixed(2)}%` : `${sapIncPctVal.toFixed(2)}%`;
+      const selPlusAmt = selectedCheckboxAuc > 0 ? `+${fmtMb(selectedCheckboxAuc)}` : fmtMb(selectedCheckboxAuc);
+      const selPlusPct = selectedIncPctVal > 0 ? `+${selectedIncPctVal.toFixed(2)}%` : `${selectedIncPctVal.toFixed(2)}%`;
+      const updValTag = Math.abs(netTotalVal - baseTotalVal) >= 0.01 ? '(update)' : '(รวมเดิม)';
+
+      const selRowHtml = selectedCheckboxCount > 0 ? `
+        <div class="formula-grid-row is-sel" title="ส่วนที่เลือก (Checkbox): ${fmtBaht(selectedCheckboxAuc)} ÷ ${fmtBaht(netTotalVal)} บาท = ${selPlusPct}">
+          <span class="formula-tag tag-sel">%+ที่เลือก</span>
+          <span class="formula-expr">${selPlusAmt} ÷ ${fmtMb(netTotalVal)} ลบ. <span class="formula-denom-tag is-upd">${updValTag}</span></span>
+          <span class="formula-res res-sel">= ${selPlusPct}</span>
+        </div>` : '';
+
       valFormulaBox.innerHTML = `
-        <div class="formula-row-main">
-          <span class="formula-lbl">สูตรสุทธิ:</span>
-          <span>(${fmtMb(baseClosedVal)}${sapAmtTerm}${selAmtTerm}) = <strong>${fmtMb(netClosedVal)}</strong> ÷ <strong>${fmtMb(netTotalVal)}</strong> ลบ. = <strong class="text-gold">${netPctVal.toFixed(2)}%</strong></span>
-        </div>
-        <div class="formula-row-sub">
-          <span>ฐานเดิม: ${fmtMb(baseClosedVal)} ÷ ${fmtMb(baseTotalVal)} = ${basePctVal.toFixed(2)}%</span>
-          <span class="formula-sep">|</span>
-          <span>เทียบยอดใหม่ (${fmtMb(netTotalVal)} ลบ.): เดิม ${baseOnNewTotalPct.toFixed(2)}% + <span style="color:#00FF88;">SAP +${sapIncPctVal.toFixed(2)}%</span>${selTerm} = <strong>${netPctVal.toFixed(2)}%</strong></span>
+        <div class="formula-grid">
+          <div class="formula-grid-row" title="ฐานเดิม: ${fmtBaht(baseClosedVal)} ÷ ${fmtBaht(baseTotalVal)} บาท = ${basePctVal.toFixed(2)}%">
+            <span class="formula-tag tag-base">%เดิม</span>
+            <span class="formula-expr">${fmtMb(baseClosedVal)} ÷ ${fmtMb(baseTotalVal)} ลบ. <span class="formula-denom-tag is-base">(เดิม)</span></span>
+            <span class="formula-res">= ${basePctVal.toFixed(2)}%</span>
+          </div>
+          <div class="formula-grid-row is-sap" title="SAP (${sapTargetStatus}): ${fmtBaht(clsdSapAuc)} ÷ ${fmtBaht(netTotalVal)} บาท = ${sapPlusPct}">
+            <span class="formula-tag tag-sap">%+SAP</span>
+            <span class="formula-expr">${sapPlusAmt} ÷ ${fmtMb(netTotalVal)} ลบ. <span class="formula-denom-tag is-upd">${updValTag}</span></span>
+            <span class="formula-res res-sap">= ${sapPlusPct}</span>
+          </div>
+          ${selRowHtml}
+          <div class="formula-grid-row is-new" title="สุทธิใหม่: ${fmtBaht(netClosedVal)} ÷ ${fmtBaht(netTotalVal)} บาท = ${netPctVal.toFixed(2)}%">
+            <span class="formula-tag tag-new">%ใหม่</span>
+            <span class="formula-expr">${fmtMb(netClosedVal)} ÷ ${fmtMb(netTotalVal)} ลบ. <span class="formula-denom-tag is-upd">${updValTag}</span></span>
+            <span class="formula-res res-new">= ${netPctVal.toFixed(2)}%</span>
+          </div>
         </div>
       `;
       valFormulaBox.style.display = showFormulaNow ? 'block' : 'none';
     }
 
     if (jobFormulaBox) {
-      const selJobAmt = selectedCheckboxCount > 0 ? ` + <span style="color:#00E5FF;">+${selectedCheckboxCount.toLocaleString('th-TH')}</span>` : '';
-      const selJobPct = selectedCheckboxCount > 0 ? ` + <span style="color:#00E5FF;">+${selectedIncPctJobs.toFixed(2)}%</span>` : '';
-      const sapJobAmt = clsdSapCount > 0 ? ` + <span style="color:#00FF88;">+${clsdSapCount.toLocaleString('th-TH')}</span>` : '';
+      const sapPlusJobs = clsdSapCount > 0 ? `+${fmtInt(clsdSapCount)}` : fmtInt(clsdSapCount);
+      const sapPlusJobPct = sapIncPctJobs > 0 ? `+${sapIncPctJobs.toFixed(2)}%` : `${sapIncPctJobs.toFixed(2)}%`;
+      const selPlusJobs = selectedCheckboxCount > 0 ? `+${fmtInt(selectedCheckboxCount)}` : fmtInt(selectedCheckboxCount);
+      const selPlusJobPct = selectedIncPctJobs > 0 ? `+${selectedIncPctJobs.toFixed(2)}%` : `${selectedIncPctJobs.toFixed(2)}%`;
+      const jobBaseCount = baseTotalJobs || netTotalJobs;
+      const updJobTag = netTotalJobs !== jobBaseCount ? '(update)' : '(รวมเดิม)';
+
+      const selJobRowHtml = selectedCheckboxCount > 0 ? `
+        <div class="formula-grid-row is-sel">
+          <span class="formula-tag tag-sel">%+ที่เลือก</span>
+          <span class="formula-expr">${selPlusJobs} ÷ ${fmtInt(netTotalJobs)} งาน <span class="formula-denom-tag ${netTotalJobs !== jobBaseCount ? 'is-upd' : 'is-base'}">${updJobTag}</span></span>
+          <span class="formula-res res-sel">= ${selPlusJobPct}</span>
+        </div>` : '';
+
       jobFormulaBox.innerHTML = `
-        <div class="formula-row-main">
-          <span class="formula-lbl">สูตรสุทธิ:</span>
-          <span>(${baseClosedJobs.toLocaleString('th-TH')}${sapJobAmt}${selJobAmt}) = <strong>${netClosedJobs.toLocaleString('th-TH')}</strong> ÷ <strong>${netTotalJobs.toLocaleString('th-TH')}</strong> งาน = <strong class="text-gold">${netPctJobs.toFixed(2)}%</strong></span>
-        </div>
-        <div class="formula-row-sub">
-          <span>สัดส่วน: เดิม ${basePctJobs.toFixed(2)}% + <span style="color:#00FF88;">SAP +${sapIncPctJobs.toFixed(2)}%</span>${selJobPct} = <strong>${netPctJobs.toFixed(2)}%</strong></span>
+        <div class="formula-grid">
+          <div class="formula-grid-row">
+            <span class="formula-tag tag-base">%เดิม</span>
+            <span class="formula-expr">${fmtInt(baseClosedJobs)} ÷ ${fmtInt(jobBaseCount)} งาน <span class="formula-denom-tag is-base">(เดิม)</span></span>
+            <span class="formula-res">= ${basePctJobs.toFixed(2)}%</span>
+          </div>
+          <div class="formula-grid-row is-sap">
+            <span class="formula-tag tag-sap">%+SAP</span>
+            <span class="formula-expr">${sapPlusJobs} ÷ ${fmtInt(netTotalJobs)} งาน <span class="formula-denom-tag ${netTotalJobs !== jobBaseCount ? 'is-upd' : 'is-base'}">${updJobTag}</span></span>
+            <span class="formula-res res-sap">= ${sapPlusJobPct}</span>
+          </div>
+          ${selJobRowHtml}
+          <div class="formula-grid-row is-new">
+            <span class="formula-tag tag-new">%ใหม่</span>
+            <span class="formula-expr">${fmtInt(netClosedJobs)} ÷ ${fmtInt(netTotalJobs)} งาน <span class="formula-denom-tag ${netTotalJobs !== jobBaseCount ? 'is-upd' : 'is-base'}">${updJobTag}</span></span>
+            <span class="formula-res res-new">= ${netPctJobs.toFixed(2)}%</span>
+          </div>
         </div>
       `;
       jobFormulaBox.style.display = showFormulaNow ? 'block' : 'none';
@@ -4484,25 +4579,34 @@
         ? 'คลิกเพื่อแก้ไขแผนปิดงาน / หมายเหตุ (Google Sheet)'
         : 'เฉพาะผู้ดูแลระบบ: คลิกเพื่อกรอกรหัส Admin PIN ปลดล็อกการแก้ไขทุกแถว';
 
-      let rowsHtml = '';
-      pageItems.forEach((item, index) => {
-        const rowNo = startIdx + index + 1;
-        const wbsCode = escapeHtml(item.wbs);
-        const safeWbsAttr = wbsCode.replace(/'/g, "\\'");
+      // Cancel any in-flight progressive table batch render
+      if (_wbsTableRafId) {
+        cancelAnimationFrame(_wbsTableRafId);
+        _wbsTableRafId = 0;
+      }
+      const myRenderToken = ++_wbsTableRenderToken;
 
-        // Budget badge style
-        let budgetClass = 'pill-c';
-        const b = (item.budget || '').toUpperCase();
-        if (b.includes('C02')) budgetClass = 'pill-c02';
-        else if (b.includes('I')) budgetClass = 'pill-i';
-        else if (b.includes('P')) budgetClass = 'pill-p';
+      const buildWbsRowsChunkHtml = (fromIdx, toIdx) => {
+        let rowsHtml = '';
+        for (let index = fromIdx; index < toIdx; index++) {
+          const item = pageItems[index];
+          const rowNo = startIdx + index + 1;
+          const wbsCode = escapeHtml(item.wbs);
+          const safeWbsAttr = wbsCode.replace(/'/g, "\\'");
 
-        // Avatar initial
-        const engName = item.engineer || '-';
-        const engInitial = engName.replace(/^(นาย|นางสาว|นาง|ว่าที่\s*ร\.ต\.|ดร\.)\s*/, '').charAt(0) || 'ช';
+          // Budget badge style
+          let budgetClass = 'pill-c';
+          const b = (item.budget || '').toUpperCase();
+          if (b.includes('C02')) budgetClass = 'pill-c02';
+          else if (b.includes('I')) budgetClass = 'pill-i';
+          else if (b.includes('P')) budgetClass = 'pill-p';
 
-        const isRowChecked = wbsState.selectedWbs && wbsState.selectedWbs.has(item.wbs);
-        let rowHtml = `<tr class="${isRowChecked ? 'wbs-row-checked' : ''}" data-wbs="${safeWbsAttr}">`;
+          // Avatar initial
+          const engName = item.engineer || '-';
+          const engInitial = engName.replace(/^(นาย|นางสาว|นาง|ว่าที่\s*ร\.ต\.|ดร\.)\s*/, '').charAt(0) || 'ช';
+
+          const isRowChecked = wbsState.selectedWbs && wbsState.selectedWbs.has(item.wbs);
+          let rowHtml = `<tr class="${isRowChecked ? 'wbs-row-checked' : ''}" data-wbs="${safeWbsAttr}">`;
         activeCols.forEach(col => {
           switch (col.id) {
             case 'id':
@@ -4731,8 +4835,41 @@
         });
         rowHtml += '</tr>';
         rowsHtml += rowHtml;
-      });
-      tbody.innerHTML = rowsHtml;
+        }
+        return rowsHtml;
+      };
+
+      const FIRST_BATCH_SIZE = 80;
+      const NEXT_BATCH_SIZE = 280;
+      const totalItemsCount = pageItems.length;
+
+      if (totalItemsCount <= FIRST_BATCH_SIZE) {
+        tbody.innerHTML = buildWbsRowsChunkHtml(0, totalItemsCount);
+      } else {
+        tbody.innerHTML = buildWbsRowsChunkHtml(0, FIRST_BATCH_SIZE);
+        let cursor = FIRST_BATCH_SIZE;
+        const appendNextChunk = () => {
+          _wbsTableRafId = 0;
+          if (_wbsTableRenderToken !== myRenderToken) return;
+          const pane = document.getElementById('tab-wbs');
+          if (pane && !pane.classList.contains('active')) {
+            wbsState._dirtyRender = true;
+            return;
+          }
+          const nextEnd = Math.min(cursor + NEXT_BATCH_SIZE, totalItemsCount);
+          const tpl = document.createElement('template');
+          tpl.innerHTML = buildWbsRowsChunkHtml(cursor, nextEnd);
+          tbody.appendChild(tpl.content);
+          cursor = nextEnd;
+          if (cursor < totalItemsCount) {
+            _wbsTableRafId = requestAnimationFrame(appendNextChunk);
+          } else {
+            if (window.updateWbsLeftScrollbar) window.updateWbsLeftScrollbar();
+            if (window.updateWbsEditLockUI) window.updateWbsEditLockUI();
+          }
+        };
+        _wbsTableRafId = requestAnimationFrame(appendNextChunk);
+      }
     }
 
     // 3. ลบแถวสรุปล่างสุดออก (เอาออก 2 แถว ตามที่ผู้ใช้สั่ง)
@@ -5721,7 +5858,7 @@
   }
 
   /**
-   * Sort column click handler
+   * Sort column click handler (re-sorts & renders table directly without rebuilding charts/dropdowns)
    */
   window.sortWbsTable = function (col) {
     if (wbsState.sortCol === col) {
@@ -5731,7 +5868,10 @@
       wbsState.sortAsc = true;
     }
 
-    renderWbsTab();
+    const tableFiltered = getFilteredWbsData(false, false, false, false);
+    const sorted = sortWbsData(tableFiltered);
+    renderWbsTableHead(sorted);
+    renderWbsTable(sorted, tableFiltered.length);
   };
 
   /**
@@ -6816,44 +6956,48 @@
     // 4. บังคับแสดงทั้งหมดตลอด (นำตัวเลือกแถวต่อหน้าออกตามคำสั่งผู้ใช้งาน)
     wbsState.pageSize = 999999;
 
-    // 5. Connect to Top Global Filter Controls
-    const topCrit = document.getElementById('filterCriteria');
-    if (topCrit) {
-      topCrit.addEventListener('change', () => {
+    // 5. Connect to Top Global Filter Controls (debounced & deduplicated against app.js renderAll)
+    let globalSyncTimer = null;
+    const scheduleWbsGlobalSync = (delayMs = 16) => {
+      clearTimeout(globalSyncTimer);
+      globalSyncTimer = setTimeout(() => {
+        const currentSig = getWbsFilterSignature();
+        const pane = document.getElementById('tab-wbs');
+        const isWbsActive = !!(pane && pane.classList.contains('active'));
+        if (isWbsActive && _lastRenderedWbsSig === currentSig && _lastRenderedWbsVersion === _wbsDataVersion && !wbsState._dirtyRender) {
+          return;
+        }
+        if (!isWbsActive && wbsState.lastFilterSignature === currentSig && _lastRenderedWbsVersion === _wbsDataVersion && wbsState._dirtyRender) {
+          return;
+        }
         wbsState.page = 1;
         renderWbsTab();
-      });
+      }, delayMs);
+    };
+
+    const topCrit = document.getElementById('filterCriteria');
+    if (topCrit) {
+      topCrit.addEventListener('change', () => scheduleWbsGlobalSync(16));
     }
 
     const topProv = document.getElementById('filterProvince');
     if (topProv) {
-      topProv.addEventListener('change', () => {
-        wbsState.page = 1;
-        renderWbsTab();
-      });
+      topProv.addEventListener('change', () => scheduleWbsGlobalSync(16));
     }
 
     const topOff = document.getElementById('filterOffice');
     if (topOff) {
-      topOff.addEventListener('change', () => {
-        wbsState.page = 1;
-        renderWbsTab();
-      });
+      topOff.addEventListener('change', () => scheduleWbsGlobalSync(16));
     }
 
     const topSearch = document.getElementById('searchInput');
     if (topSearch) {
-      topSearch.addEventListener('input', () => {
-        wbsState.page = 1;
-        renderWbsTab();
-      });
+      topSearch.addEventListener('input', () => scheduleWbsGlobalSync(210));
     }
 
     const topMonth = document.getElementById('filterMonth');
     if (topMonth) {
-      topMonth.addEventListener('change', () => {
-        renderWbsTab();
-      });
+      topMonth.addEventListener('change', () => scheduleWbsGlobalSync(16));
     }
 
     window.resetWbsAllFilters = function () {
@@ -7338,6 +7482,7 @@
         window.showToast(`✅ บันทึกข้อมูลงาน ${item.wbs} สำเร็จ (ส่งข้อมูลเข้า Google Sheet เรียบร้อย)`, 'success');
       }
 
+      invalidateWbsFilterCache();
       window.closeWbsEditNoteModal();
       renderWbsTab();
     } catch (err) {
@@ -7408,6 +7553,7 @@
    * Apply cached Google Sheet data from localStorage onto window.AUC_WBS_REMAINING_DATA
    */
   function applyCachedGoogleSheetData() {
+    invalidateWbsFilterCache();
     try {
       const savedStr = localStorage.getItem(WBS_SHEET_CACHE_KEY);
       if (!savedStr) {
@@ -7621,6 +7767,7 @@
         // 🌟 Auto-refresh modal dropdown options with any newly added/modified choices from Google Sheet
         refreshWbsPlanCloseDropdownOptions();
 
+        invalidateWbsFilterCache();
         renderWbsTab();
         if (dot) dot.style.background = '#10B981';
         if (isManual && window.showToast) {
