@@ -580,6 +580,22 @@
    */
   const BASE_AUDIT_LOGS = [
     {
+      id: 'log_000_rename_btn_update_to_github_and_timestamp',
+      timestamp: '2026-11-13 09:00:00',
+      timestampTh: '13 พ.ย. 2569, 09:00 น.',
+      type: 'EDIT',
+      typeBadge: 'ปรับปรุงปุ่ม GitHub',
+      badgeClass: 'badge-type-edit',
+      title: 'เปลี่ยนชื่อปุ่ม Update to Github พร้อมแสดงวัน-เวลาที่อัปเดตล่าสุดอัตโนมัติ',
+      targetSubject: 'ปุ่ม Navbar (#btnUpdateGithubDesktop) & ระบบ Auto GitHub Sync',
+      storageFile: 'index.html, js/app.js, scratch/sync_to_github.ps1',
+      changeSummary: 'เปลี่ยนข้อความปุ่มบน Navbar เป็น "Update to Github" และเพิ่มบรรทัดแสดงวันที่-เวลาที่อัปเดตล่าสุดอัตโนมัติ',
+      details: 'ปรับโครงสร้างปุ่ม #btnUpdateGithubDesktop เป็น 2 บรรทัด (#githubBtnTitle แสดง "Update to Github" และ #githubLastUpdateText แสดง "อัปเดตล่าสุด: ...") พร้อมปรับ js/app.js เพิ่ม initGithubLastUpdateBadge() ซิงค์ค่าจาก localStorage และให้ scratch/sync_to_github.ps1 ฝังวัน-เวลาอัปเดตลงใน index.html ทั้งสองโฟลเดอร์อัตโนมัติทุกครั้งที่มีการ Commit & Push',
+      sourceFile: 'คำสั่งผู้ใช้งาน',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง'
+    },
+    {
       id: 'log_000_hide_github_update_modal_silent_bg',
       timestamp: '2026-11-13 08:55:00',
       timestampTh: '13 พ.ย. 2569, 08:55 น.',

@@ -10499,12 +10499,31 @@
     }
   };
 
+  // Sync persisted GitHub last-update timestamp on startup if newer than embedded HTML
+  (function initGithubLastUpdateBadge() {
+    try {
+      const el = document.getElementById('githubLastUpdateText');
+      if (!el) return;
+      const htmlEpoch = Number(el.getAttribute('data-epoch') || 0);
+      const savedEpoch = Number(localStorage.getItem('auc_github_last_update_epoch') || 0);
+      const savedText = localStorage.getItem('auc_github_last_update_th');
+      if (savedText && savedEpoch > htmlEpoch) {
+        el.textContent = 'อัปเดตล่าสุด: ' + savedText;
+        el.setAttribute('data-epoch', String(savedEpoch));
+      }
+    } catch (_) {}
+  })();
+
   window.triggerUpdateToGithubDesktop = async function () {
     const btn = document.getElementById('btnUpdateGithubDesktop');
-    const originalHtml = btn ? btn.innerHTML : '';
+    const titleEl = document.getElementById('githubBtnTitle');
+    const lastEl = document.getElementById('githubLastUpdateText');
+    const originalTitle = titleEl ? titleEl.textContent : 'Update to Github';
     const originalBg = btn ? btn.style.background : '';
     if (btn) {
-      btn.innerHTML = '<span style="font-size:0.8rem;">⏳ กำลังส่งไฟล์ • Commit • Push ขึ้นเว็บ...</span>';
+      if (titleEl) {
+        titleEl.textContent = '⏳ กำลัง Commit & Push...';
+      }
       btn.disabled = true;
     }
 
@@ -10533,7 +10552,19 @@
       const webUrl = apiResult.webUrl || 'https://suphasekc3-ops.github.io/C3-auc-dashboard/';
       if (btn) {
         btn.style.background = '#059669';
-        btn.innerHTML = '<span style="font-size:0.8rem; color:#ffffff;">✅ อัปเดตขึ้นเว็บ GitHub แล้ว!</span>';
+        if (titleEl) titleEl.textContent = '✅ อัปเดตขึ้นเว็บแล้ว!';
+      }
+      if (lastEl && apiResult.lastUpdateTh) {
+        lastEl.textContent = 'อัปเดตล่าสุด: ' + apiResult.lastUpdateTh;
+        if (apiResult.lastUpdateEpoch) {
+          lastEl.setAttribute('data-epoch', String(apiResult.lastUpdateEpoch));
+        }
+        try {
+          localStorage.setItem('auc_github_last_update_th', apiResult.lastUpdateTh);
+          if (apiResult.lastUpdateEpoch) {
+            localStorage.setItem('auc_github_last_update_epoch', String(apiResult.lastUpdateEpoch));
+          }
+        } catch (_) {}
       }
       const toastText = apiResult.committed
         ? `✅ อัปเดต & Push ขึ้นเว็บสำเร็จ (${apiResult.changedCount} ไฟล์) | ${apiResult.summary} — รอ GitHub Pages รีเฟรช ~30-60 วินาที`
@@ -10547,7 +10578,7 @@
       // Auto Copy & Auto Commit เสร็จแล้ว แต่ Auto Push ยังไม่ผ่าน -> แสดง Toast แจ้งอย่างเดียว ไม่เปิด Modal กวนหน้าจอ
       if (btn) {
         btn.style.background = '#d97706';
-        btn.innerHTML = '<span style="font-size:0.8rem; color:#ffffff;">⚠️ Commit แล้ว (รอกด Push ใน GitHub Desktop)</span>';
+        if (titleEl) titleEl.textContent = '⚠️ รอกด Push origin';
       }
       const fallbackMsg = apiResult.message || 'ส่งไฟล์และ Auto Commit เรียบร้อยแล้ว แต่ระบบยังไม่สามารถ Auto Push ได้ กรุณากด Push origin ใน GitHub Desktop ครับ';
       if (typeof showToast === 'function') {
@@ -10565,7 +10596,7 @@
 
       if (btn) {
         btn.style.background = '#059669';
-        btn.innerHTML = '<span style="font-size:0.8rem; color:#ffffff;">🚀 สั่งอัปเดตขึ้นเว็บแล้ว!</span>';
+        if (titleEl) titleEl.textContent = '🚀 สั่งอัปเดตแล้ว!';
       }
       if (typeof showToast === 'function') {
         showToast('🚀 ส่งคำสั่งอัปเดตและ Auto Push ขึ้น GitHub Web แบบเบื้องหลังเรียบร้อยแล้วครับ', 'success');
@@ -10574,7 +10605,7 @@
 
     if (btn) {
       setTimeout(() => {
-        btn.innerHTML = originalHtml;
+        if (titleEl) titleEl.textContent = originalTitle || 'Update to Github';
         btn.style.background = originalBg || '#24292f';
         btn.disabled = false;
       }, 4500);
