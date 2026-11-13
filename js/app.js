@@ -10502,42 +10502,68 @@
   window.triggerUpdateToGithubDesktop = async function () {
     const btn = document.getElementById('btnUpdateGithubDesktop');
     const originalHtml = btn ? btn.innerHTML : '';
+    const originalBg = btn ? btn.style.background : '';
     if (btn) {
-      btn.innerHTML = '<span style="font-size:0.8rem;">⏳ กำลังคัดลอกไฟล์... (รอ 2 วินาที)</span>';
+      btn.innerHTML = '<span style="font-size:0.8rem;">⏳ กำลังส่งไฟล์ • Commit • Push ขึ้นเว็บ...</span>';
       btn.disabled = true;
     }
 
-    let syncedViaServer = false;
+    let apiResult = null;
+    let reachable = false;
 
-    // 1. ส่งคำขอผ่าน fetch ไปยัง local sync server (localhost:8089) พร้อม timeout 3.5 วินาที
+    // 1. ส่งคำขอไปยัง local sync server (localhost:8089) เพื่อให้ Copy + Auto Summary/Commit + Auto Push ทำงานเบื้องหลังทั้งหมด
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 3500);
+      const timeoutId = setTimeout(() => controller.abort(), 65000);
       const resp = await fetch('http://localhost:8089/api/sync-github', {
         method: 'GET',
         mode: 'cors',
         signal: controller.signal
       });
       clearTimeout(timeoutId);
-      const result = await resp.json();
-      if (result && result.status === 'success') {
-        syncedViaServer = true;
+      apiResult = await resp.json();
+      if (resp.ok && apiResult) {
+        reachable = true;
       }
     } catch (err) {
-      console.log('Local sync server not reachable, using OS protocol launcher:', err);
+      console.log('Local sync server not reachable or timed out, using OS protocol fallback:', err);
     }
 
-    if (syncedViaServer) {
+    const statusDetailEl = document.getElementById('updateGithubStatusDetail');
+
+    if (reachable && apiResult && apiResult.pushed) {
+      const webUrl = apiResult.webUrl || 'https://suphasekc3-ops.github.io/C3-auc-dashboard/';
       if (btn) {
-        btn.innerHTML = '<span style="font-size:0.8rem; color:#60A5FA;">🚀 เปิด GitHub Desktop แล้ว</span>';
+        btn.style.background = '#059669';
+        btn.innerHTML = '<span style="font-size:0.8rem; color:#ffffff;">✅ อัปเดตขึ้นเว็บ GitHub แล้ว!</span>';
+      }
+      const toastText = apiResult.committed
+        ? `✅ อัปเดต & Push ขึ้นเว็บสำเร็จ (${apiResult.changedCount} ไฟล์) | ${apiResult.summary} — รอ GitHub Pages รีเฟรช ~30-60 วินาที`
+        : `✅ ข้อมูลบนเว็บ GitHub เป็นเวอร์ชันล่าสุดอยู่แล้ว (${webUrl})`;
+      if (typeof showToast === 'function') {
+        showToast(toastText, 'success');
+      } else {
+        alert(toastText);
+      }
+    } else if (reachable && apiResult) {
+      // Auto Copy & Auto Commit เสร็จแล้ว แต่ Auto Push ยังไม่ผ่าน (เช่น ยังไม่เคยล็อกอิน GCM หรือเครือข่ายติดขัด) -> เปิด GitHub Desktop รอกด Push origin
+      if (btn) {
+        btn.style.background = '#d97706';
+        btn.innerHTML = '<span style="font-size:0.8rem; color:#ffffff;">⚠️ Commit แล้ว (รอกด Push ใน GitHub Desktop)</span>';
+      }
+      const fallbackMsg = apiResult.message || 'ส่งไฟล์และ Auto Commit เรียบร้อยแล้ว แต่ระบบยังไม่สามารถ Auto Push ได้ กรุณากด Push origin ใน GitHub Desktop ครับ';
+      if (statusDetailEl) {
+        statusDetailEl.textContent = fallbackMsg;
       }
       if (typeof showToast === 'function') {
-        showToast('✅ คัดลอกไฟล์ไปยัง C3-auc-dashboard สำเร็จ! เปิดโปรแกรม GitHub Desktop ให้อัตโนมัติแล้ว', 'success');
-      } else {
-        alert('✅ คัดลอกไฟล์สำเร็จ!\nระบบได้เปิดโปรแกรม GitHub Desktop ให้เรียบร้อย สามารถตรวจสอบแถบ Changes ได้เลยครับ');
+        showToast('⚠️ ' + fallbackMsg, 'info');
+      }
+      const modal = document.getElementById('updateGithubModal');
+      if (modal) {
+        modal.style.display = 'flex';
       }
     } else {
-      // 2. เรียกใช้งาน update00ai:// protocol เพื่อให้ Windows รันสคริปต์ซิงค์ไฟล์
+      // 2. Fallback: เรียกใช้งาน update00ai:// protocol เพื่อให้ Windows รัน Update_to_GitHub_Desktop.bat (Auto Copy + Auto Commit + Auto Push)
       try {
         const frame = document.createElement('iframe');
         frame.style.display = 'none';
@@ -10546,20 +10572,16 @@
         setTimeout(() => { try { frame.remove(); } catch (_) {} }, 4000);
       } catch (_) {}
 
-      // 3. เรียกเปิด GitHub Desktop ตรงๆ ผ่าน x-github-client protocol (หน่วงเวลา 1.5 วินาที)
-      setTimeout(() => {
-        window.openGitHubDesktopDirect();
-      }, 1500);
-
       if (btn) {
-        btn.innerHTML = '<span style="font-size:0.8rem; color:#34D399;">🚀 สั่งเปิด GitHub Desktop แล้ว</span>';
+        btn.innerHTML = '<span style="font-size:0.8rem; color:#34D399;">🚀 สั่งอัปเดตผ่านระบบ Windows แล้ว</span>';
       }
-
+      if (statusDetailEl) {
+        statusDetailEl.textContent = 'กำลังสั่งรัน Update_to_GitHub_Desktop.bat ในเครื่องเพื่อส่งไฟล์ สร้าง Summary & Commit และ Auto Push ขึ้นเว็บอัตโนมัติครับ';
+      }
       if (typeof showToast === 'function') {
-        showToast('🚀 ส่งคำสั่งเปิด GitHub Desktop แล้ว! หากยังไม่ขึ้น สามารถดับเบิลคลิก Update_to_GitHub_Desktop.bat ได้ครับ', 'info');
+        showToast('🚀 ส่งคำสั่งอัปเดตและ Auto Push ขึ้น GitHub Web ผ่าน Windows แล้วครับ', 'info');
       }
 
-      // แสดง Modal แนะนำพร้อมปุ่มทางลัด
       const modal = document.getElementById('updateGithubModal');
       if (modal) {
         modal.style.display = 'flex';
@@ -10569,8 +10591,9 @@
     if (btn) {
       setTimeout(() => {
         btn.innerHTML = originalHtml;
+        btn.style.background = originalBg || '#24292f';
         btn.disabled = false;
-      }, 3000);
+      }, 4500);
     }
   };
 

@@ -62,9 +62,9 @@
               <span>พิมพ์</span>
             </button>
 
-            <!-- ปุ่ม Update 00AI to GitHub Desktop -->
+            <!-- ปุ่ม Update 00AI to GitHub Desktop (คลิกเดียว Auto Sync + Summary + Commit + Push ขึ้นเว็บ) -->
             <button class="btn btn-github" id="btnUpdateGithubDesktop" onclick="window.triggerUpdateToGithubDesktop()"
-              title="คัดลอกไฟล์ล่าสุดจาก 00AI ไปยัง C3-auc-dashboard สำหรับส่งขึ้น GitHub Desktop"
+              title="คลิกเดียวเพื่อส่งไฟล์ที่แก้ไข สร้างชื่อ Summary & Commit และ Auto Push ขึ้นเว็บ GitHub ทันที"
               style="background:#24292f; border:1px solid rgba(255,255,255,0.22); color:#f0f6fc; display:inline-flex; align-items:center; gap:6px; font-weight:600; cursor:pointer;">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                 <path
@@ -2754,24 +2754,15 @@
         <div class="modal-body" style="padding:1.25rem; display:flex; flex-direction:column; gap:0.85rem;">
           <div
             style="background:rgba(59,130,246,0.1); border-radius:8px; padding:0.85rem 1rem; border:1px solid rgba(59,130,246,0.25);">
-            <div style="font-weight:600; color:#60A5FA; font-size:0.92rem; margin-bottom:4px;">🚀 ซิงค์ไฟล์ล่าสุดจาก
-              00AI ไปยัง GitHub Desktop:</div>
-            <p style="margin:0; font-size:0.84rem; line-height:1.6; color:var(--text-main);">
-              ระบบจะคัดลอกไฟล์หน้าเว็บที่อัปเดตล่าสุดทั้งหมด (<code
-                style="background:rgba(0,0,0,0.3); padding:2px 5px; border-radius:4px;">index.html</code>, <code
-                style="background:rgba(0,0,0,0.3); padding:2px 5px; border-radius:4px;">js</code>, <code
-                style="background:rgba(0,0,0,0.3); padding:2px 5px; border-radius:4px;">css</code>, <code
-                style="background:rgba(0,0,0,0.3); padding:2px 5px; border-radius:4px;">assets</code>) จากโฟลเดอร์
-              <strong style="color:#A78BFA;">00AI</strong> ไปยัง <strong
-                style="color:#34D399;">C3-auc-dashboard</strong> พร้อมเปิดโปรแกรม <strong>GitHub Desktop</strong>
-              ขึ้นมาให้อัตโนมัติทันที
+            <div style="font-weight:600; color:#60A5FA; font-size:0.92rem; margin-bottom:4px;">🚀 อัปเดตขึ้นเว็บ GitHub แบบอัตโนมัติ (1-Click Auto Publish):</div>
+            <p id="updateGithubStatusDetail" style="margin:0; font-size:0.84rem; line-height:1.6; color:var(--text-main);">
+              ระบบจะส่งไฟล์แก้ไข (<code style="background:rgba(0,0,0,0.3); padding:2px 5px; border-radius:4px;">index.html</code>, <code style="background:rgba(0,0,0,0.3); padding:2px 5px; border-radius:4px;">js</code>, <code style="background:rgba(0,0,0,0.3); padding:2px 5px; border-radius:4px;">css</code>, <code style="background:rgba(0,0,0,0.3); padding:2px 5px; border-radius:4px;">assets</code>) จาก <strong style="color:#A78BFA;">00AI</strong> ไปยัง <strong style="color:#34D399;">C3-auc-dashboard</strong> พร้อมสร้างชื่อ Summary &amp; Commit และ Push origin ขึ้นเว็บอัตโนมัติครับ
             </p>
           </div>
           <div
             style="background:rgba(234,179,8,0.12); border-radius:8px; padding:0.75rem 1rem; border:1px solid rgba(234,179,8,0.3); font-size:0.83rem; color:#FDE047; line-height:1.5;">
-            💡 <strong>หากโปรแกรมไม่เด้งขึ้นมา:</strong> สามารถดับเบิลคลิกไฟล์ <code
-              style="background:rgba(0,0,0,0.35); padding:2px 6px; border-radius:4px; color:#fff;">Update_to_GitHub_Desktop.bat</code>
-            ในโฟลเดอร์ 00AI เพื่อซิงค์ไฟล์และเปิดโปรแกรมได้โดยตรงทันทีครับ
+            💡 <strong>กรณีใช้งานครั้งแรก หรือ Local Server ปิดอยู่:</strong> หากมีหน้าต่างให้ลงชื่อเข้าใช้ GitHub Credential Manager ให้กด Authorize ครั้งเดียว หรือดับเบิลคลิก <code
+              style="background:rgba(0,0,0,0.35); padding:2px 6px; border-radius:4px; color:#fff;">Update_to_GitHub_Desktop.bat</code> แล้วกด <strong>Push origin</strong> ใน GitHub Desktop ได้เลยครับ
           </div>
           <div style="font-size:0.82rem; color:var(--text-muted); line-height:1.5;">
             หลังจากโปรแกรมเปิดแล้ว ท่านเพียงสลับไปที่ <strong>GitHub Desktop</strong> แล้วพิมพ์ Summary จากนั้นกด
@@ -2877,8 +2868,8 @@
   <script src="js/materials.js?v=20261112_1626"></script>
   <script charset="utf-8" src="js/data_history_archive.js?v=20261105_1514"></script>
   <script src="js/office_dd.js?v=20261105_1620"></script>
-  <script charset="utf-8" src="js/data_history.js?v=20261112_1626"></script>
-  <script src="js/app.js?v=20261107_1335"></script>
+  <script charset="utf-8" src="js/data_history.js?v=20261113_0845"></script>
+  <script src="js/app.js?v=20261113_0845"></script>
   <script src="js/criteria_dropdown.js?v=20261017_2055"></script>
   <script src="js/presentation_pointer.js?v=20261027_1435"></script>
 </body>
