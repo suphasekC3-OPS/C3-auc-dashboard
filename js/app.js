@@ -10529,8 +10529,6 @@
       console.log('Local sync server not reachable or timed out, using OS protocol fallback:', err);
     }
 
-    const statusDetailEl = document.getElementById('updateGithubStatusDetail');
-
     if (reachable && apiResult && apiResult.pushed) {
       const webUrl = apiResult.webUrl || 'https://suphasekc3-ops.github.io/C3-auc-dashboard/';
       if (btn) {
@@ -10546,24 +10544,17 @@
         alert(toastText);
       }
     } else if (reachable && apiResult) {
-      // Auto Copy & Auto Commit เสร็จแล้ว แต่ Auto Push ยังไม่ผ่าน (เช่น ยังไม่เคยล็อกอิน GCM หรือเครือข่ายติดขัด) -> เปิด GitHub Desktop รอกด Push origin
+      // Auto Copy & Auto Commit เสร็จแล้ว แต่ Auto Push ยังไม่ผ่าน -> แสดง Toast แจ้งอย่างเดียว ไม่เปิด Modal กวนหน้าจอ
       if (btn) {
         btn.style.background = '#d97706';
         btn.innerHTML = '<span style="font-size:0.8rem; color:#ffffff;">⚠️ Commit แล้ว (รอกด Push ใน GitHub Desktop)</span>';
       }
       const fallbackMsg = apiResult.message || 'ส่งไฟล์และ Auto Commit เรียบร้อยแล้ว แต่ระบบยังไม่สามารถ Auto Push ได้ กรุณากด Push origin ใน GitHub Desktop ครับ';
-      if (statusDetailEl) {
-        statusDetailEl.textContent = fallbackMsg;
-      }
       if (typeof showToast === 'function') {
         showToast('⚠️ ' + fallbackMsg, 'info');
       }
-      const modal = document.getElementById('updateGithubModal');
-      if (modal) {
-        modal.style.display = 'flex';
-      }
     } else {
-      // 2. Fallback: เรียกใช้งาน update00ai:// protocol เพื่อให้ Windows รัน Update_to_GitHub_Desktop.bat (Auto Copy + Auto Commit + Auto Push)
+      // 2. Fallback: เรียกใช้งาน update00ai:// protocol เงียบๆ เพื่อให้ Windows รัน Update_to_GitHub_Desktop.bat โดยไม่เปิด Modal
       try {
         const frame = document.createElement('iframe');
         frame.style.display = 'none';
@@ -10573,18 +10564,11 @@
       } catch (_) {}
 
       if (btn) {
-        btn.innerHTML = '<span style="font-size:0.8rem; color:#34D399;">🚀 สั่งอัปเดตผ่านระบบ Windows แล้ว</span>';
-      }
-      if (statusDetailEl) {
-        statusDetailEl.textContent = 'กำลังสั่งรัน Update_to_GitHub_Desktop.bat ในเครื่องเพื่อส่งไฟล์ สร้าง Summary & Commit และ Auto Push ขึ้นเว็บอัตโนมัติครับ';
+        btn.style.background = '#059669';
+        btn.innerHTML = '<span style="font-size:0.8rem; color:#ffffff;">🚀 สั่งอัปเดตขึ้นเว็บแล้ว!</span>';
       }
       if (typeof showToast === 'function') {
-        showToast('🚀 ส่งคำสั่งอัปเดตและ Auto Push ขึ้น GitHub Web ผ่าน Windows แล้วครับ', 'info');
-      }
-
-      const modal = document.getElementById('updateGithubModal');
-      if (modal) {
-        modal.style.display = 'flex';
+        showToast('🚀 ส่งคำสั่งอัปเดตและ Auto Push ขึ้น GitHub Web แบบเบื้องหลังเรียบร้อยแล้วครับ', 'success');
       }
     }
 

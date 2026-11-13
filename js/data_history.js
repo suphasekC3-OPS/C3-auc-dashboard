@@ -580,6 +580,22 @@
    */
   const BASE_AUDIT_LOGS = [
     {
+      id: 'log_000_hide_github_update_modal_silent_bg',
+      timestamp: '2026-11-13 08:55:00',
+      timestampTh: '13 พ.ย. 2569, 08:55 น.',
+      type: 'EDIT',
+      typeBadge: 'ซ่อนป๊อปอัป GitHub Modal & รันเบื้องหลัง',
+      badgeClass: 'badge-type-edit',
+      title: 'ซ่อนหน้าต่างป๊อปอัป #updateGithubModal เมื่อกดปุ่ม Update 00AI to GitHub Desktop และเริ่มรันเซิร์ฟเวอร์เบื้องหลัง localhost:8089 ให้ทำงานต่อเนื่อง',
+      targetSubject: 'ฟังก์ชัน triggerUpdateToGithubDesktop ใน js/app.js, เซิร์ฟเวอร์ scratch/serve.ps1 และ index.html',
+      storageFile: 'js/app.js, index.html, js/data_history.js',
+      changeSummary: 'ปรับให้เมื่อกดปุ่ม Update 00AI to GitHub Desktop ไม่ต้องแสดงหน้าต่างป๊อปอัป #updateGithubModal กวนหน้าจอในทุกกรณี ให้ทำงานเบื้องหลังทั้งหมดและแจ้งสถานะสั้นๆ ผ่านปุ่มและ Toast แทน พร้อมเปิดเซิร์ฟเวอร์ localhost:8089 ให้ทำงานต่อเนื่อง',
+      details: '1) นำคำสั่งเปิด #updateGithubModal (modal.style.display = "flex") ออกจากทุก branch ใน window.triggerUpdateToGithubDesktop (js/app.js)\n2) เปิดใช้เซิร์ฟเวอร์ scratch/serve.ps1 บน localhost:8089 เป็น Daemon ต่อเนื่องเพื่อให้การกดปุ่มบนหน้าเว็บเรียก /api/sync-github ทำงานเบื้องหลังทันทีโดยไม่ติดหน้าต่างป๊อปอัปใดๆ\n3) อัปเดต Cache Busters ใน index.html เป็น ?v=20261113_0855',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "ไม่ต้องแสดงได้ไหม" (พร้อมภาพหน้าต่าง Modal Update 00AI to GitHub Desktop)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ'
+    },
+    {
       id: 'log_000_one_click_web_github_auto_publish',
       timestamp: '2026-11-13 08:45:00',
       timestampTh: '13 พ.ย. 2569, 08:45 น.',
