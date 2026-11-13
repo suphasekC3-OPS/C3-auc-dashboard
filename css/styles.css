@@ -6071,6 +6071,14 @@ body.has-fullscreen-table {
   color: #fff;
 }
 
+#btnUpdateGithubDesktop[data-readonly="true"],
+#btnUpdateGithubDesktop[data-readonly="true"]:hover,
+#btnUpdateGithubDesktop[data-readonly="true"]:active {
+  cursor: default !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
 @keyframes slideInRight {
   from {
     transform: translateX(100%);

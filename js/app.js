@@ -10521,10 +10521,35 @@
     }
   };
 
+  function isGitHubPagesReadonlyHost() {
+    try {
+      const host = String(window.location.hostname || '').toLowerCase();
+      if (host.endsWith('github.io')) return true;
+      if (window.location.protocol !== 'file:' && host !== 'localhost' && host !== '127.0.0.1') {
+        return true;
+      }
+      return false;
+    } catch (_) {
+      return false;
+    }
+  }
+
   // Sync persisted GitHub last-update timestamp on startup if newer than embedded HTML
+  // On public GitHub Pages (github.io), lock #btnUpdateGithubDesktop into display-only mode
   (function initGithubLastUpdateBadge() {
     try {
+      const btn = document.getElementById('btnUpdateGithubDesktop');
       const el = document.getElementById('githubLastUpdateText');
+      if (isGitHubPagesReadonlyHost()) {
+        if (btn) {
+          btn.setAttribute('data-readonly', 'true');
+          btn.setAttribute('aria-disabled', 'true');
+          btn.removeAttribute('onclick');
+          btn.style.cursor = 'default';
+          btn.title = 'แสดงสถานะวันที่และเวลาที่อัปเดตข้อมูลล่าสุด (อ่านอย่างเดียว)';
+        }
+        return;
+      }
       if (!el) return;
       const htmlEpoch = Number(el.getAttribute('data-epoch') || 0);
       const savedEpoch = Number(localStorage.getItem('auc_github_last_update_epoch') || 0);
@@ -10537,6 +10562,7 @@
   })();
 
   window.triggerUpdateToGithubDesktop = async function () {
+    if (isGitHubPagesReadonlyHost()) return;
     const btn = document.getElementById('btnUpdateGithubDesktop');
     const titleEl = document.getElementById('githubBtnTitle');
     const lastEl = document.getElementById('githubLastUpdateText');

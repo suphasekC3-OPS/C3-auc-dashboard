@@ -580,6 +580,22 @@
    */
   const BASE_AUDIT_LOGS = [
     {
+      id: 'log_000_readonly_github_btn_on_github_pages',
+      timestamp: '2026-11-13 10:20:00',
+      timestampTh: '13 พ.ย. 2569, 10:20 น.',
+      type: 'EDIT',
+      typeBadge: 'โหมดแสดงผลอย่างเดียวบนเว็บ GitHub',
+      badgeClass: 'badge-type-edit',
+      title: 'ตั้งค่าปุ่ม Update to Github บน GitHub Pages เป็นโหมดแสดงสถานะอย่างเดียว',
+      targetSubject: 'ปุ่ม #btnUpdateGithubDesktop บน https://suphasekc3-ops.github.io/C3-auc-dashboard/',
+      storageFile: 'js/app.js, css/styles.css, index.html, js/data_history.js',
+      changeSummary: 'เมื่อเปิดหน้าเว็บผ่าน GitHub Pages (github.io) ปุ่ม Update to Github จะแสดงชื่อและวันที่-เวลาอัปเดตล่าสุดให้อ่านอย่างเดียว ไม่สามารถกดสั่ง Sync ได้',
+      details: 'เพิ่มฟังก์ชัน isGitHubPagesReadonlyHost() ใน js/app.js เพื่อตรวจสอบโดเมน หากเปิดบน *.github.io หรือโดเมนสาธารณะ (ไม่ใช่ file://, localhost, 127.0.0.1) ระบบจะตั้ง data-readonly="true", ถอด onclick, เปลี่ยนเคอร์เซอร์เป็น default และข้ามการทำงานใน triggerUpdateToGithubDesktop() โดยคงหน้าตาและวัน-เวลาอัปเดตไว้ครบถ้วน',
+      sourceFile: 'คำสั่งผู้ใช้งาน',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง'
+    },
+    {
       id: 'log_000_persistent_github_sync_toast_with_close_btn',
       timestamp: '2026-11-13 10:13:00',
       timestampTh: '13 พ.ย. 2569, 10:13 น.',
