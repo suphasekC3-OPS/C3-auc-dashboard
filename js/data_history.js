@@ -580,6 +580,22 @@
    */
   const BASE_AUDIT_LOGS = [
     {
+      id: 'log_000_persistent_github_sync_toast_with_close_btn',
+      timestamp: '2026-11-13 10:13:00',
+      timestampTh: '13 พ.ย. 2569, 10:13 น.',
+      type: 'EDIT',
+      typeBadge: 'ปรับปรุงแจ้งเตือน GitHub',
+      badgeClass: 'badge-type-edit',
+      title: 'ให้กล่องแจ้งเตือนผล Update to Github แสดงค้างไว้จนกว่าจะกดปุ่มปิด',
+      targetSubject: 'ฟังก์ชัน showToast() และผลลัพธ์ของปุ่ม Update to Github',
+      storageFile: 'js/app.js, css/styles.css, index.html, js/data_history.js',
+      changeSummary: 'เพิ่มโหมด persistent ใน showToast() พร้อมปุ่ม "ปิด ✕" เพื่อให้ข้อความผลลัพธ์หลังอัปเดต GitHub แสดงค้างไว้จนกว่าผู้ใช้จะกดปิดเอง',
+      details: 'ปรับ showToast(msg, type, options) ให้รองรับ options.persistent และ options.tag ใน js/app.js โดยเมื่อกดปุ่ม #btnUpdateGithubDesktop ข้อความสถานะมุมขวาล่างจะไม่หายไปเองหลัง 3.5 วินาที และแสดงปุ่ม .toast-close-btn ("ปิด ✕") ให้คลิกปิดเมื่ออ่านจบ พร้อมเพิ่มสไตล์ปุ่มปิดใน css/styles.css',
+      sourceFile: 'คำสั่งผู้ใช้งาน',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ'
+    },
+    {
       id: 'log_000_remove_presentation_pointer_button',
       timestamp: '2026-11-13 09:59:00',
       timestampTh: '13 พ.ย. 2569, 09:59 น.',

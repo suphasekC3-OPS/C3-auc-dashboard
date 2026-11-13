@@ -9798,7 +9798,7 @@
     }
   }
 
-  function showToast(msg, type = 'info') {
+  function showToast(msg, type = 'info', options = {}) {
     let container = document.getElementById('toastContainer');
     if (!container) {
       container = document.createElement('div');
@@ -9807,24 +9807,46 @@
       document.body.appendChild(container);
     }
 
+    const persistent = Boolean(options && (options.persistent || options.duration === 0));
+    const duration = typeof (options && options.duration) === 'number' ? options.duration : 3500;
+
+    if (options && options.tag) {
+      Array.from(container.children).forEach((el) => {
+        if (el.getAttribute('data-toast-tag') === options.tag) el.remove();
+      });
+    }
+
     const toast = document.createElement('div');
-    toast.className = `toast-msg toast-${type}`;
+    toast.className = `toast-msg toast-${type}${persistent ? ' toast-persistent' : ''}`;
+    if (options && options.tag) {
+      toast.setAttribute('data-toast-tag', options.tag);
+    }
     toast.innerHTML = `
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0; margin-top:1px;">
         <circle cx="12" cy="12" r="10"></circle>
         <line x1="12" y1="8" x2="12" y2="12"></line>
         <line x1="12" y1="16" x2="12.01" y2="16"></line>
       </svg>
-      <span>${escapeHtml(msg)}</span>
+      <span style="flex:1; word-break:break-word;">${escapeHtml(msg)}</span>
+      ${persistent ? '<button type="button" class="toast-close-btn" title="ปิดการแจ้งเตือน">ปิด ✕</button>' : ''}
     `;
 
-    container.appendChild(toast);
-    setTimeout(() => {
+    const dismissToast = () => {
       toast.style.opacity = '0';
       toast.style.transform = 'translateX(100%)';
       toast.style.transition = 'all 0.3s ease';
       setTimeout(() => toast.remove(), 300);
-    }, 3500);
+    };
+
+    if (persistent) {
+      const closeBtn = toast.querySelector('.toast-close-btn');
+      if (closeBtn) closeBtn.addEventListener('click', dismissToast);
+    }
+
+    container.appendChild(toast);
+    if (!persistent && duration > 0) {
+      setTimeout(dismissToast, duration);
+    }
   }
 
   // Formatting Helpers
@@ -10570,7 +10592,7 @@
         ? `✅ อัปเดต & Push ขึ้นเว็บสำเร็จ (${apiResult.changedCount} ไฟล์) | ${apiResult.summary} — รอ GitHub Pages รีเฟรช ~30-60 วินาที`
         : `✅ ข้อมูลบนเว็บ GitHub เป็นเวอร์ชันล่าสุดอยู่แล้ว (${webUrl})`;
       if (typeof showToast === 'function') {
-        showToast(toastText, 'success');
+        showToast(toastText, 'success', { persistent: true, tag: 'github-sync' });
       } else {
         alert(toastText);
       }
@@ -10582,7 +10604,7 @@
       }
       const fallbackMsg = apiResult.message || 'ส่งไฟล์และ Auto Commit เรียบร้อยแล้ว แต่ระบบยังไม่สามารถ Auto Push ได้ กรุณากด Push origin ใน GitHub Desktop ครับ';
       if (typeof showToast === 'function') {
-        showToast('⚠️ ' + fallbackMsg, 'info');
+        showToast('⚠️ ' + fallbackMsg, 'info', { persistent: true, tag: 'github-sync' });
       }
     } else {
       // 2. Fallback: เรียกใช้งาน update00ai:// protocol เงียบๆ เพื่อให้ Windows รัน Update_to_GitHub_Desktop.bat โดยไม่เปิด Modal
@@ -10599,7 +10621,7 @@
         if (titleEl) titleEl.textContent = '🚀 สั่งอัปเดตแล้ว!';
       }
       if (typeof showToast === 'function') {
-        showToast('🚀 ส่งคำสั่งอัปเดตและ Auto Push ขึ้น GitHub Web แบบเบื้องหลังเรียบร้อยแล้วครับ', 'success');
+        showToast('🚀 ส่งคำสั่งอัปเดตและ Auto Push ขึ้น GitHub Web แบบเบื้องหลังเรียบร้อยแล้วครับ', 'success', { persistent: true, tag: 'github-sync' });
       }
     }
 
