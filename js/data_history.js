@@ -580,6 +580,22 @@
    */
   const BASE_AUDIT_LOGS = [
     {
+      id: 'log_000_remove_presentation_pointer_button',
+      timestamp: '2026-11-13 09:59:00',
+      timestampTh: '13 พ.ย. 2569, 09:59 น.',
+      type: 'EDIT',
+      typeBadge: 'ลบปุ่มพอยเตอร์บน Header',
+      badgeClass: 'badge-type-edit',
+      title: 'นำปุ่มพอยเตอร์ (#presenterPointerWidget) ออกจากแถบ Header',
+      targetSubject: 'แถบ Header Actions (#presenterPointerWidget)',
+      storageFile: 'index.html, js/data_history.js',
+      changeSummary: 'ลบปุ่มพอยเตอร์ เมนูตัวเลือกรูปแบบเคอร์เซอร์ และการโหลด js/presentation_pointer.js ออกจาก index.html',
+      details: 'นำโครงสร้าง HTML ของ #presenterPointerWidget (#btnTogglePointerMenu และ #presenterPointerMenu) พร้อมแท็ก <script src="js/presentation_pointer.js"> ออกจากหน้า index.html เพื่อลดความรกของแถบเมนูด้านบน โดยคงไฟล์ js/presentation_pointer.js ไว้ในโฟลเดอร์หากต้องการนำกลับมาใช้ในภายหลัง',
+      sourceFile: 'คำสั่งผู้ใช้งาน',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ'
+    },
+    {
       id: 'log_000_rename_btn_update_to_github_and_timestamp',
       timestamp: '2026-11-13 09:00:00',
       timestampTh: '13 พ.ย. 2569, 09:00 น.',

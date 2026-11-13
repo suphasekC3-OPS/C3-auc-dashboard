@@ -72,7 +72,7 @@
               </svg>
               <span style="display:flex; flex-direction:column; align-items:flex-start; text-align:left;">
                 <span id="githubBtnTitle" style="font-size:0.84rem; font-weight:700; color:#f0f6fc;">Update to Github</span>
-                <span id="githubLastUpdateText" data-epoch="1794538608933" style="font-size:0.67rem; font-weight:500; color:#FDE047; opacity:0.95;">อัปเดตล่าสุด: 13 พ.ย. 69, 09:56 น.</span>
+                <span id="githubLastUpdateText" data-epoch="1794538816996" style="font-size:0.67rem; font-weight:500; color:#FDE047; opacity:0.95;">อัปเดตล่าสุด: 13 พ.ย. 69, 10:00 น.</span>
               </span>
             </button>
 
@@ -278,129 +278,6 @@
                   <button type="button" class="btn-palette-collapse" id="btnCollapsePaletteFooter">
                     <span>ย่อซ่อนแถบ</span>
                   </button>
-                </div>
-              </div>
-            </div>
-
-            <!-- ตัวเลือกรูปแบบ Pointer สำหรับการนำเสนอ (Presentation Pointer) -->
-            <div class="presenter-pointer-widget" id="presenterPointerWidget">
-              <button type="button" class="btn-pointer-toggle" id="btnTogglePointerMenu"
-                title="เลือกรูปแบบพอยน์เตอร์นำเสนอ (กด P สลับเร็ว)">
-                <span class="pointer-btn-icon" id="pointerBtnIcon">🖱️</span>
-                <span class="pointer-btn-label">พอยน์เตอร์</span>
-                <span class="pointer-status-pill" id="pointerStatusPill">ปกติ</span>
-                <svg class="pointer-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2.5">
-                  <polyline points="6 9 12 15 18 9"></polyline>
-                </svg>
-              </button>
-
-              <!-- เมนูตัวเลือกรูปแบบ Pointer Dropdown -->
-              <div class="presenter-pointer-menu" id="presenterPointerMenu" role="menu">
-                <div class="pointer-menu-header">
-                  <div class="pointer-menu-title-wrap">
-                    <div class="pointer-menu-title">
-                      <span class="pointer-title-icon">🎯</span>
-                      <span>รูปแบบพอยน์เตอร์นำเสนอ</span>
-                    </div>
-                    <div class="pointer-menu-subtitle">เลือกสไตล์เคอร์เซอร์เพื่อดึงดูดสายตาขณะบรรยาย</div>
-                  </div>
-                  <button type="button" class="pointer-btn-close" id="btnClosePointerMenu" title="ปิดเมนู">✕</button>
-                </div>
-
-                <div class="pointer-options-list">
-                  <!-- 1. จุดแดงทึบ (Solid Red Point - วงกลมทึบแดง) -->
-                  <button type="button" class="pointer-option-item" data-mode="red-solid">
-                    <div class="pointer-opt-icon-box solid-red-box">
-                      <span class="dot-preview dot-red-solid"></span>
-                    </div>
-                    <div class="pointer-opt-info">
-                      <div class="pointer-opt-name">จุดแดงทึบ (Solid Red Point)</div>
-                      <div class="pointer-opt-desc">จุดวงกลมสีแดงทึบ คมชัด ชี้ระบุตำแหน่งชัดเจนทุกหน้าจอ</div>
-                    </div>
-                    <span class="pointer-opt-badge hot">ยอดนิยม</span>
-                  </button>
-
-                  <!-- 2. เลเซอร์แดงนีออน -->
-                  <button type="button" class="pointer-option-item" data-mode="laser">
-                    <div class="pointer-opt-icon-box laser-glow">
-                      <span class="dot-preview dot-laser-red"></span>
-                    </div>
-                    <div class="pointer-opt-info">
-                      <div class="pointer-opt-name">เลเซอร์แดงนีออน (Red Laser)</div>
-                      <div class="pointer-opt-desc">จุดเลเซอร์สีแดงสด พร้อมรัศมีนีออนเรืองแสงสะดุดตา</div>
-                    </div>
-                    <span class="pointer-opt-badge clear">เรืองแสง</span>
-                  </button>
-
-                  <!-- 3. สปอตไลท์ -->
-                  <button type="button" class="pointer-option-item" data-mode="spotlight">
-                    <div class="pointer-opt-icon-box spotlight-glow">
-                      <span class="dot-preview dot-spotlight">🔦</span>
-                    </div>
-                    <div class="pointer-opt-info">
-                      <div class="pointer-opt-name">สปอตไลท์ส่องเน้น (Spotlight Focus)</div>
-                      <div class="pointer-opt-desc">เน้นจุดที่เมาส์ชี้ ลดทอนแสงรอบข้างให้ฉากหลังมืดลง</div>
-                    </div>
-                    <span class="pointer-opt-badge focus">โฟกัส</span>
-                  </button>
-
-                  <!-- 4. วงแหวนฟ้า -->
-                  <button type="button" class="pointer-option-item" data-mode="halo">
-                    <div class="pointer-opt-icon-box halo-glow">
-                      <span class="dot-preview dot-halo-cyan"></span>
-                    </div>
-                    <div class="pointer-opt-info">
-                      <div class="pointer-opt-name">วงแหวนนีออนฟ้า (Cyan Halo)</div>
-                      <div class="pointer-opt-desc">วงแหวนคลื่นพลังงานสีฟ้า ไม่บดบังตัวอักษรหรือกราฟ</div>
-                    </div>
-                    <span class="pointer-opt-badge clear">โปร่งใส</span>
-                  </button>
-
-                  <!-- 5. เลเซอร์เขียว -->
-                  <button type="button" class="pointer-option-item" data-mode="green-dot">
-                    <div class="pointer-opt-icon-box green-glow">
-                      <span class="dot-preview dot-laser-green"></span>
-                    </div>
-                    <div class="pointer-opt-info">
-                      <div class="pointer-opt-name">เลเซอร์เขียวนีออน (Neon Green)</div>
-                      <div class="pointer-opt-desc">จุดเลเซอร์เขียวสด สว่างคมชัดพิเศษบนทุกเฉดสี</div>
-                    </div>
-                  </button>
-
-                  <!-- 6. ลูกศรทอง -->
-                  <button type="button" class="pointer-option-item" data-mode="gold-arrow">
-                    <div class="pointer-opt-icon-box gold-glow">
-                      <span class="dot-preview dot-arrow-gold">🌟</span>
-                    </div>
-                    <div class="pointer-opt-info">
-                      <div class="pointer-opt-name">ลูกศรทอง 3D (Executive Gold)</div>
-                      <div class="pointer-opt-desc">ลูกศรพรีเซนเตอร์สีทองพรีเมียม สำหรับผู้บริหาร</div>
-                    </div>
-                    <span class="pointer-opt-badge vip">VIP</span>
-                  </button>
-
-                  <div class="pointer-menu-divider"></div>
-
-                  <!-- 7. เมาส์ปกติ -->
-                  <button type="button" class="pointer-option-item active" data-mode="normal">
-                    <div class="pointer-opt-icon-box normal-box">
-                      <span class="dot-preview dot-mouse-normal">🖱️</span>
-                    </div>
-                    <div class="pointer-opt-info">
-                      <div class="pointer-opt-name">เมาส์ปกติ (Default Mouse)</div>
-                      <div class="pointer-opt-desc">คืนค่าเคอร์เซอร์เมาส์ลูกศรมาตรฐานของระบบ</div>
-                    </div>
-                    <span class="pointer-opt-badge default">ค่าเริ่มต้น</span>
-                  </button>
-                </div>
-
-                <!-- Footer with hotkey tips -->
-                <div class="pointer-menu-footer">
-                  <div class="pointer-shortcut-tips">
-                    <span class="shortcut-pill"><kbd>P</kbd> สลับเปิด/ปิดพอยน์เตอร์</span>
-                    <span class="shortcut-pill"><kbd>Esc</kbd> คืนเมาส์ปกติ</span>
-                  </div>
                 </div>
               </div>
             </div>
@@ -2871,10 +2748,9 @@
   <script src="js/materials.js?v=20261112_1626"></script>
   <script charset="utf-8" src="js/data_history_archive.js?v=20261105_1514"></script>
   <script src="js/office_dd.js?v=20261105_1620"></script>
-  <script charset="utf-8" src="js/data_history.js?v=20261113_0859"></script>
+  <script charset="utf-8" src="js/data_history.js?v=20261113_0959"></script>
   <script src="js/app.js?v=20261113_0859"></script>
   <script src="js/criteria_dropdown.js?v=20261017_2055"></script>
-  <script src="js/presentation_pointer.js?v=20261027_1435"></script>
 </body>
 
 </html>
