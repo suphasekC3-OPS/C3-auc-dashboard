@@ -95,10 +95,10 @@
       groupNo: '04',
       name: '04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx',
       category: 'SAP ZBUDR064 & Costs',
-      importDate: '2026-11-13 10:14:14',
-      importDateTh: '13 พ.ย. 2569, 10:14 น.',
-      lastModifiedTh: '13 พ.ย. 2569, 10:14 น. (ไฟล์ล่าสุด)',
-      sizeText: '338.1 KB',
+      importDate: '2026-11-18 08:22:40',
+      importDateTh: '18 พ.ย. 2569, 08:22 น.',
+      lastModifiedTh: '18 พ.ย. 2569, 08:22 น. (ไฟล์ล่าสุด)',
+      sizeText: '338.2 KB',
       recordCount: 2083,
       status: 'active',
       statusText: 'ผสานข้อมูลสำเร็จ',
@@ -469,7 +469,7 @@
       role: 'จัดเก็บข้อมูลหลักงาน WBS (ไฟล์ 03 + 04 + 05 + 06 + Google Sheet)',
       recordsCount: '2,083 รายการ (41 คอลัมน์)',
       fileSize: '2.43 MB',
-      updatedAt: '13 พ.ย. 2569, 10:30 น.',
+      updatedAt: '18 พ.ย. 2569, 08:26 น.',
       status: '100% ฐานข้อมูลอัปเดตล่าสุด',
       variable: 'window.AUC_WBS_REMAINING_DATA'
     },
@@ -477,9 +477,9 @@
       path: 'js/wbs.js',
       title: 'โมดูลจัดการหน้าตาราง WBS & ตัวกรอง',
       role: 'ตรรกะคำนวณตัวกรอง, ค้นหาสถานะ SAP, จัดกลุ่มสรุปผล',
-      recordsCount: '7,612 บรรทัดคำสั่ง',
-      fileSize: '338 KB',
-      updatedAt: '13 พ.ย. 2569, 10:30 น.',
+      recordsCount: '7,838 บรรทัดคำสั่ง',
+      fileSize: '378 KB',
+      updatedAt: '18 พ.ย. 2569, 08:26 น.',
       status: 'อัปเดตล่าสุดวันนี้',
       variable: 'window.renderWbsTab, getFilteredWbsData'
     },
@@ -579,6 +579,22 @@
    * System Pre-defined Audit & Modification Log Entries
    */
   const BASE_AUDIT_LOGS = [
+    {
+      id: 'log_000_update_f4_nov18',
+      timestamp: '2026-11-18 08:26:00',
+      timestampTh: '18 พ.ย. 2569, 08:26 น.',
+      type: 'IMPORT',
+      typeBadge: 'อัปเดตไฟล์ 04 WBS (18 พ.ย. 69)',
+      badgeClass: 'badge-type-import',
+      title: 'นำเข้าและอัปเดตข้อมูลไฟล์ 04 WBS ZBUDR064 ล่าสุด วันที่ 18 พ.ย. 2569',
+      targetSubject: 'ตารางข้อมูล WBS คงเหลือ (js/data_wbs.js) และป้ายวันที่ไฟล์ 04',
+      storageFile: 'js/data_wbs.js, js/wbs.js, index.html, js/data_history.js',
+      changeSummary: 'อัปเดตไฟล์ 04 (18 พ.ย. 2569, 08:22 น.): สถานะ SAP เปลี่ยน 128 งาน (%เบิกพัสดุเปลี่ยน 127 งาน, %คชจ.เปลี่ยน 37 งาน) | CLSD F4: เดิม 386 -> ใหม่ 432 งาน (+46 งาน, +8,202,680.77 บาท รวม 99,687,591.23 บาท) | CLSD F2: เดิม 37 -> ใหม่ 31 งาน (-6 งาน)',
+      details: '==========================================================================\n🟣 สรุปความแตกต่าง ไฟล์ 04 WBS (ZBUDR064) | ประมวลผลเมื่อ 18 พ.ย. 2569, 08:26 น.\n==========================================================================\n• ไฟล์ที่นำเข้า : 04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx (แก้ไขล่าสุด: 18 พ.ย. 2569, 08:22 น., ขนาด 338.2 KB)\n• ยอดงานปิดแล้ว (CLSD F4) : เดิม 386 งาน (91,484,910.46 บาท) -> ใหม่ 432 งาน (99,687,591.23 บาท) [+46 งาน / +8,202,680.77 บาท]\n• ยอดงานสถานะ (CLSD F2) : เดิม 37 งาน (6,771,278.34 บาท) -> ใหม่ 31 งาน (6,220,685.27 บาท) [-6 งาน / -550,593.07 บาท]\n• จำนวนงานที่จับคู่ตรงกัน : 2,083 / 2,083 รายการ (ดัชนีไฟล์ 04 จำนวน 2,069 รายการ)\n• จำนวนงานที่สถานะ SAP เปลี่ยนแปลง : 128 งาน (สถานะเต็มเปลี่ยน 139 งาน)\n• จำนวนงานที่ % เบิกพัสดุ เปลี่ยน : 127 งาน | % เบิก คชจ. เปลี่ยน : 37 งาน | คชจ.หน้างานเปลี่ยน : 37 งาน\n• สรุปกลุ่มการเปลี่ยนสถานะ SAP (128 งาน):\n  - REL D1 -> TECO D2 : 28 งาน | TECO D2 -> CLSD F4 : 25 งาน | REL C1 -> TECO D2 : 13 งาน | REL C3 -> TECO D2 : 11 งาน\n  - TECO D2 -> TECO D3 : 10 งาน | TECO D3 -> CLSD F4 : 9 งาน | CLSD F2 -> CLSD F4 : 8 งาน | REL C3 -> REL D1 : 6 งาน\n  - REL C1 -> REL D1 : 4 งาน | REL C1 -> REL C4 : 2 งาน | REL C3 -> REL C1 : 2 งาน | REL D1 -> CLSD F4 : 2 งาน | TECO D2 -> CLSD F2 : 2 งาน\n  - REL C1 -> CLSD F4 : 1 งาน | REL C1 -> REL C3 : 1 งาน | REL C2 -> REL D1 : 1 งาน | REL C5 -> TECO D2 : 1 งาน | REL D1 -> REL C1 : 1 งาน | TECO F0 -> CLSD F4 : 1 งาน\n• ตัวอย่างรายการที่สถานะเปลี่ยน (มูลค่า AUC สูงสุด):\n  1) I-68-I-KKHXX.IS.1007 (กรย.): TECO D2 -> TECO D3 (AUC 8,071,334.05 บาท)\n  2) I-68-I-TRYB8.IQ.1005 (กฟส.ไทรโยค): REL C3 -> TECO D2 (AUC 2,446,183.88 บาท)\n  3) I-69-I-SAPME.MC.0001 (กฟส.สามพราน): REL D1 -> CLSD F4 (AUC 2,342,344.66 บาท)\n  4) I-68-I-DMT69.JA.2204 (กฟส.ด่านมะขามเตี้ย): REL D1 -> TECO D2 (AUC 1,952,814.75 บาท)\n  5) I-68-I-DACE8.IQ.1003 (กฟส.ด่านช้าง): REL D1 -> TECO D2 (AUC 1,503,682.66 บาท)\n',
+      sourceFile: '04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx (แก้ไขล่าสุด 18 พ.ย. 2569, 08:22 น.)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'สูง'
+    },
     {
       id: 'log_000_rename_job_denom_tag_to_base_total',
       timestamp: '2026-11-13 14:16:00',
