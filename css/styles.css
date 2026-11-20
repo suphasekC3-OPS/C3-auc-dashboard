@@ -5482,6 +5482,97 @@ body.has-fullscreen-table #btnReturnNormalScreen,
   box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
 }
 
+.wbs-clear-sel-badges {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.wbs-clear-sel-count-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 19px;
+  padding: 0 6px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  background: rgba(239, 68, 68, 0.22);
+  color: #FCA5A5;
+  border: 1px solid rgba(248, 113, 113, 0.45);
+  white-space: nowrap;
+}
+
+.btn-wbs-clear-table-selections.has-selection {
+  background: rgba(239, 68, 68, 0.24);
+  border-color: rgba(248, 113, 113, 0.75);
+  color: #FFE4E6;
+}
+
+.btn-wbs-clear-table-selections.has-selection .wbs-clear-sel-count-badge.is-cb {
+  background: #EF4444;
+  color: #FFFFFF;
+  border-color: #FCA5A5;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.55);
+}
+
+.btn-wbs-clear-table-selections.has-selection .wbs-clear-sel-count-badge.is-sap {
+  background: rgba(14, 165, 233, 0.88);
+  color: #FFFFFF;
+  border-color: #7DD3FC;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.45);
+}
+
+.btn-wbs-clear-table-selections.has-selection .wbs-clear-sel-count-badge.is-plan {
+  background: rgba(168, 85, 247, 0.9);
+  color: #FFFFFF;
+  border-color: #D8B4FE;
+  box-shadow: 0 0 8px rgba(168, 85, 247, 0.45);
+}
+
+[data-theme="light"] .wbs-clear-sel-count-badge {
+  background: rgba(220, 38, 38, 0.14);
+  color: #B91C1C;
+  border-color: rgba(220, 38, 38, 0.35);
+}
+
+[data-theme="light"] .btn-wbs-clear-table-selections.has-selection {
+  background: rgba(239, 68, 68, 0.16);
+  border-color: #DC2626;
+  color: #B91C1C;
+}
+
+[data-theme="light"] .btn-wbs-clear-table-selections.has-selection .wbs-clear-sel-count-badge.is-cb {
+  background: #DC2626;
+  color: #FFFFFF;
+  border-color: #DC2626;
+  box-shadow: none;
+}
+
+[data-theme="light"] .btn-wbs-clear-table-selections.has-selection .wbs-clear-sel-count-badge.is-sap {
+  background: #0284C7;
+  color: #FFFFFF;
+  border-color: #0284C7;
+  box-shadow: none;
+}
+
+[data-theme="light"] .btn-wbs-clear-table-selections.has-selection .wbs-clear-sel-count-badge.is-plan {
+  background: #7C3AED;
+  color: #FFFFFF;
+  border-color: #7C3AED;
+  box-shadow: none;
+}
+
+[data-theme="light"] .btn-wbs-clear-table-selections:hover .wbs-clear-sel-count-badge {
+  background: #FFFFFF;
+  color: #DC2626;
+  border-color: #FFFFFF;
+  box-shadow: none;
+}
+
 .btn-wbs-fullscreen {
   display: inline-flex;
   align-items: center;

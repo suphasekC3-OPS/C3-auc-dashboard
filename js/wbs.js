@@ -378,11 +378,11 @@
 
   /**
    * Helper: สร้าง Signature รวมของตัวกรองทั้งหมดที่ส่งผลต่อตาราง WBS
-   * ตามคำสั่งผู้ใช้งาน: "ให้ล้างค่าที่เลือกปุ่ม check box หลังจากเปลี่ยนตัวกรองใหม่ ทุกครั้ง"
-   * ครอบคลุมทั้งตัวกรองแถบด้านบน (เดือน, เกณฑ์วัด, พื้นที่, กอง/กฟฟ., ค้นหา)
-   * และตัวกรองในตาราง WBS (งบ, กฟฟ., ช่างคุมงาน, งวดบัญชี, ค้นหา, การ์ดสถานะ SAP, หัวตารางสถานะ SAP/งวดบัญชี)
+   * ตามคำสั่งผู้ใช้งาน: ล้างค่าที่เลือกปุ่ม Checkbox เมื่อเปลี่ยนตัวกรองหลัก
+   * แต่ "ไม่" เคลียร์ Checkbox เมื่อเปลี่ยน 2 ปุ่มตัวกรองบนหัวตาราง (สถานะ SAP: tableSapStatuses และ แผนปิดงาน: tablePlanCloseStatuses)
+   * @param {boolean} includeTableHeaderFilters - true = รวมตัวกรองหัวตารางทั้ง 2 ปุ่ม (สำหรับตรวจการเรนเดอร์ซ้ำ), false = ไม่รวม (สำหรับตรวจการล้าง Checkbox)
    */
-  function getWbsFilterSignature() {
+  function getWbsFilterSignature(includeTableHeaderFilters = true) {
     const globalState = window.state || {};
     const globalFilters = globalState.filters || {};
 
@@ -415,14 +415,20 @@
     const localPlanClose = wbsState.planClose || 'ALL';
     const localSap = wbsState.sapStatus || 'ALL';
     const selSap = Array.from(wbsState.selectedSapStatuses || []).sort().join('|');
-    const tblSap = Array.from(wbsState.tableSapStatuses || []).sort().join('|');
-    const tblPlan = Array.from(wbsState.tablePlanCloseStatuses || []).sort().join('|');
 
-    return [
+    const parts = [
       topMonth, topCrit, topProv, topOff, topSearch,
       localSearch, localBudget, localOffice, localEng, localPlanClose,
-      localSap, selSap, tblSap, tblPlan
-    ].join(':::');
+      localSap, selSap
+    ];
+
+    if (includeTableHeaderFilters) {
+      const tblSap = Array.from(wbsState.tableSapStatuses || []).sort().join('|');
+      const tblPlan = Array.from(wbsState.tablePlanCloseStatuses || []).sort().join('|');
+      parts.push(tblSap, tblPlan);
+    }
+
+    return parts.join(':::');
   }
 
   let _wbsDataVersion = 1;
@@ -687,19 +693,20 @@
     const currentCrit = globalFilters.criteria || (document.getElementById('filterCriteria') ? document.getElementById('filterCriteria').value : 'ALL');
     const excludedSap = getExcludedSapForCriteria(currentCrit);
 
-    // Auto-initialize or reset selection when ANY filter changes (Default: ทุกช่องไม่ถูกเลือก Unchecked)
-    // ตามคำสั่งผู้ใช้งาน: "ให้ล้างค่าที่เลือกปุ่ม check box หลังจากเปลี่ยนตัวกรองใหม่ ทุกครั้ง"
-    const currentFilterSig = getWbsFilterSignature();
+    // Auto-initialize or reset selection when main filters change (Default: ทุกช่องไม่ถูกเลือก Unchecked)
+    // ยกเว้น 2 ปุ่มตัวกรองบนหัวตาราง (สถานะ SAP: tableSapStatuses และ แผนปิดงาน: tablePlanCloseStatuses) จะไม่ล้าง Checkbox ตามคำสั่งผู้ใช้งาน
+    const currentSelectionSig = getWbsFilterSignature(false);
+    const currentFullSig = getWbsFilterSignature(true);
     if (!wbsState.selectionInitialized) {
       if (wbsState.selectedWbs) wbsState.selectedWbs.clear();
       wbsState.selectionInitialized = true;
-      wbsState.lastFilterSignature = currentFilterSig;
+      wbsState.lastFilterSignature = currentSelectionSig;
       wbsState.selectionCriteriaKey = currentCrit;
-    } else if (wbsState.lastFilterSignature !== currentFilterSig) {
+    } else if (wbsState.lastFilterSignature !== currentSelectionSig) {
       if (wbsState.selectedWbs && wbsState.selectedWbs.size > 0) {
         wbsState.selectedWbs.clear();
       }
-      wbsState.lastFilterSignature = currentFilterSig;
+      wbsState.lastFilterSignature = currentSelectionSig;
       wbsState.selectionCriteriaKey = currentCrit;
       wbsState.page = 1;
     }
@@ -719,7 +726,7 @@
       return;
     }
     wbsState._dirtyRender = false;
-    _lastRenderedWbsSig = currentFilterSig;
+    _lastRenderedWbsSig = currentFullSig;
     _lastRenderedWbsVersion = _wbsDataVersion;
 
     const baseFiltered = getFilteredWbsData(true, true, true, true);
@@ -2249,6 +2256,44 @@
         miniCountEl.textContent = '0';
         miniCountEl.style.display = 'none';
       }
+    }
+
+    // อัปเดตตัวเลขจำนวนที่เลือกบนปุ่ม "ล้างตัวเลือกทั้งหมดในตารางนี้" (#btnClearWbsTableSelections)
+    // แสดงครบทั้ง 2 ปุ่มตัวกรองหัวตาราง (สถานะ SAP, แผนปิดงาน) และจำนวนที่ติ๊ก Checkbox
+    const tableClearCountEl = document.getElementById('wbsClearTableSelCount');
+    const tableClearBtn = document.getElementById('btnClearWbsTableSelections');
+    const sapFilterList = wbsState.tableSapStatuses ? Array.from(wbsState.tableSapStatuses) : [];
+    const planFilterList = wbsState.tablePlanCloseStatuses ? Array.from(wbsState.tablePlanCloseStatuses) : [];
+    const sapFilterCnt = sapFilterList.length;
+    const planFilterCnt = planFilterList.length;
+    const hasAnyTableSel = (count > 0 || sapFilterCnt > 0 || planFilterCnt > 0);
+
+    if (tableClearCountEl) {
+      if (!hasAnyTableSel) {
+        tableClearCountEl.innerHTML = '<span class="wbs-clear-sel-count-badge is-zero">0</span>';
+      } else {
+        const badges = [];
+        if (count > 0) {
+          badges.push(`<span class="wbs-clear-sel-count-badge is-cb">☑ ${count.toLocaleString('th-TH')}</span>`);
+        }
+        if (sapFilterCnt > 0) {
+          badges.push(`<span class="wbs-clear-sel-count-badge is-sap">SAP ${sapFilterCnt}</span>`);
+        }
+        if (planFilterCnt > 0) {
+          badges.push(`<span class="wbs-clear-sel-count-badge is-plan">แผน ${planFilterCnt}</span>`);
+        }
+        tableClearCountEl.innerHTML = badges.join('');
+      }
+    }
+    if (tableClearBtn) {
+      tableClearBtn.classList.toggle('has-selection', hasAnyTableSel);
+      const tipParts = [`Checkbox: ${count.toLocaleString('th-TH')} งาน`];
+      if (sapFilterCnt > 0) tipParts.push(`สถานะ SAP (${sapFilterCnt}): ${sapFilterList.join(', ')}`);
+      if (planFilterCnt > 0) {
+        const planNames = planFilterList.map(p => p === 'EMPTY' ? 'ยังไม่ระบุงวดบัญชี' : p);
+        tipParts.push(`แผนปิดงาน (${planFilterCnt}): ${planNames.join(', ')}`);
+      }
+      tableClearBtn.title = `ล้างตัวเลือกทั้งหมดในตารางนี้ (${tipParts.join(' | ')})`;
     }
 
     if (count > 0) {
@@ -6961,13 +7006,14 @@
     const scheduleWbsGlobalSync = (delayMs = 16) => {
       clearTimeout(globalSyncTimer);
       globalSyncTimer = setTimeout(() => {
-        const currentSig = getWbsFilterSignature();
+        const currentFullSig = getWbsFilterSignature(true);
+        const currentSelectionSig = getWbsFilterSignature(false);
         const pane = document.getElementById('tab-wbs');
         const isWbsActive = !!(pane && pane.classList.contains('active'));
-        if (isWbsActive && _lastRenderedWbsSig === currentSig && _lastRenderedWbsVersion === _wbsDataVersion && !wbsState._dirtyRender) {
+        if (isWbsActive && _lastRenderedWbsSig === currentFullSig && _lastRenderedWbsVersion === _wbsDataVersion && !wbsState._dirtyRender) {
           return;
         }
-        if (!isWbsActive && wbsState.lastFilterSignature === currentSig && _lastRenderedWbsVersion === _wbsDataVersion && wbsState._dirtyRender) {
+        if (!isWbsActive && wbsState.lastFilterSignature === currentSelectionSig && _lastRenderedWbsVersion === _wbsDataVersion && wbsState._dirtyRender) {
           return;
         }
         wbsState.page = 1;
