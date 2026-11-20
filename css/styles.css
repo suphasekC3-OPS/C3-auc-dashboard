@@ -22237,3 +22237,488 @@ body.pointer-mode-gold * {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ==========================================================================
+   MOBILE RESPONSIVE SUITE (<= 768px & <= 480px ONLY — Zero impact on PC > 768px)
+   ========================================================================== */
+@media (max-width: 768px) {
+  html,
+  body,
+  .app-wrapper,
+  .main-container,
+  .app-layout-grid,
+  .dashboard-main-area,
+  .tab-pane {
+    max-width: 100vw !important;
+    overflow-x: clip !important;
+    box-sizing: border-box;
+  }
+
+  .main-container {
+    padding: 0.6rem 0.55rem 1.35rem !important;
+  }
+
+  /* 1. Unstick top section so scrolling shows full content on mobile */
+  .sticky-top-section {
+    position: static !important;
+    top: auto !important;
+  }
+
+  /* 2. Compact Header & Action Buttons */
+  .app-header {
+    padding: 0.55rem 0.65rem !important;
+  }
+
+  .header-inner {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.55rem !important;
+  }
+
+  .brand-section {
+    gap: 0.55rem !important;
+    align-items: center !important;
+  }
+
+  .pea-emblem {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    padding: 4px !important;
+  }
+
+  .brand-title-group h1 {
+    font-size: 0.96rem !important;
+    line-height: 1.28 !important;
+    white-space: normal !important;
+  }
+
+  .brand-subtitle {
+    font-size: 0.70rem !important;
+    line-height: 1.3 !important;
+    flex-wrap: wrap !important;
+    gap: 4px !important;
+  }
+
+  .header-actions {
+    width: 100% !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    gap: 0.38rem !important;
+  }
+
+  .header-actions .btn,
+  .header-actions .palette-fab {
+    padding: 0.36rem 0.62rem !important;
+    font-size: 0.75rem !important;
+  }
+
+  /* Hide desktop-only controls on mobile phones */
+  #btnPrintReport,
+  #presenterPointerBtn,
+  .presenter-fab,
+  .presenter-toolbar {
+    display: none !important;
+  }
+
+  #btnUpdateGithubDesktop {
+    padding: 4px 9px !important;
+  }
+
+  /* Center palette settings popup safely inside mobile viewport */
+  .palette-panel {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translate(-50%, -50%) !important;
+    width: calc(100vw - 24px) !important;
+    max-width: 400px !important;
+    max-height: 85vh !important;
+    overflow-y: auto !important;
+  }
+
+  /* 3. Smooth Horizontal Swipe Navigation Tabs */
+  .nav-tabs-bar {
+    padding: 0.3rem 0.5rem !important;
+  }
+
+  .nav-tabs-inner {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    gap: 0.35rem !important;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+  }
+
+  .nav-tabs-inner::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-tab-btn,
+  .btn-nav-tabs-lock {
+    flex: 0 0 auto !important;
+    padding: 0.42rem 0.68rem !important;
+    font-size: 0.78rem !important;
+    white-space: nowrap !important;
+  }
+
+  /* 4. Organized 2-Column Top Filter Grid */
+  .top-sticky-filter-bar {
+    padding: 0.55rem 0.6rem !important;
+    overflow: visible !important;
+  }
+
+  .top-filter-inner {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0.45rem !important;
+    align-items: stretch !important;
+  }
+
+  .top-filter-lead {
+    display: none !important;
+  }
+
+  .top-filter-group {
+    width: 100% !important;
+    min-width: 0 !important;
+    flex: unset !important;
+    padding: 0.28rem 0.42rem !important;
+    gap: 0.28rem !important;
+    box-sizing: border-box !important;
+  }
+
+  .top-filter-label {
+    font-size: 0.72rem !important;
+    white-space: nowrap !important;
+    flex-shrink: 0;
+  }
+
+  .top-filter-label svg {
+    display: none !important;
+  }
+
+  .top-filter-select {
+    min-width: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    font-size: 0.78rem !important;
+    padding: 0.22rem 0.35rem !important;
+  }
+
+  .top-filter-search-item {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .top-filter-search-box,
+  .top-filter-search-box input {
+    width: 100% !important;
+    min-width: 0 !important;
+    font-size: 0.82rem !important;
+  }
+
+  #btnResetFilters {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 0.42rem 0.75rem !important;
+    font-size: 0.8rem !important;
+  }
+
+  /* 5. Dashboard Overview Tab Cards & Charts */
+  .top-executive-grid,
+  .charts-grid,
+  .provinces-grid,
+  .criteria-cards-grid,
+  .kpi-cards-grid,
+  .kpi-cards-grid-3rows {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
+    width: 100% !important;
+  }
+
+  .top-executive-left-deck,
+  .top-executive-right-deck {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  .top-selection-strip {
+    padding: 0.48rem 0.65rem !important;
+    margin-bottom: 0.65rem !important;
+  }
+
+  .top-selection-flow {
+    flex-wrap: wrap !important;
+    gap: 3px 6px !important;
+    font-size: 0.76rem !important;
+    line-height: 1.4 !important;
+  }
+
+  .content-card,
+  .province-card,
+  .table-card,
+  .wbs-kpi-comparison-card {
+    padding: 0.8rem 0.7rem !important;
+    border-radius: 12px !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .chart-card-header,
+  .chart-header-controls {
+    flex-wrap: wrap !important;
+    gap: 0.4rem !important;
+  }
+
+  .chart-container {
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* 6. WBS Tab Mobile Layout */
+  .wbs-comparison-unified-grid {
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+  }
+
+  .wbs-side-summary-col,
+  .wbs-comparison-main-col {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    flex: 1 1 auto !important;
+  }
+
+  #wbsExecutiveDonutKpiCard .wbs-kpi-card-dates-stack {
+    flex-wrap: wrap !important;
+    justify-content: flex-start !important;
+    white-space: normal !important;
+    gap: 2px 6px !important;
+  }
+
+  #wbsExecutiveDonutKpiCard #wbsKpiSapDateText,
+  #wbsExecutiveDonutKpiCard #wbsKpiAucDateText {
+    font-size: 0.68rem !important;
+    white-space: normal !important;
+  }
+
+  .wbs-kpi-formula-box {
+    padding: 5px 7px !important;
+    font-size: 0.68rem !important;
+  }
+
+  .wbs-kpi-formula-box .formula-grid-row {
+    grid-template-columns: 48px 1fr auto !important;
+    gap: 4px !important;
+  }
+
+  .wbs-kpi-formula-box .formula-expr {
+    white-space: normal !important;
+    font-size: 0.66rem !important;
+  }
+
+  .wbs-kpi-formula-box .formula-res {
+    min-width: 52px !important;
+    font-size: 0.68rem !important;
+  }
+
+  .wbs-kpi-comp-header,
+  .wbs-kpi-bar-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.42rem !important;
+  }
+
+  .wbs-kpi-bar-header .bar-header-left,
+  .wbs-kpi-bar-header .bar-header-right {
+    flex-wrap: wrap !important;
+    gap: 0.35rem !important;
+    width: 100% !important;
+  }
+
+  .wbs-chart-header {
+    flex-wrap: wrap !important;
+    gap: 0.5rem !important;
+    align-items: flex-start !important;
+  }
+
+  .wbs-header-dates-plain {
+    flex-wrap: wrap !important;
+    gap: 0.45rem 0.75rem !important;
+    width: 100% !important;
+    justify-content: flex-start !important;
+  }
+
+  .wbs-chart-header-actions-area,
+  .wbs-chart-btn-group {
+    width: 100% !important;
+    flex-wrap: wrap !important;
+    gap: 0.35rem !important;
+  }
+
+  .wbs-sap-summary-integrated {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #wbsActiveFilterPills {
+    flex-wrap: wrap !important;
+    gap: 0.35rem !important;
+  }
+
+  .wbs-pill {
+    white-space: normal !important;
+    font-size: 0.72rem !important;
+    line-height: 1.3 !important;
+  }
+
+  /* Fix WBS Table Top Toolbar (override desktop nowrap so buttons wrap cleanly) */
+  .wbs-table-top-meta-bar {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    flex-wrap: wrap !important;
+    white-space: normal !important;
+    padding: 0.55rem 0.6rem !important;
+    gap: 0.45rem !important;
+  }
+
+  .wbs-table-top-meta-bar > div:first-child {
+    width: 100% !important;
+    flex-wrap: wrap !important;
+    gap: 0.4rem !important;
+  }
+
+  .wbs-table-active-criteria {
+    max-width: 100% !important;
+    white-space: normal !important;
+    font-size: 0.78rem !important;
+  }
+
+  .wbs-table-toolbar-actions {
+    width: 100% !important;
+    flex-wrap: wrap !important;
+    white-space: normal !important;
+    justify-content: flex-start !important;
+    margin-left: 0 !important;
+    gap: 0.36rem !important;
+  }
+
+  .wbs-table-toolbar-actions button {
+    font-size: 0.74rem !important;
+    padding: 0.34rem 0.55rem !important;
+  }
+
+  /* Hide custom left scrollbar on touch phones & dock floating target card so it never covers rows */
+  #wbsLeftScrollbar {
+    display: none !important;
+  }
+
+  #wbsTableFloatingSelection {
+    position: relative !important;
+    inset: auto !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    transform: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0.5rem 0 0 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 7. Materials Tab (#tab-materials) Mobile Layout */
+  .mat-sub-filter-bar {
+    position: static !important;
+    top: auto !important;
+    padding: 0.6rem !important;
+    gap: 0.45rem !important;
+  }
+
+  .mat-top-file-dates-bar {
+    flex-wrap: wrap !important;
+    gap: 3px 8px !important;
+    font-size: 0.72rem !important;
+  }
+
+  .mat-sf-group {
+    width: 100% !important;
+    min-width: 0 !important;
+    flex: 1 1 100% !important;
+  }
+
+  .mat-desc-dd-panel {
+    width: calc(100vw - 28px) !important;
+    max-width: calc(100vw - 28px) !important;
+    left: 0 !important;
+  }
+
+  .mat-summary-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0.55rem !important;
+  }
+
+  /* 8. Tables, Dropdown Popovers & Modals */
+  .table-responsive,
+  .wbs-table-responsive,
+  #matTableResponsive {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100% !important;
+  }
+
+  .wbs-col-dropdown-panel,
+  #matColDropdownPanel,
+  .wbs-sap-th-dropdown-panel,
+  .wbs-plan-th-dropdown-panel {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translate(-50%, -50%) !important;
+    width: calc(100vw - 24px) !important;
+    max-width: 380px !important;
+    max-height: 78vh !important;
+    overflow-y: auto !important;
+    z-index: 10050 !important;
+  }
+
+  .modal-content,
+  .dh-model-modal-content {
+    width: calc(100vw - 20px) !important;
+    max-width: 100% !important;
+    max-height: 90vh !important;
+    padding: 0.9rem !important;
+    margin: 0.5rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .top-filter-inner {
+    grid-template-columns: 1fr !important;
+  }
+
+  #wbsExecutiveDonutKpiCard .wbs-kpi-date-sep {
+    display: none !important;
+  }
+
+  .wbs-val-line,
+  .exec-total-main-val {
+    font-size: 1.22rem !important;
+  }
+
+  .exec-progress-big-val {
+    font-size: 1.32rem !important;
+  }
+}

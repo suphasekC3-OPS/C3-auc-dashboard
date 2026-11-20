@@ -580,6 +580,22 @@
    */
   const BASE_AUDIT_LOGS = [
     {
+      id: 'log_000_add_mobile_responsive_layout_css',
+      timestamp: '2026-11-20 15:35:00',
+      timestampTh: '20 พ.ย. 2569, 15:35 น.',
+      type: 'EDIT',
+      typeBadge: 'ปรับแต่งหน้าจอมือถือ (Mobile Responsive)',
+      badgeClass: 'badge-type-edit',
+      title: 'เพิ่มชุด CSS Responsive สำหรับโทรศัพท์มือถือ (<= 768px และ <= 480px) โดยไม่กระทบหน้าจอ PC',
+      targetSubject: 'การแสดงผลทุกแท็บบนมือถือ (Header, แถบตัวกรอง, ภาพรวม, ตาราง WBS, รายการพัสดุ, Popover/Modal)',
+      storageFile: 'css/styles.css, index.html, js/data_history.js',
+      changeSummary: 'เพิ่มชุด @media (max-width: 768px) และ @media (max-width: 480px) ปลด Sticky ส่วนหัวบนมือถือ จัดตัวกรองเป็นกริด 1-2 คอลัมน์ แถบเมนูเลื่อนปัดซ้าย-ขวา ปรับปุ่มหัวตาราง WBS ให้ห่อบรรทัด จัดการ์ดเป้าหมายสีฟ้าไม่ให้บังตาราง ปลด Sticky ตัวกรองหน้ารายการพัสดุ และจัด Popover/Modal ให้อยู่กึ่งกลางจอมือถือ',
+      details: 'เพิ่มบล็อก Mobile Responsive Suite ท้ายไฟล์ css/styles.css ครอบด้วย @media (max-width: 768px) และ @media (max-width: 480px) เท่านั้น จึงไม่มีผลต่อหน้าจอ PC (> 768px): ป้องกัน overflow-x: clip, ยกเลิก position: sticky ของ .sticky-top-section และ .mat-sub-filter-bar, ซ่อนปุ่มเฉพาะคอมพ์ (#btnPrintReport, ตัวชี้เลเซอร์, #wbsLeftScrollbar), จัด .wbs-table-top-meta-bar/.wbs-table-toolbar-actions ให้ wrap สวยงาม, ยึด #wbsTableFloatingSelection เป็นบล็อกเต็มความกว้างไม่บังแถวตาราง และจัด Dropdown/Modal ให้อยู่กลางจอ',
+      sourceFile: 'คำสั่งผู้ใช้งาน',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง'
+    },
+    {
       id: 'log_000_update_f8_nov20_full_0021_0022',
       timestamp: '2026-11-20 15:24:00',
       timestampTh: '20 พ.ย. 2569, 15:24 น.',
