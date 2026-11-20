@@ -5447,21 +5447,22 @@ body.has-fullscreen-table #btnReturnNormalScreen,
   gap: 0.42rem;
   padding: 0.35rem 0.75rem;
   border-radius: var(--radius-sm, 8px);
-  background: rgba(239, 68, 68, 0.14);
-  border: 1px solid rgba(248, 113, 113, 0.45);
-  color: #F87171;
+  background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%);
+  border: 1px solid #F87171;
+  color: #FFFFFF;
   font-size: 0.82rem;
   font-weight: 700;
   cursor: pointer;
+  box-shadow: 0 2px 10px rgba(220, 38, 38, 0.42);
   transition: all var(--transition-fast, 0.2s ease);
   white-space: nowrap;
 }
 
 .btn-wbs-clear-table-selections:hover {
-  background: rgba(239, 68, 68, 0.28);
-  border-color: #EF4444;
+  background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+  border-color: #FCA5A5;
   color: #FFFFFF;
-  box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.58);
   transform: translateY(-1px);
 }
 
@@ -5470,16 +5471,17 @@ body.has-fullscreen-table #btnReturnNormalScreen,
 }
 
 [data-theme="light"] .btn-wbs-clear-table-selections {
-  background: rgba(239, 68, 68, 0.1);
-  border-color: rgba(239, 68, 68, 0.35);
-  color: #DC2626;
+  background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%);
+  border-color: #B91C1C;
+  color: #FFFFFF;
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.32);
 }
 
 [data-theme="light"] .btn-wbs-clear-table-selections:hover {
-  background: #DC2626;
-  border-color: #B91C1C;
+  background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+  border-color: #DC2626;
   color: #FFFFFF;
-  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.45);
 }
 
 .wbs-clear-sel-badges {
@@ -5500,77 +5502,77 @@ body.has-fullscreen-table #btnReturnNormalScreen,
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   line-height: 1;
-  background: rgba(239, 68, 68, 0.22);
-  color: #FCA5A5;
-  border: 1px solid rgba(248, 113, 113, 0.45);
+  background: rgba(0, 0, 0, 0.26);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.38);
   white-space: nowrap;
 }
 
 .btn-wbs-clear-table-selections.has-selection {
-  background: rgba(239, 68, 68, 0.24);
-  border-color: rgba(248, 113, 113, 0.75);
-  color: #FFE4E6;
+  background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+  border-color: #FECACA;
+  color: #FFFFFF;
+  box-shadow: 0 0 14px rgba(239, 68, 68, 0.65);
 }
 
 .btn-wbs-clear-table-selections.has-selection .wbs-clear-sel-count-badge.is-cb {
-  background: #EF4444;
+  background: linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%);
   color: #FFFFFF;
-  border-color: #FCA5A5;
-  box-shadow: 0 0 8px rgba(239, 68, 68, 0.55);
+  border-color: #BAE6FD;
+  box-shadow: 0 1px 5px rgba(2, 132, 199, 0.55);
 }
 
 .btn-wbs-clear-table-selections.has-selection .wbs-clear-sel-count-badge.is-sap {
-  background: rgba(14, 165, 233, 0.88);
+  background: #059669;
   color: #FFFFFF;
-  border-color: #7DD3FC;
-  box-shadow: 0 0 8px rgba(56, 189, 248, 0.45);
+  border-color: #A7F3D0;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.28);
 }
 
 .btn-wbs-clear-table-selections.has-selection .wbs-clear-sel-count-badge.is-plan {
-  background: rgba(168, 85, 247, 0.9);
+  background: #7C3AED;
   color: #FFFFFF;
-  border-color: #D8B4FE;
-  box-shadow: 0 0 8px rgba(168, 85, 247, 0.45);
+  border-color: #E9D5FF;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.28);
 }
 
 [data-theme="light"] .wbs-clear-sel-count-badge {
-  background: rgba(220, 38, 38, 0.14);
-  color: #B91C1C;
-  border-color: rgba(220, 38, 38, 0.35);
+  background: rgba(0, 0, 0, 0.24);
+  color: #FFFFFF;
+  border-color: rgba(255, 255, 255, 0.42);
 }
 
 [data-theme="light"] .btn-wbs-clear-table-selections.has-selection {
-  background: rgba(239, 68, 68, 0.16);
-  border-color: #DC2626;
-  color: #B91C1C;
+  background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+  border-color: #991B1B;
+  color: #FFFFFF;
 }
 
 [data-theme="light"] .btn-wbs-clear-table-selections.has-selection .wbs-clear-sel-count-badge.is-cb {
-  background: #DC2626;
+  background: linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%);
   color: #FFFFFF;
-  border-color: #DC2626;
+  border-color: #BAE6FD;
   box-shadow: none;
 }
 
 [data-theme="light"] .btn-wbs-clear-table-selections.has-selection .wbs-clear-sel-count-badge.is-sap {
-  background: #0284C7;
+  background: #059669;
   color: #FFFFFF;
-  border-color: #0284C7;
+  border-color: #A7F3D0;
   box-shadow: none;
 }
 
 [data-theme="light"] .btn-wbs-clear-table-selections.has-selection .wbs-clear-sel-count-badge.is-plan {
   background: #7C3AED;
   color: #FFFFFF;
-  border-color: #7C3AED;
+  border-color: #E9D5FF;
   box-shadow: none;
 }
 
-[data-theme="light"] .btn-wbs-clear-table-selections:hover .wbs-clear-sel-count-badge {
-  background: #FFFFFF;
-  color: #DC2626;
-  border-color: #FFFFFF;
-  box-shadow: none;
+[data-theme="light"] .btn-wbs-clear-table-selections:hover .wbs-clear-sel-count-badge.is-zero {
+  background: rgba(0, 0, 0, 0.3);
+  color: #FFFFFF;
+  border-color: rgba(255, 255, 255, 0.55);
 }
 
 .btn-wbs-fullscreen {
@@ -5579,22 +5581,41 @@ body.has-fullscreen-table #btnReturnNormalScreen,
   gap: 0.42rem;
   padding: 0.35rem 0.75rem;
   border-radius: var(--radius-sm, 8px);
-  background: rgba(236, 72, 153, 0.15);
-  border: 1px solid rgba(244, 114, 182, 0.45);
-  color: #F472B6;
+  background: linear-gradient(135deg, #9333EA 0%, #6D28D9 100%);
+  border: 1px solid #C084FC;
+  color: #FFFFFF;
   font-size: 0.82rem;
   font-weight: 700;
   cursor: pointer;
+  box-shadow: 0 2px 10px rgba(147, 51, 234, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.22);
   transition: all var(--transition-fast);
   white-space: nowrap;
 }
 
 .btn-wbs-fullscreen:hover {
-  background: rgba(236, 72, 153, 0.3);
-  border-color: #F472B6;
+  background: linear-gradient(135deg, #A855F7 0%, #7C3AED 100%);
+  border-color: #E9D5FF;
   color: #FFFFFF;
-  box-shadow: 0 0 10px rgba(236, 72, 153, 0.4);
+  box-shadow: 0 4px 16px rgba(168, 85, 247, 0.62), inset 0 1px 0 rgba(255, 255, 255, 0.3);
   transform: translateY(-1px);
+}
+
+.btn-wbs-fullscreen:active {
+  transform: translateY(0);
+}
+
+[data-theme="light"] .btn-wbs-fullscreen {
+  background: linear-gradient(135deg, #7C3AED 0%, #5B21B6 100%);
+  border-color: #6D28D9;
+  color: #FFFFFF;
+  box-shadow: 0 2px 8px rgba(109, 40, 217, 0.32);
+}
+
+[data-theme="light"] .btn-wbs-fullscreen:hover {
+  background: linear-gradient(135deg, #9333EA 0%, #6D28D9 100%);
+  border-color: #7C3AED;
+  color: #FFFFFF;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.45);
 }
 
 .table-card.is-fullscreen {
