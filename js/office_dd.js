@@ -16,9 +16,13 @@
     btn.type = 'button';
     btn.id = 'filterOfficeBtn';
     btn.className = 'form-select top-filter-select office-dd-btn';
-    btn.innerHTML = '<span class="office-dd-btn-text"></span>';
+    btn.setAttribute('aria-haspopup', 'listbox');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.innerHTML =
+      '<span class="office-dd-btn-text"></span>' +
+      '<svg class="office-dd-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>';
     sel.parentNode.insertBefore(btn, sel.nextSibling);
-    const textEl = btn.firstChild;
+    const textEl = btn.querySelector('.office-dd-btn-text');
 
     const panel = document.createElement('div');
     panel.className = 'office-dd-panel';
@@ -50,7 +54,11 @@
       }
     }
 
-    function close() { panel.style.display = 'none'; }
+    function close() {
+      panel.style.display = 'none';
+      btn.classList.remove('is-open');
+      btn.setAttribute('aria-expanded', 'false');
+    }
 
     function open() {
       const r = btn.getBoundingClientRect();
@@ -59,6 +67,8 @@
       panel.style.top = (r.bottom + 6) + 'px';
       panel.style.minWidth = Math.max(r.width, 220) + 'px';
       panel.style.display = 'block';
+      btn.classList.add('is-open');
+      btn.setAttribute('aria-expanded', 'true');
       const s = panel.querySelector('.is-selected');
       if (s && s.scrollIntoView) s.scrollIntoView({ block: 'nearest' });
     }

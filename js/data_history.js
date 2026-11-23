@@ -95,10 +95,10 @@
       groupNo: '04',
       name: '04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx',
       category: 'SAP ZBUDR064 & Costs',
-      importDate: '2026-11-20 11:36:58',
-      importDateTh: '20 พ.ย. 2569, 11:36 น.',
-      lastModifiedTh: '20 พ.ย. 2569, 11:36 น. (ไฟล์ล่าสุด)',
-      sizeText: '338.0 KB',
+      importDate: '2026-11-23 09:35:02',
+      importDateTh: '23 พ.ย. 2569, 09:35 น.',
+      lastModifiedTh: '23 พ.ย. 2569, 09:35 น. (ไฟล์ล่าสุด)',
+      sizeText: '338.2 KB',
       recordCount: 2083,
       status: 'active',
       statusText: 'ผสานข้อมูลสำเร็จ',
@@ -469,7 +469,7 @@
       role: 'จัดเก็บข้อมูลหลักงาน WBS (ไฟล์ 03 + 04 + 05 + 06 + Google Sheet)',
       recordsCount: '2,083 รายการ (41 คอลัมน์)',
       fileSize: '2.43 MB',
-      updatedAt: '20 พ.ย. 2569, 11:41 น.',
+      updatedAt: '23 พ.ย. 2569, 09:40 น.',
       status: '100% ฐานข้อมูลอัปเดตล่าสุด',
       variable: 'window.AUC_WBS_REMAINING_DATA'
     },
@@ -479,7 +479,7 @@
       role: 'ตรรกะคำนวณตัวกรอง, ค้นหาสถานะ SAP, จัดกลุ่มสรุปผล',
       recordsCount: '7,876 บรรทัดคำสั่ง',
       fileSize: '381 KB',
-      updatedAt: '20 พ.ย. 2569, 11:42 น.',
+      updatedAt: '23 พ.ย. 2569, 09:41 น.',
       status: 'อัปเดตล่าสุดวันนี้',
       variable: 'window.renderWbsTab, getFilteredWbsData'
     },
@@ -509,7 +509,7 @@
       role: 'เชื่อม WBS ไฟล์ 03 -> 07 (องค์ประกอบ WBS) & 04 (ข้อกำหนดโครงการ /WBS), ตัวกรอง, เลือกคอลัมน์ 49 คอลัมน์, ส่งออก CSV',
       recordsCount: '49 คอลัมน์เลือกแสดงได้',
       fileSize: '195 KB',
-      updatedAt: '20 พ.ย. 2569, 15:15 น.',
+      updatedAt: '23 พ.ย. 2569, 09:41 น.',
       status: 'อัปเดตล่าสุดวันนี้',
       variable: 'window.renderMaterialsTab'
     },
@@ -579,6 +579,38 @@
    * System Pre-defined Audit & Modification Log Entries
    */
   const BASE_AUDIT_LOGS = [
+    {
+      id: 'log_000_fix_office_dd_chevron_nov23',
+      timestamp: '2026-11-23 09:48:00',
+      timestampTh: '23 พ.ย. 2569, 09:48 น.',
+      type: 'EDIT',
+      typeBadge: 'แก้ไขลูกศรตัวกรอง กอง/กฟฟ.',
+      badgeClass: 'badge-type-edit',
+      title: 'นำลูกศร Dropdown (Chevron) ของตัวกรอง กอง/กฟฟ. กลับคืนมาให้ตรงกับตัวกรองพื้นที่',
+      targetSubject: 'ปุ่มตัวกรอง กอง/กฟฟ. (#filterOfficeBtn) บนแถบตัวกรองหลักด้านบน',
+      storageFile: 'js/office_dd.js, css/styles.css, index.html, js/data_history.js',
+      changeSummary: 'เพิ่มไอคอนลูกศรลง (.office-dd-chevron) ให้ปุ่มตัวกรอง กอง/กฟฟ. (#filterOfficeBtn) พร้อมหมุนกลับ 180 องศาเมื่อเปิดรายการ และจัดตำแหน่งชิดขวาให้เหมือนตัวกรองพื้นที่/เกณฑ์วัด',
+      details: '• สาเหตุ: ปุ่ม custom dropdown #filterOfficeBtn ที่แทนที่ <select id="filterOffice"> ใน js/office_dd.js มีเฉพาะข้อความ <span class="office-dd-btn-text"> ไม่มีไอคอนลูกศรลง (Chevron)\n• การแก้ไข:\n  1) เพิ่ม SVG <svg class="office-dd-chevron"> (12x12, stroke-width 2.6, สี currentColor) ใน js/office_dd.js พร้อมสลับคลาส .is-open และ aria-expanded เมื่อเปิด/ปิดรายการ\n  2) ปรับสไตล์ .top-filter-select.office-dd-btn ใน css/styles.css เป็น inline-flex จัดข้อความชิดซ้ายและลูกศรชิดขวา พร้อมหมุน 180° เมื่อเปิดเมนู (รองรับทั้งโหมดมืด/สว่าง และหน้าจอมือถือ)\n  3) อัปเดต Cache Buster (?v=20261123_0948) ใน index.html',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "วงเหลือง ตัวกรอง กอง/กฟฟ หายไป ให้กลับเข้ามาใหม่"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ'
+    },
+    {
+      id: 'log_000_update_f4_nov23',
+      timestamp: '2026-11-23 09:41:00',
+      timestampTh: '23 พ.ย. 2569, 09:41 น.',
+      type: 'IMPORT',
+      typeBadge: 'อัปเดตไฟล์ 04 WBS (23 พ.ย. 69)',
+      badgeClass: 'badge-type-import',
+      title: 'นำเข้าและอัปเดตข้อมูลไฟล์ 04 WBS ZBUDR064 ล่าสุด วันที่ 23 พ.ย. 2569',
+      targetSubject: 'ตารางข้อมูล WBS คงเหลือ (js/data_wbs.js) และป้ายวันที่ไฟล์ 04 ทุกจุด (WBS & รายการพัสดุ)',
+      storageFile: 'js/data_wbs.js, js/wbs.js, js/materials.js, index.html, js/data_history.js',
+      changeSummary: 'อัปเดตไฟล์ 04 (23 พ.ย. 2569, 09:35 น.): สถานะ SAP เปลี่ยน 55 งาน (%เบิกพัสดุเปลี่ยน 28 งาน, %คชจ.เปลี่ยน 16 งาน) | CLSD F4: เดิม 451 -> ใหม่ 457 งาน (+6 งาน, +3,634,191.25 บาท รวม 109,673,003.25 บาท) | CLSD F2: เดิม 31 -> ใหม่ 30 งาน (-1 งาน)',
+      details: '==========================================================================\n🟣 สรุปความแตกต่าง ไฟล์ 04 WBS (ZBUDR064) | ประมวลผลเมื่อ 23 พ.ย. 2569, 09:41 น.\n==========================================================================\n• ไฟล์ที่นำเข้า : 04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx (แก้ไขล่าสุด: 23 พ.ย. 2569, 09:35 น., ขนาด 338.2 KB)\n• ยอดงานปิดแล้ว (CLSD F4) : เดิม 451 งาน (106,038,812.00 บาท) -> ใหม่ 457 งาน (109,673,003.25 บาท) [+6 งาน / +3,634,191.25 บาท]\n• ยอดงานสถานะ (CLSD F2) : เดิม 31 งาน (6,676,514.37 บาท) -> ใหม่ 30 งาน (6,208,511.13 บาท) [-1 งาน / -468,003.24 บาท]\n• จำนวนงานที่จับคู่ตรงกัน : 2,083 / 2,083 รายการ (ดัชนีไฟล์ 04 จำนวน 2,069 รายการ)\n• จำนวนงานที่สถานะ SAP เปลี่ยนแปลง : 55 งาน (สถานะเต็มเปลี่ยน 55 งาน)\n• จำนวนงานที่ % เบิกพัสดุ เปลี่ยน : 28 งาน | % เบิก คชจ. เปลี่ยน : 16 งาน | คชจ.หน้างานเปลี่ยน : 16 งาน\n• สรุปกลุ่มการเปลี่ยนสถานะ SAP (55 งาน):\n  - REL C1 -> TECO D2 : 18 งาน | REL C1 -> REL D1 : 12 งาน | TECO D2 -> TECO D3 : 9 งาน\n  - TECO D2 -> CLSD F4 : 5 งาน | REL C1 -> REL C9 : 4 งาน | REL D1 -> TECO D2 : 3 งาน\n  - CLSD F2 -> CLSD F4 : 1 งาน | REL C3 -> REL D1 : 1 งาน | REL D1 -> REL C1 : 1 งาน | REL D1 -> REL D2 : 1 งาน\n• ตัวอย่างรายการที่สถานะเปลี่ยน (มูลค่า AUC สูงสุด):\n  1) P-TDD02.3-I-OMNNA.0027 (กฟส.อ้อมน้อย): TECO D2 -> TECO D3 (AUC 4,792,436.02 บาท)\n  2) I-68-I-DMT69.JA.2204 (กฟส.ด่านมะขามเตี้ย): TECO D2 -> CLSD F4 (AUC 1,952,814.75 บาท)\n  3) C-68-I-TPMCM.0152.01.1 (กฟส.ทองผาภูมิ): REL D1 -> TECO D2 (AUC 1,025,948.69 บาท)\n  4) I-68-I-NCI69.JA.2201 (กฟส.นครชัยศรี): REL C1 -> REL D1 (AUC 1,012,086.04 บาท)\n  5) I-67-I-UTO68.HB.2214 (กฟส.อู่ทอง): TECO D2 -> CLSD F4 (AUC 948,721.60 บาท)\n',
+      sourceFile: '04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx (แก้ไขล่าสุด 23 พ.ย. 2569, 09:35 น.)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'สูง'
+    },
     {
       id: 'log_000_add_mobile_responsive_layout_css',
       timestamp: '2026-11-20 15:35:00',

@@ -22041,9 +22041,34 @@ body.pointer-mode-gold * {
 #filterOffice::-webkit-scrollbar-thumb:hover, #chartFilterOffice::-webkit-scrollbar-thumb:hover { background:linear-gradient(135deg, #FFE082 0%, #F472B6 50%, #EC4899 100%); }
 [data-theme="light"] #filterOffice::-webkit-scrollbar-track, [data-theme="light"] #chartFilterOffice::-webkit-scrollbar-track { background:#F3F4F6; border-color:rgba(0,0,0,0.1); }
 
-/* ตัวกรอง กอง/กฟฟ.: รายการ Dropdown สีอักษรเดิม + แถบเลื่อนเหมือนสถานะ SAP */
-.office-dd-btn { text-align:left; cursor:pointer; }
-.office-dd-btn-text { display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+/* ตัวกรอง กอง/กฟฟ.: รายการ Dropdown สีอักษรเดิม + แถบเลื่อนเหมือนสถานะ SAP + ลูกศร dropdown (chevron) */
+.top-filter-select.office-dd-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.35rem;
+  text-align: left;
+  cursor: pointer;
+  padding: 0.2rem 0.35rem 0.2rem 0.2rem !important;
+}
+.office-dd-btn-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.office-dd-chevron {
+  flex-shrink: 0;
+  color: currentColor;
+  opacity: 0.92;
+  transition: transform 0.2s ease;
+  pointer-events: none;
+}
+.office-dd-btn.is-open .office-dd-chevron {
+  transform: rotate(180deg);
+}
 .office-dd-panel { position:fixed; z-index:99999; max-height:320px; overflow-y:auto; background:#2D0A45; border:1px solid #FFB81C; border-radius:10px; box-shadow:0 8px 24px rgba(0,0,0,.5); }
 .office-dd-item { padding:6px 12px; font-size:.94rem; color:#FFB81C; cursor:pointer; white-space:nowrap; }
 .office-dd-item:hover { background:rgba(255,184,28,.2); }
