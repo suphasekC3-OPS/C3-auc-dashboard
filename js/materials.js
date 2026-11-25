@@ -2427,8 +2427,10 @@
       const isRowSel = (sel === it.name || sel === it.code);
       const safeAttr = escapeHtml(it.name);
       const plantListStr = it.plants.size > 0 ? Array.from(it.plants).join(', ') : '-';
+      const matCodeListStr = (it.matCodes && it.matCodes.size > 0) ? Array.from(it.matCodes).sort().join(', ') : '-';
+      const safeMatCodeAttr = escapeHtml(matCodeListStr);
 
-      let titleTip = `${safeAttr}`;
+      let titleTip = `รหัสพัสดุ: ${safeMatCodeAttr}&#10;${safeAttr}`;
       if (effectiveBudget === 'IP') {
         titleTip += ` — ค้างเบิก งบ I, P: ${formatQty(it.remIp)} [คงคลัง SLoc 0022: ${formatQty(it.stockIp)}]`;
       } else if (effectiveBudget === 'C') {
@@ -2468,7 +2470,7 @@
       html.push(
         `<div class="mat-hchart-row${isRowSel ? ' selected' : ''}${sel && !isRowSel ? ' dimmed' : ''}" data-mat="${safeAttr}" onclick="window.selectMatChartItemWithBudget(this.getAttribute('data-mat'), 'ALL', event)" title="${titleTip}">` +
         `<div class="mat-hchart-rank">${i + 1}</div>` +
-        `<div class="${nameCls}" onclick="window.selectMatChartItemWithBudget('${safeAttr}', 'ALL', event)" title="คลิกเพื่อเลือกพัสดุนี้: ${safeAttr} (แสดงทุกงบ)">${escapeHtml(it.name)}${nameCheck}</div>` +
+        `<div class="${nameCls}" onclick="window.selectMatChartItemWithBudget('${safeAttr}', 'ALL', event)" title="รหัสพัสดุ: ${safeMatCodeAttr}&#10;คลิกเพื่อเลือกพัสดุนี้: ${safeAttr} (แสดงทุกงบ)">${escapeHtml(it.name)}${nameCheck}</div>` +
         `<div class="mat-hchart-bars">` +
         pendingTracksHtml +
         stockTracksHtml +
@@ -2734,12 +2736,17 @@
       headerBadgeHtml = `<span class="mat-wh-card-badge" style="color:#FDE047; font-size:0.70rem;">เฉพาะพัสดุ</span>`;
       headerActionHtml = '';
 
-      // ข้อความชื่อพัสดุที่เลือกไว้ด้านบนแบบเต็ม แสดงครบถ้วนไม่ตัดคำ (วงเหลือง)
+      // ข้อความชื่อพัสดุที่เลือกไว้ด้านบนแบบเต็ม พร้อมรหัสพัสดุใต้บรรทัดชื่อพัสดุ
+      const selMatCodeStr = (it.matCodes && it.matCodes.size > 0) ? Array.from(it.matCodes).sort().join(', ') : '-';
       subBannerHtml = `
         <div class="mat-wh-selected-mat-box">
           <div class="mat-wh-selected-mat-title" title="${escapeHtml(it.name)}">
             <span class="mat-wh-mat-icon">🔍</span>
             <span class="mat-wh-mat-name">${escapeHtml(it.name)}</span>
+          </div>
+          <div class="mat-wh-mat-code-row" title="รหัสพัสดุ: ${escapeHtml(selMatCodeStr)}">
+            <span class="mat-wh-mat-code-label">รหัสพัสดุ:</span>
+            <span class="mat-wh-mat-code-pill">${escapeHtml(selMatCodeStr)}</span>
           </div>
         </div>
       `;

@@ -16,7 +16,7 @@
     { id: '04_budget', label: 'งบประมาณ (ไฟล์ 04 ZBUDR064)', icon: '💰' },
     { id: '04_act', label: 'ค่าใช้จ่ายจริง Actual (ไฟล์ 04 ZBUDR064)', icon: '⚡' },
     { id: '04_plan', label: 'แผนงาน Plan (ไฟล์ 04 ZBUDR064)', icon: '📊' },
-    { id: '05_cn41', label: 'ข้อมูล CN41 วันเริ่มบัญชี 14 ต.ค. (ไฟล์ 05)', icon: '📁' },
+    { id: '05_cn41', label: 'ข้อมูล CN41 วันเริ่มบัญชี 13 พ.ย. (ไฟล์ 05)', icon: '📁' },
     { id: '06_cn41', label: 'ข้อมูล CN41 มูลค่า AUC ล่าสุด (ไฟล์ 06)', icon: '📑' },
     { id: '06_sheet', label: 'แผนงานแล้วเสร็จ (G-Sheet)', icon: '📅' }
   ];
@@ -802,8 +802,8 @@
       <span class="wbs-pill pill-gold" style="font-weight:700;" title="วันที่และเวลานำเข้าข้อมูลไฟล์ WBS เข้าสู่ระบบ">
         📥 วันที่/เวลา นำเข้าข้อมูล:
       </span>
-      <span class="wbs-pill pill-file pill-file-03" onclick="if(window.openDhModelModal)window.openDhModelModal('src_03')" title="วันที่/เวลา นำเข้าข้อมูล: 23 ต.ค. 2569, 08:04 น. (ไฟล์ 03 WBSงานคงเหลือเดือนล่าสุด.xlsx)">
-        📋 <strong>03 WBSงานคงเหลือเดือนล่าสุด.xlsx:</strong> 23 ต.ค. 2569, 08:04 น.
+      <span class="wbs-pill pill-file pill-file-03" onclick="if(window.openDhModelModal)window.openDhModelModal('src_03')" title="วันที่/เวลา แก้ไขไฟล์: 25 พ.ย. 2569, 09:25 น. (ไฟล์ 03 WBSงานคงเหลือเดือนล่าสุด.xlsx)">
+        📋 <strong>03 WBSงานคงเหลือเดือนล่าสุด.xlsx:</strong> 25 พ.ย. 2569, 09:25 น.
       </span>
       <span class="wbs-pill pill-file pill-file-04" onclick="if(window.openDhModelModal)window.openDhModelModal('src_04')" title="วันที่/เวลา แก้ไขไฟล์: 23 พ.ย. 2569, 09:35 น. (ไฟล์ 04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx)">
         ⚡ <strong>04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx:</strong> 23 พ.ย. 2569, 09:35 น.
@@ -4160,7 +4160,7 @@
             headerMetricHtml = `
               <div class="th-header-metric-badge th-header-stacked">
                 <span class="th-header-type-badge">รวม (05)</span>
-                <span class="th-header-cyan-val" style="color: #22D3EE; font-weight: 700;" title="ผลรวมสะสมต้นทุนจริง ไฟล์ 05 (14 ต.ค. 69): ${formatMoney(totalCn41Cost05)} บาท">
+                <span class="th-header-cyan-val" style="color: #22D3EE; font-weight: 700;" title="ผลรวมสะสมต้นทุนจริง ไฟล์ 05 (13 พ.ย. 69): ${formatMoney(totalCn41Cost05)} บาท">
                   ${formatMoney(totalCn41Cost05)}
                 </span>
               </div>`;
@@ -4298,7 +4298,7 @@
               </div>
             </div>
             ${col.id === 'statusSap' ? `<div class="th-sub-date-text" style="font-size: 0.70rem; color: #CBD5E1; font-weight: 500; line-height: 1.2; margin: 1px 0 3px 0; text-align: center; white-space: nowrap;" title="วันที่แก้ไขล่าสุดของไฟล์ 04 ZBUDR064: 23 พ.ย. 2569">แก้ไขล่าสุด: 23 พ.ย. 69</div>` : ''}
-            ${col.id === 'cn41Cost05' ? `<div class="th-sub-date-text" style="font-size: 0.70rem; color: #CBD5E1; font-weight: 500; line-height: 1.2; margin: 1px 0 3px 0; text-align: center; white-space: nowrap;" title="วันที่แก้ไขล่าสุดของไฟล์ 05 CN41: 14 ต.ค. 2569">แก้ไขล่าสุด: 14 ต.ค. 69</div>` : ''}
+            ${col.id === 'cn41Cost05' ? `<div class="th-sub-date-text" style="font-size: 0.70rem; color: #CBD5E1; font-weight: 500; line-height: 1.2; margin: 1px 0 3px 0; text-align: center; white-space: nowrap;" title="วันที่แก้ไขล่าสุดของไฟล์ 05 CN41: 13 พ.ย. 2569">แก้ไขล่าสุด: 13 พ.ย. 69</div>` : ''}
             ${col.id === 'cn41ActualCost' ? `<div class="th-sub-date-text" style="font-size: 0.70rem; color: #CBD5E1; font-weight: 500; line-height: 1.2; margin: 1px 0 3px 0; text-align: center; white-space: nowrap;" title="วันที่แก้ไขล่าสุดของไฟล์ 06 CN41: 13 พ.ย. 2569">แก้ไขล่าสุด: 13 พ.ย. 69</div>` : ''}
             ${(col.id === 'planClose' || col.id === 'note') ? `<div class="th-sub-date-text wbs-th-sync-time" style="font-size: 0.70rem; color: #CBD5E1; font-weight: 500; line-height: 1.2; margin: 1px 0 3px 0; text-align: center; white-space: nowrap;" title="เวลาซิงค์ข้อมูลล่าสุดจาก Google Sheet: ${getGoogleSheetFullSyncTimeText()}">${getGoogleSheetSyncTimeText()}</div>` : ''}
             ${headerMetricHtml}
@@ -4810,9 +4810,9 @@
               rowHtml += `<td style="text-align: right; font-family: var(--font-mono, monospace); font-size: 0.85rem; font-weight: 700; color: ${incColor};" title="มูลค่า AUC ที่เพิ่มขึ้น (ไฟล์ 06 - ไฟล์ 05): ${formatMoney(item.cn41CostInc)} บาท">${displayVal}</td>`;
               break;
             }
-            // File 05 Columns (CN41 มูลค่า AUC วันเริ่มบัญชี 14 ต.ค. 69)
+            // File 05 Columns (CN41 มูลค่า AUC วันเริ่มบัญชี 13 พ.ย. 69)
             case 'cn41Cost05':
-              rowHtml += `<td style="text-align: right; font-family: var(--font-mono, monospace); font-size: 0.85rem; font-weight: 600; color: #22D3EE;" title="ต้นทุนจริง วันเริ่มบัญชี 14 ต.ค. 69 (ไฟล์ 05): ${formatMoney(item.cn41Cost05)} บาท">${formatMoney(item.cn41Cost05)}</td>`;
+              rowHtml += `<td style="text-align: right; font-family: var(--font-mono, monospace); font-size: 0.85rem; font-weight: 600; color: #22D3EE;" title="ต้นทุนจริง วันเริ่มบัญชี 13 พ.ย. 69 (ไฟล์ 05): ${formatMoney(item.cn41Cost05)} บาท">${formatMoney(item.cn41Cost05)}</td>`;
               break;
             case 'cn41ObjDesc':
               rowHtml += `<td><div style="font-size: 0.85rem; color: var(--text-main); font-weight: 500; min-width: 220px; line-height: 1.35;" title="${escapeHtml(item.cn41ObjDesc)}">${escapeHtml(item.cn41ObjDesc || '-')}</div></td>`;

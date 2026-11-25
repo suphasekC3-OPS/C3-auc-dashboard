@@ -65,11 +65,11 @@
       groupNo: '03',
       name: '03 WBSงานคงเหลือเดือนล่าสุด.xlsx',
       category: 'WBS Base Database',
-      importDate: '2026-10-23 08:04:27',
-      importDateTh: '23 ต.ค. 2569, 08:04 น.',
-      lastModifiedTh: '23 ต.ค. 2569, 08:04 น.',
-      sizeText: '5.43 MB',
-      recordCount: 2083,
+      importDate: '2026-11-25 09:35:00',
+      importDateTh: '25 พ.ย. 2569, 09:35 น.',
+      lastModifiedTh: '25 พ.ย. 2569, 09:25 น.',
+      sizeText: '85.3 KB',
+      recordCount: 1614,
       status: 'active',
       statusText: 'ใช้งานอยู่ (หลัก)',
       storageFile: 'js/data_wbs.js',
@@ -123,22 +123,22 @@
     {
       id: 'src_05',
       groupNo: '05',
-      name: '05 WBS CN41 มูลค่า AUC วันเริ่มบัญชี 14 ตค 69.xlsx',
+      name: '05 WBS CN41 มูลค่า AUC วันเริ่มบัญชีรอบใหม่ 13 พย 69.xlsx',
       category: 'SAP CN41 AUC Values (Baseline)',
-      importDate: '2026-10-24 20:45:00',
-      importDateTh: '24 ต.ค. 2569, 20:45 น.',
-      lastModifiedTh: '14 ต.ค. 2569 (วันเริ่มบัญชี)',
-      sizeText: '339.0 KB',
-      recordCount: 2083,
+      importDate: '2026-11-25 10:15:00',
+      importDateTh: '25 พ.ย. 2569, 10:15 น.',
+      lastModifiedTh: '13 พ.ย. 2569, 10:25 น. (วันเริ่มบัญชีรอบใหม่)',
+      sizeText: '159.1 KB',
+      recordCount: 1614,
       status: 'active',
       statusText: 'ผสานข้อมูลสำเร็จ (ผูก WBS 03)',
       storageFile: 'js/data_wbs.js',
       storageVar: 'window.AUC_WBS_REMAINING_DATA.cn41Cost05',
       icon: '📁',
       badgeColor: '#06B6D4',
-      description: 'รายงาน SAP CN41 มูลค่าต้นทุนจริง AUC ณ วันเริ่มบัญชี 14 ต.ค. 2569 ยอดรวม 643,241,099.93 บาท ผูกกับ WBS ไฟล์ 03 สำหรับคำนวณมูลค่า AUC ที่เพิ่มขึ้น',
+      description: 'รายงาน SAP CN41 มูลค่าต้นทุนจริง AUC ณ วันเริ่มบัญชีรอบใหม่ 13 พ.ย. 2569 ยอดรวม 562,112,723.14 บาท (1,614 รายการ) ผูกกับ WBS ไฟล์ 03 สำหรับคำนวณมูลค่า AUC ที่เพิ่มขึ้น',
       columns: [
-        'cn41Cost05 (ต้นทุนจริง วันเริ่มบัญชี 14 ต.ค. 69)',
+        'cn41Cost05 (ต้นทุนจริง วันเริ่มบัญชี 13 พ.ย. 69)',
         'cn41CostInc (มูลค่าAUCที่เพิ่มขึ้น = ไฟล์ 06 - ไฟล์ 05)',
         'cn41ActualCost (ต้นทุนจริง ไฟล์ 06 ล่าสุด 13 พ.ย. 69)'
       ],
@@ -214,7 +214,7 @@
       <div style="color:#E2E8F0;">
         <span style="color:#FCA5A5; font-weight:700;">• ไม่แสดงรหัสหมวดอื่นที่ไม่ใช่ 1*</span> (ตัดรหัสหมวด 2*, 9* ออก)<br>
         <span style="color:#FCA5A5; font-weight:700;">• ไม่แสดง Movement Type อื่น</span> (เช่น Mvt 581 คืนพัสดุเข้าโครงการ หรือ Mvt อื่น)<br>
-        <span style="color:#FCA5A5; font-weight:700;">• ไม่แสดงพัสดุของงาน WBS ที่ปิดงานแล้ว</span> หรือไม่อยู่ใน 2,083 โครงการคงเหลือของไฟล์ 03
+        <span style="color:#FCA5A5; font-weight:700;">• ไม่แสดงพัสดุของงาน WBS ที่ปิดงานแล้ว</span> หรือไม่อยู่ใน 1,614 โครงการคงเหลือของไฟล์ 03
       </div>
     </div>
   </div>
@@ -236,7 +236,7 @@
         }));
       }
     },
-{
+    {
       id: 'src_08',
       groupNo: '08',
       name: '08 พัสดุคงเหลือ MB52.xlsx',
@@ -351,6 +351,35 @@
       }))
     },
     {
+      id: 'src_01_oct',
+      groupNo: '01',
+      name: '01 รายงาน AUC เดือน 10ต.ค. (3.3teco).xlsx',
+      category: 'Monthly AUC Executive Report',
+      importDate: '2026-11-25 08:38:00',
+      importDateTh: '25 พ.ย. 2569, 08:38 น.',
+      lastModifiedTh: '25 พ.ย. 2569, 08:19 น.',
+      sizeText: '44.3 KB',
+      recordCount: 368,
+      status: 'active',
+      statusText: 'ข้อมูลเดือนล่าสุด (ต.ค.)',
+      storageFile: 'js/data_oct.js',
+      storageVar: 'window.AUC_DATA_OCT (Active Month: ต.ค. 2569)',
+      icon: '📊',
+      badgeColor: '#EC4899',
+      description: 'รายงานผลการติดตามงานก่อสร้างและขึ้นทะเบียนทรัพย์สิน AUC ประจำเดือน ต.ค. 2569 สรุปราย กฟฟ. และกองทั้งหมด (รวม 8 เกณฑ์วัด, 368 แถวข้อมูล)',
+      columns: [
+        'criteria (เกณฑ์วัด)', 'province (พื้นที่)', 'office (กฟฟ.)', 'totalValue (ยอดรวม)',
+        'closedValue (ปิดงานแล้ว)', 'remainingValue (คงเหลือ)', 'latestPercent (% ปิดงาน)', 'kpiScore (คะแนน KPI)'
+      ],
+      sampleProvider: () => (window.AUC_DATA_OCT || []).slice(0, 5).map(r => ({
+        'กฟฟ.': r.office,
+        'เกณฑ์วัด': r.criteria,
+        'คงเหลือ (บาท)': (r.remainingValue || 0).toLocaleString('th-TH', { minimumFractionDigits: 2 }),
+        '% ปิดงาน': ((r.latestPercent || 0) * 100).toFixed(2) + '%',
+        'คะแนน KPI': (r.kpiScore || r.score || 0).toFixed(2)
+      }))
+    },
+    {
       id: 'src_01_sep',
       groupNo: '01',
       name: '01 รายงาน AUC เดือน 9ก.ย.  (3.3teco).xlsx',
@@ -360,23 +389,23 @@
       lastModifiedTh: '22 ต.ค. 2569, 21:03 น.',
       sizeText: '46.0 KB',
       recordCount: 368,
-      status: 'active',
-      statusText: 'ข้อมูลเดือนล่าสุด (ก.ย.)',
+      status: 'ready',
+      statusText: 'ประวัติเดือน ก.ย.',
       storageFile: 'js/data_sep.js',
-      storageVar: 'window.AUC_DATA_SEP (Active Month: ก.ย. 2569)',
+      storageVar: 'window.AUC_DATA_SEP (เดือน ก.ย. 2569)',
       icon: '📊',
-      badgeColor: '#EC4899',
-      description: 'รายงานผลการติดตามงานก่อสร้างและขึ้นทะเบียนทรัพย์สิน AUC ประจำเดือน ก.ย. 2569 สรุปราย กฟฟ. ทั้ง 20 แห่ง',
+      badgeColor: '#8B5CF6',
+      description: 'รายงานผลการติดตามงานก่อสร้างและขึ้นทะเบียนทรัพย์สิน AUC ประจำเดือน ก.ย. 2569 สรุปราย กฟฟ. ทั้งหมด',
       columns: [
         'criteria (เกณฑ์วัด)', 'province (พื้นที่)', 'office (กฟฟ.)', 'totalValue (ยอดรวม)',
-        'closedValue (ปิดงานแล้ว)', 'remainingValue (คงเหลือ)', 'latestPercent (% ปิดงาน)', 'score (คะแนน KPI)'
+        'closedValue (ปิดงานแล้ว)', 'remainingValue (คงเหลือ)', 'latestPercent (% ปิดงาน)', 'kpiScore (คะแนน KPI)'
       ],
       sampleProvider: () => (window.AUC_DATA_SEP || []).slice(0, 5).map(r => ({
         'กฟฟ.': r.office,
         'เกณฑ์วัด': r.criteria,
         'คงเหลือ (บาท)': (r.remainingValue || 0).toLocaleString('th-TH', { minimumFractionDigits: 2 }),
         '% ปิดงาน': ((r.latestPercent || 0) * 100).toFixed(2) + '%',
-        'คะแนน KPI': (r.score || 0).toFixed(2)
+        'คะแนน KPI': (r.kpiScore || r.score || 0).toFixed(2)
       }))
     },
     {
@@ -467,9 +496,9 @@
       path: 'js/data_wbs.js',
       title: 'ฐานข้อมูลรวมงาน WBS คงเหลือ (Merged WBS Database)',
       role: 'จัดเก็บข้อมูลหลักงาน WBS (ไฟล์ 03 + 04 + 05 + 06 + Google Sheet)',
-      recordsCount: '2,083 รายการ (41 คอลัมน์)',
-      fileSize: '2.43 MB',
-      updatedAt: '23 พ.ย. 2569, 09:40 น.',
+      recordsCount: '1,614 รายการ (41 คอลัมน์)',
+      fileSize: '1.88 MB',
+      updatedAt: '25 พ.ย. 2569, 10:15 น.',
       status: '100% ฐานข้อมูลอัปเดตล่าสุด',
       variable: 'window.AUC_WBS_REMAINING_DATA'
     },
@@ -477,9 +506,9 @@
       path: 'js/wbs.js',
       title: 'โมดูลจัดการหน้าตาราง WBS & ตัวกรอง',
       role: 'ตรรกะคำนวณตัวกรอง, ค้นหาสถานะ SAP, จัดกลุ่มสรุปผล',
-      recordsCount: '7,876 บรรทัดคำสั่ง',
+      recordsCount: '7,884 บรรทัดคำสั่ง',
       fileSize: '381 KB',
-      updatedAt: '23 พ.ย. 2569, 09:41 น.',
+      updatedAt: '25 พ.ย. 2569, 10:15 น.',
       status: 'อัปเดตล่าสุดวันนี้',
       variable: 'window.renderWbsTab, getFilteredWbsData'
     },
@@ -493,7 +522,7 @@
       status: '100% ฐานข้อมูลอัปเดตล่าสุด',
       variable: 'window.AUC_MAT07_COMPACT'
     },
-{
+    {
       path: 'js/data_materials_08.js',
       title: 'ฐานข้อมูลพัสดุคงเหลือในคลัง MB52 (ไฟล์ 08)',
       role: 'จัดเก็บข้อมูลสต็อกคงเหลือในคลัง แยกตามรหัสพัสดุและโรงงาน (SLoc 0021 งบ C, SLoc 0022 งบ I,P)',
@@ -509,18 +538,28 @@
       role: 'เชื่อม WBS ไฟล์ 03 -> 07 (องค์ประกอบ WBS) & 04 (ข้อกำหนดโครงการ /WBS), ตัวกรอง, เลือกคอลัมน์ 49 คอลัมน์, ส่งออก CSV',
       recordsCount: '49 คอลัมน์เลือกแสดงได้',
       fileSize: '195 KB',
-      updatedAt: '23 พ.ย. 2569, 09:41 น.',
+      updatedAt: '25 พ.ย. 2569, 08:30 น.',
       status: 'อัปเดตล่าสุดวันนี้',
       variable: 'window.renderMaterialsTab'
     },
     {
+      path: 'js/data_oct.js',
+      title: 'ข้อมูลผลงาน AUC เดือน ต.ค. 2569 (ล่าสุด)',
+      role: 'ฐานข้อมูลสรุปผลงานระดับผู้บริหารเดือน ต.ค. 2569 (8 เกณฑ์วัด, 3.3 TECO D2)',
+      recordsCount: '368 รายการ',
+      fileSize: '193.4 KB',
+      updatedAt: '25 พ.ย. 2569, 08:38 น.',
+      status: 'Active Month',
+      variable: 'window.AUC_DATA_OCT'
+    },
+    {
       path: 'js/data_sep.js',
-      title: 'ข้อมูลผลงาน AUC เดือน ก.ย. 2569 (ล่าสุด)',
+      title: 'ข้อมูลผลงาน AUC เดือน ก.ย. 2569',
       role: 'ฐานข้อมูลสรุปผลงานระดับผู้บริหารเดือน ก.ย. 2569',
       recordsCount: '368 รายการ',
       fileSize: '198 KB',
       updatedAt: '22 ต.ค. 2569, 23:18 น.',
-      status: 'Active Month',
+      status: 'Historical Baseline',
       variable: 'window.AUC_DATA_SEP'
     },
     {
@@ -579,6 +618,150 @@
    * System Pre-defined Audit & Modification Log Entries
    */
   const BASE_AUDIT_LOGS = [
+    {
+      id: 'log_000_update_f05_nov13_nov25',
+      timestamp: '2026-11-25 10:15:00',
+      timestampTh: '25 พ.ย. 2569, 10:15 น.',
+      type: 'IMPORT',
+      typeBadge: 'อัปเดตไฟล์ 05 CN41 (13 พ.ย. 69)',
+      badgeClass: 'badge-type-import',
+      title: 'อัปเดตฐานมูลค่า AUC วันเริ่มบัญชีรอบใหม่จากไฟล์ 05 CN41 (13 พ.ย. 2569)',
+      targetSubject: 'คอลัมน์ต้นทุนจริงวันเริ่มบัญชี (cn41Cost05), มูลค่า AUC ที่เพิ่มขึ้น (cn41CostInc) และป้ายวันที่ไฟล์ 05',
+      storageFile: 'js/data_wbs.js, js/wbs.js, index.html, js/data_history.js',
+      changeSummary: 'อัปเดตไฟล์ 05 วันเริ่มบัญชีรอบใหม่ 13 พ.ย. 69 (แมตช์ 1,614/1,614 งาน = 100%): ฐานต้นทุนจริง (cn41Cost05) ปรับจาก 535,063,071.48 -> 562,112,723.14 บาท (+27,049,651.66 บาท, เปลี่ยน 1,307 งาน) และส่วนต่าง cn41CostInc (06 - 05) รีเซ็ตจาก +27,049,651.66 -> 0.00 บาท พร้อมเริ่มรอบบัญชีใหม่',
+      details: '==========================================================================\n🟣 สรุปการอัปเดตไฟล์ 05 WBS CN41 วันเริ่มบัญชีรอบใหม่ | ประมวลผลเมื่อ 25 พ.ย. 2569, 10:15 น.\n==========================================================================\n• ไฟล์ต้นทาง : 05 WBS CN41 มูลค่า AUC วันเริ่มบัญชีรอบใหม่ 13 พย 69.xlsx (แก้ไขล่าสุด: 13 พ.ย. 2569, 10:25 น., ขนาด 159.1 KB, 2,069 ดัชนี WBS)\n• ฐานข้อมูลที่อัปเดต : js/data_wbs.js (ขนาด 1.88 MB, สำรองเดิมที่ scratch/data_wbs.bak_before_f05_nov25.js)\n• อัตราการจับคู่ : 1,614 / 1,614 รายการ (100%, Unmatched = 0)\n• ยอดรวมต้นทุนจริง ไฟล์ 05 (cn41Cost05) : เดิม 535,063,071.48 -> ใหม่ 562,112,723.14 บาท (+27,049,651.66 บาท, รายการเปลี่ยน 1,307 งาน)\n• ยอดรวมมูลค่า AUC ไฟล์ 06 (cn41ActualCost) : 562,112,723.14 บาท (คงเดิม 13 พ.ย. 69)\n• ยอดรวมมูลค่า AUC ที่เพิ่มขึ้น (cn41CostInc = 06 - 05) : เดิม +27,049,651.66 -> ใหม่ 0.00 บาท (รีเซ็ตเริ่มรอบบัญชีใหม่เรียบร้อย)\n• อัปเดตวันที่แสดงผลไฟล์ 05 จาก "14 ต.ค. 69" -> "13 พ.ย. 69" ครบทุกจุดใน js/wbs.js, แค็ตตาล็อก src_05 ใน js/data_history.js และ Cache Buster (?v=20261125_1015) ใน index.html',
+      sourceFile: '05 WBS CN41 มูลค่า AUC วันเริ่มบัญชีรอบใหม่ 13 พย 69.xlsx (แก้ไขล่าสุด 13 พ.ย. 2569, 10:25 น.)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง'
+    },
+    {
+      id: 'log_000_update_f03_oct_nov25',
+      timestamp: '2026-11-25 09:36:00',
+      timestampTh: '25 พ.ย. 2569, 09:36 น.',
+      type: 'IMPORT',
+      typeBadge: 'อัปเดตไฟล์ 03 WBS (25 พ.ย. 69)',
+      badgeClass: 'badge-type-import',
+      title: 'อัปเดตฐานข้อมูลงาน WBS คงเหลือจากไฟล์ 03 WBS ล่าสุด (1,614 งาน ตรงรอบเดือน ต.ค. 69)',
+      targetSubject: 'ฐานข้อมูลงาน WBS คงเหลือ (js/data_wbs.js), ป้ายจำนวนงานบนแท็บ/การ์ด และผัง Model View',
+      storageFile: 'js/data_wbs.js, js/wbs.js, index.html, js/data_history.js',
+      changeSummary: 'อัปเดตไฟล์ 03 (25 พ.ย. 2569, 09:25 น.): ปรับฐานงาน WBS คงเหลือจาก 2,083 เหลือ 1,614 รายการ (-469 งานที่ปิดแล้วใน ต.ค., ตรงไฟล์ 01 เดือน ต.ค. 100% ทุกเกณฑ์วัดและทุก กฟฟ.) โดยรักษาข้อมูลผสานไฟล์ 04/05/06, Google Sheet และคอลัมน์ประเภท (type) เดิมไว้ครบ 1,614/1,614 รายการ',
+      details: '==========================================================================\n🟣 สรุปการอัปเดตไฟล์ 03 WBS งานคงเหลือ | ประมวลผลเมื่อ 25 พ.ย. 2569, 09:36 น.\n==========================================================================\n• ไฟล์ต้นทาง : 03 WBSงานคงเหลือเดือนล่าสุด.xlsx (แก้ไขล่าสุด: 25 พ.ย. 2569, 09:25 น., ขนาด 85.3 KB)\n• ฐานข้อมูลที่อัปเดต : js/data_wbs.js (ขนาด 1.89 MB, สำรองไฟล์เดิมไว้ที่ scratch/data_wbs.bak_before_f03_nov25.js)\n• จำนวนรายการ WBS คงเหลือ : เดิม 2,083 -> ใหม่ 1,614 รายการ (-469 งานที่ปิดแล้ว)\n  - ตรงกับยอดงานคงเหลือไฟล์ 01 เดือน ต.ค. 2569 (1,614 งาน) 100% ทั้ง 8 เกณฑ์วัดและทุก กฟฟ.\n  - ข้อ 1.1: 103 | ข้อ 1.2: 8 | ข้อ 1.3: 223 | ข้อ 2.1: 720 | ข้อ 2.2: 488 | ข้อ 3.3: 4 | ข้อ 4: 61 | ข้อ 5: 7\n• การคงค่าข้อมูลผสาน (1,614 / 1,614 รายการ = 100%):\n  - คงข้อมูลไฟล์ 04 ZBUDR064 (23 พ.ย.), ไฟล์ 05, ไฟล์ 06 CN41 (13 พ.ย.) และคอลัมน์ประเภท (type) ครบ 1,614 รายการ\n  - คงแผนปิดงาน (Google Sheet): 1,309 รายการ | หมายเหตุ: 1,341 รายการ\n  - แก้ไขฟิลด์จากไฟล์ 03: กอง/กฟฟ. 3 รายการ, ช่างคุมงาน 2 รายการ, สังกัด 14 รายการ\n• ยอดคงเหลือรวมใน js/data_wbs.js ใหม่:\n  - มูลค่า AUC รวม (ไฟล์ 06): 562,112,723.14 บาท\n  - ปิดใน SAP แล้วระหว่างเดือน พ.ย.: CLSD F4 = 30 งาน (9,777,820.87 บาท) | CLSD F2 = 1 งาน (324,503.16 บาท)\n• อัปเดตวันที่ไฟล์ 03 (.pill-file-03), ตัวเลขป้ายแท็บ (#wbsTabTotalBadge -> 1,614), แค็ตตาล็อก/Model View และ Cache Buster (?v=20261125_0936) ครบทุกจุด',
+      sourceFile: '03 WBSงานคงเหลือเดือนล่าสุด.xlsx (แก้ไขล่าสุด 25 พ.ย. 2569, 09:25 น.)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'สูง'
+    },
+    {
+      id: 'log_000_fix_fivepct_save_green_nov25',
+      timestamp: '2026-11-25 08:52:00',
+      timestampTh: '25 พ.ย. 2569, 08:52 น.',
+      type: 'EDIT',
+      typeBadge: 'แก้ปุ่ม Save +5% แสดงสีเขียว',
+      badgeClass: 'badge-type-edit',
+      title: 'แก้ไขปุ่ม "บันทึกการตั้งค่า (Save)" ในแผงตั้งค่า +5% คงเหลือ ให้แสดงสีเขียวและข้อความ "✓ บันทึกสำเร็จแล้ว" เหมือนแผงเลือกเดือนเกณฑ์ KPI',
+      targetSubject: 'ปุ่ม Save แผงตั้งค่า +5% คงเหลือ (#btnSaveTargetFivePct, #next3mConfigSavedAt) ใน js/app.js',
+      storageFile: 'js/app.js, index.html, js/data_history.js',
+      changeSummary: 'ย้ายการเรียก renderNext3MonthsProjection() ขึ้นมาก่อนการใส่คลาส .is-saved และ .just-updated เพื่อให้ปุ่ม Save เปลี่ยนเป็นสีเขียวพร้อมข้อความ "✓ บันทึกสำเร็จแล้ว" และแถบเวลาบันทึกล่าสุดกะพริบสีเขียวครบ 2.2 วินาทีเหมือนแผงเลือกเดือนเกณฑ์ KPI',
+      details: '• สาเหตุเดิม: ใน saveTargetFivePctConfigFromUI() มีการเรียก renderNext3MonthsProjection() ต่อท้ายหลังใส่คลาส .is-saved ทำให้ DOM ของปุ่ม #btnSaveTargetFivePct ถูกสร้างใหม่ทับทันทีจนไม่ทันแสดงสีเขียว\n• การแก้ไข: เรียก renderNext3MonthsProjection() และ syncWbsSideKpiCard() ก่อน จากนั้นจึงใส่คลาส .is-saved ("✓ บันทึกสำเร็จแล้ว") และ .just-updated ลงบน DOM ปุ่มใหม่ พร้อม clearTimeout กรณีกดซ้ำ\n• อัปเดต Cache Buster (?v=20261125_0852) ใน index.html',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "กด save แล้วให้แสดงสีเขียว เหมือนกับ เลือกเดือนเกณฑ์ KPI ที่แสดง"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ'
+    },
+    {
+      id: 'log_000_pin_dec_kpi_badge_top_nov25',
+      timestamp: '2026-11-25 08:49:00',
+      timestampTh: '25 พ.ย. 2569, 08:49 น.',
+      type: 'EDIT',
+      typeBadge: 'จัดตำแหน่งป้าย KPI ธ.ค. บนสุด',
+      badgeClass: 'badge-type-edit',
+      title: 'จัดลำดับป้ายเป้า KPI เดือน ธ.ค. ให้อยู่ตำแหน่งบนสุดเสมอในกราฟแท่ง 8 ประเภทเกณฑ์วัด',
+      targetSubject: 'ป้ายเป้า KPI บนแท่งกราฟ 8 เกณฑ์วัด (js/chart.js, js/app.js) โดยเฉพาะแท่ง ข้อ 3.3 TECO D2',
+      storageFile: 'js/chart.js, js/app.js, index.html, js/data_history.js',
+      changeSummary: 'ปรับตรรกะเรียงลำดับป้าย barItems ใน js/chart.js ให้ป้ายที่มีเดือน ธ.ค. (hasDec) อยู่ตำแหน่งบนสุดเสมอ และเมื่อค่า % เป้าเท่ากันให้เรียงเดือนที่มากกว่าอยู่ด้านบน (แก้กรณี ข้อ 3.3 TECO D2 ที่ KPI ต.ค. 100% ขึ้นไปอยู่เหนือ KPI ธ.ค. 100%)',
+      details: '• ส่งค่า maxMonthIdx และ hasDec (monthIdxs.includes(11)) ใน barTargetLines ของ js/app.js\n• ปรับ barItems.sort() ใน js/chart.js ให้ป้าย target ที่มีเดือน ธ.ค. (hasDec) ได้สิทธิ์อยู่ลำดับบนสุดก่อนป้ายเดือนอื่นเสมอ และเรียงเดือนมากกว่าอยู่บนเมื่อตำแหน่ง badgeY เท่ากัน\n• อัปเดต Cache Buster (?v=20261125_0849) สำหรับ js/chart.js, js/app.js, js/data_history.js ใน index.html',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "แก้ไข เดือน ธ.ค. ตำแหน่ง บนสุด"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ'
+    },
+    {
+      id: 'log_000_update_f01_oct_nov25',
+      timestamp: '2026-11-25 08:38:00',
+      timestampTh: '25 พ.ย. 2569, 08:38 น.',
+      type: 'IMPORT',
+      typeBadge: 'อัปเดตไฟล์ 01 AUC เดือน ต.ค. 69',
+      badgeClass: 'badge-type-import',
+      title: 'นำเข้าและอัปเดตข้อมูลไฟล์ 01 รายงาน AUC เดือน 10 ต.ค. 2569 (3.3teco) เป็นเดือนล่าสุดของระบบ',
+      targetSubject: 'ฐานข้อมูลรายงานผลงาน AUC รายเดือน (js/data_oct.js) และตัวเลือกเดือนเริ่มต้น (ต.ค. 2569)',
+      storageFile: 'js/data_oct.js, js/app.js, index.html, js/data_history.js',
+      changeSummary: 'อัปเดตไฟล์ 01 เดือน ต.ค. 2569 (368 แถว, 8 เกณฑ์วัด): ปิดงานสะสม 8,573/10,187 งาน (84.16%, เพิ่ม +473 งานจาก ก.ย.) | มูลค่าปิดแล้ว 1,755.19/2,316.52 ลบ. (75.77%, เพิ่ม +165.99 ลบ.) | คงเหลือ 1,614 งาน / 561.33 ลบ. | เป้าหมายที่ต้องปิดเพิ่มปรับแสดง 2 เดือน (พ.ย. - ธ.ค. 2569) อัตโนมัติ',
+      details: '==========================================================================\n🟣 สรุปการนำเข้าไฟล์ 01 รายงาน AUC เดือน 10 (ต.ค. 2569) | ประมวลผลเมื่อ 25 พ.ย. 2569, 08:38 น.\n==========================================================================\n• ไฟล์ต้นทาง : 01 รายงาน AUC เดือน 10ต.ค. (3.3teco).xlsx (แก้ไขล่าสุด: 25 พ.ย. 2569, 08:19 น., ขนาด 44.3 KB)\n• ไฟล์ฐานข้อมูลที่สร้าง : js/data_oct.js (ขนาด 193.4 KB, 368 รายการ = 328 แถวรายหน่วยงาน + 40 แถวผลรวม)\n• ภาพรวมเปรียบเทียบ ต.ค. 69 เทียบ ก.ย. 69 (รวมทุกเกณฑ์วัด ไม่นับแถวผลรวม):\n  - งานทั้งหมด : 10,183 -> 10,187 งาน (+4 งาน)\n  - ปิดงานแล้ว : 8,100 (79.54%) -> 8,573 งาน (84.16%) [+473 งาน / +4.62%]\n  - งานคงเหลือ : 2,083 -> 1,614 งาน (-469 งาน)\n  - มูลค่ารวม : 2,231,338,464.73 -> 2,316,524,570.75 บาท (+85,186,106.02 บาท)\n  - มูลค่าปิดแล้ว : 1,589,201,672.17 (71.22%) -> 1,755,193,741.05 บาท (75.77%) [+165,992,068.88 บาท / +4.55%]\n  - มูลค่าคงเหลือ : 642,132,859.56 -> 561,326,896.70 บาท (-80,805,962.86 บาท)\n• สรุปผลงานแยก 8 เกณฑ์วัด เดือน ต.ค. 2569:\n  - ข้อ 1.1 งบ C.1 ก่อน 69 : 93.66% (มูลค่าปิด 274.35/292.93 ลบ. | 3,127/3,230 งาน)\n  - ข้อ 1.2 งบ I , P ก่อนปี 68 : 87.54% (มูลค่าปิด 196.85/224.86 ลบ. | 121/129 งาน)\n  - ข้อ 1.3 งบ I , P ก่อนปี 69 : 76.06% (มูลค่าปิด 665.51/875.03 ลบ. | 1,350/1,573 งาน)\n  - ข้อ 2.1 งบ C.1 ปี 69 : 61.57% (มูลค่าปิด 112.57/182.83 ลบ. | 2,045/2,765 งาน)\n  - ข้อ 2.2 งบ I , P ปี 69 : 40.59% (มูลค่าปิด 147.71/363.92 ลบ. | 520/1,008 งาน)\n  - ข้อ 3.3 TECO D2 : 98.83% (ปิดงาน 339/343 งาน | มูลค่าปิด 129.92/130.71 ลบ.)\n  - ข้อ 4 งบ C02.2 ปี 69 : 94.38% (ปิดงาน 1,024/1,085 งาน | มูลค่าปิด 161.00/168.72 ลบ.)\n  - ข้อ5 งานบ้านและที่ดินจัดสรร : 86.78% (มูลค่าปิด 67.29/77.53 ลบ. | 47/54 งาน)\n• การปรับปรุงระบบเชื่อมต่อ:\n  - เพิ่ม <script src="js/data_oct.js?v=20261125_0838"> และเปิดใช้งานตัวเลือกเดือน ต.ค. 2569 (ล่าสุด) ใน index.html\n  - ปรับเดือนเริ่มต้น state.filters.month = 9 (ต.ค.), ปรับ updateChartMonthDropdown() ให้ระบุ "(ล่าสุด)" อัตโนมัติจาก getLatestAvailableMonthIndex(), อัปเดต MONTH_EXCEL_FILES, hasReportForMonth(), และ Model View ใน js/data_history.js',
+      sourceFile: '01 รายงาน AUC เดือน 10ต.ค. (3.3teco).xlsx (แก้ไขล่าสุด 25 พ.ย. 2569, 08:19 น.)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'สูง'
+    },
+    {
+      id: 'log_000_revert_mat_chart_custom_tooltip_nov25',
+      timestamp: '2026-11-25 08:30:00',
+      timestampTh: '25 พ.ย. 2569, 08:30 น.',
+      type: 'EDIT',
+      typeBadge: 'ย้อนกลับ Tooltip กราฟพัสดุ',
+      badgeClass: 'badge-type-edit',
+      title: 'ย้อนกลับ Custom Tooltip ของกราฟปริมาณค้างเบิก > 0 กลับไปใช้ Tooltip มาตรฐานเบราว์เซอร์ (คงรหัสพัสดุไว้ครบ)',
+      targetSubject: 'กราฟแนวนอน "ปริมาณค้างเบิก > 0 แยกตามรายการพัสดุ" (js/materials.js, css/styles.css)',
+      storageFile: 'js/materials.js, css/styles.css, index.html, js/data_history.js',
+      changeSummary: 'นำ Custom Floating Tooltip (#matHChartTooltip) ออกและคืนค่า Native Tooltip (title="...") ที่แสดงรหัสพัสดุตามเดิม โดยคงแถวรหัสพัสดุใต้ชื่อพัสดุในการ์ดรายละเอียดแต่ละคลังพัสดุไว้ครบถ้วน',
+      details: '• ลบฟังก์ชัน Custom Tooltip (ensureMatChartTooltipEl, hideMatChartTooltip, positionMatChartTooltip, buildMatChartTooltipHtml, bindMatChartTooltipEvents) ออกจาก js/materials.js และคืนค่า title="..." บนแถว/ชื่อพัสดุ/แท่งกราฟ (ยังคงแสดง "รหัสพัสดุ: <รหัส>" ใน Tooltip)\n• ลบชุดสไตล์ .mat-hchart-tooltip ออกจาก css/styles.css\n• คงแถวรหัสพัสดุ (.mat-wh-mat-code-row) ใต้บรรทัดชื่อพัสดุในการ์ดรายละเอียดแต่ละคลังพัสดุไว้เหมือนเดิม\n• อัปเดต Cache Buster (?v=20261125_0830) ใน index.html',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "ย้อนกลับ tooltip คำสั่งล่าสุด"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ'
+    },
+    {
+      id: 'log_000_wh_card_mat_code_line_nov25',
+      timestamp: '2026-11-25 08:21:00',
+      timestampTh: '25 พ.ย. 2569, 08:21 น.',
+      type: 'EDIT',
+      typeBadge: 'เพิ่มรหัสพัสดุในการ์ดคลัง',
+      badgeClass: 'badge-type-edit',
+      title: 'เพิ่มแถวแสดงรหัสพัสดุใต้บรรทัดชื่อพัสดุในการ์ด "รายละเอียดแต่ละคลังพัสดุ (เฉพาะพัสดุ)"',
+      targetSubject: 'กรอบชื่อพัสดุที่เลือก (.mat-wh-selected-mat-box) ในการ์ดรายละเอียดแต่ละคลังพัสดุ',
+      storageFile: 'js/materials.js, css/styles.css, index.html, js/data_history.js',
+      changeSummary: 'เพิ่มบรรทัดแสดง "รหัสพัสดุ: <รหัส>" ในรูปแบบแคปซูลคมชัดใต้ชื่อพัสดุใน renderMatWarehouseSummary() พร้อมคัดลอกข้อความได้ และรองรับทั้งโหมดมืด/สว่าง',
+      details: '• เพิ่มแถว .mat-wh-mat-code-row ใต้ .mat-wh-selected-mat-title ใน js/materials.js ดึงรหัสจาก it.matCodes เรียงลำดับและคั่นด้วยเครื่องหมายจุลภาคกรณีมีหลายรหัส\n• เพิ่ม CSS .mat-wh-mat-code-row, .mat-wh-mat-code-label, .mat-wh-mat-code-pill ใน css/styles.css (เปิด user-select: text ให้คัดลอกรหัสไปค้นหาใน SAP ได้สะดวก พร้อมรองรับ [data-theme="light"])\n• อัปเดต Cache Buster (?v=20261125_0821) ใน index.html',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "เพิ่มรหัสพัสดุ ใต้บรรทัด ชื่อพัสดุ"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ'
+    },
+    {
+      id: 'log_000_mat_chart_custom_tooltip_nov25',
+      timestamp: '2026-11-25 08:18:00',
+      timestampTh: '25 พ.ย. 2569, 08:18 น.',
+      type: 'EDIT',
+      typeBadge: 'ปรับแต่ง Tooltip กราฟพัสดุ',
+      badgeClass: 'badge-type-edit',
+      title: 'อัปเกรด Tooltip กราฟปริมาณค้างเบิก > 0 แยกตามรายการพัสดุ เป็น Custom Tooltip ธีม PEA ม่วง-ทอง',
+      targetSubject: 'กราฟแนวนอน "ปริมาณค้างเบิก > 0 แยกตามรายการพัสดุ" (#matHChartBody, #matHChartTooltip)',
+      storageFile: 'js/materials.js, css/styles.css, index.html, js/data_history.js',
+      changeSummary: 'เปลี่ยนจาก Tooltip พื้นขาวของเบราว์เซอร์เป็น Custom Floating Tooltip ธีมพื้นหลังม่วงเข้มไล่เฉด ขอบทองเรืองแสง แสดงป้ายรหัสพัสดุสีทอง ชื่อพัสดุสีขาวคมชัด และชิปสรุปยอดค้างเบิก/คงคลัง รองรับทั้งโหมดมืดและสว่าง',
+      details: '• เปลี่ยนจาก native title="..." บนแถว/ชื่อพัสดุ/แท่งกราฟเป็น Custom Tooltip (#matHChartTooltip) แบบ position:fixed บน body พร้อมจัดตำแหน่งอัตโนมัติไม่ให้ตกขอบหน้าจอและซ่อนอัตโนมัติเมื่อเลื่อนหน้าหรือคลิก\n• ออกแบบสไตล์ .mat-hchart-tooltip ใน css/styles.css: พื้นหลังม่วงเข้มไล่เฉด (PEA Royal Purple) ขอบทองเรืองแสง ป้ายรหัสพัสดุสีทองโดดเด่น (.mat-htip-code) ข้อความวัสดุสีขาวคมชัด (.mat-htip-name) ชิปสรุปยอดค้างเบิก/คงคลังตามสีกราฟ พร้อมสไตล์โหมดสว่าง [data-theme="light"]\n• อัปเดต Cache Buster (?v=20261125_0818) ใน index.html',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "เปลี่ยนอักษร พื้นหลังให้สวยๆ Tooltip"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ'
+    },
+    {
+      id: 'log_000_mat_chart_tooltip_code_nov25',
+      timestamp: '2026-11-25 08:12:00',
+      timestampTh: '25 พ.ย. 2569, 08:12 น.',
+      type: 'EDIT',
+      typeBadge: 'เพิ่มรหัสพัสดุใน Tooltip กราฟ',
+      badgeClass: 'badge-type-edit',
+      title: 'เพิ่มการแสดงรหัสพัสดุ (Material Code) ใน Tooltip กราฟปริมาณค้างเบิก > 0 แยกตามรายการพัสดุ',
+      targetSubject: 'กราฟแนวนอน "ปริมาณค้างเบิก > 0 แยกตามรายการพัสดุ" ในแท็บรายการพัสดุ (js/materials.js)',
+      storageFile: 'js/materials.js, index.html, js/data_history.js',
+      changeSummary: 'เพิ่มข้อความ "รหัสพัสดุ: <รหัส>" ใน Tooltip (title) เมื่อชี้เมาส์บนชื่อพัสดุและแถวรายการของกราฟปริมาณค้างเบิก > 0 แยกตามรายการพัสดุ',
+      details: '• ดึงรหัสพัสดุทั้งหมดของรายการนั้นจากชุดข้อมูล it.matCodes (เรียงลำดับและคั่นด้วยเครื่องหมายจุลภาคกรณีมีหลายรหัส)\n• อัปเดต title ของ .mat-hchart-name ให้แสดง "รหัสพัสดุ: <รหัส>\\nคลิกเพื่อเลือกพัสดุนี้: <ข้อความวัสดุ> (แสดงทุกงบ)" และอัปเดต titleTip ของแถว .mat-hchart-row ให้แสดงรหัสพัสดุเช่นเดียวกัน\n• อัปเดต Cache Buster (?v=20261125_0812) ใน index.html',
+      sourceFile: 'คำสั่งผู้ใช้งาน: "แสดงรหัสพัสดุ เพิ่ม ในกรอบแดง"',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ต่ำ'
+    },
     {
       id: 'log_000_fix_office_dd_chevron_nov23',
       timestamp: '2026-11-23 09:48:00',
@@ -2404,7 +2587,7 @@
       author: 'ผู้ดูแลระบบ (System Admin)',
       impactLevel: 'สูง'
     },
-{
+    {
       id: 'log_000_import_file_08_materials_stock_mb52',
       timestamp: '2026-10-31 22:10:00',
       timestampTh: '31 ต.ค. 2569, 22:10 น.',
@@ -3012,7 +3195,7 @@
       sourceFile: 'คำสั่งผู้ใช้งาน & ภาพสรุปความต้องการ (Image Review 1-6)',
       author: 'ผู้ดูแลระบบ (System Admin)',
       impactLevel: 'ปานกลาง'
-    },    {
+    }, {
       id: 'log_000_col_picker_custom_tags_sap_pct',
       timestamp: '2026-10-30 16:30:00',
       timestampTh: '30 ต.ค. 2569, 16:30 น.',
@@ -3187,7 +3370,7 @@
       sourceFile: 'คำสั่งผู้ใช้งาน: "ไฟล์ 07 ให้ดึงข้อมูลมาแสดงเฉพาะ Mvt281 เท่านั้น" และ "เอาออก วงสีแดง"',
       author: 'ผู้ดูแลระบบ (System Admin)',
       impactLevel: 'ปานกลาง (คัดกรองข้อมูลเฉพาะ Mvt 281 และจัดแถบหัวตารางให้เรียบง่ายตามที่ผู้ใช้งานต้องการ)'
-    },    {
+    }, {
       id: 'log_000_add_materials_07_tab_and_table',
       timestamp: '2026-10-30 14:05:00',
       timestampTh: '30 ต.ค. 2569, 14:05 น.',
@@ -3285,7 +3468,7 @@
   /**
    * Toggle visibility of rules summary inside file card
    */
-  window.toggleDhCardRules = function(fileId) {
+  window.toggleDhCardRules = function (fileId) {
     const box = document.getElementById('rulesBox_' + fileId);
     const btn = document.getElementById('btnToggleRules_' + fileId);
     const textSpan = document.getElementById('btnToggleRulesText_' + fileId);
@@ -3324,7 +3507,7 @@
       const lastImportTh = DATA_SOURCE_CATALOG[0].importDateTh;
       const lastEditTh = allLogs[0] ? allLogs[0].timestampTh : '17 ต.ค. 2569, 08:15 น.';
 
-    container.innerHTML = `
+      container.innerHTML = `
       <div class="data-history-wrapper">
         
         <!-- Header Banner & Top Stats -->
@@ -3374,18 +3557,18 @@
           <div class="dh-stat-card">
             <div class="dh-stat-icon" style="background:rgba(139,92,246,0.15); color:#A78BFA;">📅</div>
             <div class="dh-stat-body">
-              <div class="dh-stat-val">12 พ.ย. 2569</div>
+              <div class="dh-stat-val">25 พ.ย. 2569</div>
               <div class="dh-stat-label">นำเข้าข้อมูล WBS &amp; พัสดุล่าสุด</div>
-              <div class="dh-stat-sub">2,083 รายการ WBS (ผสานไฟล์ 03, 04, 05, 06, 07, 08)</div>
+              <div class="dh-stat-sub">1,614 รายการ WBS (ผสานไฟล์ 03, 04, 05, 06, 07, 08)</div>
             </div>
           </div>
 
           <div class="dh-stat-card">
             <div class="dh-stat-icon" style="background:rgba(245,158,11,0.15); color:#FBBF24;">🛠️</div>
             <div class="dh-stat-body">
-              <div class="dh-stat-val">12 พ.ย. 2569</div>
+              <div class="dh-stat-val">25 พ.ย. 2569</div>
               <div class="dh-stat-label">แก้ไขข้อมูล / ตัวกรองล่าสุด</div>
-              <div class="dh-stat-sub">อัปเดตฐานข้อมูลไฟล์ 04 ZBUDR064 และไฟล์ 06 CN41 ล่าสุด (12 พ.ย. 69)</div>
+              <div class="dh-stat-sub">อัปเดตไฟล์ 01 เดือน ต.ค. และไฟล์ 03 WBS คงเหลือ 1,614 งาน (25 พ.ย. 69)</div>
             </div>
           </div>
 
@@ -3394,7 +3577,7 @@
             <div class="dh-stat-body">
               <div class="dh-stat-val">${totalStorageFiles} แหล่งจัดเก็บ</div>
               <div class="dh-stat-label">ไฟล์จัดเก็บในระบบ (System Storage)</div>
-              <div class="dh-stat-sub">js/data_wbs.js, js/data_aug.js, kpi_matrix.js</div>
+              <div class="dh-stat-sub">js/data_wbs.js, js/data_oct.js, kpi_matrix.js</div>
             </div>
           </div>
         </div>
@@ -3456,8 +3639,8 @@
                 <div class="dh-stage-cards">
                   <div class="dh-flow-node" onclick="window.openModelViewModal('src_03', 'source')">
                     <div class="dh-node-badge" style="background:#EC4899;">ไฟล์ 03</div>
-                    <div class="dh-node-title">WBS คงเหลือ (2,083 รายการ)</div>
-                    <div class="dh-node-meta">นำเข้า: 23 ต.ค. 69 • 5.43 MB</div>
+                    <div class="dh-node-title">WBS คงเหลือ (1,614 รายการ)</div>
+                    <div class="dh-node-meta">นำเข้า: 25 พ.ย. 69 • 85.3 KB</div>
                   </div>
                   <div class="dh-flow-node" onclick="window.openModelViewModal('src_04', 'source')">
                     <div class="dh-node-badge" style="background:#8B5CF6;">ไฟล์ 04</div>
@@ -3489,10 +3672,10 @@
                     <div class="dh-node-title">KPI Matrix (เกณฑ์วัด 8 ข้อ)</div>
                     <div class="dh-node-meta">นำเข้า: 3 ต.ค. 69 • 17.4 KB</div>
                   </div>
-                  <div class="dh-flow-node" onclick="window.openModelViewModal('src_01_aug', 'source')">
-                    <div class="dh-node-badge" style="background:#6366F1;">ไฟล์ 01</div>
-                    <div class="dh-node-title">รายงาน AUC เดือน ส.ค. (ล่าสุด)</div>
-                    <div class="dh-node-meta">นำเข้า: 29 ก.ย. 69 • 50.2 KB</div>
+                  <div class="dh-flow-node" onclick="window.openModelViewModal('src_01_oct', 'source')">
+                    <div class="dh-node-badge" style="background:#EC4899;">ไฟล์ 01</div>
+                    <div class="dh-node-title">รายงาน AUC เดือน ต.ค. (ล่าสุด)</div>
+                    <div class="dh-node-meta">นำเข้า: 25 พ.ย. 69 • 44.3 KB</div>
                   </div>
                 </div>
               </div>
@@ -3555,12 +3738,12 @@
                   <div class="dh-flow-node storage-node" onclick="window.openModelViewModal('src_03', 'source')">
                     <div class="dh-node-badge" style="background:#10B981;">js/data_wbs.js</div>
                     <div class="dh-node-title">window.AUC_WBS_REMAINING_DATA</div>
-                    <div class="dh-node-meta">2,083 รายการ WBS • 2.32 MB</div>
+                    <div class="dh-node-meta">1,614 รายการ WBS • 1.89 MB</div>
                   </div>
-                  <div class="dh-flow-node storage-node" onclick="window.openModelViewModal('src_01_aug', 'source')">
-                    <div class="dh-node-badge" style="background:#6366F1;">js/data_aug.js</div>
-                    <div class="dh-node-title">window.AUC_DATA_AUG (ส.ค.)</div>
-                    <div class="dh-node-meta">368 รายการ • 372 KB</div>
+                  <div class="dh-flow-node storage-node" onclick="window.openModelViewModal('src_01_oct', 'source')">
+                    <div class="dh-node-badge" style="background:#EC4899;">js/data_oct.js</div>
+                    <div class="dh-node-title">window.AUC_DATA_OCT (ต.ค.)</div>
+                    <div class="dh-node-meta">368 รายการ • 193.4 KB</div>
                   </div>
                   <div class="dh-flow-node storage-node" onclick="window.openModelViewModal('src_02', 'source')">
                     <div class="dh-node-badge" style="background:#3B82F6;">js/kpi_matrix.js</div>
@@ -3763,17 +3946,17 @@
       </div>
     `;
 
-    setupDhEventListeners();
+      setupDhEventListeners();
 
-    // Update badge on navigation tab dynamically to newest audit log date
-    const newestLog = allLogs && allLogs.length > 0 ? allLogs[0] : null;
-    const badgeEl = document.getElementById('dataHistoryBadge');
-    if (badgeEl && newestLog && newestLog.timestampTh) {
-      const match = newestLog.timestampTh.match(/^(\d{1,2}\s+[^\s,]+)/);
-      if (match) {
-        badgeEl.textContent = match[1];
+      // Update badge on navigation tab dynamically to newest audit log date
+      const newestLog = allLogs && allLogs.length > 0 ? allLogs[0] : null;
+      const badgeEl = document.getElementById('dataHistoryBadge');
+      if (badgeEl && newestLog && newestLog.timestampTh) {
+        const match = newestLog.timestampTh.match(/^(\d{1,2}\s+[^\s,]+)/);
+        if (match) {
+          badgeEl.textContent = match[1];
+        }
       }
-    }
     } catch (err) {
       console.error('Error rendering Data History Tab:', err);
       if (container) {
@@ -4121,10 +4304,10 @@
     const dateStr = `${now.getDate()} ${monthsTh[now.getMonth()]} ${now.getFullYear() + 543}, ${timeStr}`;
 
     const typeBadges = {
-        EDIT: '✏️',
-        IMPORT: '📥',
-        MERGE: '🔄',
-        CONFIG: '⚙️'
+      EDIT: '✏️',
+      IMPORT: '📥',
+      MERGE: '🔄',
+      CONFIG: '⚙️'
     };
 
     const newLog = {

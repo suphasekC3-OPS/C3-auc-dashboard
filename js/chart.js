@@ -442,8 +442,13 @@ class PeaChart {
               if (tl.targetVal >= 100 || tl.targetY <= pad.top + 2) {
                 prefTargetBadgeY = pad.top + 3;
               }
+              const maxM = (typeof tl.maxMonthIdx === 'number')
+                ? tl.maxMonthIdx
+                : (Array.isArray(tl.monthIdxs) && tl.monthIdxs.length ? Math.max(...tl.monthIdxs) : (typeof tl.monthIdx === 'number' ? tl.monthIdx : -1));
+              const hasDec = Boolean(tl.hasDec || maxM === 11 || (Array.isArray(tl.monthIdxs) && tl.monthIdxs.includes(11)) || /ธ\.ค\./.test(tl.label || ''));
               barItems.push({
                 type: 'target',
+                targetVal: tl.targetVal,
                 targetY: tl.targetY,
                 badgeY: prefTargetBadgeY,
                 h: badgeH,
@@ -451,7 +456,9 @@ class PeaChart {
                 color: tl.color || '#FFB81C',
                 textColor: tl.textColor || tl.color || '#FFD25A',
                 isPass: tl.isPass,
-                isLatestMonth: tl.isLatestMonth
+                isLatestMonth: tl.isLatestMonth,
+                maxMonthIdx: maxM,
+                hasDec: hasDec
               });
             });
 
@@ -483,7 +490,18 @@ class PeaChart {
             }
 
             // 3. Multi-pass bidirectional relaxation so items NEVER overlap each other
-            barItems.sort((a, b) => a.badgeY - b.badgeY);
+            // จัดลำดับให้ป้าย KPI เดือน ธ.ค. อยู่ตำแหน่งบนสุดเสมอ (เช่น ข้อ 3.3 TECO D2 ที่เป้า ต.ค. และ ธ.ค. เท่ากัน 100%)
+            barItems.sort((a, b) => {
+              if (a.type === 'target' && b.type === 'target') {
+                if (a.hasDec !== b.hasDec) return a.hasDec ? -1 : 1;
+                const dy = a.badgeY - b.badgeY;
+                if (Math.abs(dy) <= 1.0 && a.maxMonthIdx !== b.maxMonthIdx) {
+                  return b.maxMonthIdx - a.maxMonthIdx;
+                }
+                return dy;
+              }
+              return a.badgeY - b.badgeY;
+            });
 
             const hasAchieveBadge = (ext && ext.isExceedDecKpi && !isNoWork);
             const minGap = 4.0; // Guaranteed visual gap between badges

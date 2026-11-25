@@ -31,7 +31,7 @@
       kpiGrade: 'ALL',
       search: '',
       unit: 'ALL',
-      month: 8 // เริ่มต้นที่ ก.ย. (ไฟล์รายงาน 01 ก.ย.2569 ล่าสุด)
+      month: 9 // เริ่มต้นที่ ต.ค. (ไฟล์รายงาน 01 ต.ค.2569 ล่าสุด)
     },
     table: {
       page: 1,
@@ -482,7 +482,7 @@
     { monthIndex: 6, shortMonth: 'ก.ค.', monthName: 'กรกฎาคม', filename: '01 รายงาน AUC เดือน 7ก.ค.  (3.2teco).xlsx', targetVar: 'AUC_DATA_JUL', pattern: /7ก\.ค\.|เดือน\s*7\b/i },
     { monthIndex: 7, shortMonth: 'ส.ค.', monthName: 'สิงหาคม', filename: '01 รายงาน AUC เดือน 8ส.ค.  (3.2&3.3teco).xlsx', targetVar: 'AUC_DATA_AUG', pattern: /8ส\.ค\.|เดือน\s*8\b/i },
     { monthIndex: 8, shortMonth: 'ก.ย.', monthName: 'กันยายน', filename: '01 รายงาน AUC เดือน 9ก.ย.  (3.3teco).xlsx', targetVar: 'AUC_DATA_SEP', pattern: /9ก\.ย\.|เดือน\s*9\b/i },
-    { monthIndex: 9, shortMonth: 'ต.ค.', monthName: 'ตุลาคม', filename: '01 รายงาน AUC เดือน 10ต.ค. ยังไม่มี (3.3teco).xlsx', targetVar: 'AUC_DATA_OCT', pattern: /10ต\.ค\.|เดือน\s*10\b/i },
+    { monthIndex: 9, shortMonth: 'ต.ค.', monthName: 'ตุลาคม', filename: '01 รายงาน AUC เดือน 10ต.ค. (3.3teco).xlsx', targetVar: 'AUC_DATA_OCT', pattern: /10ต\.ค\.|เดือน\s*10\b/i },
     { monthIndex: 10, shortMonth: 'พ.ย.', monthName: 'พฤศจิกายน', filename: '01 รายงาน AUC เดือน 11พ.ย. ยังไม่มี (3.3teco).xlsx', targetVar: 'AUC_DATA_NOV', pattern: /11พ\.ย\.|เดือน\s*11\b/i },
     { monthIndex: 11, shortMonth: 'ธ.ค.', monthName: 'ธันวาคม', filename: '01 รายงาน AUC เดือน 12ธ.ค. ยังไม่มี (3.3teco).xlsx', targetVar: 'AUC_DATA_DEC', pattern: /12ธ\.ค\.|เดือน\s*12\b/i }
   ];
@@ -898,7 +898,7 @@
       const hasClosed = raw.some(d => (Number(d.closedJobs) > 0 || Number(d.closedValue) > 0));
       if (hasClosed) return true;
     }
-    return m >= 0 && m <= 8;
+    return m >= 0 && m <= 9;
   }
 
   function getLatestAvailableMonthIndex() {
@@ -907,7 +907,7 @@
         return m;
       }
     }
-    return 8; // Default fallback to ก.ย. (index 8)
+    return 9; // Default fallback to ต.ค. (index 9)
   }
   window.getLatestAvailableMonthIndex = getLatestAvailableMonthIndex;
 
@@ -932,7 +932,7 @@
     const m = Number(mIdx);
     let rawList = getRawDataForMonth(m);
     if (!rawList.length) {
-      rawList = (window.AUC_DATA_SEP || window.AUC_DATA_AUG || window.AUC_DATA_JUL || window.AUC_INITIAL_DATA || window.AUC_DATA_JUN || window.AUC_DATA_MAY || window.AUC_DATA_APR || window.AUC_DATA_MAR || window.AUC_DATA_FEB || window.AUC_DATA_JAN || []);
+      rawList = (window.AUC_DATA_OCT || window.AUC_DATA_SEP || window.AUC_DATA_AUG || window.AUC_DATA_JUL || window.AUC_INITIAL_DATA || window.AUC_DATA_JUN || window.AUC_DATA_MAY || window.AUC_DATA_APR || window.AUC_DATA_MAR || window.AUC_DATA_FEB || window.AUC_DATA_JAN || []);
     }
 
     state.allData = rawList.map(item => {
@@ -1227,16 +1227,17 @@
     }
 
     function updateChartMonthDropdown() {
+      const latestM = getLatestAvailableMonthIndex();
       let mHtml = '';
       for (let m = 0; m < 12; m++) {
         const hasData = hasReportForMonth(m);
-        const isLatest = m === 8;
+        const isLatest = m === latestM;
         const label = isLatest ? `เดือน ${MONTHS_TH[m]} (ล่าสุด)` : `เดือน ${MONTHS_TH[m]}`;
         const suffix = hasData ? '' : ' (ยังไม่มีข้อมูล)';
         const disabledAttr = hasData ? '' : ' disabled';
         mHtml += `<option value="${m}"${disabledAttr}>${label}${suffix}</option>`;
       }
-      const currentM = (typeof state.filters.month === 'number') ? state.filters.month : 8;
+      const currentM = (typeof state.filters.month === 'number') ? state.filters.month : latestM;
       document.querySelectorAll('.select-chart-month').forEach(sel => {
         sel.innerHTML = mHtml;
         sel.value = currentM;
@@ -1320,8 +1321,8 @@
     const badge = document.getElementById('selectedMonthBadge');
     if (badge) {
       const mIdx = (typeof state.filters.month === 'number') ? state.filters.month : getLatestAvailableMonthIndex();
-      const mName = MONTHS_TH[mIdx] || 'ก.ย.';
-      const hasData = activeBtn ? activeBtn.classList.contains('has-data') : (mIdx <= 7);
+      const mName = MONTHS_TH[mIdx] || 'ต.ค.';
+      const hasData = activeBtn ? activeBtn.classList.contains('has-data') : hasReportForMonth(mIdx);
       badge.textContent = `${mName} (${hasData ? 'มีข้อมูล' : 'ยังไม่มีข้อมูล'})`;
       if (hasData) {
         badge.classList.remove('no-data');
@@ -3464,34 +3465,46 @@
     // Save and format latest save timestamp
     const nowStr = setTargetFivePctSavedAt();
 
+    // อัปเดตการ์ดและตารางก่อน เพื่อไม่ให้การ render ใหม่ล้างสถานะสีเขียว (.is-saved / .just-updated) บนปุ่ม Save ทันที
+    renderNext3MonthsProjection();
+    if (typeof window.syncWbsSideKpiCard === 'function') {
+      window.syncWbsSideKpiCard();
+    }
+
+    if (window._saveTargetFivePctTimer) {
+      clearTimeout(window._saveTargetFivePctTimer);
+    }
+
     const btn = document.getElementById('btnSaveTargetFivePct');
     const btnText = document.getElementById('btnSaveTargetFivePctText');
     if (btn && btnText) {
       btn.classList.add('is-saved');
       btnText.textContent = '✓ บันทึกสำเร็จแล้ว';
-      setTimeout(() => {
-        btn.classList.remove('is-saved');
-        btnText.textContent = 'บันทึกการตั้งค่า (Save)';
-      }, 2200);
     }
 
-    // Update timestamp label in UI immediately with flash animation
+    // Update timestamp label in UI immediately with flash animation (เหมือนปุ่มบันทึกเดือนเกณฑ์ KPI)
     const savedAtEl = document.getElementById('txtTargetFivePctSavedAt');
     if (savedAtEl) {
       savedAtEl.textContent = nowStr;
       const wrap = document.getElementById('next3mConfigSavedAt');
       if (wrap) {
         wrap.classList.add('just-updated');
-        setTimeout(() => wrap.classList.remove('just-updated'), 2200);
       }
     }
 
+    window._saveTargetFivePctTimer = setTimeout(() => {
+      const b = document.getElementById('btnSaveTargetFivePct');
+      const bt = document.getElementById('btnSaveTargetFivePctText');
+      if (b && bt) {
+        b.classList.remove('is-saved');
+        bt.textContent = 'บันทึกการตั้งค่า (Save)';
+      }
+      const w = document.getElementById('next3mConfigSavedAt');
+      if (w) w.classList.remove('just-updated');
+    }, 2200);
+
     if (typeof window.showToast === 'function') {
       window.showToast(`💾 บันทึกการตั้งค่า +5% คงเหลือเรียบร้อยแล้ว (${nowStr})`, 'success');
-    }
-    renderNext3MonthsProjection();
-    if (typeof window.syncWbsSideKpiCard === 'function') {
-      window.syncWbsSideKpiCard();
     }
   };
 
@@ -8907,12 +8920,16 @@
             existing.monthIdxs.push(bt.monthIdx);
           }
           existing.monthNames = existing.monthIdxs.map(i => monthNames[i]);
+          existing.maxMonthIdx = Math.max(...existing.monthIdxs);
+          existing.hasDec = existing.monthIdxs.includes(11);
           existing.label = `KPI ${formatKpiMonthRuns(existing.monthIdxs)} ${valStr}`;
         } else {
           barTargetLines.push({
             ...bt,
             monthIdxs: [bt.monthIdx],
             monthNames: [bt.monthName],
+            maxMonthIdx: bt.monthIdx,
+            hasDec: (bt.monthIdx === 11),
             label: `KPI ${bt.monthName} ${valStr}`
           });
         }
