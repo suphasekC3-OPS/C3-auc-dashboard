@@ -95,11 +95,11 @@
       groupNo: '04',
       name: '04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx',
       category: 'SAP ZBUDR064 & Costs',
-      importDate: '2026-11-23 09:35:02',
-      importDateTh: '23 พ.ย. 2569, 09:35 น.',
-      lastModifiedTh: '23 พ.ย. 2569, 09:35 น. (ไฟล์ล่าสุด)',
-      sizeText: '338.2 KB',
-      recordCount: 2083,
+      importDate: '2026-11-25 10:48:03',
+      importDateTh: '25 พ.ย. 2569, 10:48 น.',
+      lastModifiedTh: '25 พ.ย. 2569, 10:48 น. (ไฟล์ล่าสุด)',
+      sizeText: '267.3 KB',
+      recordCount: 1614,
       status: 'active',
       statusText: 'ผสานข้อมูลสำเร็จ',
       storageFile: 'js/data_wbs.js',
@@ -140,7 +140,7 @@
       columns: [
         'cn41Cost05 (ต้นทุนจริง วันเริ่มบัญชี 13 พ.ย. 69)',
         'cn41CostInc (มูลค่าAUCที่เพิ่มขึ้น = ไฟล์ 06 - ไฟล์ 05)',
-        'cn41ActualCost (ต้นทุนจริง ไฟล์ 06 ล่าสุด 13 พ.ย. 69)'
+        'cn41ActualCost (ต้นทุนจริง ไฟล์ 06 ล่าสุด 25 พ.ย. 69)'
       ],
       sampleProvider: () => (window.AUC_WBS_REMAINING_DATA || []).slice(0, 5).map(r => ({
         'WBS': r.wbs,
@@ -155,18 +155,18 @@
       groupNo: '06',
       name: '06 WBS CN41 มูลค่า AUC วันดึงข้อมูลล่าสุด.xlsx',
       category: 'SAP CN41 AUC Values (Latest)',
-      importDate: '2026-11-13 10:25:51',
-      importDateTh: '13 พ.ย. 2569, 10:25 น.',
-      lastModifiedTh: '13 พ.ย. 2569, 10:25 น. (ไฟล์ล่าสุด)',
-      sizeText: '159.1 KB',
-      recordCount: 2083,
+      importDate: '2026-11-25 10:51:57',
+      importDateTh: '25 พ.ย. 2569, 10:51 น.',
+      lastModifiedTh: '25 พ.ย. 2569, 10:51 น. (ไฟล์ล่าสุด)',
+      sizeText: '126.4 KB',
+      recordCount: 1614,
       status: 'active',
       statusText: 'ผสานข้อมูลสำเร็จ',
       storageFile: 'js/data_wbs.js',
       storageVar: 'window.AUC_WBS_REMAINING_DATA.cn41ActualCost',
       icon: '📑',
       badgeColor: '#F59E0B',
-      description: 'รายงาน SAP CN41 ระบุต้นทุนจริงและมูลค่า AUC สะสม (บาท) ของแต่ละโครงการ สำหรับวิเคราะห์มูลค่าสินทรัพย์ระหว่างก่อสร้าง ล่าสุด 13 พ.ย. 69 ยอดรวม 674,579,954.28 บาท',
+      description: 'รายงาน SAP CN41 ระบุต้นทุนจริงและมูลค่า AUC สะสม (บาท) ของแต่ละโครงการ สำหรับวิเคราะห์มูลค่าสินทรัพย์ระหว่างก่อสร้าง ล่าสุด 25 พ.ย. 69 ยอดรวม 562,782,760.40 บาท (เพิ่มขึ้น +670,037.26 บาทจากฐาน 13 พ.ย. 69)',
       columns: [
         'cn41ActualCost (มูลค่า AUC บาท)', 'cn41ObjDesc (ออบเจคโครงการ)', 'cn41Level (ระดับ)',
         'cn41Currency (สกุลเงิน THB)', 'cn41Row (ลำดับแถว)'
@@ -183,18 +183,18 @@
       groupNo: '07',
       name: '07 พัสดุค้างเบิก CN52N.xlsx',
       category: 'SAP CN52N Pending Materials',
-      importDate: '2026-11-20 15:06:30',
-      importDateTh: '20 พ.ย. 2569, 15:06 น.',
-      lastModifiedTh: '20 พ.ย. 2569, 15:06 น. (ไฟล์ล่าสุด)',
-      sizeText: '4.56 MB',
-      recordCount: 53872,
+      importDate: '2026-11-25 11:01:38',
+      importDateTh: '25 พ.ย. 2569, 11:01 น.',
+      lastModifiedTh: '25 พ.ย. 2569, 11:01 น. (ไฟล์ล่าสุด)',
+      sizeText: '5.86 MB',
+      recordCount: 51640,
       status: 'active',
       statusText: 'เชื่อม WBS ไฟล์ 03 & 04 สำเร็จ 100%',
       storageFile: 'js/data_materials_07.js',
       storageVar: 'window.AUC_MAT07_COMPACT',
       icon: '📦',
       badgeColor: '#0EA5E9',
-      description: 'รายงานพัสดุค้างเบิก SAP CN52N ทั้งหมด เฉพาะ Mvt 281 ทั้งหมด 53,872 รายการ (1,220 งาน WBS, 533 รหัสวัสดุ / หมวด 1* 500 รหัส) เชื่อมกับไฟล์ 03 ผ่านคอลัมน์ องค์ประกอบ WBS และเชื่อมไฟล์ 04 ผ่านคอลัมน์ ข้อกำหนดโครงการ /WBS แสดงในเมนู รายการพัสดุ',
+      description: 'รายงานพัสดุค้างเบิก SAP CN52N ทั้งหมด เฉพาะ Mvt 281 ทั้งหมด 51,640 รายการ (1,167 งาน WBS, 527 รหัสวัสดุ / หมวด 1* 495 รหัส, ค้างเบิก > 0 จำนวน 4,864 รายการ) เชื่อมกับไฟล์ 03 ผ่านคอลัมน์ องค์ประกอบ WBS และเชื่อมไฟล์ 04 ผ่านคอลัมน์ ข้อกำหนดโครงการ /WBS แสดงในเมนู รายการพัสดุ',
       rulesHtml: `<div style="background:rgba(15,23,42,0.85); border:1px solid rgba(14,165,233,0.35); border-radius:8px; padding:0.65rem 0.85rem; font-size:0.8rem; line-height:1.5;">
   <div style="font-weight:700; color:#38BDF8; margin-bottom:0.45rem; display:flex; align-items:center; gap:0.35rem;">
     <span>📋 เงื่อนไขสรุปการประมวลผล (แสดง / ไม่แสดง ข้อมูลในระบบ):</span>
@@ -203,7 +203,7 @@
     <div style="display:flex; align-items:flex-start; gap:0.45rem; background:rgba(16,185,129,0.12); padding:0.45rem 0.65rem; border-radius:6px; border-left:3px solid #10B981;">
       <span style="color:#10B981; font-weight:800; font-size:0.85rem; flex-shrink:0;">✅ แสดง:</span>
       <div style="color:#E2E8F0;">
-        <span style="color:#6EE7B7; font-weight:700;">• รหัสพัสดุเฉพาะหมวด 1*</span> (อุปกรณ์หลักระบบจำหน่าย/สายส่ง/หม้อแปลง 500 รหัส)<br>
+        <span style="color:#6EE7B7; font-weight:700;">• รหัสพัสดุเฉพาะหมวด 1*</span> (อุปกรณ์หลักระบบจำหน่าย/สายส่ง/หม้อแปลง 495 รหัส)<br>
         <span style="color:#6EE7B7; font-weight:700;">• เฉพาะ Movement Type 281</span> (เบิกจ่ายพัสดุเข้าโครงการ WBS ก่อสร้าง)<br>
         <span style="color:#6EE7B7; font-weight:700;">• เชื่อมโยง WBS คงเหลือไฟล์ 03</span> (และผูกงบประมาณโครงการไฟล์ 04 ZBUDR064)<br>
         <span style="color:#6EE7B7; font-weight:700;">• ปริมาณค้างเบิก:</span> คำนวณจาก (ต้องการ − เบิกจ่าย − คลัง) หากติดลบคิดเป็น 0
@@ -241,18 +241,18 @@
       groupNo: '08',
       name: '08 พัสดุคงเหลือ MB52.xlsx',
       category: 'SAP MB52 Warehouse Stock',
-      importDate: '2026-11-20 15:22:22',
-      importDateTh: '20 พ.ย. 2569, 15:22 น.',
-      lastModifiedTh: '20 พ.ย. 2569, 15:22 น. (ไฟล์ล่าสุด)',
-      sizeText: '211.9 KB',
-      recordCount: 4043,
+      importDate: '2026-11-25 11:02:49',
+      importDateTh: '25 พ.ย. 2569, 11:02 น.',
+      lastModifiedTh: '25 พ.ย. 2569, 11:02 น. (ไฟล์ล่าสุด)',
+      sizeText: '112.5 KB',
+      recordCount: 1949,
       status: 'active',
       statusText: 'เชื่อมพัสดุไฟล์ 07 (รหัสพัสดุ & โรงงาน) สำเร็จ 100%',
       storageFile: 'js/data_materials_08.js',
       storageVar: 'window.AUC_MAT08_STOCK',
       icon: '🏬',
       badgeColor: '#10B981',
-      description: 'รายงานปริมาณพัสดุคงเหลือในคลังจาก SAP MB52 รวม 4,043 รายการ (427 รหัสพัสดุ, 7 โรงงาน/Plant I010-I070, 2,469 คู่พัสดุ-โรงงาน) ครบทั้งคลัง SLoc 0021 (งบ C: 1,668 แถว, รวม 715,496.619) และ SLoc 0022 (งบ I,P: 2,375 แถว, รวม 2,269,699.586) นำมาเชื่อมโยงกับไฟล์ 07 ด้วยรหัสพัสดุและโรงงาน เพื่อแสดงเปรียบเทียบในกราฟแท่งแนวนอนของเมนูรายการพัสดุ',
+      description: 'รายงานปริมาณพัสดุคงเหลือในคลังจาก SAP MB52 รวม 1,949 รายการ (343 รหัสพัสดุ, 6 โรงงาน/Plant I010-I070, 1,390 คู่พัสดุ-โรงงาน) ครบทั้งคลัง SLoc 0021 (งบ C: 863 แถว, รวม 711,487.949) และ SLoc 0022 (งบ I,P: 1,086 แถว, รวม 2,307,702.566) นำมาเชื่อมโยงกับไฟล์ 07 ด้วยรหัสพัสดุและโรงงาน เพื่อแสดงเปรียบเทียบในกราฟแท่งแนวนอนของเมนูรายการพัสดุ',
       rulesHtml: `<div style="background:rgba(15,23,42,0.85); border:1px solid rgba(16,185,129,0.35); border-radius:8px; padding:0.65rem 0.85rem; font-size:0.8rem; line-height:1.5;">
   <div style="font-weight:700; color:#34D399; margin-bottom:0.45rem; display:flex; align-items:center; gap:0.35rem;">
     <span>📋 กฎการเชื่อมโยงและการแสดงผลไฟล์ 08 ในกราฟ:</span>
@@ -498,7 +498,7 @@
       role: 'จัดเก็บข้อมูลหลักงาน WBS (ไฟล์ 03 + 04 + 05 + 06 + Google Sheet)',
       recordsCount: '1,614 รายการ (41 คอลัมน์)',
       fileSize: '1.88 MB',
-      updatedAt: '25 พ.ย. 2569, 10:15 น.',
+      updatedAt: '25 พ.ย. 2569, 10:55 น.',
       status: '100% ฐานข้อมูลอัปเดตล่าสุด',
       variable: 'window.AUC_WBS_REMAINING_DATA'
     },
@@ -508,7 +508,7 @@
       role: 'ตรรกะคำนวณตัวกรอง, ค้นหาสถานะ SAP, จัดกลุ่มสรุปผล',
       recordsCount: '7,884 บรรทัดคำสั่ง',
       fileSize: '381 KB',
-      updatedAt: '25 พ.ย. 2569, 10:15 น.',
+      updatedAt: '25 พ.ย. 2569, 10:55 น.',
       status: 'อัปเดตล่าสุดวันนี้',
       variable: 'window.renderWbsTab, getFilteredWbsData'
     },
@@ -516,9 +516,9 @@
       path: 'js/data_materials_07.js',
       title: 'ฐานข้อมูลรายการพัสดุค้างเบิก CN52N (ไฟล์ 07)',
       role: 'จัดเก็บข้อมูลพัสดุค้างเบิกแบบบีบอัด Dictionary (เฉพาะ Mvt 281, รหัสพัสดุ 1*, เชื่อม WBS ไฟล์ 03 และ 04)',
-      recordsCount: '53,872 รายการ (เฉพาะ Mvt 281, 14 คอลัมน์)',
-      fileSize: '2.46 MB',
-      updatedAt: '20 พ.ย. 2569, 15:14 น.',
+      recordsCount: '51,640 รายการ (เฉพาะ Mvt 281, 14 คอลัมน์)',
+      fileSize: '2.35 MB',
+      updatedAt: '25 พ.ย. 2569, 11:04 น.',
       status: '100% ฐานข้อมูลอัปเดตล่าสุด',
       variable: 'window.AUC_MAT07_COMPACT'
     },
@@ -526,9 +526,9 @@
       path: 'js/data_materials_08.js',
       title: 'ฐานข้อมูลพัสดุคงเหลือในคลัง MB52 (ไฟล์ 08)',
       role: 'จัดเก็บข้อมูลสต็อกคงเหลือในคลัง แยกตามรหัสพัสดุและโรงงาน (SLoc 0021 งบ C, SLoc 0022 งบ I,P)',
-      recordsCount: '2,469 รายการจับคู่พัสดุ-โรงงาน (4,043 แถวต้นฉบับ MB52)',
-      fileSize: '199.2 KB',
-      updatedAt: '20 พ.ย. 2569, 15:24 น.',
+      recordsCount: '1,390 รายการจับคู่พัสดุ-โรงงาน (1,949 แถวต้นฉบับ MB52)',
+      fileSize: '113.2 KB',
+      updatedAt: '25 พ.ย. 2569, 11:08 น.',
       status: '100% ฐานข้อมูลอัปเดตล่าสุด',
       variable: 'window.AUC_MAT08_STOCK'
     },
@@ -538,7 +538,7 @@
       role: 'เชื่อม WBS ไฟล์ 03 -> 07 (องค์ประกอบ WBS) & 04 (ข้อกำหนดโครงการ /WBS), ตัวกรอง, เลือกคอลัมน์ 49 คอลัมน์, ส่งออก CSV',
       recordsCount: '49 คอลัมน์เลือกแสดงได้',
       fileSize: '195 KB',
-      updatedAt: '25 พ.ย. 2569, 08:30 น.',
+      updatedAt: '25 พ.ย. 2569, 11:08 น.',
       status: 'อัปเดตล่าสุดวันนี้',
       variable: 'window.renderMaterialsTab'
     },
@@ -618,6 +618,70 @@
    * System Pre-defined Audit & Modification Log Entries
    */
   const BASE_AUDIT_LOGS = [
+    {
+      id: 'log_000_update_f08_nov25',
+      timestamp: '2026-11-25 11:08:00',
+      timestampTh: '25 พ.ย. 2569, 11:08 น.',
+      type: 'IMPORT',
+      typeBadge: 'อัปเดตไฟล์ 08 พัสดุคงเหลือ (25 พ.ย. 69)',
+      badgeClass: 'badge-type-import',
+      title: 'นำเข้าและอัปเดตฐานข้อมูลไฟล์ 08 พัสดุคงเหลือในคลัง MB52 ล่าสุด วันที่ 25 พ.ย. 2569',
+      targetSubject: 'ฐานข้อมูลสต็อกคงคลัง (js/data_materials_08.js) และป้ายวันที่ไฟล์ 08 ในแท็บรายการพัสดุ',
+      storageFile: 'js/data_materials_08.js, js/materials.js, index.html, js/data_history.js',
+      changeSummary: 'อัปเดตไฟล์ 08 MB52 (25 พ.ย. 2569, 11:02 น.): 1,949 แถวต้นฉบับ -> 1,390 คู่พัสดุ-โรงงาน (343 รหัสพัสดุ, 6 คลัง I010-I070) | SLoc 0021 งบ C: 711,487.949 (863 แถว, เปลี่ยน -4,008.670) | SLoc 0022 งบ I,P: 2,307,702.566 (1,086 แถว, เปลี่ยน +38,002.980)',
+      details: '==========================================================================\n🟣 สรุปการอัปเดตไฟล์ 08 พัสดุคงเหลือในคลัง (MB52) | ประมวลผลเมื่อ 25 พ.ย. 2569, 11:08 น.\n==========================================================================\n• ไฟล์ต้นทาง : 08 พัสดุคงเหลือ MB52.xlsx (แก้ไขล่าสุด: 25 พ.ย. 2569, 11:02 น., ขนาด 112.5 KB)\n• ฐานข้อมูลที่สร้าง : js/data_materials_08.js (ขนาด 113.2 KB, สำรองเดิมที่ scratch/data_materials_08.bak_before_nov25.js)\n• สรุปยอดสต็อกคงคลัง (เทียบกับรอบ 20 พ.ย. 69):\n  - แถวข้อมูลต้นฉบับ MB52 : เดิม 4,043 -> ใหม่ 1,949 แถว (ครอบคลุม 6 คลังหลัก I010, I020, I030, I040, I050, I070)\n  - รายการจับคู่พัสดุ-โรงงาน : เดิม 2,469 -> ใหม่ 1,390 คู่ (343 รหัสพัสดุ)\n  - SLoc 0021 (งบ C) : เดิม 715,496.619 -> ใหม่ 711,487.949 (863 แถว, เปลี่ยน -4,008.670)\n  - SLoc 0022 (งบ I,P) : เดิม 2,269,699.586 -> ใหม่ 2,307,702.566 (1,086 แถว, เปลี่ยน +38,002.980)\n• อัปเดต meta.lastModifiedTh ("25 พ.ย. 2569, 11:02 น."), ป้ายวันที่ใน js/materials.js, แค็ตตาล็อก src_08 / Model View และ Cache Buster (?v=20261125_1108) ครบทุกจุด',
+      sourceFile: '08 พัสดุคงเหลือ MB52.xlsx (แก้ไขล่าสุด 25 พ.ย. 2569, 11:02 น.)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'ปานกลาง'
+    },
+    {
+      id: 'log_000_update_f07_nov25',
+      timestamp: '2026-11-25 11:05:00',
+      timestampTh: '25 พ.ย. 2569, 11:05 น.',
+      type: 'IMPORT',
+      typeBadge: 'อัปเดตไฟล์ 07 พัสดุ (25 พ.ย. 69)',
+      badgeClass: 'badge-type-import',
+      title: 'นำเข้าและอัปเดตฐานข้อมูลไฟล์ 07 พัสดุค้างเบิก CN52N ล่าสุด วันที่ 25 พ.ย. 2569',
+      targetSubject: 'ฐานข้อมูลรายการพัสดุค้างเบิก (js/data_materials_07.js) และป้ายวันที่ไฟล์ 07 ในแท็บรายการพัสดุ',
+      storageFile: 'js/data_materials_07.js, js/materials.js, index.html, js/data_history.js',
+      changeSummary: 'อัปเดตไฟล์ 07 CN52N (25 พ.ย. 2569, 11:01 น.): แถว Excel ต้นฉบับ 68,598 แถว -> คัดเฉพาะ Mvt 281 จำนวน 51,640 รายการ (เดิม 53,872, ลดลง -2,232 รายการ | 1,167 งาน WBS, 527 รหัสวัสดุ / หมวด 1* 495 รหัส | แมตช์ไฟล์ 03 ครบ 100% = 51,640 แถว | หมวด 1* 49,428 แถว, ค้างเบิก > 0 จำนวน 4,864 รายการ)',
+      details: '==========================================================================\n🟣 สรุปการอัปเดตไฟล์ 07 พัสดุค้างเบิก (CN52N) | ประมวลผลเมื่อ 25 พ.ย. 2569, 11:05 น.\n==========================================================================\n• ไฟล์ต้นทาง : 07 พัสดุค้างเบิก CN52N.xlsx (แก้ไขล่าสุด: 25 พ.ย. 2569, 11:01 น., ขนาด 5.86 MB)\n• ฐานข้อมูลที่สร้าง : js/data_materials_07.js (ขนาด 2.35 MB, สำรองเดิมที่ scratch/data_materials_07.bak_before_nov25.js)\n• สรุปจำนวนแถวข้อมูล:\n  - แถวทั้งหมดในไฟล์ Excel : 68,598 แถว\n  - คัดเฉพาะ Mvt 281 : 51,640 รายการ (ตัด Mvt อื่นออก 16,958 แถว | เทียบเดิม 53,872 ลดลง -2,232 รายการ)\n  - จำนวนงาน WBS ที่มีรายการพัสดุ : 1,167 งาน (จับคู่ตรงกับ WBS คงเหลือไฟล์ 03 ครบ 51,640/51,640 รายการ = 100%)\n  - จำนวนรหัสวัสดุทั้งหมด : 527 รหัส (เฉพาะหมวด 1* จำนวน 495 รหัส)\n  - รายการพัสดุหมวด 1* ที่แสดงในแท็บรายการพัสดุ : 49,428 รายการ (ค้างเบิก > 0 จำนวน 4,864 รายการ)\n• อัปเดต meta.lastModifiedTh ("25 พ.ย. 2569, 11:01 น."), ป้ายวันที่ใน js/materials.js, ป้ายแท็บ #materialsTabTotalBadge (49,428), แค็ตตาล็อก src_07 / Model View และ Cache Buster (?v=20261125_1105) ครบทุกจุด (คงวันที่ไฟล์ 08 ไว้ที่ 20 พ.ย. 69)',
+      sourceFile: '07 พัสดุค้างเบิก CN52N.xlsx (แก้ไขล่าสุด 25 พ.ย. 2569, 11:01 น.)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'สูง'
+    },
+    {
+      id: 'log_000_update_f06_nov25',
+      timestamp: '2026-11-25 10:55:00',
+      timestampTh: '25 พ.ย. 2569, 10:55 น.',
+      type: 'IMPORT',
+      typeBadge: 'อัปเดตไฟล์ 06 CN41 (25 พ.ย. 69)',
+      badgeClass: 'badge-type-import',
+      title: 'นำเข้าและอัปเดตข้อมูลไฟล์ 06 WBS CN41 มูลค่า AUC ล่าสุด วันที่ 25 พ.ย. 2569',
+      targetSubject: 'มูลค่า AUC ล่าสุด (cn41ActualCost), ส่วนต่างที่เพิ่มขึ้น (cn41CostInc) และป้ายวันที่ไฟล์ 06 ทุกจุด',
+      storageFile: 'js/data_wbs.js, js/wbs.js, index.html, js/data_history.js',
+      changeSummary: 'อัปเดตไฟล์ 06 CN41 (25 พ.ย. 2569, 10:51 น., แมตช์ 1,614/1,614 งาน = 100%): มูลค่า AUC รวมเพิ่มจาก 562,112,723.14 -> 562,782,760.40 บาท (+670,037.26 บาท, เปลี่ยน 40 งาน: เพิ่ม 39 / ลด 1) | CLSD F4 (42 งาน): 18,558,181.83 บาท (+622,194.77) | CLSD F2 (13 งาน): 704,161.09 บาท (+20,672.50)',
+      details: '==========================================================================\n🟣 สรุปการอัปเดตไฟล์ 06 WBS CN41 มูลค่า AUC ล่าสุด | ประมวลผลเมื่อ 25 พ.ย. 2569, 10:55 น.\n==========================================================================\n• ไฟล์ที่นำเข้า : 06 WBS CN41 มูลค่า AUC วันดึงข้อมูลล่าสุด.xlsx (แก้ไขล่าสุด: 25 พ.ย. 2569, 10:51 น., ขนาด 126.4 KB, 1,610 ดัชนี WBS)\n• ฐานข้อมูลที่อัปเดต : js/data_wbs.js (ขนาด 1.88 MB, สำรองเดิมที่ scratch/data_wbs.bak_before_f06_nov25.js)\n• อัตราการจับคู่ : 1,614 / 1,614 รายการ (100%, Unmatched = 0)\n• มูลค่า AUC ฐาน ไฟล์ 05 (13 พ.ย. 69) : 562,112,723.14 บาท\n• มูลค่า AUC ล่าสุด ไฟล์ 06 (25 พ.ย. 69) : เดิม 562,112,723.14 -> ใหม่ 562,782,760.40 บาท (+670,037.26 บาท)\n• มูลค่า AUC ที่เพิ่มขึ้น (cn41CostInc = 06 - 05) : +670,037.26 บาท (เปลี่ยน 40 งาน: เพิ่มขึ้น 39 งาน, ลดลง 1 งาน)\n• มูลค่างานปิดใน SAP ล่าสุด:\n  - CLSD F4 (42 งาน): 17,935,987.06 -> 18,558,181.83 บาท (+622,194.77 บาท)\n  - CLSD F2 (13 งาน): 683,488.59 -> 704,161.09 บาท (+20,672.50 บาท)\n• ตัวอย่างรายการที่มูลค่า AUC เปลี่ยนแปลงสูงสุด:\n  1) I-68-I-DMTA8.IQ.1014 (กฟส.ด่านมะขามเตี้ย): 1,432,210.10 -> 1,895,396.74 (+463,186.64 บาท)\n  2) I-67-I-UTO68.HB.2215 (กฟส.อู่ทอง): 819,146.09 -> 854,465.88 (+35,319.79 บาท)\n  3) I-68-I-SPIE8.IQ.1025 (กฟจ.สุพรรณบุรี): 468,003.24 -> 500,784.46 (+32,781.22 บาท)\n  4) I-67-I-UTO68.HB.2214 (กฟส.อู่ทอง): 948,721.60 -> 975,812.83 (+27,091.23 บาท)\n  5) I-68-I-DMT69.JA.2204 (กฟส.ด่านมะขามเตี้ย): 1,952,814.75 -> 1,974,129.85 (+21,315.10 บาท)\n• อัปเดตวันที่ไฟล์ 06 เป็น 25 พ.ย. 69 (10:51 น.) ครบทุกจุด (คงวันที่ไฟล์ 05 ไว้ที่ 13 พ.ย. 69) และอัปเดต Cache Buster (?v=20261125_1055)',
+      sourceFile: '06 WBS CN41 มูลค่า AUC วันดึงข้อมูลล่าสุด.xlsx (แก้ไขล่าสุด 25 พ.ย. 2569, 10:51 น.)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'สูง'
+    },
+    {
+      id: 'log_000_update_f04_nov25',
+      timestamp: '2026-11-25 10:50:00',
+      timestampTh: '25 พ.ย. 2569, 10:50 น.',
+      type: 'IMPORT',
+      typeBadge: 'อัปเดตไฟล์ 04 WBS (25 พ.ย. 69)',
+      badgeClass: 'badge-type-import',
+      title: 'นำเข้าและอัปเดตข้อมูลไฟล์ 04 WBS ZBUDR064 ล่าสุด วันที่ 25 พ.ย. 2569 (ฐาน 1,614 งาน)',
+      targetSubject: 'ตารางข้อมูล WBS คงเหลือ (js/data_wbs.js) และป้ายวันที่ไฟล์ 04 ทุกจุด (WBS & รายการพัสดุ)',
+      storageFile: 'js/data_wbs.js, js/wbs.js, js/materials.js, index.html, js/data_history.js',
+      changeSummary: 'อัปเดตไฟล์ 04 (25 พ.ย. 2569, 10:48 น.): สถานะ SAP เปลี่ยน 63 งาน (%เบิกพัสดุเปลี่ยน 32 งาน, %คชจ.เปลี่ยน 30 งาน) | CLSD F4: เดิม 30 -> ใหม่ 42 งาน (+12 งาน, +8,158,166.19 บาท รวม 17,935,987.06 บาท) | CLSD F2: เดิม 1 -> ใหม่ 13 งาน (+12 งาน, +358,985.43 บาท รวม 683,488.59 บาท)',
+      details: '==========================================================================\n🟣 สรุปความแตกต่าง ไฟล์ 04 WBS (ZBUDR064) | ประมวลผลเมื่อ 25 พ.ย. 2569, 10:50 น.\n==========================================================================\n• ไฟล์ที่นำเข้า : 04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx (แก้ไขล่าสุด: 25 พ.ย. 2569, 10:48 น., ขนาด 267.3 KB)\n• ยอดงานปิดแล้ว (CLSD F4) : เดิม 30 งาน (9,777,820.87 บาท) -> ใหม่ 42 งาน (17,935,987.06 บาท) [+12 งาน / +8,158,166.19 บาท]\n• ยอดงานสถานะ (CLSD F2) : เดิม 1 งาน (324,503.16 บาท) -> ใหม่ 13 งาน (683,488.59 บาท) [+12 งาน / +358,985.43 บาท]\n• จำนวนงานที่จับคู่ตรงกัน : 1,614 / 1,614 รายการ (ดัชนีไฟล์ 04 จำนวน 1,610 รายการ)\n• จำนวนงานที่สถานะ SAP เปลี่ยนแปลง : 63 งาน (สถานะเต็มเปลี่ยน 68 งาน)\n• จำนวนงานที่ % เบิกพัสดุ เปลี่ยน : 32 งาน | % เบิก คชจ. เปลี่ยน : 30 งาน | คชจ.หน้างานเปลี่ยน : 27 งาน\n• สรุปกลุ่มการเปลี่ยนสถานะ SAP (63 งาน):\n  - REL D1 -> TECO D2 : 18 งาน | TECO D2 -> CLSD F2 : 12 งาน | TECO D2 -> CLSD F4 : 11 งาน\n  - REL C1 -> TECO D2 : 6 งาน | REL C3 -> TECO D2 : 3 งาน | REL C9 -> TECO D2 : 3 งาน\n  - TECO D3 -> CLSD F4 : 1 งาน | TECO D2 -> TECO D3 : 1 งาน | TECO D2 -> REL C9 : 1 งาน | TECO D3 -> TECO D2 : 1 งาน\n  - REL B1 -> REL B2 : 1 | REL B1 -> REL C1 : 1 | REL B2 -> REL C1 : 1 | REL C1 -> REL D1 : 1 | REL D1 -> REL C3 : 1 | REL D2 -> TECO D2 : 1\n• ตัวอย่างรายการที่สถานะเปลี่ยน (มูลค่า AUC สูงสุด):\n  1) P-TDD02.3-I-OMNNA.0027 (กฟส.อ้อมน้อย): TECO D3 -> CLSD F4 (AUC 4,792,436.02 บาท)\n  2) I-67-I-BOP68.HB.2203 (กฟส.บ่อพลอย): REL D1 -> TECO D2 (AUC 2,896,948.27 บาท)\n  3) I-67-I-BOP68.HB.2202 (กฟส.บ่อพลอย): REL D1 -> TECO D2 (AUC 2,495,830.41 บาท)\n  4) I-68-I-DMTB8.IQ.1020 (กฟส.ด่านมะขามเตี้ย): TECO D2 -> CLSD F4 (AUC 1,693,890.35 บาท)\n  5) I-69-I-SMG69.M4.1109 (กรย.): REL C1 -> REL D1 (AUC 1,441,059.53 บาท)\n• อัปเดตวันที่ไฟล์ 04 เป็น 25 พ.ย. 69 (10:48 น.) ครบทุกจุดใน index.html, js/wbs.js, js/materials.js, js/data_history.js และ Cache Buster (?v=20261125_1050)',
+      sourceFile: '04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx (แก้ไขล่าสุด 25 พ.ย. 2569, 10:48 น.)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'สูง'
+    },
     {
       id: 'log_000_update_f05_nov13_nov25',
       timestamp: '2026-11-25 10:15:00',
@@ -3645,22 +3709,22 @@
                   <div class="dh-flow-node" onclick="window.openModelViewModal('src_04', 'source')">
                     <div class="dh-node-badge" style="background:#8B5CF6;">ไฟล์ 04</div>
                     <div class="dh-node-title">ZBUDR064 (%พัสดุ/สถานะ SAP)</div>
-                    <div class="dh-node-meta">นำเข้า: 12 พ.ย. 69 • 431.0 KB</div>
+                    <div class="dh-node-meta">นำเข้า: 25 พ.ย. 69 • 267.3 KB</div>
                   </div>
                   <div class="dh-flow-node" onclick="window.openModelViewModal('src_06', 'source')">
                     <div class="dh-node-badge" style="background:#F59E0B;">ไฟล์ 06</div>
                     <div class="dh-node-title">CN41 (มูลค่า AUC บาท)</div>
-                    <div class="dh-node-meta">นำเข้า: 12 พ.ย. 69 • 159.1 KB</div>
+                    <div class="dh-node-meta">นำเข้า: 25 พ.ย. 69 • 126.4 KB</div>
                   </div>
                   <div class="dh-flow-node" onclick="window.openModelViewModal('src_07', 'source')">
                     <div class="dh-node-badge" style="background:#0EA5E9;">ไฟล์ 07</div>
                     <div class="dh-node-title">CN52N พัสดุ (Mvt 281 / รหัส 1*)</div>
-                    <div class="dh-node-meta">นำเข้า: 5 พ.ย. 69 • 6.34 MB</div>
+                    <div class="dh-node-meta">นำเข้า: 25 พ.ย. 69 • 5.86 MB</div>
                   </div>
                   <div class="dh-flow-node" onclick="window.openModelViewModal('src_08', 'source')">
                     <div class="dh-node-badge" style="background:#10B981;">ไฟล์ 08</div>
                     <div class="dh-node-title">MB52 พัสดุคงเหลือ (SLoc 0021/0022)</div>
-                    <div class="dh-node-meta">นำเข้า: 5 พ.ย. 69 • 115.3 KB</div>
+                    <div class="dh-node-meta">นำเข้า: 25 พ.ย. 69 • 112.5 KB</div>
                   </div>
                   <div class="dh-flow-node" onclick="window.openModelViewModal('src_sheet', 'source')">
                     <div class="dh-node-badge" style="background:#10B981;">G-Sheet</div>

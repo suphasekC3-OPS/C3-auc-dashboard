@@ -707,11 +707,11 @@
 
     const m07 = (window.AUC_MAT07_COMPACT && window.AUC_MAT07_COMPACT.meta) || {};
     const m08 = (window.AUC_MAT08_STOCK && window.AUC_MAT08_STOCK.meta) || {};
-    const date07Short = m07.lastModifiedShortTh || '20 พ.ย. 69';
-    const date07Full = m07.lastModifiedTh || '20 พ.ย. 2569, 15:06 น.';
-    const date08Short = m08.lastModifiedShortTh || '20 พ.ย. 69';
-    const date08Full = m08.lastModifiedTh || '20 พ.ย. 2569, 15:22 น.';
-    const date04Short = '23 พ.ย. 69';
+    const date07Short = m07.lastModifiedShortTh || '25 พ.ย. 69';
+    const date07Full = m07.lastModifiedTh || '25 พ.ย. 2569, 11:01 น.';
+    const date08Short = m08.lastModifiedShortTh || '25 พ.ย. 69';
+    const date08Full = m08.lastModifiedTh || '25 พ.ย. 2569, 11:02 น.';
+    const date04Short = '25 พ.ย. 69';
 
     pane.innerHTML = `
       <!-- แถบสรุปภาพรวมรายการพัสดุค้างเบิก (ไฟล์ 07 เชื่อมไฟล์ 03 WBS และไฟล์ 04 ZBUDR064) -->
@@ -877,7 +877,7 @@
         <div class="content-card" style="padding:0.85rem 1.05rem; margin-bottom:0; border-left:3px solid #A855F7;">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.25rem;">
             <span style="font-size:0.78rem; color:var(--text-muted); font-weight:600;">💰 รวมราคา/สกุลเงินในปท. (ไฟล์ 07)</span>
-            <span style="font-size:0.68rem; color:#D8B4FE;">SAP 04: 23 พ.ย. 69</span>
+            <span style="font-size:0.68rem; color:#D8B4FE;">SAP 04: 25 พ.ย. 69</span>
           </div>
           <div style="display:flex; align-items:baseline; gap:0.45rem; flex-wrap:wrap;">
             <strong id="matSummaryTotalPrice" style="font-size:1.32rem; color:var(--pea-gold-400); font-weight:800; line-height:1.15;">0.00</strong>
@@ -1479,12 +1479,12 @@
 
         let subDateHtml = '';
         if (col.id === 'statusSap') {
-          subDateHtml = `<div class="th-sub-date-text" style="font-size:0.69rem; color:#CBD5E1; font-weight:500; line-height:1.2; margin:1px 0 3px 0; text-align:center; white-space:nowrap;" title="ข้อมูลสถานะ SAP จากไฟล์ 04 ZBUDR064 แก้ไขล่าสุด: 23 พ.ย. 2569 เวลา 09:35 น.">แก้ไขล่าสุด: 23 พ.ย. 69</div>`;
+          subDateHtml = `<div class="th-sub-date-text" style="font-size:0.69rem; color:#CBD5E1; font-weight:500; line-height:1.2; margin:1px 0 3px 0; text-align:center; white-space:nowrap;" title="ข้อมูลสถานะ SAP จากไฟล์ 04 ZBUDR064 แก้ไขล่าสุด: 25 พ.ย. 2569 เวลา 10:48 น.">แก้ไขล่าสุด: 25 พ.ย. 69</div>`;
         } else if (col.id === 'matCode') {
           const m07Meta = (window.AUC_MAT07_COMPACT && window.AUC_MAT07_COMPACT.meta) ? window.AUC_MAT07_COMPACT.meta : {};
-          const f07Time = m07Meta.lastModifiedTimeTh || '15:06 น.';
-          const f07Full = m07Meta.lastModifiedTh || '20 พ.ย. 2569, 15:06 น.';
-          const f07Sub = m07Meta.lastModifiedShortTh ? `${m07Meta.lastModifiedShortTh} ${f07Time}` : `20 พ.ย. 69 ${f07Time}`;
+          const f07Time = m07Meta.lastModifiedTimeTh || '11:01 น.';
+          const f07Full = m07Meta.lastModifiedTh || '25 พ.ย. 2569, 11:01 น.';
+          const f07Sub = m07Meta.lastModifiedShortTh ? `${m07Meta.lastModifiedShortTh} ${f07Time}` : `25 พ.ย. 69 ${f07Time}`;
           subDateHtml = `<div class="th-sub-date-text" style="font-size:0.69rem; color:#7DD3FC; font-weight:500; line-height:1.2; margin:1px 0 3px 0; white-space:nowrap;" title="ข้อมูลพัสดุค้างเบิกจากไฟล์ 07 CN52N แก้ไขล่าสุด: ${f07Full}">ไฟล์ 07: ${f07Sub}</div>`;
         }
 
