@@ -619,6 +619,22 @@
    */
   const BASE_AUDIT_LOGS = [
     {
+      id: 'log_000_restore_styles_tail_office_dd_nov27',
+      timestamp: '2026-11-27 11:07:00',
+      timestampTh: '27 พ.ย. 2569, 11:07 น.',
+      type: 'EDIT',
+      typeBadge: 'กู้คืนพื้นหลังตัวกรอง & CSS ท้ายไฟล์',
+      badgeClass: 'badge-type-edit',
+      title: 'กู้คืนชุด CSS พื้นหลังตัวกรอง กอง/กฟฟ. (.office-dd-panel), Mobile Responsive และ Performance Overrides ท้ายไฟล์ css/styles.css',
+      targetSubject: 'ตัวกรอง กอง/กฟฟ. (.office-dd-panel, .office-dd-item, .office-dd-chevron) และส่วนท้ายไฟล์ css/styles.css',
+      storageFile: 'css/styles.css, index.html, js/data_history.js',
+      changeSummary: 'แก้ไขอาการ "พื้นหลังตัวกรอง กอง/กฟฟ. หายไป": พบว่าส่วนท้ายของ css/styles.css ถูกตัดข้อความ "... [truncated for diff preview]" ที่บรรทัด 22,362 กู้คืนชุด CSS ท้ายไฟล์ครบทั้ง 706 บรรทัดจาก Git commit c1988fb (พื้นหลังม่วงเข้ม #2D0A45 ขอบทอง #FFB81C รายการสีทอง แถบเลื่อน ปุ่มซ่อนการ์ดลอย Performance Overrides และ Mobile Responsive) พร้อมแก้ไขวงเล็บปีกกาหลุดที่บรรทัด 13,917-13,919 จน Balance = 0 ครบทั้ง 23,061 บรรทัด',
+      details: '• สาเหตุ: เมื่อ css/styles.css มีขนาดเกิน ~512 KB ระบบ Diff Preview ตัดส่วนท้ายไฟล์ออกตั้งแต่บรรทัด 22,362 ทำให้คลาส .office-dd-panel (พื้นหลัง #2D0A45 ขอบ #FFB81C max-height 320px) และชุด CSS ท้ายไฟล์หายไป\n• การแก้ไข: กู้คืนโค้ดส่วนท้ายทั้ง 706 บรรทัดจาก Git commit c1988fb กลับคืนลงใน css/styles.css พร้อมคงการอัปเดตล่าสุดทั้งหมดของวันนี้ (เส้นมูลค่า AUC, เฉลี่ย มูลค่า/งาน, ไฟวิ่ง 4.2px, คำอธิบายสถานะ SAP 24 รหัส และสีเป้าหมาย KPI) ไว้ครบ 100%\n• แก้ไขบรรทัดค้างที่เกินมา 3 บรรทัดหลัง .wbs-floating-sel-currency และตรวจสอบสมดุลปีกกาทั้งไฟล์ได้ FINAL_DEPTH=0, NEG_COUNT=0\n• อัปเดต Cache Buster เป็น ?v=20261127_1107 สำหรับ css/styles.css และ js/data_history.js',
+      sourceFile: 'คำสั่งผู้ใช้งาน: แก้ไขพื้นหลังตัวกรอง กอง/กฟฟ. หายไป',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'สูง'
+    },
+    {
       id: 'log_000_revert_sap_desc_color_nov27',
       timestamp: '2026-11-27 10:54:00',
       timestampTh: '27 พ.ย. 2569, 10:54 น.',
