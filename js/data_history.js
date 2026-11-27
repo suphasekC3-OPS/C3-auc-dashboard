@@ -95,10 +95,10 @@
       groupNo: '04',
       name: '04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx',
       category: 'SAP ZBUDR064 & Costs',
-      importDate: '2026-11-25 10:48:03',
-      importDateTh: '25 พ.ย. 2569, 10:48 น.',
-      lastModifiedTh: '25 พ.ย. 2569, 10:48 น. (ไฟล์ล่าสุด)',
-      sizeText: '267.3 KB',
+      importDate: '2026-11-27 09:24:35',
+      importDateTh: '27 พ.ย. 2569, 09:24 น.',
+      lastModifiedTh: '27 พ.ย. 2569, 09:24 น. (ไฟล์ล่าสุด)',
+      sizeText: '267.2 KB',
       recordCount: 1614,
       status: 'active',
       statusText: 'ผสานข้อมูลสำเร็จ',
@@ -498,7 +498,7 @@
       role: 'จัดเก็บข้อมูลหลักงาน WBS (ไฟล์ 03 + 04 + 05 + 06 + Google Sheet)',
       recordsCount: '1,614 รายการ (41 คอลัมน์)',
       fileSize: '1.88 MB',
-      updatedAt: '25 พ.ย. 2569, 10:55 น.',
+      updatedAt: '27 พ.ย. 2569, 09:27 น.',
       status: '100% ฐานข้อมูลอัปเดตล่าสุด',
       variable: 'window.AUC_WBS_REMAINING_DATA'
     },
@@ -618,6 +618,22 @@
    * System Pre-defined Audit & Modification Log Entries
    */
   const BASE_AUDIT_LOGS = [
+    {
+      id: 'log_000_update_f04_nov27',
+      timestamp: '2026-11-27 09:27:00',
+      timestampTh: '27 พ.ย. 2569, 09:27 น.',
+      type: 'IMPORT',
+      typeBadge: 'อัปเดตไฟล์ 04 WBS (27 พ.ย. 69)',
+      badgeClass: 'badge-type-import',
+      title: 'นำเข้าและผสานข้อมูลไฟล์ 04 WBS ZBUDR064 สถานะ SAP และ %เบิกล่าสุด วันที่ 27 พ.ย. 2569',
+      targetSubject: 'ฐานข้อมูลงาน WBS คงเหลือ (js/data_wbs.js) และป้ายวันที่สถานะ SAP ไฟล์ 04 ทุกจุดในระบบ',
+      storageFile: 'js/data_wbs.js, js/wbs.js, js/materials.js, index.html, js/data_history.js',
+      changeSummary: 'อัปเดตไฟล์ 04 ZBUDR064 (27 พ.ย. 2569, 09:24 น., 267.2 KB): จับคู่ WBS ครบ 1,614/1,614 งาน (100%) | สถานะ SAP ย่อเปลี่ยน 70 งาน (สถานะเต็ม 77 งาน) | CLSD F4 เพิ่มจาก 42 งาน (18.56 ลบ.) -> 82 งาน (25.95 ลบ., เพิ่ม +40 งาน / +7.39 ลบ.) | CLSD F2 เพิ่มจาก 13 -> 16 งาน (+3 งาน / +0.48 ลบ.)',
+      details: '==========================================================================\n🟣 สรุปการอัปเดตไฟล์ 04 WBS ZBUDR064 | ประมวลผลเมื่อ 27 พ.ย. 2569, 09:27 น.\n==========================================================================\n• ไฟล์ต้นทาง : 04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx (แก้ไขล่าสุด: 27 พ.ย. 2569, 09:24 น., ขนาด 267.2 KB, 1,611 แถว x 23 คอลัมน์)\n• ฐานข้อมูลปลายทาง : js/data_wbs.js (ขนาด 1.88 MB, สำรองเดิมที่ scratch/data_wbs.bak_before_f4_nov27.js)\n• ผลการจับคู่และเปลี่ยนแปลง (เทียบกับรอบ 25 พ.ย. 69 10:48 น.):\n  - จับคู่ WBS สำเร็จ : 1,614 / 1,614 รายการ (100%, ไม่พบตกหล่น)\n  - สถานะ SAP ย่อเปลี่ยน : 70 งาน (สถานะเต็ม 77 งาน) | % เบิกพัสดุเปลี่ยน 20 งาน | % เบิก คชจ. เปลี่ยน 45 งาน | คชจ.หน้างานอื่นๆ เปลี่ยน 44 งาน\n  - CLSD F4 : เดิม 42 งาน (18,558,181.83 บาท) -> ใหม่ 82 งาน (25,946,241.97 บาท) | เพิ่ม +40 งาน (+7,388,060.14 บาท)\n    (TECO D2->CLSD F4: 35, TECO D3->CLSD F4: 3, REL C1->CLSD F4: 2)\n  - CLSD F2 : เดิม 13 งาน (704,161.09 บาท) -> ใหม่ 16 งาน (1,186,091.22 บาท) | เพิ่ม +3 งาน (+481,930.13 บาท)\n  - สถานะอื่นๆ ที่เปลี่ยนเด่น : REL C1->TECO D2 (10), REL D1->TECO D2 (6), REL C3->REL D1 (5), TECO D2->TECO D3 (3), REL B2->TECO D2 (1), REL C3->REL C1 (1), TECO D2->CLSD D1 (1)\n• อัปเดตวันที่ไฟล์ 04 เป็น "27 พ.ย. 69 / 09:24 น." ครบทุกจุด: #wbsHeaderDatesPlain, #wbsKpiSapDateText, .bar-sap-date-plain, .th-sub-date-text, .pill-file-04, js/materials.js (3 จุด), #dataHistoryBadge, DATA_SOURCE_CATALOG (src_04), SYSTEM_STORAGE_FILES, Model View และ Cache Buster (?v=20261127_0927)',
+      sourceFile: '04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx (แก้ไขล่าสุด 27 พ.ย. 2569, 09:24 น.)',
+      author: 'ผู้ดูแลระบบ (System Admin)',
+      impactLevel: 'สูง'
+    },
     {
       id: 'log_000_remain_pill_thicker_glow_nov27',
       timestamp: '2026-11-27 09:04:00',
@@ -3561,33 +3577,6 @@
       sourceFile: '07 พัสดุค้างเบิก CN52N.xlsx (30 ต.ค. 2569, 07:57 น.), 03 WBSงานคงเหลือเดือนล่าสุด.xlsx, 04 WBS ZBUDR064 %พัสดุและค่าแรงและสถานะsap.xlsx',
       author: 'ผู้ดูแลระบบ (System Admin)',
       impactLevel: 'สูง (เพิ่มระบบติดตามรายการพัสดุค้างเบิก CN52N ครบวงจร เชื่อมโยงฐานข้อมูล WBS 03 และ SAP ZBUDR064 04 แบบอัตโนมัติ)'
-    },
-    {
-      id: 'log_000_revert_sparkles_to_original',
-      timestamp: '2026-10-30 13:47:00',
-      timestampTh: '30 ต.ค. 2569, 13:47 น.',
-      type: 'EDIT',
-      typeBadge: 'ยกเลิกเพิ่มไฟวิบวับ กลับไปใช้แบบเดิม',
-      badgeClass: 'badge-type-edit',
-      title: 'ยกเลิกการเพิ่มแสงไฟวิบวับเพิ่มเติม และคืนค่ารูปแบบประกายเพชรวิบวับรอบคำว่า "บรรลุเป้าหมาย" กลับเป็นแบบเดิม',
-      targetSubject: 'เอฟเฟกต์แอนิเมชันบนกราฟเปรียบเทียบเกณฑ์วัด (#criteriaFireworksCanvas, window.CriteriaFireworks ใน js/app.js)',
-      storageFile: 'js/app.js, js/data_history.js',
-      changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน: "ยกเลิกเพิ่มไฟวิบวับ ให้ใช้แบบเดิม" โดยคืนค่าโค้ดใน window.CriteriaFireworks กลับเป็นชุดประกายเพชรสีต่างๆ ขนาดเล็กวิบวับ 14 จุดแบบเดิม',
-      details: 'นำเมธอด drawFairyBokehOrb และลำแสงแฉกเพิ่มเติมออก คืนค่าเมธอด drawDiamondGemSparkle และ drawAchieveDiamondSparkles ใน js/app.js กลับเป็นเวอร์ชันประกายเพชรจิ๋ว 14 จุดแบบเดิมตามความต้องการของผู้ใช้งาน',
-      sourceFile: 'คำสั่งผู้ใช้งาน: "ยกเลิกเพิ่มไฟวิบวับ ให้ใช้แบบเดิม"',
-      author: 'ผู้ดูแลระบบ (System Admin)',
-      impactLevel: 'ต่ำ (คืนค่าการแสดงผลแอนิเมชันประกายเพชรกลับเป็นรูปแบบเดิมที่ผู้ใช้งานต้องการ)'
-    },
-    {
-      id: 'log_000_enhance_achieve_twinkling_lights',
-      timestamp: '2026-10-30 13:42:00',
-      timestampTh: '30 ต.ค. 2569, 13:42 น.',
-      type: 'EDIT',
-      typeBadge: 'เพิ่มแสงไฟวิบวับรอบคำว่า บรรลุเป้าหมาย',
-      badgeClass: 'badge-type-edit',
-      title: 'เพิ่มความสว่างและจำนวนแสงไฟวิบวับหลากสี (Starburst Light Flares, ซุ้มไฟโค้ง & ละอองโบเก้) รอบคำว่า "บรรลุเป้าหมาย"',
-      targetSubject: 'เอฟเฟกต์แอนิเมชันบนกราฟเปรียบเทียบเกณฑ์วัด (#criteriaFireworksCanvas, window.CriteriaFireworks ใน js/app.js)',
-      storageFile: 'js/app.js, index.html, js/data_history.js',
       changeSummary: 'ดำเนินการตามคำสั่งผู้ใช้งาน: "เพิ่มแสงไฟวิบวับอีก" ยกระดับเอฟเฟกต์แสงไฟรอบคำว่า "บรรลุเป้าหมาย" เป็น 3 ชั้นแสงแบบ Additive Light Glow: 1) เพิ่มแสงไฟแฉกเพชร (Starburst & Diamond Light Flares) จาก 14 ดวง เป็น 24 ดวง พร้อมลำแสงแฉกไฟแนวตั้ง-แนวนอน (Lens Flare Streaks) จังหวะสว่างพีค จัดเรียงเป็นซุ้มโค้งด้านบน 9 ดวง ปีกซ้าย-ขวา 8 ดวง และสายไฟขอบล่าง 7 ดวง 2) เพิ่มละอองแสงไฟโบเก้นีออน (Micro-Bokeh Fairy Lights) อีก 16 ดวง รวมเป็น 40 ดวงไฟระยิบระยับ 3) เพิ่มคลื่นไฟวิ่งไล่ระดับ (Chasing Light Wave) และชิมเมอร์แสงทองอ่อนๆ โดยไม่ทับตัวอักษรและไม่ชนแท่งข้างเคียง',
       details: '1) ใน js/app.js (window.CriteriaFireworks): เพิ่มเมธอด drawFairyBokehOrb() ใช้ globalCompositeOperation = "lighter" วาดละอองไฟนีออนเรืองแสง 16 ดวง, อัปเกรด drawDiamondGemSparkle() ให้มีออร่าแสงฟุ้ง (Additive Light Bloom) และลำแสงแฉกไฟยาวคมชัด (Starburst Cross-Flare Beams) พร้อมจุดสะท้อนแสงขาวกึ่งกลาง และขยายจุดไฟเพชรใน drawAchieveDiamondSparkles() เป็น 24 ดวง พร้อมระบบคำนวณระยะเพดานอัตโนมัติ (topHeadroom / safeCeilingY) และขอบเขตแนวนอน (halfGroupLimit) ป้องกันการซ้อนทับ 100% 2) อัปเดต Cache Busters ใน index.html เป็น ?v=20261030_1342 และบันทึก Audit Log ตามกฎ AGENTS.md',
       sourceFile: 'คำสั่งผู้ใช้งาน: "เพิ่มแสงไฟวิบวับอีก"',
@@ -3821,7 +3810,7 @@
                   <div class="dh-flow-node" onclick="window.openModelViewModal('src_04', 'source')">
                     <div class="dh-node-badge" style="background:#8B5CF6;">ไฟล์ 04</div>
                     <div class="dh-node-title">ZBUDR064 (%พัสดุ/สถานะ SAP)</div>
-                    <div class="dh-node-meta">นำเข้า: 25 พ.ย. 69 • 267.3 KB</div>
+                    <div class="dh-node-meta">นำเข้า: 27 พ.ย. 69 • 267.2 KB</div>
                   </div>
                   <div class="dh-flow-node" onclick="window.openModelViewModal('src_06', 'source')">
                     <div class="dh-node-badge" style="background:#F59E0B;">ไฟล์ 06</div>
