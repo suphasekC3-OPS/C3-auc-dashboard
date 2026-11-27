@@ -8,7 +8,7 @@
   <meta name="description"
     content="ระบบสารสนเทศและแดชบอร์ดติดตามงานก่อสร้างและขึ้นทะเบียนทรัพย์สิน AUC การไฟฟ้าส่วนภูมิภาค เขต 3 (ภาคกลาง)">
   <link rel="icon" type="image/svg+xml" href="assets/pea_logo.svg">
-  <link rel="stylesheet" href="css/styles.css?v=20261125_0830">
+  <link rel="stylesheet" href="css/styles.css?v=20261127_0904">
 
 </head>
 
@@ -73,8 +73,8 @@
               <span style="display:flex; flex-direction:column; align-items:flex-start; text-align:left;">
                 <span id="githubBtnTitle" style="font-size:0.84rem; font-weight:700; color:#f0f6fc;">Update to
                   Github</span>
-                <span id="githubLastUpdateText" data-epoch="1795579858321"
-                  style="font-size:0.67rem; font-weight:500; color:#FDE047; opacity:0.95;">อัปเดตล่าสุด: 25 พ.ย. 69, 11:10 น.</span>
+                <span id="githubLastUpdateText" data-epoch="1795745211373"
+                  style="font-size:0.67rem; font-weight:500; color:#FDE047; opacity:0.95;">อัปเดตล่าสุด: 27 พ.ย. 69, 09:06 น.</span>
               </span>
             </button>
 
@@ -1651,8 +1651,34 @@
                 </div>
 
                 <div class="wbs-chart-header-actions-area">
-                  <!-- ปุ่มแอ็กชันด้านบนขวาสุด: เลือกทุกสถานะ & ล้างข้อมูล -->
+                  <!-- ปุ่มแอ็กชันด้านบนขวาสุด: สลับเส้นมูลค่า AUC, เลือกทุกสถานะ & ล้างข้อมูล -->
                   <div class="wbs-chart-btn-group">
+                    <button type="button" class="btn-wbs-card-auc-line" id="wbsOfficeChartAucLineBtn"
+                      onclick="window.toggleWbsAucLine()"
+                      aria-pressed="false"
+                      title="เปิด/ปิด เส้นกราฟมูลค่า AUC รวมรายหน่วยงาน (จากไฟล์ 06 CN41 • แกน Y ขวา หน่วย ล้านบาท)">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+                        <circle cx="22" cy="7" r="2.2" fill="currentColor"></circle>
+                        <circle cx="13.5" cy="15.5" r="2.2" fill="currentColor"></circle>
+                        <circle cx="8.5" cy="10.5" r="2.2" fill="currentColor"></circle>
+                        <circle cx="2" cy="17" r="2.2" fill="currentColor"></circle>
+                      </svg>
+                      <span>เส้นมูลค่า AUC</span>
+                    </button>
+                    <button type="button" class="btn-wbs-card-avg-auc-line" id="wbsOfficeChartAvgAucLineBtn"
+                      onclick="window.toggleWbsAvgAucLine()"
+                      aria-pressed="false"
+                      title="เปิด/ปิด เส้นกราฟค่าเฉลี่ย มูลค่า AUC ต่อ 1 งาน รายหน่วยงาน (จากไฟล์ 06 CN41 • หน่วย ล้านบาท/งาน)">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="2 16 8 10 14 13 22 6" stroke-dasharray="3.5 2.5"></polyline>
+                        <polygon points="14,10.2 16.8,13 14,15.8 11.2,13" fill="currentColor" stroke="none"></polygon>
+                        <polygon points="22,3.4 24.4,6 22,8.6 19.6,6" fill="currentColor" stroke="none"></polygon>
+                      </svg>
+                      <span>เฉลี่ย มูลค่า/งาน</span>
+                    </button>
                     <button type="button" class="btn-wbs-card-select-all" id="wbsOfficeChartSelectAllBtn"
                       onclick="window.selectAllWbsSapStatuses()"
                       title="เลือกการ์ดสถานะ SAP ทั้งหมด (แสดงข้อมูลทุกสถานะ)">
@@ -2752,13 +2778,13 @@
   <script src="js/kpi_matrix.js?v=20261003_0930"></script>
   <script src="js/chart.js?v=20261125_0849"></script>
   <script src="js/data_wbs.js?v=20261125_1055"></script>
-  <script src="js/wbs.js?v=20261125_1055"></script>
+  <script src="js/wbs.js?v=20261127_0854"></script>
   <script src="js/data_materials_07.js?v=20261125_1105"></script>
   <script src="js/data_materials_08.js?v=20261125_1108"></script>
   <script src="js/materials.js?v=20261125_1108"></script>
   <script charset="utf-8" src="js/data_history_archive.js?v=20261105_1514"></script>
   <script src="js/office_dd.js?v=20261123_0948"></script>
-  <script charset="utf-8" src="js/data_history.js?v=20261125_1108"></script>
+  <script charset="utf-8" src="js/data_history.js?v=20261127_0904"></script>
   <script src="js/app.js?v=20261125_0852"></script>
   <script src="js/criteria_dropdown.js?v=20261017_2055"></script>
 </body>

@@ -280,6 +280,8 @@
     colSearchQuery: '',
     chartMode: 'stacked', // 'stacked' or 'grouped'
     chartScope: 'all', // 'all' (แสดงทั้งหมดที่มีงานคงเหลือ) or 'top10' (10 อันดับแรก)
+    showAucLine: false, // ค่าเริ่มต้นปิดเส้นกราฟมูลค่า AUC รวม (ผู้ใช้คลิกเปิดเองได้)
+    showAvgAucLine: false, // ค่าเริ่มต้นปิดเส้นค่าเฉลี่ย มูลค่า/งาน (ผู้ใช้คลิกเปิดเองได้)
     charts: {}
   };
 
@@ -1010,7 +1012,7 @@
         
         <div class="wbs-sap-card-main-info">
           <div class="wbs-sap-card-top">
-            <span class="wbs-sap-card-badge badge-all" style="font-size:0.72rem; padding:0.10rem 0.35rem; background:rgba(56, 189, 248, 0.2); color:#38BDF8; border:1px solid rgba(56, 189, 248, 0.5); font-weight:700;">ทั้งหมด</span>
+            <span class="wbs-sap-card-badge badge-all" style="background:rgba(56, 189, 248, 0.2); color:#38BDF8; border:1px solid rgba(56, 189, 248, 0.5); font-weight:700;">ทั้งหมด</span>
             <div class="wbs-sap-card-check-pill ${isAllActive ? 'is-active' : 'is-inactive'}"
               title="${isAllActive ? 'กำลังแสดงทุกสถานะ (เลือกอยู่)' : 'คลิกเพื่อเลือกแสดงทุกสถานะ'}">
               <span class="check-pill-icon">
@@ -1106,7 +1108,7 @@
           
           <div class="wbs-sap-card-main-info">
             <div class="wbs-sap-card-top">
-              <span class="badge-sap-short" style="font-size:0.72rem; padding:0.10rem 0.35rem; border-radius:4px; ${badgeStyleAttr}">
+              <span class="badge-sap-short" style="border-radius:4px; ${badgeStyleAttr}">
                 ${escapeHtml(item.status)}
               </span>
               <div class="wbs-sap-card-check-pill ${isActive ? 'is-active' : 'is-inactive'}"
@@ -5101,6 +5103,64 @@
   };
 
   /**
+   * Toggle Total AUC Line Overlay on Offices Combo Chart (Right Y-Axis: ล้านบาท)
+   */
+  window.toggleWbsAucLine = function (forceVal) {
+    wbsState.showAucLine = (typeof forceVal === 'boolean') ? forceVal : !wbsState.showAucLine;
+
+    const btn = document.getElementById('wbsOfficeChartAucLineBtn');
+    if (btn) {
+      btn.classList.toggle('active', wbsState.showAucLine);
+      btn.setAttribute('aria-pressed', wbsState.showAucLine ? 'true' : 'false');
+    }
+
+    const canvas = document.getElementById('wbsOfficesBarChart');
+    if (canvas && activeWbsTopOffices.length) {
+      drawTopOfficesCanvas(canvas, activeWbsTopOffices, wbsState.chartMode || 'stacked', wbsChartHoverIdx, null);
+    } else {
+      const hasSapFilter = (wbsState.selectedSapStatuses && wbsState.selectedSapStatuses.size > 0) || (wbsState.sapStatus && wbsState.sapStatus !== 'ALL');
+      const chartFiltered = hasSapFilter ? getFilteredWbsData(true, false) : getFilteredWbsData(true, true);
+      renderTopOfficesChart(chartFiltered);
+    }
+
+    if (window.showToast) {
+      window.showToast(
+        wbsState.showAucLine ? 'แสดงเส้นกราฟมูลค่า AUC รวม (แกนขวา: ล้านบาท)' : 'ซ่อนเส้นกราฟมูลค่า AUC รวม',
+        'info'
+      );
+    }
+  };
+
+  /**
+   * Toggle Average AUC per Job Line Overlay on Offices Combo Chart (หน่วย: ล้านบาท/งาน)
+   */
+  window.toggleWbsAvgAucLine = function (forceVal) {
+    wbsState.showAvgAucLine = (typeof forceVal === 'boolean') ? forceVal : !wbsState.showAvgAucLine;
+
+    const btn = document.getElementById('wbsOfficeChartAvgAucLineBtn');
+    if (btn) {
+      btn.classList.toggle('active', wbsState.showAvgAucLine);
+      btn.setAttribute('aria-pressed', wbsState.showAvgAucLine ? 'true' : 'false');
+    }
+
+    const canvas = document.getElementById('wbsOfficesBarChart');
+    if (canvas && activeWbsTopOffices.length) {
+      drawTopOfficesCanvas(canvas, activeWbsTopOffices, wbsState.chartMode || 'stacked', wbsChartHoverIdx, null);
+    } else {
+      const hasSapFilter = (wbsState.selectedSapStatuses && wbsState.selectedSapStatuses.size > 0) || (wbsState.sapStatus && wbsState.sapStatus !== 'ALL');
+      const chartFiltered = hasSapFilter ? getFilteredWbsData(true, false) : getFilteredWbsData(true, true);
+      renderTopOfficesChart(chartFiltered);
+    }
+
+    if (window.showToast) {
+      window.showToast(
+        wbsState.showAvgAucLine ? 'แสดงเส้นค่าเฉลี่ย มูลค่า/งาน (ล้านบาท/งาน)' : 'ซ่อนเส้นค่าเฉลี่ย มูลค่า/งาน',
+        'info'
+      );
+    }
+  };
+
+  /**
    * Set Chart Scope for WBS Offices ('all' or 'top10')
    */
   window.setWbsChartScope = function (scope) {
@@ -5493,6 +5553,20 @@
     if (elTecoCount) elTecoCount.textContent = sumTeco.toLocaleString('th-TH');
     if (elRelCount) elRelCount.textContent = sumRel.toLocaleString('th-TH');
 
+    // Sync AUC Line & Avg AUC/Job Line toggle buttons visual state
+    const aucLineBtn = document.getElementById('wbsOfficeChartAucLineBtn');
+    if (aucLineBtn) {
+      const isAucLineOn = wbsState.showAucLine === true;
+      aucLineBtn.classList.toggle('active', isAucLineOn);
+      aucLineBtn.setAttribute('aria-pressed', isAucLineOn ? 'true' : 'false');
+    }
+    const avgAucLineBtn = document.getElementById('wbsOfficeChartAvgAucLineBtn');
+    if (avgAucLineBtn) {
+      const isAvgLineOn = wbsState.showAvgAucLine === true;
+      avgAucLineBtn.classList.toggle('active', isAvgLineOn);
+      avgAucLineBtn.setAttribute('aria-pressed', isAvgLineOn ? 'true' : 'false');
+    }
+
     // Bind canvas hover, click & resize events once (เอาตัวเมาเลื่อนแล้วแสดง Popup ออกไปตามคำสั่งผู้ใช้งาน)
     if (!wbsChartEventsBound) {
       wbsChartEventsBound = true;
@@ -5513,12 +5587,12 @@
         if (idx >= 0 && idx < activeWbsTopOffices.length && mouseY >= 8 && mouseY <= (canvas._wbsPlotBottom || (rect.height - 35))) {
           if (wbsChartHoverIdx !== idx) {
             wbsChartHoverIdx = idx;
-            drawTopOfficesCanvas(canvas, activeWbsTopOffices, wbsState.chartMode || 'stacked', wbsChartHoverIdx, currentCrit);
+            drawTopOfficesCanvas(canvas, activeWbsTopOffices, wbsState.chartMode || 'stacked', wbsChartHoverIdx, null);
           }
         } else {
           if (wbsChartHoverIdx !== -1) {
             wbsChartHoverIdx = -1;
-            drawTopOfficesCanvas(canvas, activeWbsTopOffices, wbsState.chartMode || 'stacked', -1, currentCrit);
+            drawTopOfficesCanvas(canvas, activeWbsTopOffices, wbsState.chartMode || 'stacked', -1, null);
           }
         }
       });
@@ -5552,12 +5626,12 @@
 
       canvas.addEventListener('mouseleave', function () {
         wbsChartHoverIdx = -1;
-        drawTopOfficesCanvas(canvas, activeWbsTopOffices, wbsState.chartMode || 'stacked', -1, currentCrit);
+        drawTopOfficesCanvas(canvas, activeWbsTopOffices, wbsState.chartMode || 'stacked', -1, null);
       });
 
       window.addEventListener('resize', function () {
         if (activeWbsTopOffices.length) {
-          drawTopOfficesCanvas(canvas, activeWbsTopOffices, wbsState.chartMode || 'stacked', wbsChartHoverIdx, currentCrit);
+          drawTopOfficesCanvas(canvas, activeWbsTopOffices, wbsState.chartMode || 'stacked', wbsChartHoverIdx, null);
         }
       });
     }
@@ -5566,8 +5640,126 @@
   }
 
   /**
-   * Core Canvas Drawing for Offices Bar Chart (Height 268px, CLSD Green, TECO Yellow, REL Red)
-   * กราฟสมส่วน ความสูงพอเหมาะ มองเห็นตัวเลขชัดเจน และไล่ระดับสีตามสถานะ SAP
+   * Helper: Format AUC value in short Million Baht label (e.g. "111.6M", "52.7M", "0.45M")
+   */
+  function formatWbsAucShortM(aucBaht, highPrecision = false) {
+    const m = Math.max(0, Number(aucBaht) || 0) / 1e6;
+    if (m <= 0) return '0';
+    if (highPrecision || m < 1) return `${m.toFixed(2)}M`;
+    return `${m.toFixed(1)}M`;
+  }
+
+  /**
+   * Helper: Format Right Y-Axis tick label in Million Baht (e.g. "0", "20M", "60M", "120M")
+   */
+  function formatWbsAucTickM(valM) {
+    if (valM <= 0) return '0';
+    if (valM < 1) return `${Number(valM.toFixed(2))}M`;
+    return `${Number.isInteger(valM) ? valM.toLocaleString('th-TH') : valM.toFixed(1)}M`;
+  }
+
+  /**
+   * Helper: Draw compact rounded pill box on canvas
+   */
+  function drawCanvasRoundedBox(ctx, x, y, w, h, r) {
+    const rad = Math.min(r, w / 2, h / 2);
+    ctx.beginPath();
+    if (ctx.roundRect) {
+      ctx.roundRect(x, y, w, h, rad);
+    } else {
+      ctx.moveTo(x + rad, y);
+      ctx.lineTo(x + w - rad, y);
+      ctx.quadraticCurveTo(x + w, y, x + w, y + rad);
+      ctx.lineTo(x + w, y + h - rad);
+      ctx.quadraticCurveTo(x + w, y + h, x + w - rad, y + h);
+      ctx.lineTo(x + rad, y + h);
+      ctx.quadraticCurveTo(x, y + h, x, y + h - rad);
+      ctx.lineTo(x, y + rad);
+      ctx.quadraticCurveTo(x, y, x + rad, y);
+      ctx.closePath();
+    }
+  }
+
+  /**
+   * Helper: Format Average AUC per Job in short Million Baht label (e.g. "2.28M", "0.38M", "12.5M")
+   */
+  function formatWbsAvgAucShortM(avgBaht, highPrecision = false) {
+    const m = Math.max(0, Number(avgBaht) || 0) / 1e6;
+    if (m <= 0) return '0';
+    if (highPrecision || m < 10) return `${m.toFixed(2)}M`;
+    return `${m.toFixed(1)}M`;
+  }
+
+  /**
+   * Helper: Draw diamond node marker on canvas
+   */
+  function drawCanvasDiamond(ctx, cx, cy, r) {
+    ctx.beginPath();
+    ctx.moveTo(cx, cy - r);
+    ctx.lineTo(cx + r, cy);
+    ctx.lineTo(cx, cy + r);
+    ctx.lineTo(cx - r, cy);
+    ctx.closePath();
+  }
+
+  /**
+   * Helper: Build adaptive strictly-monotonic scale & nice ticks for Million Baht series
+   */
+  function buildWbsMoneyAxisScale(valuesM, count) {
+    const maxM = Math.max(...valuesM, 0);
+    let niceMaxM;
+    if (maxM <= 0) {
+      niceMaxM = 1;
+    } else {
+      const rawMax = maxM * 1.08;
+      const step = rawMax <= 0.25 ? 0.05
+        : (rawMax <= 0.6 ? 0.1
+        : (rawMax <= 1.5 ? 0.25
+        : (rawMax <= 3.5 ? 0.5
+        : (rawMax <= 8 ? 1
+        : (rawMax <= 18 ? 2
+        : (rawMax <= 40 ? 5
+        : (rawMax <= 85 ? 10
+        : (rawMax <= 180 ? 20
+        : (rawMax <= 400 ? 50 : 100)))))))));
+      niceMaxM = Number((Math.ceil(rawMax / step) * step || step).toFixed(4));
+    }
+
+    const posSorted = valuesM.filter(v => v > 0).sort((a, b) => a - b);
+    const medianM = posSorted.length ? posSorted[Math.floor(posSorted.length / 2)] : 0;
+    const skewRatio = (medianM > 0 && maxM > 0) ? (maxM / medianM) : 1;
+    const gamma = (count > 4 && maxM > 0)
+      ? (skewRatio > 3.5 ? 0.62 : (skewRatio > 2.2 ? 0.76 : 1.0))
+      : 1.0;
+
+    const toRatio = (vM) => {
+      if (vM <= 0 || niceMaxM <= 0) return 0;
+      return Math.pow(Math.min(vM, niceMaxM) / niceMaxM, gamma);
+    };
+
+    let ticks;
+    if (gamma < 0.99 && niceMaxM >= 0.4) {
+      const tStep = niceMaxM <= 1 ? 0.2
+        : (niceMaxM <= 3.5 ? 0.5
+        : (niceMaxM <= 10 ? 1
+        : (niceMaxM <= 30 ? 2
+        : (niceMaxM <= 80 ? 5
+        : (niceMaxM <= 200 ? 10 : 25)))));
+      const a1 = Number(Math.max(tStep, Math.round((niceMaxM * Math.pow(0.32, 1 / gamma)) / tStep) * tStep).toFixed(4));
+      const a2 = Number(Math.max(a1 + tStep, Math.round((niceMaxM * Math.pow(0.66, 1 / gamma)) / tStep) * tStep).toFixed(4));
+      const c2 = Number(Math.min(a2, niceMaxM - tStep).toFixed(4));
+      ticks = [0, a1, c2, niceMaxM].filter((v, idx, arr) => v >= 0 && v <= niceMaxM && arr.indexOf(v) === idx);
+    } else {
+      ticks = [0, Number((niceMaxM * 0.5).toFixed(2)), niceMaxM]
+        .filter((v, idx, arr) => arr.indexOf(v) === idx);
+    }
+
+    return { maxM, niceMaxM, gamma, toRatio, ticks };
+  }
+
+  /**
+   * Core Canvas Drawing for Offices Bar Chart + Total AUC & Avg AUC/Job Combo Line Overlays
+   * กราฟสมส่วน ความสูงพอเหมาะ มองเห็นตัวเลขชัดเจน ไล่ระดับสีตามสถานะ SAP พร้อมเส้นมูลค่า AUC รวม และเส้นค่าเฉลี่ย มูลค่า/งาน
    */
   function drawTopOfficesCanvas(canvas, data, mode, hoveredIdx, currentCrit) {
     const ctx = canvas.getContext('2d');
@@ -5580,15 +5772,24 @@
     }
 
     const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    const showAucLine = wbsState.showAucLine === true;
+    const showAvgAucLine = wbsState.showAvgAucLine === true;
+    const anyOverlayLine = showAucLine || showAvgAucLine;
+    const bothOverlayLines = showAucLine && showAvgAucLine;
     const dpr = window.devicePixelRatio || 1;
     const container = canvas.parentElement;
     const containerW = container ? container.getBoundingClientRect().width : 800;
-    const height0 = 330; // ความสูงกราฟสมส่วน สวยงาม กว้างและชัดเจน
+    const height0 = bothOverlayLines ? 390 : (anyOverlayLine ? 364 : 330);
 
     const count = (data || []).length;
     const fitOnePage = mode !== 'grouped';
     const minSlotW = mode === 'grouped' ? 60 : 48;
-    const pad = { top: 28, right: 18, bottom: 58, left: 46 };
+    const pad = {
+      top: anyOverlayLine ? 48 : 28,
+      right: bothOverlayLines ? 108 : (anyOverlayLine ? 58 : 18),
+      bottom: 58,
+      left: 46
+    };
     const slotEst = (containerW - pad.left - pad.right) / Math.max(count, 1);
     const dense = fitOnePage && (slotEst < 56 || count > 18);
     const labelAngleDeg = dense ? -52 : -28;
@@ -5606,7 +5807,7 @@
         pad.left = Math.min(72, Math.max(46, firstLeftReach + 10));
       }
     }
-    const plotHBase = 242; // ความสูงพื้นที่วาดกราฟสมส่วน มองเห็นรหัสสถานะและตัวเลขในแต่ละแท่งชัดเจน
+    const plotHBase = bothOverlayLines ? 286 : (anyOverlayLine ? 260 : 242);
     const height = dense ? pad.top + plotHBase + pad.bottom : Math.max(height0, pad.top + plotHBase + pad.bottom);
 
     const minRequiredW = pad.left + pad.right + Math.max(count, 1) * minSlotW;
@@ -5664,7 +5865,7 @@
       return Math.pow(Math.min(v, niceMax) / niceMax, scaleGamma);
     };
 
-    // 1. Draw Grid Lines & Y-Axis Scale (สอดคล้องกับสเกลความสูงแท่งจริง)
+    // 1. Draw Grid Lines & Left Y-Axis Scale (จำนวนงาน)
     ctx.save();
     ctx.strokeStyle = isLight ? 'rgba(104, 44, 145, 0.14)' : 'rgba(168, 85, 247, 0.14)';
     ctx.lineWidth = 1;
@@ -5694,7 +5895,19 @@
 
       ctx.fillText(val.toLocaleString('th-TH'), pad.left - 6, y);
     });
+
+    if (anyOverlayLine) {
+      ctx.setLineDash([]);
+      ctx.font = '700 9.5px Prompt, sans-serif';
+      ctx.fillStyle = isLight ? '#6B7280' : '#C4B5D9';
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'bottom';
+      ctx.fillText('งาน', pad.left - 6, pad.top - 12);
+    }
     ctx.restore();
+
+    const barTopYs = new Array(count).fill(pad.top + plotH);
+    const stackedTotalLabels = [];
 
     // 2. Draw Office Bars
     data.forEach((off, i) => {
@@ -5825,17 +6038,15 @@
           curBaseY = segY;
         });
 
-        // 4. Total Job Count on Top of Stack (Bold Gold/Theme text)
-        ctx.save();
-        ctx.fillStyle = (isHovered || isSelected) ? (isLight ? '#682C91' : '#FFFFFF') : (isLight ? '#92400E' : '#FFD25A');
-        ctx.font = 'bold 12px Prompt, sans-serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'bottom';
-        ctx.shadowColor = isLight ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.9)';
-        ctx.shadowBlur = 4;
-        ctx.shadowOffsetY = 1;
-        ctx.fillText(off.total.toLocaleString('th-TH'), centerX, curBaseY - 3);
-        ctx.restore();
+        barTopYs[i] = curBaseY;
+
+        // Defer Total Job Count label so it renders cleanly ABOVE the AUC line (and below AUC value pills)
+        stackedTotalLabels.push({
+          text: off.total.toLocaleString('th-TH'),
+          x: centerX,
+          y: curBaseY - 3,
+          isHighlight: isHovered || isSelected
+        });
 
       } else {
         // --- GROUPED BARS MODE ---
@@ -5860,10 +6071,12 @@
           { val: off.rel, col1: '#EF4444', col2: '#DC2626', stroke: 'rgba(239, 68, 68, 0.8)', textCol: '#F87171' }
         ];
 
+        let minGroupedTopY = pad.top + plotH;
         series.forEach((s, sIdx) => {
           const bx = startX + sIdx * (subBarW + gap);
           const bh = s.val > 0 ? Math.max(3, (s.val / niceMax) * plotH) : 2;
           const by = pad.top + plotH - bh;
+          if (by < minGroupedTopY) minGroupedTopY = by;
 
           const g = ctx.createLinearGradient(0, by, 0, by + bh);
           g.addColorStop(0, s.col1);
@@ -5882,6 +6095,7 @@
           ctx.fillText(s.val.toLocaleString('th-TH'), bx + subBarW / 2, by - 2);
           ctx.restore();
         });
+        barTopYs[i] = minGroupedTopY;
       }
 
       // X-Axis Office Name
@@ -5900,6 +6114,443 @@
       ctx.fillText(off.office, 0, 0);
       ctx.restore();
     });
+
+    // Helper: Draw Stacked Bar Gold Total Job Counts (above overlay lines so numbers like 112, 50, 49 are never obscured)
+    const drawStackedTotalJobCounts = () => {
+      if (!stackedTotalLabels.length) return;
+      ctx.save();
+      ctx.font = 'bold 12px Prompt, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'bottom';
+      ctx.lineJoin = 'round';
+      stackedTotalLabels.forEach(item => {
+        if (anyOverlayLine) {
+          ctx.shadowBlur = 0;
+          ctx.lineWidth = 3.2;
+          ctx.strokeStyle = isLight ? 'rgba(255, 255, 255, 0.95)' : 'rgba(15, 6, 28, 0.92)';
+          ctx.strokeText(item.text, item.x, item.y);
+        }
+        ctx.fillStyle = item.isHighlight ? (isLight ? '#682C91' : '#FFFFFF') : (isLight ? '#92400E' : '#FFD25A');
+        ctx.shadowColor = isLight ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.9)';
+        ctx.shadowBlur = 4;
+        ctx.shadowOffsetY = 1;
+        ctx.fillText(item.text, item.x, item.y);
+      });
+      ctx.restore();
+    };
+
+    if (!anyOverlayLine) {
+      drawStackedTotalJobCounts();
+    }
+
+    // 3. Draw Overlay Lines: Total AUC (Cyan, Solid ●) & Avg AUC/Job (Pink-Magenta, Dashed ◆) + Independent Right Y-Axes
+    if (anyOverlayLine && count > 0) {
+      const rightAxisX = width - pad.right;
+      const lineHalo = isLight ? 'rgba(255, 255, 255, 0.92)' : 'rgba(14, 6, 28, 0.86)';
+
+      const aucColors = {
+        main: isLight ? '#0284C7' : '#38BDF8',
+        bright: isLight ? '#0369A1' : '#7DD3FC',
+        axisStroke: isLight ? 'rgba(2, 132, 199, 0.38)' : 'rgba(56, 189, 248, 0.36)',
+        glow: isLight ? 'rgba(2, 132, 199, 0.25)' : 'rgba(56, 189, 248, 0.65)',
+        hlRing: isLight ? 'rgba(2, 132, 199, 0.20)' : 'rgba(56, 189, 248, 0.26)',
+        hlStroke: isLight ? '#0369A1' : '#7DD3FC',
+        hlFill: isLight ? '#0284C7' : '#0EA5E9',
+        hlBorder: '#E0F2FE',
+        pillBg: isLight ? 'rgba(255, 255, 255, 0.93)' : 'rgba(11, 17, 36, 0.88)',
+        pillBorder: isLight ? 'rgba(2, 132, 199, 0.50)' : 'rgba(56, 189, 248, 0.58)',
+        pillText: isLight ? '#0369A1' : '#BAE6FD',
+        leader: isLight ? 'rgba(2, 132, 199, 0.45)' : 'rgba(56, 189, 248, 0.48)'
+      };
+
+      const avgColors = {
+        main: isLight ? '#DB2777' : '#F472B6',
+        bright: isLight ? '#BE185D' : '#F9A8D4',
+        axisStroke: isLight ? 'rgba(219, 39, 119, 0.38)' : 'rgba(244, 114, 182, 0.40)',
+        glow: isLight ? 'rgba(219, 39, 119, 0.24)' : 'rgba(244, 114, 182, 0.65)',
+        hlRing: isLight ? 'rgba(219, 39, 119, 0.20)' : 'rgba(244, 114, 182, 0.28)',
+        hlStroke: isLight ? '#BE185D' : '#FBCFE8',
+        hlFill: isLight ? '#DB2777' : '#EC4899',
+        hlBorder: '#FCE7F3',
+        pillBg: isLight ? 'rgba(255, 247, 251, 0.94)' : 'rgba(34, 10, 38, 0.88)',
+        pillBorder: isLight ? 'rgba(219, 39, 119, 0.52)' : 'rgba(244, 114, 182, 0.62)',
+        pillText: isLight ? '#BE185D' : '#FBCFE8',
+        leader: isLight ? 'rgba(219, 39, 119, 0.48)' : 'rgba(244, 114, 182, 0.52)'
+      };
+
+      const drawRightMoneyAxis = (axisX, scaleObj, colors, unitLabel) => {
+        ctx.save();
+        ctx.strokeStyle = colors.axisStroke;
+        ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        ctx.moveTo(axisX, pad.top);
+        ctx.lineTo(axisX, pad.top + plotH);
+        ctx.stroke();
+
+        ctx.font = '600 9.8px Prompt, sans-serif';
+        ctx.fillStyle = colors.main;
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+
+        scaleObj.ticks.forEach(tVal => {
+          const ty = pad.top + plotH - scaleObj.toRatio(tVal) * plotH;
+          ctx.beginPath();
+          ctx.moveTo(axisX, ty);
+          ctx.lineTo(axisX + 4, ty);
+          ctx.stroke();
+          ctx.fillText(formatWbsAucTickM(tVal), axisX + 6, ty);
+        });
+
+        ctx.font = '700 9.2px Prompt, sans-serif';
+        ctx.fillStyle = colors.bright;
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'bottom';
+        ctx.fillText(unitLabel, axisX + 2, pad.top - 12);
+        ctx.restore();
+      };
+
+      // Build series data & independent scales
+      let aucPoints = [];
+      let avgPoints = [];
+
+      if (showAucLine) {
+        const aucValuesM = data.map(o => Math.max(0, Number(o.auc) || 0) / 1e6);
+        const aucScale = buildWbsMoneyAxisScale(aucValuesM, count);
+        drawRightMoneyAxis(rightAxisX, aucScale, aucColors, 'ล้านบาท');
+        aucPoints = data.map((off, i) => ({
+          idx: i,
+          x: pad.left + (i + 0.5) * slotW,
+          y: pad.top + plotH - aucScale.toRatio(aucValuesM[i]) * plotH,
+          vM: aucValuesM[i],
+          rawBaht: Number(off.auc) || 0,
+          total: off.total,
+          office: off.office,
+          barTopY: barTopYs[i],
+          seriesKey: 'auc'
+        }));
+      }
+
+      if (showAvgAucLine) {
+        const avgValuesM = data.map(o => (o.total > 0 ? Math.max(0, Number(o.auc) || 0) / o.total : 0) / 1e6);
+        const avgScale = buildWbsMoneyAxisScale(avgValuesM, count);
+        const avgAxisX = showAucLine ? (rightAxisX + 52) : rightAxisX;
+        drawRightMoneyAxis(avgAxisX, avgScale, avgColors, 'ลบ./งาน');
+        avgPoints = data.map((off, i) => ({
+          idx: i,
+          x: pad.left + (i + 0.5) * slotW,
+          y: pad.top + plotH - avgScale.toRatio(avgValuesM[i]) * plotH,
+          vM: avgValuesM[i],
+          rawBaht: off.total > 0 ? (Number(off.auc) || 0) / off.total : 0,
+          total: off.total,
+          office: off.office,
+          barTopY: barTopYs[i],
+          seriesKey: 'avg'
+        }));
+      }
+
+      // 3.1 Draw Compact Inline Legend at Top-Right Headroom
+      ctx.save();
+      const legY = 12;
+      let legCursorRight = width - 10;
+      ctx.font = '600 10px Prompt, sans-serif';
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'middle';
+
+      if (showAvgAucLine) {
+        const avgLegText = 'เฉลี่ย มูลค่า/งาน (ลบ./งาน)';
+        const avgW = ctx.measureText(avgLegText).width;
+        ctx.fillStyle = avgColors.bright;
+        ctx.fillText(avgLegText, legCursorRight, legY);
+
+        const lEnd = legCursorRight - avgW - 6;
+        const lStart = lEnd - 20;
+        ctx.save();
+        ctx.strokeStyle = avgColors.main;
+        ctx.lineWidth = 2.1;
+        ctx.setLineDash([4.5, 2.5]);
+        ctx.beginPath();
+        ctx.moveTo(lStart, legY);
+        ctx.lineTo(lEnd, legY);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        drawCanvasDiamond(ctx, (lStart + lEnd) / 2, legY, 3.6);
+        ctx.fillStyle = isLight ? '#FFFFFF' : '#220A26';
+        ctx.fill();
+        ctx.lineWidth = 1.7;
+        ctx.stroke();
+        ctx.restore();
+
+        legCursorRight = lStart - 16;
+      }
+
+      if (showAucLine) {
+        const aucLegText = 'มูลค่า AUC รวม (ล้านบาท)';
+        const aucW = ctx.measureText(aucLegText).width;
+        ctx.fillStyle = aucColors.bright;
+        ctx.fillText(aucLegText, legCursorRight, legY);
+
+        const lEnd = legCursorRight - aucW - 6;
+        const lStart = lEnd - 18;
+        ctx.save();
+        ctx.strokeStyle = aucColors.main;
+        ctx.lineWidth = 2.2;
+        ctx.beginPath();
+        ctx.moveTo(lStart, legY);
+        ctx.lineTo(lEnd, legY);
+        ctx.stroke();
+        ctx.fillStyle = isLight ? '#FFFFFF' : '#0F172A';
+        ctx.beginPath();
+        ctx.arc((lStart + lEnd) / 2, legY, 3, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.lineWidth = 1.8;
+        ctx.stroke();
+        ctx.restore();
+      }
+      ctx.restore();
+
+      // 3.2 Draw Polyline & Nodes for Line 1 (Total AUC — Cyan Solid ●)
+      if (showAucLine && aucPoints.length) {
+        if (aucPoints.length > 1) {
+          ctx.save();
+          ctx.lineJoin = 'round';
+          ctx.lineCap = 'round';
+          ctx.beginPath();
+          aucPoints.forEach((pt, idx) => {
+            if (idx === 0) ctx.moveTo(pt.x, pt.y);
+            else ctx.lineTo(pt.x, pt.y);
+          });
+          ctx.strokeStyle = lineHalo;
+          ctx.lineWidth = 4.6;
+          ctx.stroke();
+
+          ctx.strokeStyle = aucColors.main;
+          ctx.lineWidth = 2.3;
+          ctx.shadowColor = aucColors.glow;
+          ctx.shadowBlur = isLight ? 3 : 6;
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        aucPoints.forEach(pt => {
+          const isHighlight = (hoveredIdx === pt.idx) || (wbsState.office && wbsState.office !== 'ALL' && wbsState.office === pt.office);
+          ctx.save();
+          if (isHighlight) {
+            ctx.beginPath();
+            ctx.arc(pt.x, pt.y, 9.5, 0, Math.PI * 2);
+            ctx.fillStyle = aucColors.hlRing;
+            ctx.fill();
+          }
+          ctx.beginPath();
+          ctx.arc(pt.x, pt.y, isHighlight ? 5.2 : 3.6, 0, Math.PI * 2);
+          ctx.fillStyle = isHighlight ? '#FFFFFF' : (isLight ? '#FFFFFF' : '#0B1120');
+          ctx.fill();
+          ctx.lineWidth = isHighlight ? 2.6 : 2.1;
+          ctx.strokeStyle = isHighlight ? aucColors.hlStroke : aucColors.main;
+          ctx.shadowColor = aucColors.glow;
+          ctx.shadowBlur = isHighlight ? 8 : 4;
+          ctx.stroke();
+          ctx.restore();
+        });
+      }
+
+      // 3.3 Draw Polyline & Diamond Nodes for Line 2 (Avg AUC/Job — Pink-Magenta Dashed ◆)
+      if (showAvgAucLine && avgPoints.length) {
+        if (avgPoints.length > 1) {
+          ctx.save();
+          ctx.lineJoin = 'round';
+          ctx.lineCap = 'round';
+          ctx.beginPath();
+          avgPoints.forEach((pt, idx) => {
+            if (idx === 0) ctx.moveTo(pt.x, pt.y);
+            else ctx.lineTo(pt.x, pt.y);
+          });
+          ctx.strokeStyle = lineHalo;
+          ctx.lineWidth = 4.2;
+          ctx.stroke();
+
+          ctx.strokeStyle = avgColors.main;
+          ctx.lineWidth = 2.15;
+          ctx.setLineDash([6, 3.5]);
+          ctx.shadowColor = avgColors.glow;
+          ctx.shadowBlur = isLight ? 3 : 6;
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        avgPoints.forEach(pt => {
+          const isHighlight = (hoveredIdx === pt.idx) || (wbsState.office && wbsState.office !== 'ALL' && wbsState.office === pt.office);
+          ctx.save();
+          if (isHighlight) {
+            ctx.beginPath();
+            ctx.arc(pt.x, pt.y, 9.5, 0, Math.PI * 2);
+            ctx.fillStyle = avgColors.hlRing;
+            ctx.fill();
+          }
+          drawCanvasDiamond(ctx, pt.x, pt.y, isHighlight ? 6.0 : 4.2);
+          ctx.fillStyle = isHighlight ? '#FFFFFF' : (isLight ? '#FFFFFF' : '#220A26');
+          ctx.fill();
+          ctx.lineWidth = isHighlight ? 2.5 : 2.0;
+          ctx.strokeStyle = isHighlight ? avgColors.hlStroke : avgColors.main;
+          ctx.shadowColor = avgColors.glow;
+          ctx.shadowBlur = isHighlight ? 8 : 4;
+          ctx.stroke();
+          ctx.restore();
+        });
+      }
+
+      // Draw Stacked Bar Gold Total Job Counts above both lines & nodes so job counts stay 100% legible
+      drawStackedTotalJobCounts();
+
+      // 3.4 Shared Collision-Aware Value Badges Layer (Total AUC pills + Avg AUC/Job pills)
+      const labelFontPxOverlay = dense ? (bothOverlayLines ? 8.3 : 8.8) : 9.4;
+      const pillH = dense ? (bothOverlayLines ? 12.8 : 13.5) : 14.5;
+      const minCenterY = 25;
+      const maxCenterY = pad.top + plotH - 9;
+
+      const jobBoxes = data.map((_, i) => {
+        const cx = pad.left + (i + 0.5) * slotW;
+        return { x1: cx - 15, x2: cx + 15, y1: barTopYs[i] - 18, y2: barTopYs[i] - 1 };
+      });
+
+      const placedBoxes = [];
+      const badgeDrawList = [];
+
+      const boxesOverlap = (a, b, padX = 1.5, padY = 1.5) => !(
+        (a.x2 + padX) < b.x1 ||
+        (a.x1 - padX) > b.x2 ||
+        (a.y2 + padY) < b.y1 ||
+        (a.y1 - padY) > b.y2
+      );
+
+      const scheduleSeriesBadges = (points, colors, formatter, preferBelowFirst = false) => {
+        points.forEach((pt, i) => {
+          const isHighlight = (hoveredIdx === i) || (wbsState.office && wbsState.office !== 'ALL' && wbsState.office === pt.office);
+          const lbl = formatter(pt.rawBaht, isHighlight);
+          const fontPx = isHighlight ? (labelFontPxOverlay + 0.9) : labelFontPxOverlay;
+
+          ctx.font = `700 ${fontPx}px Prompt, sans-serif`;
+          const textW = ctx.measureText(lbl).width;
+          const pillW = Math.ceil(textW) + (isHighlight ? 9 : 5.5);
+          const curPillH = isHighlight ? (pillH + 2) : pillH;
+
+          const minCx = pad.left + pillW / 2 + 1;
+          const maxCx = rightAxisX - pillW / 2 - 1;
+          const pillCx = Math.max(minCx, Math.min(maxCx, pt.x));
+
+          const candidates = preferBelowFirst
+            ? [pt.y + 13, pt.y - 12, pt.y + 26, pt.y - 25, pt.y - 38, pt.y + 39, pt.y - 51]
+            : [pt.y - 12, pt.y - 25, pt.y + 13, pt.y - 38, pt.y + 26, pt.y - 51, pt.y + 39];
+
+          let bestCy = Math.max(minCenterY, Math.min(maxCenterY, candidates[0]));
+          let bestScore = Infinity;
+
+          candidates.forEach((candY, cIdx) => {
+            let score = cIdx * 3.5;
+            let testY = candY;
+            if (testY < minCenterY || testY > maxCenterY) {
+              score += 900;
+              testY = Math.max(minCenterY, Math.min(maxCenterY, testY));
+            }
+            const box = {
+              x1: pillCx - pillW / 2,
+              x2: pillCx + pillW / 2,
+              y1: testY - curPillH / 2,
+              y2: testY + curPillH / 2
+            };
+            for (let k = 0; k < placedBoxes.length; k++) {
+              if (boxesOverlap(box, placedBoxes[k], 1.5, 1.5)) {
+                score += 260;
+              }
+            }
+            for (let j = Math.max(0, i - 1); j <= Math.min(count - 1, i + 1); j++) {
+              if (boxesOverlap(box, jobBoxes[j], 1, 1)) {
+                score += 80;
+              }
+            }
+            if (score < bestScore) {
+              bestScore = score;
+              bestCy = testY;
+            }
+          });
+
+          placedBoxes.push({
+            x1: pillCx - pillW / 2,
+            x2: pillCx + pillW / 2,
+            y1: bestCy - curPillH / 2,
+            y2: bestCy + curPillH / 2
+          });
+
+          badgeDrawList.push({
+            pt,
+            lbl,
+            colors,
+            pillCx,
+            pillCy: bestCy,
+            pillW,
+            pillH: curPillH,
+            isHighlight,
+            fontPx
+          });
+        });
+      };
+
+      ctx.save();
+      if (showAucLine) {
+        scheduleSeriesBadges(aucPoints, aucColors, formatWbsAucShortM, false);
+      }
+      if (showAvgAucLine) {
+        // When both lines are ON, allow avg badges to naturally tuck below or above without fighting total AUC pills
+        scheduleSeriesBadges(avgPoints, avgColors, formatWbsAvgAucShortM, false);
+      }
+
+      const drawSingleOverlayBadge = (b) => {
+        const px = b.pillCx - b.pillW / 2;
+        const py = b.pillCy - b.pillH / 2;
+        const dy = b.pillCy - b.pt.y;
+
+        if (Math.abs(dy) > 15) {
+          ctx.save();
+          ctx.strokeStyle = b.colors.leader;
+          ctx.lineWidth = 1;
+          ctx.setLineDash([2, 2]);
+          ctx.beginPath();
+          ctx.moveTo(b.pt.x, b.pt.y + (dy < 0 ? -4 : 4));
+          ctx.lineTo(b.pillCx, dy < 0 ? (py + b.pillH) : py);
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        ctx.save();
+        drawCanvasRoundedBox(ctx, px, py, b.pillW, b.pillH, 4);
+        if (b.isHighlight) {
+          ctx.fillStyle = b.colors.hlFill;
+          ctx.shadowColor = b.colors.glow;
+          ctx.shadowBlur = 7;
+          ctx.fill();
+          ctx.strokeStyle = b.colors.hlBorder;
+          ctx.lineWidth = 1.2;
+          ctx.stroke();
+        } else {
+          ctx.fillStyle = b.colors.pillBg;
+          ctx.fill();
+          ctx.strokeStyle = b.colors.pillBorder;
+          ctx.lineWidth = 0.9;
+          ctx.stroke();
+        }
+
+        ctx.shadowBlur = 0;
+        ctx.font = `700 ${b.fontPx}px Prompt, sans-serif`;
+        ctx.fillStyle = b.isHighlight ? '#FFFFFF' : b.colors.pillText;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(b.lbl, b.pillCx, b.pillCy + 0.4);
+        ctx.restore();
+      };
+
+      badgeDrawList.filter(b => !b.isHighlight).forEach(drawSingleOverlayBadge);
+      badgeDrawList.filter(b => b.isHighlight).forEach(drawSingleOverlayBadge);
+      ctx.restore();
+    }
   }
 
   /**
