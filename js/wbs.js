@@ -887,6 +887,42 @@
    * Render SAP Status Summary Section (Horizontal Badges / Stat Cards Strip)
    * แสดงตำแหน่งตามรูป 41 ชี้ระหว่างกราฟแท่งหน่วยงานกับตาราง WBS
    */
+  /**
+   * ตารางที่ 4.1 คำอธิบายสถานะงานในระบบ SAP (รหัสสถานะผู้ใช้ A0-Z0)
+   */
+  const WBS_SAP_USER_STATUS_META = {
+    A0: { desc: 'สร้างหมายเลขงาน WBS', unit: '' },
+    A1: { desc: 'ตรวจสอบข้อมูลทางบัญชี', unit: 'บัญชี' },
+    A2: { desc: 'สำรวจ ออกแบบ ประมาณการ', unit: 'ก่อสร้าง' },
+    A5: { desc: 'อนุมัติประมาณการ', unit: 'ก่อสร้าง' },
+    B1: { desc: 'จัดงานเข้าโครงการ/ชำระเงินแล้ว', unit: 'ก่อสร้าง' },
+    B2: { desc: 'บันทึก-โอนงบประมาณเข้า WBS', unit: 'งบประมาณ' },
+    C1: { desc: 'อยู่ระหว่างงานก่อสร้าง', unit: 'ก่อสร้าง' },
+    C2: { desc: 'อยู่ระหว่างจัดซื้อ-จัดจ้าง', unit: 'ก่อสร้าง' },
+    C3: { desc: 'หยุดงาน รอจัดหาพัสดุ', unit: 'ก่อสร้าง' },
+    C4: { desc: 'หยุดงานชั่วคราว-กฟภ.', unit: 'ก่อสร้าง' },
+    C5: { desc: 'หยุดงานชั่วคราว-ผชฟ.', unit: 'ก่อสร้าง' },
+    C6: { desc: 'หยุดงานชั่วคราว-บ้านจัดสรร', unit: 'ก่อสร้าง' },
+    C9: { desc: 'ยกเลิกสถานะ TECO', unit: 'ก่อสร้าง' },
+    D1: { desc: 'แล้วเสร็จ-ตรวจสอบพัสดุ/ค่าใช้จ่าย', unit: 'ก่อสร้าง' },
+    D2: { desc: 'แล้วเสร็จทางเทคนิค (TECO)', unit: 'ก่อสร้าง' },
+    D3: { desc: 'รับเอกสารปิดงาน', unit: 'บัญชี' },
+    D9: { desc: 'ยกเลิกสถานะ CLSD', unit: 'บัญชี' },
+    F0: { desc: 'ตรวจสอบค่าใช้จ่าย และแจ้งโอนคืนงบ', unit: 'บัญชี' },
+    F1: { desc: 'โอนคืนงบประมาณเรียบร้อยแล้ว', unit: 'งบประมาณ' },
+    F2: { desc: 'ปิดงานทางบัญชีระดับ WBS', unit: 'บัญชี' },
+    F3: { desc: 'ปิดงานทางบัญชี-บางส่วน', unit: 'บัญชี' },
+    E2: { desc: 'ยกเลิกหมายเลขงานระดับ WBS', unit: 'บัญชี/ก่อสร้าง' },
+    F4: { desc: 'ขึ้นสินทรัพย์ถาวรแล้ว', unit: 'บัญชี' },
+    Z0: { desc: 'ข้อมูล WBS ระดับ Node', unit: '' }
+  };
+
+  function getWbsSapStatusMeta(statusStr) {
+    const code = (String(statusStr || '').toUpperCase().match(/\b([A-Z]\d)\b/) || [])[1] || '';
+    if (code && WBS_SAP_USER_STATUS_META[code]) return WBS_SAP_USER_STATUS_META[code];
+    return { desc: 'สถานะงานในระบบ SAP', unit: '' };
+  }
+
   function renderWbsSapSummary(records, currentSap) {
     const container = document.getElementById('wbsSapSummarySection');
     if (!container) return;
@@ -1036,6 +1072,7 @@
             <span class="wbs-sap-auc-label">มูลค่า AUC รวม</span>
             <span class="wbs-sap-auc-val">฿${allAucFmt}</span>
           </div>
+          <div class="wbs-sap-card-desc" title="แสดงงานคงเหลือทุกสถานะ SAP">ทุกสถานะงานในระบบ SAP</div>
         </div>
       </div>
     `;
@@ -1098,12 +1135,15 @@
       const statusSelectedAucFmt = formatMoneyNoDecimals(item.selectedAuc);
 
       const isDimmed = hasFilterActive && !isActive;
+      const sapMeta = getWbsSapStatusMeta(item.status);
+      const sapDesc = sapMeta.desc || '';
+      const sapDescTitle = sapMeta.unit ? `${sapDesc} (หน่วยงาน: ${sapMeta.unit})` : sapDesc;
 
       cardsHtml += `
         <div class="wbs-sap-card ${cardTypeCls} ${isActive ? 'active' : ''} ${isDimmed ? 'is-dimmed' : ''}"
           style="${cardStyleAttr} position: relative;"
           onclick="window.setWbsSapStatusFilter('${escapeHtml(item.status)}')"
-          title="สถานะ SAP: ${escapeHtml(item.status)} | ${item.count} งาน (${pctJobs}%) | มูลค่า ${aucFmt} บาท (${pctAuc}% ของ AUC รวม) | คลิกเพื่อเลือก/ปลดเลือกตัวกรองนี้">
+          title="สถานะ SAP: ${escapeHtml(item.status)} — ${escapeHtml(sapDescTitle)} | ${item.count} งาน (${pctJobs}%) | มูลค่า ${aucFmt} บาท (${pctAuc}% ของ AUC รวม) | คลิกเพื่อเลือก/ปลดเลือกตัวกรองนี้">
           <div class="wbs-sap-card-accent" style="position:absolute; top:0; left:0; right:0; height:3px; background:${topBarColor}; border-radius:8px 8px 0 0;"></div>
           
           <div class="wbs-sap-card-main-info">
@@ -1134,6 +1174,7 @@
               <span class="wbs-sap-auc-label">มูลค่า AUC</span>
               <span class="wbs-sap-auc-val">฿${aucFmt}</span>
             </div>
+            <div class="wbs-sap-card-desc" title="${escapeHtml(sapDescTitle)}">${escapeHtml(sapDesc)}</div>
           </div>
         </div>
       `;
